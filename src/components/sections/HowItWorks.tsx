@@ -64,11 +64,11 @@ export const HowItWorks = () => {
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        {/* <div className="text-center mt-12">
           <p className="text-gray-400">
             Average time from first call to production deploy: <span className="text-blue-400 font-semibold">6 weeks</span>
           </p>
-        </div>
+        </div> */}
       </div>
     </section>
   );
