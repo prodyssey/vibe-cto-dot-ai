@@ -81,7 +81,7 @@ export const Resources = () => {
         </div>
 
         <div className="text-center">
-          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" className="border-white/20 text-white bg-white/5 hover:bg-white/10 backdrop-blur-sm">
             View All Resources
             <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
