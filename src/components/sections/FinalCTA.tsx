@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight, Clock } from "lucide-react";
 
@@ -27,7 +26,7 @@ export const FinalCTA = () => {
               size="lg" 
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 md:px-12 py-4 md:py-6 text-lg md:text-xl font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
             >
-              Book Your Free Clarity Call
+              Book a Clarity Call
               <ArrowRight className="ml-2 md:ml-3 w-5 md:w-6 h-5 md:h-6" />
             </Button>
             
