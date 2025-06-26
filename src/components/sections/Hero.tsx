@@ -75,7 +75,7 @@ export const Hero = () => {
               />
               {/* Quote under avatar */}
               <p className="mt-6 text-lg text-gray-200 italic">
-                "Hi. I'm Craig. I'm here to help."
+                "Hi. I'm Craig. Let's build something together."
               </p>
               {/* Glow effect behind avatar */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-2xl -z-10 scale-110"></div>
