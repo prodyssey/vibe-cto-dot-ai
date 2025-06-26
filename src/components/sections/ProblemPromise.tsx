@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Zap, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const ProblemPromise = () => {
+  const navigate = useNavigate();
+
   const handleNavigation = (path: string) => {
-    window.scrollTo(0, 0);
-    window.location.href = path;
+    navigate(path);
+    // Scroll to top after navigation
+    setTimeout(() => window.scrollTo(0, 0), 0);
   };
 
   return (
