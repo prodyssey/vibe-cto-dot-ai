@@ -33,8 +33,8 @@ export const Hero = () => {
 
             {/* Subcopy */}
             <p className="text-xl md:text-2xl text-gray-100 max-w-4xl lg:max-w-none mx-auto mb-12 leading-relaxed">
-              I coach and advise builders using tools like Replit, Bolt, and Lovable to ship 
-              <span className="text-blue-400 font-semibold"> secure, scalable products</span>—fast.
+              I coach and advise builders using tools like Lovable, Replit, and Bolt to ship 
+              <span className="text-blue-400 font-semibold"> real, secure, scalable products</span>.
             </p>
 
             {/* Primary CTA */}
