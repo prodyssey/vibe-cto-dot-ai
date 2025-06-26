@@ -67,12 +67,16 @@ export const Hero = () => {
 
           {/* Right column - Avatar */}
           <div className="flex justify-center lg:justify-end">
-            <div className="relative">
+            <div className="relative text-center">
               <img 
                 src="/lovable-uploads/8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png" 
                 alt="VibeCTO Avatar" 
                 className="w-80 h-80 lg:w-96 lg:h-96 object-contain hover:scale-105 transition-transform duration-300"
               />
+              {/* Quote under avatar */}
+              <p className="mt-6 text-lg text-gray-200 italic">
+                "Hi. I'm Craig. I'm here to help."
+              </p>
               {/* Glow effect behind avatar */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-2xl -z-10 scale-110"></div>
             </div>
