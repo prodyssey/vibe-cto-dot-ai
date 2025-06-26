@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Search, Map, Rocket } from "lucide-react";
 
@@ -20,7 +19,7 @@ export const HowItWorks = () => {
       icon: Rocket,
       title: "Ship",
       description: "Hands-on coaching or fractional CTO support as you build",
-      details: "Regular check-ins, code reviews, and strategic guidance until launch"
+      details: "Regular check-ins, code reviews, and strategic guidance through launch and expansion"
     }
   ];
 
