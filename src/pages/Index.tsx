@@ -12,7 +12,7 @@ const Index = () => {
       <Hero />
       <ProblemPromise />
       <HowItWorks />
-      <Proof />
+      {/* <Proof /> */}
       <Resources />
       <FinalCTA />
     </div>
