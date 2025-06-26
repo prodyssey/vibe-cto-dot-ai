@@ -43,7 +43,7 @@ export const ProblemPromise = () => {
                 </li>
                 <li className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-green-400 rounded-full flex-shrink-0"></div>
-                  <span className="text-base">First deployment guidance</span>
+                  <span className="text-base">Data model guidance</span>
                 </li>
               </ul>
               
