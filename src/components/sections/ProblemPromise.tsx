@@ -4,6 +4,11 @@ import { Sparkles, Zap, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const ProblemPromise = () => {
+  const handleNavigation = (path: string) => {
+    window.scrollTo(0, 0);
+    window.location.href = path;
+  };
+
   return (
     <section className="py-20 px-6 bg-black/40 backdrop-blur-sm" id="journey">
       <div className="max-w-6xl mx-auto">
@@ -47,12 +52,13 @@ export const ProblemPromise = () => {
                 </li>
               </ul>
               
-              <Link to="/ignition">
-                <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 text-base">
-                  Explore Ignition
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
+              <Button 
+                onClick={() => handleNavigation('/ignition')}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 text-base"
+              >
+                Explore Ignition
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
             </CardContent>
           </Card>
 
@@ -86,12 +92,13 @@ export const ProblemPromise = () => {
                 </li>
               </ul>
               
-              <Link to="/launch-control">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-base">
-                  Explore Launch Control
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
+              <Button 
+                onClick={() => handleNavigation('/launch-control')}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-base"
+              >
+                Explore Launch Control
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
             </CardContent>
           </Card>
         </div>
