@@ -1,11 +1,11 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Zap, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const ProblemPromise = () => {
   return (
-    <section className="py-20 px-6 bg-black/40 backdrop-blur-sm">
+    <section className="py-20 px-6 bg-black/40 backdrop-blur-sm" id="journey">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -47,10 +47,12 @@ export const ProblemPromise = () => {
                 </li>
               </ul>
               
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 text-base">
-                Explore Ignition
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
+              <Link to="/ignition">
+                <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 text-base">
+                  Explore Ignition
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
             </CardContent>
           </Card>
 
@@ -84,10 +86,12 @@ export const ProblemPromise = () => {
                 </li>
               </ul>
               
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-base">
-                Explore Launch Control
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
+              <Link to="/launch-control">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-base">
+                  Explore Launch Control
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
