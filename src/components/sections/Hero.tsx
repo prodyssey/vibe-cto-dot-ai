@@ -56,7 +56,7 @@ export const Hero = () => {
             <div className="mt-16 flex justify-center lg:justify-start space-x-12 opacity-60">
               <div className="flex items-center space-x-2 text-gray-400">
                 <Rocket className="w-5 h-5" />
-                <span className="text-sm">Fast deployment</span>
+                <span className="text-sm">Ship fast</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-400">
                 <Code className="w-5 h-5" />
