@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Code, Rocket } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -39,13 +40,15 @@ export const Hero = () => {
 
             {/* Primary CTA */}
             <div className="space-y-6">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
-              >
-                Pick Your Path
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+              <Link to="/ignition">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
+                >
+                  Pick Your Path
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
               
               <p className="text-sm text-gray-400">
                 Free clarity call • No commitment required
