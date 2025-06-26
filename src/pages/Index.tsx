@@ -1,4 +1,5 @@
 
+import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/sections/Hero";
 import { ProblemPromise } from "@/components/sections/ProblemPromise";
 import { HowItWorks } from "@/components/sections/HowItWorks";
@@ -9,12 +10,15 @@ import { FinalCTA } from "@/components/sections/FinalCTA";
 const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <Hero />
-      <ProblemPromise />
-      <HowItWorks />
-      {/* <Proof /> */}
-      <Resources />
-      <FinalCTA />
+      <Navigation />
+      <div className="pt-20">
+        <Hero />
+        <ProblemPromise />
+        <HowItWorks />
+        {/* <Proof /> */}
+        <Resources />
+        <FinalCTA />
+      </div>
     </div>
   );
 };
