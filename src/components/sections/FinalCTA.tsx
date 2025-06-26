@@ -14,7 +14,7 @@ export const FinalCTA = () => {
           </div>
           
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Your idea won't wait—let's make it real
+            Your idea doesn't have to wait—let's make it real
           </h2>
           
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
