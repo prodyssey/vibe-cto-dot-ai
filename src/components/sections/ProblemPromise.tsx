@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Zap, ArrowRight } from "lucide-react";
+import { Sparkles, Zap, ArrowRight, Rocket } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export const ProblemPromise = () => {
@@ -24,7 +24,7 @@ export const ProblemPromise = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {/* Ignition Card */}
           <Card className="relative group bg-gray-900/80 backdrop-blur-sm border-green-500/30 hover:border-green-400/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20">
             <CardContent className="p-8">
@@ -100,6 +100,46 @@ export const ProblemPromise = () => {
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-base"
               >
                 Explore Launch Control
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Interstellar Card */}
+          <Card className="relative group bg-gray-900/80 backdrop-blur-sm border-purple-500/30 hover:border-purple-400/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+            <CardContent className="p-8">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="p-3 bg-purple-500/20 rounded-lg">
+                  <Rocket className="w-6 h-6 text-purple-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-white">Team ready to accelerate?</h3>
+              </div>
+              
+              <p className="text-gray-50 mb-6 leading-relaxed text-lg">
+                Transform your team's velocity with AI agents. Enterprise-grade strategies to 
+                ship features 10x faster while maintaining quality and security.
+              </p>
+              
+              <ul className="space-y-3 mb-8 text-gray-50">
+                <li className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full flex-shrink-0"></div>
+                  <span className="text-base">AI agent integration</span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full flex-shrink-0"></div>
+                  <span className="text-base">Team transformation</span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full flex-shrink-0"></div>
+                  <span className="text-base">Enterprise support</span>
+                </li>
+              </ul>
+              
+              <Button 
+                onClick={() => handleNavigation('/interstellar')}
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 text-base"
+              >
+                Explore Interstellar
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </CardContent>

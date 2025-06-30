@@ -1,7 +1,5 @@
-
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight, Clock } from "lucide-react";
-import { Link } from "react-router-dom";
 
 export const FinalCTA = () => {
   return (
@@ -13,27 +11,32 @@ export const FinalCTA = () => {
               <Calendar className="w-8 h-8 text-white" />
             </div>
           </div>
-          
+
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Your idea doesn't have to wait—let's make it real
+            Your ideas don't have to wait—let's make them real
           </h2>
-          
+
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Stop wondering "what if" and start shipping. Book your free clarity call today 
-            and get a custom action plan for your vibe coding journey.
+            Stop wondering "what if" and start shipping. Book your free clarity
+            call today and get a custom action plan for your vibe coding
+            journey.
           </p>
 
           <div className="space-y-8">
-            <Link to="/launch-control">
-              <Button 
-                size="lg" 
+            <a
+              href="https://savvycal.com/craigsturgis/vibecto-clarity-call"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 md:px-12 py-4 md:py-6 text-lg md:text-xl font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
               >
                 Book a Clarity Call
                 <ArrowRight className="ml-2 md:ml-3 w-5 md:w-6 h-5 md:h-6" />
               </Button>
-            </Link>
-            
+            </a>
+
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-gray-400 px-4">
               <div className="flex items-center space-x-2">
                 <Clock className="w-4 h-4" />

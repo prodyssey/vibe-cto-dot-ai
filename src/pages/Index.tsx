@@ -1,7 +1,7 @@
-
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/sections/Hero";
 import { ProblemPromise } from "@/components/sections/ProblemPromise";
+import { Paths } from "@/components/sections/Paths";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Proof } from "@/components/sections/Proof";
 import { Resources } from "@/components/sections/Resources";
@@ -17,6 +17,7 @@ const Index = () => {
         <HowItWorks />
         {/* <Proof /> */}
         <Resources />
+        <Paths />
         <FinalCTA />
       </div>
     </div>
