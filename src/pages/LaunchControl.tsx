@@ -1,93 +1,57 @@
-
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Rocket, Shield, Users, TrendingUp, CheckCircle, ArrowRight, Star, Calendar } from "lucide-react";
+import { Shield, Code2, GitBranch, Layers, Rocket, Calendar } from "lucide-react";
 
 const LaunchControl = () => {
   const services = [
     {
-      icon: Rocket,
-      title: "Launch Strategy",
-      description: "Complete go-to-market strategy tailored to your product and audience"
-    },
-    {
       icon: Shield,
-      title: "Risk Management",
-      description: "Identify and mitigate potential launch risks before they become problems"
+      title: "Production Confidence",
+      description:
+        "Build rock-solid systems that won't break under pressure or expose security vulnerabilities",
     },
     {
-      icon: TrendingUp,
-      title: "Growth Optimization",
-      description: "Data-driven approaches to maximize your launch momentum"
+      icon: Code2,
+      title: "Architecture Review",
+      description:
+        "Ensure your codebase is maintainable, scalable, and follows industry best practices",
     },
     {
-      icon: Users,
-      title: "Community Building",
-      description: "Build a loyal user base before, during, and after your launch"
-    }
+      icon: GitBranch,
+      title: "Development Workflow",
+      description:
+        "Set up proper version control, CI/CD, and collaboration tools for sustainable growth",
+    },
+    {
+      icon: Layers,
+      title: "Technical Foundation",
+      description:
+        "Establish patterns and conventions that enable efficient development as your product evolves",
+    },
   ];
 
   const testimonials = [
     {
       name: "Sarah Chen",
       role: "Founder, TechStart",
-      content: "Launch Control helped us go from prototype to $10k MRR in just 8 weeks. The strategic guidance was invaluable.",
-      rating: 5
+      content:
+        "Launch Control helped us avoid critical security vulnerabilities and set up a proper CI/CD pipeline. Our product is now rock-solid.",
+      rating: 5,
     },
     {
       name: "Marcus Rodriguez",
       role: "CEO, InnovateNow",
-      content: "The risk management strategies saved us from major pitfalls. Our launch was smooth and successful.",
-      rating: 5
-    }
-  ];
-
-  const packages = [
-    {
-      name: "Essentials",
-      price: "$2,997",
-      description: "Perfect for solo founders ready to launch their first product",
-      features: [
-        "Launch strategy session",
-        "Risk assessment checklist",
-        "Basic marketing templates",
-        "Email support for 30 days"
-      ]
+      content:
+        "The architecture review transformed our codebase. We can now onboard developers without fear of breaking things.",
+      rating: 5,
     },
-    {
-      name: "Premium",
-      price: "$7,997",
-      description: "Comprehensive launch support for serious entrepreneurs",
-      features: [
-        "Everything in Essentials",
-        "Weekly strategy calls",
-        "Custom launch timeline",
-        "Marketing automation setup",
-        "Community building guide",
-        "90 days of support"
-      ],
-      popular: true
-    },
-    {
-      name: "Enterprise",
-      price: "Custom",
-      description: "White-glove service for high-stakes launches",
-      features: [
-        "Everything in Premium",
-        "Dedicated launch manager",
-        "Custom integrations",
-        "Press & media outreach",
-        "Investor pitch support",
-        "6 months of support"
-      ]
-    }
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <Navigation />
-      
+
       <div className="pt-20">
         {/* Hero Section */}
         <section className="py-20 px-6">
@@ -97,31 +61,31 @@ const LaunchControl = () => {
                 <Rocket className="w-12 h-12 text-white" />
               </div>
             </div>
-            
+
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               Launch Control
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Turn your vibe coding projects into profitable businesses. Get expert guidance, 
-              proven strategies, and hands-on support for a successful product launch.
+              Transform your vibe coding projects into production-ready systems.
+              Get expert guidance on architecture, security, and development
+              workflows that ensure your product can scale without breaking or
+              exposing vulnerabilities.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+                onClick={() =>
+                  window.open(
+                    "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
+                    "_blank"
+                  )
+                }
               >
                 Book Strategy Call
                 <Calendar className="ml-2 w-5 h-5" />
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="border-white/20 text-white bg-white/5 hover:bg-white/10 backdrop-blur-sm px-8 py-6 text-lg"
-              >
-                View Case Studies
               </Button>
             </div>
           </div>
@@ -135,23 +99,31 @@ const LaunchControl = () => {
                 What We Do
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Comprehensive launch support to maximize your chances of success.
+                Expert guidance to ensure your product is secure, scalable, and
+                maintainable.
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {services.map((service, index) => (
-                <Card key={index} className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300">
+                <Card
+                  key={index}
+                  className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300"
+                >
                   <CardHeader className="text-center">
                     <div className="flex justify-center mb-4">
                       <div className="p-3 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl">
                         <service.icon className="w-8 h-8 text-blue-400" />
                       </div>
                     </div>
-                    <CardTitle className="text-white text-lg">{service.title}</CardTitle>
+                    <CardTitle className="text-white text-lg">
+                      {service.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-300 text-center">{service.description}</p>
+                    <p className="text-gray-300 text-center">
+                      {service.description}
+                    </p>
                   </CardContent>
                 </Card>
               ))}
@@ -160,7 +132,7 @@ const LaunchControl = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-20 px-6">
+        {/* <section className="py-20 px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -192,56 +164,80 @@ const LaunchControl = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
-        {/* Pricing Section */}
+        {/* How It Works Section */}
         <section className="py-20 px-6 bg-black/20">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Choose Your Package
+                How It Works
               </h2>
-              <p className="text-xl text-gray-300">
-                Select the level of support that matches your ambitions.
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                We'll guide you through every step to ensure your project is
+                production-ready.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {packages.map((pkg, index) => (
-                <Card key={index} className={`bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 relative ${pkg.popular ? 'ring-2 ring-blue-500' : ''}`}>
-                  {pkg.popular && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                        Most Popular
-                      </span>
-                    </div>
-                  )}
-                  <CardHeader className="text-center">
-                    <CardTitle className="text-white text-2xl mb-2">{pkg.name}</CardTitle>
-                    <div className="text-4xl font-bold text-white mb-4">{pkg.price}</div>
-                    <p className="text-gray-300">{pkg.description}</p>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3 mb-8">
-                      {pkg.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-center space-x-3">
-                          <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                          <span className="text-gray-300">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <Button 
-                      className={`w-full ${pkg.popular 
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700' 
-                        : 'bg-white/10 hover:bg-white/20'
-                      } text-white`}
-                    >
-                      Get Started
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="space-y-8">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                  1
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    Initial Architecture Review
+                  </h3>
+                  <p className="text-gray-300">
+                    We'll analyze your current codebase and identify potential
+                    issues before they become problems.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                  2
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    Security & Performance Audit
+                  </h3>
+                  <p className="text-gray-300">
+                    Comprehensive review to ensure your application is secure
+                    and performs well under load.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                  3
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    Development Workflow Setup
+                  </h3>
+                  <p className="text-gray-300">
+                    Implement proper CI/CD, testing, and collaboration tools for
+                    sustainable growth.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                  4
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    Ongoing Support & Guidance
+                  </h3>
+                  <p className="text-gray-300">
+                    Continue working with us as your product grows and evolves.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -251,27 +247,34 @@ const LaunchControl = () => {
           <div className="max-w-4xl mx-auto text-center">
             <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-sm border border-white/20 rounded-3xl p-12">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Ready for Launch?
+                Ready to Build with Confidence?
               </h2>
-              
+
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Don't leave your product launch to chance. Get the expert guidance you need to succeed.
+                Stop worrying about your code breaking in production. Get the
+                expert guidance you need to build systems that last.
               </p>
 
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
+                onClick={() =>
+                  window.open(
+                    "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
+                    "_blank"
+                  )
+                }
               >
                 Schedule Free Consultation
                 <Calendar className="ml-3 w-6 h-6" />
               </Button>
-              
+
               <div className="flex items-center justify-center space-x-6 mt-6 text-sm text-gray-400">
                 <span>No commitment required</span>
                 <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                <span>30-minute strategy session</span>
+                <span>30-minute architecture review</span>
                 <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                <span>Custom action plan included</span>
+                <span>Custom technical roadmap included</span>
               </div>
             </div>
           </div>

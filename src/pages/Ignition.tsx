@@ -77,7 +77,11 @@ const Ignition = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="https://savvycal.com/craigsturgis/vibecto-clarity-call" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://savvycal.com/craigsturgis/vibecto-clarity-call"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
@@ -87,13 +91,13 @@ const Ignition = () => {
                 </Button>
               </a>
 
-              <Button
+              {/* <Button
                 variant="outline"
                 size="lg"
                 className="border-white/20 text-white bg-white/5 hover:bg-white/10 backdrop-blur-sm px-8 py-6 text-lg"
               >
                 Learn More
-              </Button>
+              </Button> */}
             </div>
           </div>
         </section>
@@ -146,7 +150,7 @@ const Ignition = () => {
                 Your Learning Path
               </h2>
               <p className="text-xl text-gray-300">
-                Follow our proven 5-step process to become a vibe coding expert.
+                Follow my 5-step process to become a vibe coding expert.
               </p>
             </div>
 
@@ -180,8 +184,8 @@ const Ignition = () => {
               </h2>
 
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Join thousands of developers who've accelerated their careers
-                with vibe coding.
+                Join thousands of dreamers who've made something real with vibe
+                coding.
               </p>
 
               <Button

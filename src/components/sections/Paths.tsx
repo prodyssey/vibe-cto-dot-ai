@@ -8,7 +8,8 @@ export const Paths = () => {
     {
       icon: Zap,
       title: "Ignition",
-      subtitle: "For Individual Builders",
+      subtitle:
+        "For individual builders who want some guidance to build momentum",
       description:
         "Learn to build and ship faster than ever before with AI-powered development tools like Lovable, Replit, Bolt, and more.",
       features: [
@@ -25,7 +26,8 @@ export const Paths = () => {
     {
       icon: Rocket,
       title: "Launch Control",
-      subtitle: "For Solo Founders",
+      subtitle:
+        "For solo founders and non technical folks on the verge of launching",
       description:
         "Get fractional CTO support to take your product from prototype to production.",
       features: [
@@ -41,7 +43,8 @@ export const Paths = () => {
     {
       icon: Sparkles,
       title: "Interstellar",
-      subtitle: "For Teams",
+      subtitle:
+        "For established teams that want to build quality products much faster",
       description:
         "Transform your team's development velocity with enterprise-grade AI agent integration.",
       features: [
@@ -112,7 +115,12 @@ export const Paths = () => {
                 </ul>
 
                 {path.isExternal ? (
-                  <a href={path.link} target="_blank" rel="noopener noreferrer" className="block pt-4">
+                  <a
+                    href={path.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block pt-4"
+                  >
                     <Button
                       className={`w-full bg-gradient-to-r ${path.color} hover:opacity-90 text-white font-semibold`}
                     >
