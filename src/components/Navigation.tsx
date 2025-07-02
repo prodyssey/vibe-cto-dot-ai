@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, Zap, Rocket, Sparkles } from "lucide-react";
+import { Home, Zap, Rocket, Sparkles, BookOpen } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 export const Navigation = () => {
@@ -11,6 +11,7 @@ export const Navigation = () => {
     { path: "/ignition", label: "Ignition", icon: Zap },
     { path: "/launch-control", label: "Launch Control", icon: Rocket },
     { path: "/interstellar", label: "Interstellar", icon: Sparkles },
+    { path: "/resources", label: "Resources", icon: BookOpen },
   ];
 
   return (
@@ -25,7 +26,8 @@ export const Navigation = () => {
           <div className="flex items-center space-x-4">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = location.pathname === item.path;
+              const isActive = location.pathname === item.path || 
+                (item.path === "/resources" && location.pathname.startsWith("/resources"));
 
               return (
                 <Link key={item.path} to={item.path}>
