@@ -42,11 +42,10 @@ export const Hero = () => {
 
             {/* Subcopy */}
             <p className="text-xl md:text-2xl text-gray-100 max-w-4xl lg:max-w-none mx-auto mb-12 leading-relaxed">
-              I coach and advise builders using AI powered product building
-              tools to ship
+              I jump start and coach builders using AI tools to ship
               <span className="text-blue-400 font-semibold">
                 {" "}
-                real, secure, scalable products - fast
+                real prototypes, internal tools, and products - fast
               </span>
               .
             </p>
@@ -75,7 +74,9 @@ export const Hero = () => {
               </div>
               <div className="flex items-center space-x-2 text-gray-400">
                 <Code className="w-5 h-5" />
-                <span className="text-sm">Get production ready</span>
+                <span className="text-sm">
+                  Confidence from experienced help
+                </span>
               </div>
             </div>
           </div>

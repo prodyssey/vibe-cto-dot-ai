@@ -6,21 +6,26 @@ export const HowItWorks = () => {
     {
       icon: Search,
       title: "Assess",
-      description: "Quick diagnostic of your current setup, goals, and blockers",
-      details: "15-minute call to understand where you are and where you want to go"
+      description:
+        "Quick diagnostic of your current setup, goals, and blockers",
+      details:
+        "15-minute call to understand where you are and where you want to go",
     },
     {
       icon: Map,
-      title: "Plan", 
-      description: "Custom roadmap or learning syllabus tailored to your path",
-      details: "Clear milestones, timelines, and success metrics for your journey"
+      title: "Plan",
+      description: "Custom roadmap tailored to your path and goals",
+      details:
+        "Clear milestones, timelines, and success metrics for your journey",
     },
     {
       icon: Rocket,
       title: "Ship",
-      description: "Hands-on coaching or fractional CTO support as you build",
-      details: "Regular check-ins, code reviews, and strategic guidance through launch and expansion"
-    }
+      description:
+        "Custom delivery, fractional CTO support, or hands on coaching as you build",
+      details:
+        "Starter kits, check-ins, code reviews, support,and strategic guidance through launch and expansion",
+    },
   ];
 
   return (
@@ -31,8 +36,8 @@ export const HowItWorks = () => {
             How it works
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            A proven 3-step process to take you from idea to production, 
-            no matter your starting point.
+            A proven 3-step process to take you from idea to production, no
+            matter your starting point.
           </p>
         </div>
 
@@ -43,7 +48,7 @@ export const HowItWorks = () => {
               {index < steps.length - 1 && (
                 <div className="hidden md:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-blue-500/50 to-purple-500/50 z-0"></div>
               )}
-              
+
               <Card className="relative z-10 bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
                 <CardContent className="p-8 text-center">
                   <div className="relative mb-6">
@@ -54,9 +59,13 @@ export const HowItWorks = () => {
                       {index + 1}
                     </div>
                   </div>
-                  
-                  <h3 className="text-2xl font-bold text-white mb-4">{step.title}</h3>
-                  <p className="text-gray-300 mb-4 text-lg">{step.description}</p>
+
+                  <h3 className="text-2xl font-bold text-white mb-4">
+                    {step.title}
+                  </h3>
+                  <p className="text-gray-300 mb-4 text-lg">
+                    {step.description}
+                  </p>
                   <p className="text-sm text-gray-400">{step.details}</p>
                 </CardContent>
               </Card>

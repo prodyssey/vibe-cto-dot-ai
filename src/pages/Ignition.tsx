@@ -15,41 +15,36 @@ import {
 const Ignition = () => {
   const features = [
     {
+      icon: Target,
+      title: "Product Discovery",
+      description: "We'll dig deep into your idea, understand the market, and identify the core value proposition",
+    },
+    {
       icon: Code,
-      title: "Rapid Prototyping",
-      description: "Turn ideas into working prototypes in hours, not weeks",
+      title: "Rapid MVP Building",
+      description:
+        "Using vibe coding tools, I'll build you something real and testable in just a few hours",
+    },
+    {
+      icon: Users,
+      title: "Customer Development Guidance",
+      description:
+        "Learn how to validate your concept with real users and gather meaningful feedback",
     },
     {
       icon: Zap,
-      title: "AI-Powered Development",
+      title: "Iteration Framework",
       description:
-        "Leverage the latest AI vibe coding tools to accelerate your coding workflow",
-    },
-    {
-      icon: Target,
-      title: "Market Validation",
-      description:
-        "Get your MVP in front of users quickly to validate your ideas",
-    },
-    // {
-    //   icon: Users,
-    //   title: "Community Support",
-    //   description: "Join a community of like-minded vibe coders building the future"
-    // }
-    {
-      icon: Users,
-      title: "Office hours",
-      description:
-        "Get 1-on-1 coaching from Craig to help you build, measure and learn",
+        "Get the tools and knowledge to continue building and improving on your own",
     },
   ];
 
   const steps = [
-    "Learn the fundamentals of vibe coding",
-    "Master AI-assisted development tools",
-    "Build your first prototype in 24 hours",
-    "Get feedback from real users",
-    "Iterate and improve rapidly",
+    "Discovery Call: We'll explore your idea, target market, and key assumptions",
+    "Rapid Prototyping: I'll build a testable MVP using cutting-edge vibe coding tools",
+    "Validation Strategy: Learn how to test your concept with real potential customers",
+    "Iteration Guidance: Get the framework to continue building and improving",
+    "Next Steps Planning: Decide if your idea has traction worth pursuing further",
   ];
 
   return (
@@ -71,9 +66,9 @@ const Ignition = () => {
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Spark your vibe coding journey. Learn to build and ship faster
-              than ever before with AI-powered development tools and proven
-              methodologies.
+              Turn your idea into reality. I'll use 20 years of zero-to-one product experience 
+              and cutting-edge vibe coding tools to build you something testable in hours, 
+              not months.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -86,7 +81,7 @@ const Ignition = () => {
                   size="lg"
                   className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
                 >
-                  Start Your Journey
+                  Let's Build Your Idea
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </a>
@@ -107,11 +102,10 @@ const Ignition = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Why Ignition?
+                How It Works
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Get the foundation you need to build and ship products at the
-                speed of thought.
+                From idea to testable product in just a few hours of focused work.
               </p>
             </div>
 
@@ -147,10 +141,10 @@ const Ignition = () => {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Your Learning Path
+                The Process
               </h2>
               <p className="text-xl text-gray-300">
-                Follow my 5-step process to become a vibe coding expert.
+                From idea to testable product in just a few focused sessions.
               </p>
             </div>
 
@@ -180,31 +174,32 @@ const Ignition = () => {
           <div className="max-w-4xl mx-auto text-center">
             <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 backdrop-blur-sm border border-white/20 rounded-3xl p-12">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Ready to ignite your potential?
+                Ready to test your idea?
               </h2>
 
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Join thousands of dreamers who've made something real with vibe
-                coding.
+                Stop wondering if your idea could work. Let's build something 
+                real and find out together.
               </p>
 
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
+                onClick={() => window.open('https://savvycal.com/craigsturgis/vibecto-clarity-call', '_blank')}
               >
-                Get Started Today
+                Book Discovery Call
                 <Rocket className="ml-3 w-6 h-6" />
               </Button>
 
               <div className="flex items-center justify-center space-x-6 mt-6 text-sm text-gray-400">
                 <div className="flex items-center space-x-2">
                   <Clock className="w-4 h-4" />
-                  <span>Self-paced learning</span>
+                  <span>Hands-on building</span>
                 </div>
                 <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                <span>Lifetime access</span>
+                <span>Real MVP delivered</span>
                 <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                <span>Community included</span>
+                <span>Validation guidance included</span>
               </div>
             </div>
           </div>

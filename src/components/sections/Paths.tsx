@@ -9,16 +9,16 @@ export const Paths = () => {
       icon: Zap,
       title: "Ignition",
       subtitle:
-        "For individual builders who want some guidance to build momentum",
+        "For founders with ideas who want to test them quickly and intelligently",
       description:
-        "Learn to build and ship faster than ever before with AI-powered development tools like Lovable, Replit, Bolt, and more.",
+        "I'll use 20 years of product experience and cutting-edge vibe coding tools to turn your idea into a testable MVP in hours, plus guide you on validation.",
       features: [
-        "Rapid prototyping techniques",
-        "AI tool mastery",
-        "Market validation strategies",
-        "Community support",
+        "Product discovery session",
+        "Rapid MVP building",
+        "Customer validation strategy",
+        "Iteration framework",
       ],
-      cta: "Start Your Journey",
+      cta: "Build My Idea",
       link: "https://savvycal.com/craigsturgis/vibecto-clarity-call",
       isExternal: true,
       color: "from-yellow-600 to-orange-600",
