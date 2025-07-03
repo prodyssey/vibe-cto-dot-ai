@@ -11,6 +11,7 @@ export interface PostMetadata {
   tags: string[];
   author: string;
   slug: string;
+  hidden?: boolean;
 }
 
 export interface Post {
@@ -39,7 +40,7 @@ function slugify(filename: string): string {
     .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
 }
 
-export async function getAllPosts(): Promise<PostMetadata[]> {
+export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]> {
   const posts: PostMetadata[] = [];
 
   // Process markdown files
@@ -49,11 +50,16 @@ export async function getAllPosts(): Promise<PostMetadata[]> {
       const { data } = matter(rawContent);
       const slug = slugify(path);
       
-      posts.push({
+      const post = {
         ...data,
         slug,
         type: 'markdown'
-      } as PostMetadata);
+      } as PostMetadata;
+      
+      // Skip hidden posts unless explicitly requested
+      if (!includeHidden && post.hidden) continue;
+      
+      posts.push(post);
     } catch (error) {
       console.error(`Error loading markdown file ${path}:`, error);
     }
@@ -67,11 +73,16 @@ export async function getAllPosts(): Promise<PostMetadata[]> {
       const slug = slugify(path);
       
       if (component && component.metadata) {
-        posts.push({
+        const post = {
           ...component.metadata,
           slug,
           type: 'react'
-        } as PostMetadata);
+        } as PostMetadata;
+        
+        // Skip hidden posts unless explicitly requested
+        if (!includeHidden && post.hidden) continue;
+        
+        posts.push(post);
       }
     } catch (error) {
       console.error(`Error loading React file ${path}:`, error);
@@ -86,7 +97,7 @@ export async function getAllPosts(): Promise<PostMetadata[]> {
   });
 }
 
-export async function getPostBySlug(slug: string): Promise<Post | null> {
+export async function getPostBySlug(slug: string, allowHidden = true): Promise<Post | null> {
   // Try markdown first
   const markdownPath = `/src/content/posts/${slug}.md`;
   if (markdownPath in markdownFiles) {
@@ -94,12 +105,19 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       const rawContent = markdownFiles[markdownPath] as string;
       const { data, content } = matter(rawContent);
       
+      const metadata = {
+        ...data,
+        slug,
+        type: 'markdown'
+      } as PostMetadata;
+      
+      // Check if post is hidden and if we should allow it
+      if (!allowHidden && metadata.hidden) {
+        return null;
+      }
+      
       return {
-        metadata: {
-          ...data,
-          slug,
-          type: 'markdown'
-        } as PostMetadata,
+        metadata,
         content
       };
     } catch (error) {
@@ -115,12 +133,19 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       const component = module.default;
       
       if (component && component.metadata) {
+        const metadata = {
+          ...component.metadata,
+          slug,
+          type: 'react'
+        } as PostMetadata;
+        
+        // Check if post is hidden and if we should allow it
+        if (!allowHidden && metadata.hidden) {
+          return null;
+        }
+        
         return {
-          metadata: {
-            ...component.metadata,
-            slug,
-            type: 'react'
-          } as PostMetadata,
+          metadata,
           content: '' // React components don't have markdown content
         };
       }
