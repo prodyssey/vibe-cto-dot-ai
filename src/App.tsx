@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import Ignition from "./pages/Ignition";
 import LaunchControl from "./pages/LaunchControl";
 import Interstellar from "./pages/Interstellar";
+import Resources from "./pages/Resources";
+import ResourcePost from "./pages/ResourcePost";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +25,8 @@ const App = () => (
           <Route path="/ignition" element={<Ignition />} />
           <Route path="/launch-control" element={<LaunchControl />} />
           <Route path="/interstellar" element={<Interstellar />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/resources/:slug" element={<ResourcePost />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
