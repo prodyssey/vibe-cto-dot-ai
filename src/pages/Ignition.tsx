@@ -1,6 +1,7 @@
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmailOptIn } from "@/components/EmailOptIn";
 import {
   Zap,
   Code,
@@ -17,7 +18,8 @@ const Ignition = () => {
     {
       icon: Target,
       title: "Product Discovery",
-      description: "We'll dig deep into your idea, understand the market, and identify the core value proposition",
+      description:
+        "We'll dig deep into your idea, understand the market, and identify the core value proposition",
     },
     {
       icon: Code,
@@ -66,9 +68,9 @@ const Ignition = () => {
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Turn your idea into reality. I'll use 20 years of zero-to-one product experience 
-              and cutting-edge vibe coding tools to build you something testable in hours, 
-              not months.
+              Turn your idea into reality. I'll use 20 years of zero-to-one
+              product experience and cutting-edge vibe coding tools to build you
+              something testable in hours, not months.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -105,7 +107,8 @@ const Ignition = () => {
                 How It Works
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                From idea to testable product in just a few hours of focused work.
+                From idea to testable product in just a few hours of focused
+                work.
               </p>
             </div>
 
@@ -169,6 +172,17 @@ const Ignition = () => {
           </div>
         </section>
 
+        {/* Email Opt-in Section */}
+        <section className="py-16 px-6">
+          <div className="max-w-4xl mx-auto">
+            <EmailOptIn
+              title="Learn for yourself"
+              description="Follow along with me as I build and share what I learn"
+              className="max-w-2xl mx-auto"
+            />
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="py-20 px-6 bg-black/20">
           <div className="max-w-4xl mx-auto text-center">
@@ -178,14 +192,19 @@ const Ignition = () => {
               </h2>
 
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Stop wondering if your idea could work. Let's build something 
+                Stop wondering if your idea could work. Let's build something
                 real and find out together.
               </p>
 
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
-                onClick={() => window.open('https://savvycal.com/craigsturgis/vibecto-clarity-call', '_blank')}
+                onClick={() =>
+                  window.open(
+                    "https://savvycal.com/craigsturgis/vibecto-clarity-call",
+                    "_blank"
+                  )
+                }
               >
                 Book Discovery Call
                 <Rocket className="ml-3 w-6 h-6" />
