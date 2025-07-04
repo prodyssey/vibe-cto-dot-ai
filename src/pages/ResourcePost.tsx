@@ -1,30 +1,40 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkToc from 'remark-toc';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeSlug from 'rehype-slug';
-import { Navigation } from '@/components/Navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Calendar, Clock, Share2, Twitter, Linkedin, Copy } from 'lucide-react';
-import { getPostBySlug, getReactComponent, Post } from '@/lib/content';
-import { toast } from 'sonner';
-import 'highlight.js/styles/github-dark.css';
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkToc from "remark-toc";
+import rehypeHighlight from "rehype-highlight";
+import rehypeSlug from "rehype-slug";
+import { Navigation } from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  Share2,
+  Twitter,
+  Linkedin,
+  Copy,
+} from "lucide-react";
+import { getPostBySlug, getReactComponent, Post } from "@/lib/content";
+import { toast } from "sonner";
+import { EmailOptIn } from "@/components/EmailOptIn";
+import "highlight.js/styles/github-dark.css";
 
 export default function ResourcePost() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
-  const [ReactComponent, setReactComponent] = useState<React.ComponentType | null>(null);
+  const [ReactComponent, setReactComponent] =
+    useState<React.ComponentType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!slug) {
-      setError('Post not found');
+      setError("Post not found");
       setLoading(false);
       return;
     }
@@ -33,19 +43,19 @@ export default function ResourcePost() {
       try {
         const postData = await getPostBySlug(slug);
         if (!postData) {
-          setError('Post not found');
+          setError("Post not found");
           return;
         }
 
         setPost(postData);
 
-        if (postData.metadata.type === 'react') {
+        if (postData.metadata.type === "react") {
           const component = await getReactComponent(slug);
           setReactComponent(() => component);
         }
       } catch (err) {
-        console.error('Error loading post:', err);
-        setError('Failed to load post');
+        console.error("Error loading post:", err);
+        setError("Failed to load post");
       } finally {
         setLoading(false);
       }
@@ -54,23 +64,33 @@ export default function ResourcePost() {
     loadPost();
   }, [slug]);
 
-  const sharePost = async (platform: 'twitter' | 'linkedin' | 'copy') => {
+  const sharePost = async (platform: "twitter" | "linkedin" | "copy") => {
     const url = window.location.href;
     const text = `Check out this article: ${post?.metadata.title}`;
 
     switch (platform) {
-      case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+      case "twitter":
+        window.open(
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+            text
+          )}&url=${encodeURIComponent(url)}`,
+          "_blank"
+        );
         break;
-      case 'linkedin':
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+      case "linkedin":
+        window.open(
+          `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+            url
+          )}`,
+          "_blank"
+        );
         break;
-      case 'copy':
+      case "copy":
         try {
           await navigator.clipboard.writeText(url);
-          toast.success('Link copied to clipboard!');
+          toast.success("Link copied to clipboard!");
         } catch (err) {
-          toast.error('Failed to copy link');
+          toast.error("Failed to copy link");
         }
         break;
     }
@@ -95,10 +115,17 @@ export default function ResourcePost() {
         <Navigation />
         <div className="pt-20 px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl font-bold text-white mb-4">Post Not Found</h1>
-            <p className="text-gray-300 mb-8">{error || 'The requested post could not be found.'}</p>
+            <h1 className="text-3xl font-bold text-white mb-4">
+              Post Not Found
+            </h1>
+            <p className="text-gray-300 mb-8">
+              {error || "The requested post could not be found."}
+            </p>
             <Link to="/resources">
-              <Button variant="outline" className="border-white/20 text-white bg-white/5 hover:bg-white/10">
+              <Button
+                variant="outline"
+                className="border-white/20 text-white bg-white/5 hover:bg-white/10"
+              >
                 <ArrowLeft className="mr-2 w-4 h-4" />
                 Back to Resources
               </Button>
@@ -112,13 +139,16 @@ export default function ResourcePost() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
       <Navigation />
-      
+
       <div className="pt-20 px-6">
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
           <div className="mb-8">
             <Link to="/resources">
-              <Button variant="outline" className="border-white/20 text-white bg-white/5 hover:bg-white/10">
+              <Button
+                variant="outline"
+                className="border-white/20 text-white bg-white/5 hover:bg-white/10"
+              >
                 <ArrowLeft className="mr-2 w-4 h-4" />
                 Back to Resources
               </Button>
@@ -130,13 +160,25 @@ export default function ResourcePost() {
             <CardContent className="p-8">
               <div className="flex flex-wrap gap-2 mb-4">
                 {post.metadata.featured && (
-                  <Badge className="bg-yellow-500/20 text-yellow-400">Featured</Badge>
+                  <Badge className="bg-yellow-500/20 text-yellow-400">
+                    Featured
+                  </Badge>
                 )}
-                <Badge className={post.metadata.type === 'react' ? 'bg-blue-500/20 text-blue-400' : 'bg-green-500/20 text-green-400'}>
-                  {post.metadata.type === 'react' ? 'Interactive' : 'Article'}
+                <Badge
+                  className={
+                    post.metadata.type === "react"
+                      ? "bg-blue-500/20 text-blue-400"
+                      : "bg-green-500/20 text-green-400"
+                  }
+                >
+                  {post.metadata.type === "react" ? "Interactive" : "Article"}
                 </Badge>
                 {post.metadata.tags?.map((tag) => (
-                  <Badge key={tag} variant="outline" className="border-white/20 text-white/70">
+                  <Badge
+                    key={tag}
+                    variant="outline"
+                    className="border-white/20 text-white/70"
+                  >
                     {tag}
                   </Badge>
                 ))}
@@ -155,18 +197,25 @@ export default function ResourcePost() {
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
                     <span className="whitespace-nowrap">
-                      {new Date(post.metadata.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      })}
+                      {new Date(post.metadata.date).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        }
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 mr-1" />
-                    <span className="whitespace-nowrap">{post.metadata.readTime}</span>
+                    <span className="whitespace-nowrap">
+                      {post.metadata.readTime}
+                    </span>
                   </div>
-                  <div className="whitespace-nowrap">By {post.metadata.author}</div>
+                  <div className="whitespace-nowrap">
+                    By {post.metadata.author}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -175,7 +224,7 @@ export default function ResourcePost() {
                     size="sm"
                     variant="outline"
                     className="border-white/20 text-white bg-white/5 hover:bg-white/10 h-8 w-8 p-0"
-                    onClick={() => sharePost('twitter')}
+                    onClick={() => sharePost("twitter")}
                     title="Share on Twitter"
                   >
                     <Twitter className="w-4 h-4" />
@@ -184,7 +233,7 @@ export default function ResourcePost() {
                     size="sm"
                     variant="outline"
                     className="border-white/20 text-white bg-white/5 hover:bg-white/10 h-8 w-8 p-0"
-                    onClick={() => sharePost('linkedin')}
+                    onClick={() => sharePost("linkedin")}
                     title="Share on LinkedIn"
                   >
                     <Linkedin className="w-4 h-4" />
@@ -193,7 +242,7 @@ export default function ResourcePost() {
                     size="sm"
                     variant="outline"
                     className="border-white/20 text-white bg-white/5 hover:bg-white/10 h-8 w-8 p-0"
-                    onClick={() => sharePost('copy')}
+                    onClick={() => sharePost("copy")}
                     title="Copy link"
                   >
                     <Copy className="w-4 h-4" />
@@ -206,7 +255,7 @@ export default function ResourcePost() {
           {/* Article Content */}
           <Card className="bg-white/5 backdrop-blur-sm border-white/10">
             <CardContent className="p-8">
-              {post.metadata.type === 'react' && ReactComponent ? (
+              {post.metadata.type === "react" && ReactComponent ? (
                 <ReactComponent />
               ) : (
                 <div className="markdown-content">
@@ -221,6 +270,15 @@ export default function ResourcePost() {
             </CardContent>
           </Card>
 
+          {/* Email Opt-in */}
+          <div className="py-8">
+            <EmailOptIn
+              title="Get More Like This"
+              description="Follow along as I build and share what I learn"
+              className="mt-8"
+            />
+          </div>
+
           {/* Footer */}
           <div className="py-8 text-center">
             <Separator className="bg-white/20 mb-8" />
@@ -231,7 +289,7 @@ export default function ResourcePost() {
               <Button
                 variant="outline"
                 className="border-white/20 text-white bg-white/5 hover:bg-white/10"
-                onClick={() => sharePost('twitter')}
+                onClick={() => sharePost("twitter")}
               >
                 <Twitter className="mr-2 w-4 h-4" />
                 <span>Share on Twitter</span>
@@ -239,7 +297,7 @@ export default function ResourcePost() {
               <Button
                 variant="outline"
                 className="border-white/20 text-white bg-white/5 hover:bg-white/10"
-                onClick={() => sharePost('linkedin')}
+                onClick={() => sharePost("linkedin")}
               >
                 <Linkedin className="mr-2 w-4 h-4" />
                 <span>Share on LinkedIn</span>

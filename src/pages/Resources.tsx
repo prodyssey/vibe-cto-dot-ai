@@ -1,33 +1,36 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Calendar, FileText, Code, ArrowRight } from 'lucide-react';
-import { getAllPosts, PostMetadata } from '@/lib/content';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Navigation } from "@/components/Navigation";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, FileText, Code, ArrowRight } from "lucide-react";
+import { getAllPosts, PostMetadata } from "@/lib/content";
+import { EmailOptIn } from "@/components/EmailOptIn";
 
 export default function Resources() {
   const [posts, setPosts] = useState<PostMetadata[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllPosts().then(setPosts).finally(() => setLoading(false));
+    getAllPosts()
+      .then(setPosts)
+      .finally(() => setLoading(false));
   }, []);
 
   const getIcon = (type: string) => {
-    return type === 'react' ? Code : FileText;
+    return type === "react" ? Code : FileText;
   };
 
   const getBadgeColor = (featured: boolean, type: string) => {
-    if (featured) return 'bg-yellow-500/20 text-yellow-400';
-    if (type === 'react') return 'bg-blue-500/20 text-blue-400';
-    return 'bg-green-500/20 text-green-400';
+    if (featured) return "bg-yellow-500/20 text-yellow-400";
+    if (type === "react") return "bg-blue-500/20 text-blue-400";
+    return "bg-green-500/20 text-green-400";
   };
 
   const getBadgeText = (featured: boolean, type: string) => {
-    if (featured) return 'Featured';
-    if (type === 'react') return 'Interactive';
-    return 'Article';
+    if (featured) return "Featured";
+    if (type === "react") return "Interactive";
+    return "Article";
   };
 
   if (loading) {
@@ -45,13 +48,13 @@ export default function Resources() {
     );
   }
 
-  const featuredPosts = posts.filter(post => post.featured);
-  const regularPosts = posts.filter(post => !post.featured);
+  const featuredPosts = posts.filter((post) => post.featured);
+  const regularPosts = posts.filter((post) => !post.featured);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
       <Navigation />
-      
+
       <div className="pt-20 px-6">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
@@ -60,7 +63,8 @@ export default function Resources() {
               Resources
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Stay ahead with the latest strategies, tools, and insights for vibe coders.
+              Stay ahead with the latest strategies, tools, and insights for
+              vibe coders.
             </p>
           </div>
 
@@ -82,19 +86,24 @@ export default function Resources() {
                             <div className="p-2 bg-blue-500/20 rounded-lg">
                               <Icon className="w-5 h-5 text-blue-400" />
                             </div>
-                            <Badge className={getBadgeColor(post.featured, post.type)}>
+                            <Badge
+                              className={getBadgeColor(
+                                post.featured,
+                                post.type
+                              )}
+                            >
                               {getBadgeText(post.featured, post.type)}
                             </Badge>
                           </div>
-                          
+
                           <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
                             {post.title}
                           </h3>
-                          
+
                           <p className="text-gray-300 mb-4 leading-relaxed">
                             {post.description}
                           </p>
-                          
+
                           <div className="flex items-center justify-between text-sm text-gray-400">
                             <div className="flex items-center">
                               <Calendar className="w-4 h-4 mr-1" />
@@ -106,7 +115,11 @@ export default function Resources() {
                           {post.tags && post.tags.length > 0 && (
                             <div className="flex flex-wrap gap-2 mt-4">
                               {post.tags.slice(0, 3).map((tag) => (
-                                <Badge key={tag} variant="outline" className="border-white/20 text-white/70">
+                                <Badge
+                                  key={tag}
+                                  variant="outline"
+                                  className="border-white/20 text-white/70"
+                                >
                                   {tag}
                                 </Badge>
                               ))}
@@ -120,6 +133,15 @@ export default function Resources() {
               </div>
             </section>
           )}
+
+          {/* Email Opt-in */}
+          <section className="mb-16">
+            <EmailOptIn
+              title="Follow along"
+              description="Get the latest as I build and share what I learn"
+              className="max-w-2xl mx-auto"
+            />
+          </section>
 
           {/* All Posts */}
           <section>
@@ -137,19 +159,21 @@ export default function Resources() {
                           <div className="p-2 bg-blue-500/20 rounded-lg">
                             <Icon className="w-5 h-5 text-blue-400" />
                           </div>
-                          <Badge className={getBadgeColor(post.featured, post.type)}>
+                          <Badge
+                            className={getBadgeColor(post.featured, post.type)}
+                          >
                             {getBadgeText(post.featured, post.type)}
                           </Badge>
                         </div>
-                        
+
                         <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
                           {post.title}
                         </h3>
-                        
+
                         <p className="text-gray-300 mb-4 leading-relaxed">
                           {post.description}
                         </p>
-                        
+
                         <div className="flex items-center justify-between text-sm text-gray-400">
                           <div className="flex items-center">
                             <Calendar className="w-4 h-4 mr-1" />
@@ -161,7 +185,11 @@ export default function Resources() {
                         {post.tags && post.tags.length > 0 && (
                           <div className="flex flex-wrap gap-2 mt-4">
                             {post.tags.slice(0, 2).map((tag) => (
-                              <Badge key={tag} variant="outline" className="border-white/20 text-white/70">
+                              <Badge
+                                key={tag}
+                                variant="outline"
+                                className="border-white/20 text-white/70"
+                              >
                                 {tag}
                               </Badge>
                             ))}
