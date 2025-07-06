@@ -57,7 +57,7 @@ export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]
       } as PostMetadata;
       
       // Skip hidden posts unless explicitly requested
-      if (!includeHidden && post.hidden) continue;
+      if (!includeHidden && post.hidden) {continue;}
       
       posts.push(post);
     } catch (error) {
@@ -80,7 +80,7 @@ export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]
         } as PostMetadata;
         
         // Skip hidden posts unless explicitly requested
-        if (!includeHidden && post.hidden) continue;
+        if (!includeHidden && post.hidden) {continue;}
         
         posts.push(post);
       }
@@ -91,8 +91,8 @@ export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]
 
   // Sort by date (newest first) and featured status
   return posts.sort((a, b) => {
-    if (a.featured && !b.featured) return -1;
-    if (!a.featured && b.featured) return 1;
+    if (a.featured && !b.featured) {return -1;}
+    if (!a.featured && b.featured) {return 1;}
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 }

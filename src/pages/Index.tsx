@@ -1,12 +1,12 @@
+import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
+import { FinalCTA } from "@/components/sections/FinalCTA";
 import { Hero } from "@/components/sections/Hero";
-import { ProblemPromise } from "@/components/sections/ProblemPromise";
-import { Paths } from "@/components/sections/Paths";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { Paths } from "@/components/sections/Paths";
+import { ProblemPromise } from "@/components/sections/ProblemPromise";
 import { Proof } from "@/components/sections/Proof";
 import { Resources } from "@/components/sections/Resources";
-import { FinalCTA } from "@/components/sections/FinalCTA";
-import { EmailOptIn } from "@/components/EmailOptIn";
 
 const Index = () => {
   return (

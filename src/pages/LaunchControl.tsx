@@ -1,7 +1,3 @@
-import { Navigation } from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EmailOptIn } from "@/components/EmailOptIn";
 import {
   Shield,
   Code2,
@@ -10,6 +6,11 @@ import {
   Rocket,
   Calendar,
 } from "lucide-react";
+
+import { EmailOptIn } from "@/components/EmailOptIn";
+import { Navigation } from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const LaunchControl = () => {
   const services = [

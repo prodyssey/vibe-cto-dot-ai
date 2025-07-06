@@ -1,11 +1,12 @@
+import { Calendar, FileText, Code, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Navigation } from "@/components/Navigation";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, FileText, Code, ArrowRight } from "lucide-react";
-import { getAllPosts, PostMetadata } from "@/lib/content";
+
 import { EmailOptIn } from "@/components/EmailOptIn";
+import { Navigation } from "@/components/Navigation";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { getAllPosts, PostMetadata } from "@/lib/content";
 
 export default function Resources() {
   const [posts, setPosts] = useState<PostMetadata[]>([]);
@@ -22,14 +23,14 @@ export default function Resources() {
   };
 
   const getBadgeColor = (featured: boolean, type: string) => {
-    if (featured) return "bg-yellow-500/20 text-yellow-400";
-    if (type === "react") return "bg-blue-500/20 text-blue-400";
+    if (featured) {return "bg-yellow-500/20 text-yellow-400";}
+    if (type === "react") {return "bg-blue-500/20 text-blue-400";}
     return "bg-green-500/20 text-green-400";
   };
 
   const getBadgeText = (featured: boolean, type: string) => {
-    if (featured) return "Featured";
-    if (type === "react") return "Interactive";
+    if (featured) {return "Featured";}
+    if (type === "react") {return "Interactive";}
     return "Article";
   };
 

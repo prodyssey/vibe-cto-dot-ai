@@ -1,15 +1,3 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import remarkToc from "remark-toc";
-import rehypeHighlight from "rehype-highlight";
-import rehypeSlug from "rehype-slug";
-import { Navigation } from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft,
   Calendar,
@@ -19,9 +7,24 @@ import {
   Linkedin,
   Copy,
 } from "lucide-react";
-import { getPostBySlug, getReactComponent, Post } from "@/lib/content";
+import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { useParams, Link } from "react-router-dom";
+import rehypeHighlight from "rehype-highlight";
+import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
+import remarkToc from "remark-toc";
 import { toast } from "sonner";
+
 import { EmailOptIn } from "@/components/EmailOptIn";
+import { Navigation } from "@/components/Navigation";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { getPostBySlug, getReactComponent, Post } from "@/lib/content";
+
+
 import "highlight.js/styles/github-dark.css";
 
 export default function ResourcePost() {
