@@ -84,11 +84,11 @@ export const Hero = () => {
 
           {/* Right column - Avatar */}
           <div className="flex justify-center lg:justify-end lg:mr-10">
-            <div className="relative text-center">
+            <div className="relative text-center mx-auto lg:mx-0">
               <img
                 src="/lovable-uploads/8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png"
                 alt="VibeCTO Avatar"
-                className="w-80 h-80 lg:w-96 lg:h-96 object-contain hover:scale-105 transition-transform duration-300"
+                className="w-80 h-80 lg:w-96 lg:h-96 object-contain hover:scale-105 transition-transform duration-300 mx-auto"
               />
               {/* Quote under avatar */}
               <p className="mt-6 text-lg text-gray-200 italic">
