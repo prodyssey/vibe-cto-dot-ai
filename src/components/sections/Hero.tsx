@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { ArrowRight, Code, Rocket } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 export const Hero = () => {
   const scrollToJourney = () => {

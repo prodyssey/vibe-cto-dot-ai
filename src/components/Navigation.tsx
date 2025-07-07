@@ -1,9 +1,10 @@
+import { Home, Zap, Rocket, Sparkles, BookOpen, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
+import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Home, Zap, Rocket, Sparkles, BookOpen, Menu, X } from "lucide-react";
-import { Logo } from "@/components/Logo";
 
 export const Navigation = () => {
   const location = useLocation();

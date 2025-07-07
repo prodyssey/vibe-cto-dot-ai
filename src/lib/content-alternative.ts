@@ -3,8 +3,9 @@ import matter from 'gray-matter';
 import React from 'react';
 
 // Explicit imports
-import examplePostMd from '@/content/posts/example-post.md?raw';
 import InteractiveDemo from '@/content/posts/interactive-demo';
+
+import examplePostMd from '@/content/posts/example-post.md?raw';
 
 export interface PostMetadata {
   title: string;
@@ -62,8 +63,8 @@ export async function getAllPosts(): Promise<PostMetadata[]> {
 
   // Sort by date (newest first) and featured status
   return posts.sort((a, b) => {
-    if (a.featured && !b.featured) return -1;
-    if (!a.featured && b.featured) return 1;
+    if (a.featured && !b.featured) {return -1;}
+    if (!a.featured && b.featured) {return 1;}
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 }

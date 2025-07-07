@@ -1,7 +1,3 @@
-import { Navigation } from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EmailOptIn } from "@/components/EmailOptIn";
 import {
   Zap,
   Code,
@@ -12,6 +8,11 @@ import {
   Users,
   Target,
 } from "lucide-react";
+
+import { EmailOptIn } from "@/components/EmailOptIn";
+import { Navigation } from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Ignition = () => {
   const features = [

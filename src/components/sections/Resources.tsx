@@ -1,9 +1,10 @@
 
+import { Calendar, FileText, Code, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, FileText, Code, ArrowRight } from "lucide-react";
 import { getAllPosts, PostMetadata } from "@/lib/content";
 
 export const Resources = () => {
@@ -46,13 +47,13 @@ export const Resources = () => {
   };
 
   const getBadge = (post: PostMetadata) => {
-    if (post.featured) return 'Featured';
-    if (post.type === 'react') return 'Interactive';
+    if (post.featured) {return 'Featured';}
+    if (post.type === 'react') {return 'Interactive';}
     
     // Check if post is recent (within last 7 days)
     const postDate = new Date(post.date);
     const daysAgo = Math.floor((Date.now() - postDate.getTime()) / (1000 * 60 * 60 * 24));
-    if (daysAgo <= 7) return 'New';
+    if (daysAgo <= 7) {return 'New';}
     
     return 'Popular';
   };

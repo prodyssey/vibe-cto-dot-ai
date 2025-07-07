@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight, Clock } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 export const FinalCTA = () => {
   return (

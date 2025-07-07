@@ -1,5 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Search, Map, Rocket } from "lucide-react";
+
+import { Card, CardContent } from "@/components/ui/card";
 
 export const HowItWorks = () => {
   const steps = [

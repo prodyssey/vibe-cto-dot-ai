@@ -1,7 +1,8 @@
+import { Mail, CheckCircle2 } from "lucide-react";
 import React, { useState, useRef } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface EmailOptInProps {
