@@ -1,11 +1,12 @@
+import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
+import { FinalCTA } from "@/components/sections/FinalCTA";
 import { Hero } from "@/components/sections/Hero";
-import { ProblemPromise } from "@/components/sections/ProblemPromise";
-import { Paths } from "@/components/sections/Paths";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { Paths } from "@/components/sections/Paths";
+import { ProblemPromise } from "@/components/sections/ProblemPromise";
 import { Proof } from "@/components/sections/Proof";
 import { Resources } from "@/components/sections/Resources";
-import { FinalCTA } from "@/components/sections/FinalCTA";
 
 const Index = () => {
   return (
@@ -17,6 +18,13 @@ const Index = () => {
         <HowItWorks />
         {/* <Proof /> */}
         <Resources />
+        <div className="py-16 px-6">
+          <EmailOptIn
+            title="Follow along"
+            description="Get the latest as I build and share what I learn"
+            className="max-w-2xl mx-auto"
+          />
+        </div>
         <Paths />
         <FinalCTA />
       </div>

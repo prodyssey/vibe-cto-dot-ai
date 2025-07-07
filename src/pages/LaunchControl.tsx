@@ -1,7 +1,16 @@
+import {
+  Shield,
+  Code2,
+  GitBranch,
+  Layers,
+  Rocket,
+  Calendar,
+} from "lucide-react";
+
+import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, Code2, GitBranch, Layers, Rocket, Calendar } from "lucide-react";
 
 const LaunchControl = () => {
   const services = [
@@ -239,6 +248,17 @@ const LaunchControl = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Email Opt-in Section */}
+        <section className="py-16 px-6">
+          <div className="max-w-4xl mx-auto">
+            <EmailOptIn
+              title="Learn with me"
+              description="Follow along as I build and share what I learn"
+              className="max-w-2xl mx-auto"
+            />
           </div>
         </section>
 

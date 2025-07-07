@@ -1,6 +1,7 @@
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Star, TrendingUp, Users, Zap } from "lucide-react";
+
+import { Card, CardContent } from "@/components/ui/card";
 
 export const Proof = () => {
   const metrics = [

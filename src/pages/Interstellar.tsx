@@ -1,6 +1,3 @@
-import { Navigation } from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Users,
   Cpu,
@@ -10,6 +7,10 @@ import {
   Shield,
   Clock,
 } from "lucide-react";
+
+import { Navigation } from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Interstellar = () => {
   const features = [
