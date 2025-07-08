@@ -133,7 +133,7 @@ InteractiveDemo.metadata = {
   date: "2024-12-20",
   readTime: "10 min read",
   featured: false,
-  type: "react",
+  type: "react" as const,
   tags: ["react", "interactive", "demo"],
   author: "Vibe CTO",
   hidden: true,
