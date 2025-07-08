@@ -14,7 +14,80 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      adventure_choices: {
+        Row: {
+          answered_at: string
+          choice_text: string
+          choice_value: string
+          id: string
+          question_number: number
+          question_text: string
+          session_id: string
+        }
+        Insert: {
+          answered_at?: string
+          choice_text: string
+          choice_value: string
+          id?: string
+          question_number: number
+          question_text: string
+          session_id: string
+        }
+        Update: {
+          answered_at?: string
+          choice_text?: string
+          choice_value?: string
+          id?: string
+          question_number?: number
+          question_text?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "adventure_choices_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      adventure_sessions: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          email: string | null
+          final_outcome: Database["public"]["Enums"]["game_outcome"] | null
+          final_path: Database["public"]["Enums"]["adventure_path"] | null
+          id: string
+          is_generated_name: boolean
+          player_name: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          email?: string | null
+          final_outcome?: Database["public"]["Enums"]["game_outcome"] | null
+          final_path?: Database["public"]["Enums"]["adventure_path"] | null
+          id?: string
+          is_generated_name?: boolean
+          player_name: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          email?: string | null
+          final_outcome?: Database["public"]["Enums"]["game_outcome"] | null
+          final_path?: Database["public"]["Enums"]["adventure_path"] | null
+          id?: string
+          is_generated_name?: boolean
+          player_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +96,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      adventure_path: "ignition" | "launch_control" | "interstellar"
+      game_outcome: "email_signup" | "book_meeting"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +224,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      adventure_path: ["ignition", "launch_control", "interstellar"],
+      game_outcome: ["email_signup", "book_meeting"],
+    },
   },
 } as const

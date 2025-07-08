@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 
+import Adventure from "./pages/Adventure";
 import Ignition from "./pages/Ignition";
 import Index from "./pages/Index";
 import Interstellar from "./pages/Interstellar";
@@ -25,6 +26,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/adventure" element={<Adventure />} />
           <Route path="/ignition" element={<Ignition />} />
           <Route path="/launch-control" element={<LaunchControl />} />
           <Route path="/interstellar" element={<Interstellar />} />

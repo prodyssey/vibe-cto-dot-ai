@@ -1,8 +1,11 @@
-import { ArrowRight, Code, Rocket } from "lucide-react";
+import { ArrowRight, Code, Rocket, Gamepad2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 
 export const Hero = () => {
+  const navigate = useNavigate();
+
   const scrollToJourney = () => {
     const journeySection = document.getElementById("journey");
     if (journeySection) {
@@ -53,17 +56,29 @@ export const Hero = () => {
 
             {/* Primary CTA */}
             <div className="space-y-6">
-              <Button
-                onClick={scrollToJourney}
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
-              >
-                Pick Your Path
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button
+                  onClick={scrollToJourney}
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
+                >
+                  Pick Your Path Standard
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+                
+                <Button
+                  onClick={() => navigate("/adventure")}
+                  size="lg"
+                  variant="outline"
+                  className="border-2 border-purple-500/50 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-400 px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105"
+                >
+                  <Gamepad2 className="mr-2 w-5 h-5" />
+                  Pick Your Path Fun
+                </Button>
+              </div>
 
-              <p className="text-sm text-gray-400">
-                Free clarity call • No commitment required
+              <p className="text-sm text-gray-400 text-center lg:text-left">
+                Free clarity call • No commitment required • Adventure mode available!
               </p>
             </div>
 
