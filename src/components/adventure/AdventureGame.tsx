@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
-import { ArrowRight, Sparkles, Shuffle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { EmailOptIn } from '@/components/EmailOptIn';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -13,20 +10,18 @@ import { useGameStore } from './gameStore';
 import { Scene } from './Scene';
 import { SceneNavigation } from './SceneNavigation';
 import { getScene } from './scenes';
-import { generateRandomName, saveGameProgress, saveSceneVisit, saveChoice, getPathInfo } from './utils';
+import { saveGameProgress, saveSceneVisit, saveChoice, getPathInfo } from './utils';
 import { useBrowserNavigation, useGameCompletion } from './hooks';
+import { EntryScreen } from './scenes/EntryScreen';
+import { PlayerSetupScreen } from './scenes/PlayerSetupScreen';
 
 export const AdventureGame = () => {
   const {
     currentSceneId,
     playerName,
-    isGeneratedName,
     sessionId,
     visitedScenes,
     finalPath,
-    setPlayerName,
-    setSessionId,
-    startSession,
     makeChoice,
     calculateFinalPath,
   } = useGameStore();
@@ -35,38 +30,6 @@ export const AdventureGame = () => {
   const { handleEmailSignup: handleEmailSignupBase, handleExploreService: handleExploreServiceBase } = useGameCompletion();
   const currentScene = getScene(currentSceneId);
 
-  const handleGenerateRandomName = () => {
-    const randomName = generateRandomName();
-    setPlayerName(randomName, true);
-  };
-
-  const startGame = async () => {
-    if (!playerName.trim()) {
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from('adventure_sessions')
-        .insert({
-          player_name: playerName,
-          is_generated_name: isGeneratedName,
-          current_scene_id: 'destinationSelection',
-        })
-        .select()
-        .single();
-
-      if (error) {
-        throw error;
-      }
-      
-      setSessionId(data.id);
-      startSession();
-      pushScene('destinationSelection');
-    } catch (error) {
-      console.error('Error starting game:', error);
-    }
-  };
 
   const handleChoice = async (choice: {
     id: string;
@@ -154,65 +117,12 @@ export const AdventureGame = () => {
 
   // Entry scene
   if (currentSceneId === 'entry') {
-    return (
-      <Scene scene={currentScene}>
-        <div className="text-center">
-          <Button
-            onClick={() => pushScene('playerSetup')}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3"
-            size="lg"
-          >
-            Begin Journey
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
-        </div>
-      </Scene>
-    );
+    return <EntryScreen />;
   }
 
   // Player setup scene
   if (currentSceneId === 'playerSetup') {
-    return (
-      <Scene scene={currentScene}>
-        <div>
-          <Label htmlFor="playerName" className="text-white text-sm font-medium">
-            Enter your name or generate a retro gaming alias
-          </Label>
-          <div className="flex gap-3 mt-2">
-            <Input
-              id="playerName"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value, false)}
-              placeholder="Your name or alias"
-              className="bg-gray-800/80 border-gray-600 text-white placeholder:text-gray-400"
-            />
-            <Button
-              onClick={handleGenerateRandomName}
-              variant="outline"
-              className="border-purple-500/50 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 whitespace-nowrap"
-            >
-              <Shuffle className="w-4 h-4 mr-2" />
-              Random
-            </Button>
-          </div>
-          {isGeneratedName && (
-            <p className="text-purple-400 text-sm mt-2">
-              <Sparkles className="w-4 h-4 inline mr-1" />
-              Generated retro gaming name!
-            </p>
-          )}
-        </div>
-        <Button
-          onClick={startGame}
-          disabled={!playerName.trim()}
-          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
-          size="lg"
-        >
-          Begin Quest
-          <ArrowRight className="ml-2 w-5 h-5" />
-        </Button>
-      </Scene>
-    );
+    return <PlayerSetupScreen />;
   }
 
   // Choice scenes
