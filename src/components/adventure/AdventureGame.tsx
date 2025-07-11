@@ -29,6 +29,13 @@ import { LaunchControlTimelineScreen } from './scenes/launchcontrol/LaunchContro
 import { LaunchControlTestimonialsScreen } from './scenes/launchcontrol/LaunchControlTestimonialsScreen';
 import { LaunchControlApplicationScreen } from './scenes/launchcontrol/LaunchControlApplicationScreen';
 import { LaunchControlFinalScreen } from './scenes/launchcontrol/LaunchControlFinalScreen';
+import { InterstellarDetailScreen } from './scenes/interstellar/InterstellarDetailScreen';
+import { InterstellarCapabilitiesScreen } from './scenes/interstellar/InterstellarCapabilitiesScreen';
+import { InterstellarEngagementScreen } from './scenes/interstellar/InterstellarEngagementScreen';
+import { InterstellarFeaturesScreen } from './scenes/interstellar/InterstellarFeaturesScreen';
+import { InterstellarPartnershipScreen } from './scenes/interstellar/InterstellarPartnershipScreen';
+import { InterstellarContactScreen } from './scenes/interstellar/InterstellarContactScreen';
+import { InterstellarFinalScreen } from './scenes/interstellar/InterstellarFinalScreen';
 import { saveGameProgress, saveSceneVisit, saveChoice, getPathInfo } from './utils';
 
 export const AdventureGame = () => {
@@ -195,6 +202,29 @@ export const AdventureGame = () => {
   }
   if (currentSceneId === 'launchControlFinal') {
     return <LaunchControlFinalScreen />;
+  }
+
+  // Interstellar path scenes
+  if (currentSceneId === 'interstellarDetail') {
+    return <InterstellarDetailScreen />;
+  }
+  if (currentSceneId === 'interstellarCapabilities') {
+    return <InterstellarCapabilitiesScreen />;
+  }
+  if (currentSceneId === 'interstellarEngagement') {
+    return <InterstellarEngagementScreen />;
+  }
+  if (currentSceneId === 'interstellarFeatures') {
+    return <InterstellarFeaturesScreen />;
+  }
+  if (currentSceneId === 'interstellarPartnership') {
+    return <InterstellarPartnershipScreen />;
+  }
+  if (currentSceneId === 'interstellarContact') {
+    return <InterstellarContactScreen />;
+  }
+  if (currentSceneId === 'interstellarFinal') {
+    return <InterstellarFinalScreen />;
   }
 
   // Other choice scenes
