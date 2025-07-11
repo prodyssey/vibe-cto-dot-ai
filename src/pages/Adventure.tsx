@@ -1,5 +1,5 @@
-import { Navigation } from "@/components/Navigation";
 import { AdventureGame } from "@/components/adventure/AdventureGame";
+import { Navigation } from "@/components/Navigation";
 
 const Adventure = () => {
   return (
