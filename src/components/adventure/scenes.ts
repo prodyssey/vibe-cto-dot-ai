@@ -21,50 +21,13 @@ export const SCENES: Record<string, Scene> = {
     nextScene: 'destinationSelection',
   },
 
-  // Main Branch Selection - Three Paths
+  // Main Branch Selection - Three Paths (handled by BranchSelectionScreen component)
   destinationSelection: {
     id: 'destinationSelection',
     type: 'choice',
     title: 'Choose Your Path',
     description: 'Three paths lead to product success. Where are you in your journey?',
     backgroundClass: 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900',
-    choices: [
-      {
-        id: 'ignition-path',
-        text: '🔥 I have an idea I believe in - but need help getting started',
-        nextScene: 'ignitionDetail',
-        pathWeight: {
-          ignition: 3,
-          launch_control: 0,
-          interstellar: 0,
-        },
-      },
-      {
-        id: 'launch-control-path',
-        text: '🚀 I\'ve got a real vibe coded prototype with traction - ready to gear up for scale',
-        nextScene: 'launchControlDetail',
-        pathWeight: {
-          ignition: 0,
-          launch_control: 3,
-          interstellar: 0,
-        },
-      },
-      {
-        id: 'interstellar-path',
-        text: '✨ We\'re well on our way - but want help to go further, faster',
-        nextScene: 'interstellarDetail',
-        pathWeight: {
-          ignition: 0,
-          launch_control: 0,
-          interstellar: 3,
-        },
-      },
-      {
-        id: 'explore-station',
-        text: '📡 Just exploring the station...',
-        nextScene: 'stationTour',
-      },
-    ],
   },
 
   // Ignition Path Detail

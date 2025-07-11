@@ -14,6 +14,8 @@ import { saveGameProgress, saveSceneVisit, saveChoice, getPathInfo } from './uti
 import { useBrowserNavigation, useGameCompletion } from './hooks';
 import { EntryScreen } from './scenes/EntryScreen';
 import { PlayerSetupScreen } from './scenes/PlayerSetupScreen';
+import { BranchSelectionScreen } from './scenes/BranchSelectionScreen';
+import { StationTourScreen } from './scenes/StationTourScreen';
 
 export const AdventureGame = () => {
   const {
@@ -125,7 +127,17 @@ export const AdventureGame = () => {
     return <PlayerSetupScreen />;
   }
 
-  // Choice scenes
+  // Branch selection scene
+  if (currentSceneId === 'destinationSelection') {
+    return <BranchSelectionScreen />;
+  }
+
+  // Station tour scene
+  if (currentSceneId === 'stationTour') {
+    return <StationTourScreen />;
+  }
+
+  // Other choice scenes
   if (currentScene.type === 'choice' && currentScene.choices) {
     return (
       <Scene scene={currentScene}>

@@ -18,13 +18,18 @@ export const SceneNavigation = ({
   onNext,
   nextLabel = 'Continue',
 }: SceneNavigationProps) => {
-  const { resetGame } = useGameStore();
+  const { resetGame, currentSceneId } = useGameStore();
   const { pushScene, canNavigateBack } = useBrowserNavigation();
   const { soundEnabled, toggleSound } = usePreferences();
   const { formattedDuration } = useSessionTimer();
 
   const handleBack = () => {
-    window.history.back();
+    // Handle special back navigation cases
+    if (currentSceneId === 'stationTour') {
+      pushScene('destinationSelection');
+    } else {
+      window.history.back();
+    }
   };
 
   const handleReset = () => {
