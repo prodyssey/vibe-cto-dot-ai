@@ -5,6 +5,7 @@ import { useGameStore } from '../gameStore';
 import { useBrowserNavigation } from '../hooks';
 import { saveChoice, saveSceneVisit } from '../utils';
 import { Flame, Rocket, Sparkles, Radio } from 'lucide-react';
+import { IgnitionPortal, LaunchControlPortal, InterstellarPortal } from '../assets';
 import type { Scene as SceneType } from '../types';
 
 const BRANCH_SCENE: SceneType = {
@@ -180,12 +181,19 @@ export const BranchSelectionScreen = () => {
                     </div>
                   </div>
 
+                  {/* Portal Asset */}
+                  <div className="absolute inset-0">
+                    {portal.id === 'ignition-path' && <IgnitionPortal isActive={hoveredPortal === portal.id} />}
+                    {portal.id === 'launch-control-path' && <LaunchControlPortal isActive={hoveredPortal === portal.id} />}
+                    {portal.id === 'interstellar-path' && <InterstellarPortal isActive={hoveredPortal === portal.id} />}
+                  </div>
+
                   {/* Portal Content */}
                   <div className="relative h-full flex flex-col items-center justify-center p-6 text-center">
-                    {/* Icon */}
+                    {/* Icon (now smaller, for accent) */}
                     <div className={cn(
-                      "mb-4 text-white opacity-80 group-hover:opacity-100 transition-all",
-                      "group-hover:scale-110 group-hover:rotate-12"
+                      "mb-4 text-white opacity-60 group-hover:opacity-80 transition-all",
+                      "w-8 h-8"
                     )}>
                       {portal.icon}
                     </div>

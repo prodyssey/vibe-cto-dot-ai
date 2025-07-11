@@ -5,6 +5,7 @@ import { Scene } from '../Scene';
 import { TypewriterText } from '../TypewriterText';
 import { useGameStore } from '../gameStore';
 import { useBrowserNavigation } from '../hooks';
+import { SpaceStationLobby, LoadingSpinner, WalkingFounders } from '../assets';
 import type { Scene as SceneType } from '../types';
 
 const ENTRY_SCENE: SceneType = {
@@ -41,11 +42,8 @@ export const EntryScreen = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="relative">
-            <div className="w-24 h-24 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-            <Sparkles className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-purple-400" />
-          </div>
-          <p className="text-purple-300 animate-pulse">Initializing VibeCTO Station...</p>
+          <LoadingSpinner className="w-24 h-24 mx-auto" />
+          <p className="text-purple-300 animate-pulse font-mono">Initializing VibeCTO Station...</p>
         </div>
       </div>
     );
@@ -53,37 +51,9 @@ export const EntryScreen = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-        {/* Stars */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute animate-twinkle"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-              }}
-            >
-              <div className="w-1 h-1 bg-white rounded-full opacity-70" />
-            </div>
-          ))}
-        </div>
-
-        {/* Grid Lines */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="h-full w-full"
-            style={{
-              backgroundImage: `
-                linear-gradient(to right, rgba(147, 51, 234, 0.3) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(147, 51, 234, 0.3) 1px, transparent 1px)
-              `,
-              backgroundSize: '50px 50px',
-            }}
-          />
-        </div>
+      {/* Space Station Lobby Background */}
+      <div className="absolute inset-0">
+        <SpaceStationLobby className="w-full h-full object-cover" />
       </div>
 
       {/* Holographic Displays */}
@@ -140,14 +110,8 @@ export const EntryScreen = () => {
           </div>
 
           {/* Animated Founders */}
-          <div className="absolute bottom-0 left-0 right-0 h-20 overflow-hidden">
-            <div className="flex space-x-8 animate-scroll">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="flex-shrink-0 text-gray-600 text-4xl">
-                  🚶‍♂️
-                </div>
-              ))}
-            </div>
+          <div className="absolute bottom-4 left-0 right-0 h-16 overflow-hidden">
+            <WalkingFounders className="opacity-70" />
           </div>
         </Scene>
       </div>

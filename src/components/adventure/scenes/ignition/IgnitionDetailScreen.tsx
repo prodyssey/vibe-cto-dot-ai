@@ -6,6 +6,7 @@ import { useGameStore } from '../../gameStore';
 import { useBrowserNavigation } from '../../hooks';
 import { Button } from '@/components/ui/button';
 import { Flame, Zap, Cpu, Gauge, ArrowRight } from 'lucide-react';
+import { ForgeBackground } from '../../assets';
 import { cn } from '@/lib/utils';
 import type { Scene as SceneType } from '../../types';
 
@@ -40,26 +41,9 @@ export const IgnitionDetailScreen = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Animated Background - Industrial Forge */}
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-900 via-red-900 to-slate-900">
-        {/* Animated Sparks */}
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-orange-400 rounded-full animate-float"
-              style={{
-                left: `${Math.random() * 100}%`,
-                bottom: '0',
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${3 + Math.random() * 4}s`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Forge Glow */}
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl" />
+      {/* Forge Background */}
+      <div className="absolute inset-0">
+        <ForgeBackground className="w-full h-full" />
       </div>
 
       {/* Holographic Blueprints */}
