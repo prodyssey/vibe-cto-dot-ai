@@ -7,15 +7,29 @@ import { supabase } from '@/integrations/supabase/client';
 
 import { Choice } from './Choice';
 import { useGameStore } from './gameStore';
+import { useBrowserNavigation, useGameCompletion } from './hooks';
 import { Scene } from './Scene';
 import { SceneNavigation } from './SceneNavigation';
 import { getScene } from './scenes';
-import { saveGameProgress, saveSceneVisit, saveChoice, getPathInfo } from './utils';
-import { useBrowserNavigation, useGameCompletion } from './hooks';
 import { EntryScreen } from './scenes/EntryScreen';
 import { PlayerSetupScreen } from './scenes/PlayerSetupScreen';
 import { BranchSelectionScreen } from './scenes/BranchSelectionScreen';
 import { StationTourScreen } from './scenes/StationTourScreen';
+import { IgnitionDetailScreen } from './scenes/ignition/IgnitionDetailScreen';
+import { IgnitionProcessScreen } from './scenes/ignition/IgnitionProcessScreen';
+import { IgnitionBudgetScreen } from './scenes/ignition/IgnitionBudgetScreen';
+import { IgnitionQualificationScreen } from './scenes/ignition/IgnitionQualificationScreen';
+import { IgnitionFinalScreen } from './scenes/ignition/IgnitionFinalScreen';
+import { IgnitionAlternativesScreen } from './scenes/ignition/IgnitionAlternativesScreen';
+import { IgnitionPaymentInfoScreen } from './scenes/ignition/IgnitionPaymentInfoScreen';
+import { LaunchControlDetailScreen } from './scenes/launchcontrol/LaunchControlDetailScreen';
+import { LaunchControlProcessScreen } from './scenes/launchcontrol/LaunchControlProcessScreen';
+import { LaunchControlCapabilitiesScreen } from './scenes/launchcontrol/LaunchControlCapabilitiesScreen';
+import { LaunchControlTimelineScreen } from './scenes/launchcontrol/LaunchControlTimelineScreen';
+import { LaunchControlTestimonialsScreen } from './scenes/launchcontrol/LaunchControlTestimonialsScreen';
+import { LaunchControlApplicationScreen } from './scenes/launchcontrol/LaunchControlApplicationScreen';
+import { LaunchControlFinalScreen } from './scenes/launchcontrol/LaunchControlFinalScreen';
+import { saveGameProgress, saveSceneVisit, saveChoice, getPathInfo } from './utils';
 
 export const AdventureGame = () => {
   const {
@@ -135,6 +149,52 @@ export const AdventureGame = () => {
   // Station tour scene
   if (currentSceneId === 'stationTour') {
     return <StationTourScreen />;
+  }
+
+  // Ignition path scenes
+  if (currentSceneId === 'ignitionDetail') {
+    return <IgnitionDetailScreen />;
+  }
+  if (currentSceneId === 'ignitionProcess') {
+    return <IgnitionProcessScreen />;
+  }
+  if (currentSceneId === 'ignitionBudget') {
+    return <IgnitionBudgetScreen />;
+  }
+  if (currentSceneId === 'ignitionQualification') {
+    return <IgnitionQualificationScreen />;
+  }
+  if (currentSceneId === 'ignitionFinal') {
+    return <IgnitionFinalScreen />;
+  }
+  if (currentSceneId === 'ignitionAlternatives') {
+    return <IgnitionAlternativesScreen />;
+  }
+  if (currentSceneId === 'ignitionPaymentInfo') {
+    return <IgnitionPaymentInfoScreen />;
+  }
+
+  // Launch Control path scenes
+  if (currentSceneId === 'launchControlDetail') {
+    return <LaunchControlDetailScreen />;
+  }
+  if (currentSceneId === 'launchControlProcess') {
+    return <LaunchControlProcessScreen />;
+  }
+  if (currentSceneId === 'launchControlCapabilities') {
+    return <LaunchControlCapabilitiesScreen />;
+  }
+  if (currentSceneId === 'launchControlTimeline') {
+    return <LaunchControlTimelineScreen />;
+  }
+  if (currentSceneId === 'launchControlTestimonials') {
+    return <LaunchControlTestimonialsScreen />;
+  }
+  if (currentSceneId === 'launchControlApplication') {
+    return <LaunchControlApplicationScreen />;
+  }
+  if (currentSceneId === 'launchControlFinal') {
+    return <LaunchControlFinalScreen />;
   }
 
   // Other choice scenes

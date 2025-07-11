@@ -1,0 +1,180 @@
+import { useState } from 'react';
+import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
+import { useGameStore } from '../../gameStore';
+import { useBrowserNavigation } from '../../hooks';
+import { saveChoice } from '../../utils';
+import { Button } from '@/components/ui/button';
+import { DollarSign, CheckCircle, XCircle, Info } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import type { Scene as SceneType } from '../../types';
+
+const BUDGET_SCENE: SceneType = {
+  id: 'ignitionBudget',
+  type: 'choice',
+  title: 'Investment Check',
+  description: 'Let\'s ensure we\'re aligned on the investment required',
+  backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
+};
+
+const BUDGET_OPTIONS = [
+  {
+    id: 'ready',
+    title: 'Ready to Invest',
+    amount: '$15,000 - $25,000',
+    description: 'I understand the investment and I\'m ready to transform my idea',
+    icon: <CheckCircle className="w-6 h-6" />,
+    color: 'from-green-600 to-emerald-600',
+    nextScene: 'ignitionQualification',
+  },
+  {
+    id: 'need-info',
+    title: 'Need More Information',
+    amount: 'Let\'s discuss options',
+    description: 'I\'d like to understand payment plans and what\'s included',
+    icon: <Info className="w-6 h-6" />,
+    color: 'from-blue-600 to-cyan-600',
+    nextScene: 'ignitionPaymentInfo',
+  },
+  {
+    id: 'not-ready',
+    title: 'Not Ready Yet',
+    amount: 'Maybe later',
+    description: 'This is outside my current budget',
+    icon: <XCircle className="w-6 h-6" />,
+    color: 'from-gray-600 to-gray-700',
+    nextScene: 'ignitionAlternatives',
+  },
+];
+
+export const IgnitionBudgetScreen = () => {
+  const [hoveredOption, setHoveredOption] = useState<string | null>(null);
+  const { sessionId, makeChoice } = useGameStore();
+  const { pushScene } = useBrowserNavigation();
+
+  const handleBudgetChoice = async (option: typeof BUDGET_OPTIONS[0]) => {
+    // Save choice
+    makeChoice(BUDGET_SCENE.id, option.id);
+    await saveChoice(
+      sessionId,
+      BUDGET_SCENE.id,
+      option.id,
+      `${option.title}: ${option.amount}`
+    );
+
+    // Navigate to next scene
+    pushScene(option.nextScene);
+  };
+
+  return (
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-900 via-red-900 to-slate-900">
+        {/* Floating Dollar Signs */}
+        <div className="absolute inset-0 overflow-hidden opacity-10">
+          {[...Array(10)].map((_, i) => (
+            <DollarSign
+              key={i}
+              className="absolute text-orange-400 animate-float"
+              size={40}
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${5 + Math.random() * 5}s`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
+        <Scene scene={BUDGET_SCENE} className="max-w-4xl w-full">
+          <div className="space-y-8">
+            {/* Investment Overview */}
+            <div className="bg-gray-900/50 backdrop-blur-sm border border-orange-500/30 rounded-lg p-6">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                <DollarSign className="w-6 h-6 mr-2 text-orange-400" />
+                Ignition Investment Overview
+              </h3>
+              
+              <div className="grid md:grid-cols-2 gap-4 text-gray-300">
+                <div>
+                  <h4 className="font-semibold text-orange-300 mb-2">What\'s Included:</h4>
+                  <ul className="space-y-1 text-sm">
+                    <li>• 2-4 week intensive development</li>
+                    <li>• Working MVP of your product</li>
+                    <li>• Technical documentation</li>
+                    <li>• Deployment & hosting setup</li>
+                    <li>• 30 days of post-launch support</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-orange-300 mb-2">Investment Range:</h4>
+                  <div className="text-2xl font-bold text-white mb-2">$15,000 - $25,000</div>
+                  <p className="text-sm">Final cost depends on scope and complexity</p>
+                  <p className="text-sm mt-2 text-orange-300">Payment plans available</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Budget Options */}
+            <div className="space-y-4">
+              {BUDGET_OPTIONS.map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => handleBudgetChoice(option)}
+                  onMouseEnter={() => setHoveredOption(option.id)}
+                  onMouseLeave={() => setHoveredOption(null)}
+                  className={cn(
+                    "w-full text-left transition-all duration-300",
+                    "bg-gray-800/30 backdrop-blur-sm border rounded-xl p-6",
+                    "hover:scale-[1.02] hover:bg-gray-800/50",
+                    hoveredOption === option.id
+                      ? "border-transparent shadow-xl"
+                      : "border-gray-700/50"
+                  )}
+                  style={{
+                    boxShadow: hoveredOption === option.id
+                      ? `0 10px 40px -10px ${option.color.includes('green') ? 'rgba(34, 197, 94, 0.3)' : 
+                          option.color.includes('blue') ? 'rgba(59, 130, 246, 0.3)' : 'rgba(107, 114, 128, 0.3)'}`
+                      : 'none'
+                  }}
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className={cn(
+                      "p-3 rounded-lg bg-gradient-to-br text-white",
+                      option.color
+                    )}>
+                      {option.icon}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-lg font-semibold text-white mb-1">
+                        {option.title}
+                      </h4>
+                      <div className="text-xl font-bold text-gray-300 mb-2">
+                        {option.amount}
+                      </div>
+                      <p className="text-sm text-gray-400">
+                        {option.description}
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Additional Info */}
+            <div className="text-center text-sm text-gray-400">
+              <p>All investments are backed by our satisfaction guarantee</p>
+              <p>We only succeed when you succeed</p>
+            </div>
+          </div>
+
+          <SceneNavigation showBack showReset />
+        </Scene>
+      </div>
+    </div>
+  );
+};
