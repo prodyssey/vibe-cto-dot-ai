@@ -27,6 +27,7 @@ export interface GameState {
   playerName: string;
   isGeneratedName: boolean;
   sessionId: string;
+  sessionStartTime: string | null;
   visitedScenes: Record<string, number>;
   pathScores: {
     ignition: number;
@@ -39,6 +40,18 @@ export interface GameState {
     choiceId: string;
     timestamp: string;
   }>;
+  discoveredPaths: Set<ServicePath>;
+  unlockedContent: string[];
+  preferences: {
+    soundEnabled: boolean;
+    musicVolume: number;
+    effectsVolume: number;
+  };
+  completionStatus: {
+    isCompleted: boolean;
+    completedAt: string | null;
+    finalOutcome: 'email_signup' | 'explore_service' | null;
+  };
 }
 
 export interface SceneTransition {
@@ -56,4 +69,14 @@ export interface GameProgress {
   choices: GameState['choices'];
   finalPath?: ServicePath;
   completedAt?: string;
+  discoveredPaths?: string[];
+  unlockedContent?: string[];
+  preferences?: GameState['preferences'];
+}
+
+export interface AnalyticsEvent {
+  eventType: 'scene_view' | 'choice_made' | 'path_discovered' | 'game_completed' | 'preference_changed';
+  timestamp: string;
+  sessionId: string;
+  data: Record<string, any>;
 }

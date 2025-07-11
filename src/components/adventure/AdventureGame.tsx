@@ -14,9 +14,9 @@ import { Scene } from './Scene';
 import { SceneNavigation } from './SceneNavigation';
 import { getScene } from './scenes';
 import { generateRandomName, saveGameProgress, saveSceneVisit, saveChoice, getPathInfo } from './utils';
+import { useBrowserNavigation, useGameCompletion } from './hooks';
 
 export const AdventureGame = () => {
-  const navigate = useNavigate();
   const {
     currentSceneId,
     playerName,
@@ -26,11 +26,13 @@ export const AdventureGame = () => {
     finalPath,
     setPlayerName,
     setSessionId,
-    navigateToScene,
+    startSession,
     makeChoice,
     calculateFinalPath,
   } = useGameStore();
 
+  const { pushScene } = useBrowserNavigation();
+  const { handleEmailSignup: handleEmailSignupBase, handleExploreService: handleExploreServiceBase } = useGameCompletion();
   const currentScene = getScene(currentSceneId);
 
   const handleGenerateRandomName = () => {
@@ -59,7 +61,8 @@ export const AdventureGame = () => {
       }
       
       setSessionId(data.id);
-      navigateToScene('destinationSelection');
+      startSession();
+      pushScene('destinationSelection');
     } catch (error) {
       console.error('Error starting game:', error);
     }
@@ -81,7 +84,7 @@ export const AdventureGame = () => {
 
     // Navigate to next scene
     if (choice.nextScene) {
-      navigateToScene(choice.nextScene);
+      pushScene(choice.nextScene);
       
       // Save scene visit
       const visitCount = (visitedScenes[choice.nextScene] || 0) + 1;
@@ -110,6 +113,8 @@ export const AdventureGame = () => {
         .from('adventure_sessions')
         .update({ final_outcome: 'email_signup' })
         .eq('id', sessionId);
+      
+      await handleEmailSignupBase();
     } catch (error) {
       console.error('Error updating outcome:', error);
     }
@@ -122,14 +127,7 @@ export const AdventureGame = () => {
         .update({ final_outcome: 'explore_service' })
         .eq('id', sessionId);
       
-      // Navigate to appropriate path page
-      if (finalPath === 'ignition') {
-        navigate('/ignition');
-      } else if (finalPath === 'launch_control') {
-        navigate('/launch-control');
-      } else if (finalPath === 'interstellar') {
-        navigate('/interstellar');
-      }
+      await handleExploreServiceBase();
     } catch (error) {
       console.error('Error updating outcome:', error);
     }
@@ -147,7 +145,7 @@ export const AdventureGame = () => {
         finalPath,
       });
     }
-  }, [currentSceneId, sessionId]);
+  }, [currentSceneId, sessionId, playerName, visitedScenes, finalPath]);
 
   // Handle different scene types
   if (!currentScene) {
@@ -160,7 +158,7 @@ export const AdventureGame = () => {
       <Scene scene={currentScene}>
         <div className="text-center">
           <Button
-            onClick={() => navigateToScene('playerSetup')}
+            onClick={() => pushScene('playerSetup')}
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3"
             size="lg"
           >
@@ -244,7 +242,7 @@ export const AdventureGame = () => {
       <Scene scene={currentScene}>
         <div className="text-center">
           <Button
-            onClick={() => navigateToScene(currentScene.nextScene || '')}
+            onClick={() => pushScene(currentScene.nextScene || '')}
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
             size="lg"
           >

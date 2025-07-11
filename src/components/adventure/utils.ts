@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import type { GameProgress, ServicePath } from './types';
+import { useGameStore } from './gameStore';
 
 export const RETRO_NAMES = [
   'PixelMaster', 'ByteBlade', 'CodeCrusher', 'DataDragon', 'VibeViper',
@@ -14,6 +15,7 @@ export const generateRandomName = (): string => {
 
 export const saveGameProgress = async (progress: GameProgress): Promise<void> => {
   try {
+    const gameState = useGameStore.getState();
     const { error } = await supabase
       .from('adventure_sessions')
       .upsert({
@@ -24,6 +26,10 @@ export const saveGameProgress = async (progress: GameProgress): Promise<void> =>
         choices: progress.choices,
         final_path: progress.finalPath,
         completed_at: progress.completedAt,
+        discovered_paths: progress.discoveredPaths || [],
+        unlocked_content: progress.unlockedContent || [],
+        preferences: progress.preferences || gameState.preferences,
+        session_duration: gameState.getSessionDuration(),
       });
 
     if (error) throw error;
@@ -99,5 +105,47 @@ export const getPathInfo = (path: ServicePath) => {
         features: ['AI agent integration', 'Team transformation', 'Enterprise support'],
         color: 'from-purple-600 to-indigo-600',
       };
+  }
+};
+
+export const loadGameProgress = async (sessionId: string): Promise<GameProgress | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('adventure_sessions')
+      .select('*')
+      .eq('id', sessionId)
+      .single();
+
+    if (error) throw error;
+    if (!data) return null;
+
+    return {
+      sessionId: data.id,
+      playerName: data.player_name,
+      currentSceneId: data.current_scene_id || 'entry',
+      visitedScenes: data.visited_scenes || {},
+      choices: data.choices || [],
+      finalPath: data.final_path,
+      completedAt: data.completed_at,
+      discoveredPaths: data.discovered_paths || [],
+      unlockedContent: data.unlocked_content || [],
+      preferences: data.preferences,
+    };
+  } catch (error) {
+    console.error('Error loading game progress:', error);
+    return null;
+  }
+};
+
+export const clearGameProgress = async (sessionId: string): Promise<void> => {
+  try {
+    const { error } = await supabase
+      .from('adventure_sessions')
+      .delete()
+      .eq('id', sessionId);
+
+    if (error) throw error;
+  } catch (error) {
+    console.error('Error clearing game progress:', error);
   }
 };
