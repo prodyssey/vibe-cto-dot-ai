@@ -57,7 +57,7 @@ export const SCENES: Record<string, Scene> = {
     title: 'Interstellar Command',
     description: 'Interstellar Command - where established ventures accelerate beyond conventional limits. Transform your velocity with AI-powered innovation.',
     backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
-    nextScene: 'interstellarProcess',
+    nextScene: 'interstellarCapabilities',
   },
 
   // Station Tour

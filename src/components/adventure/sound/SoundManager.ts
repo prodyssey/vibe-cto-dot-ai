@@ -12,11 +12,11 @@ export interface Sound {
 export class SoundManager {
   private static instance: SoundManager | null = null;
   private audioContext: AudioContext | null = null;
-  private sounds: Map<string, HTMLAudioElement> = new Map();
-  private masterVolume: number = 1;
-  private musicVolume: number = 0.5;
-  private effectsVolume: number = 0.7;
-  private enabled: boolean = true;
+  private sounds = new Map<string, HTMLAudioElement>();
+  private masterVolume = 1;
+  private musicVolume = 0.5;
+  private effectsVolume = 0.7;
+  private enabled = true;
   private currentMusic: HTMLAudioElement | null = null;
 
   private constructor() {
@@ -84,7 +84,7 @@ export class SoundManager {
   }
 
   play(soundId: string, options?: { volume?: number; loop?: boolean }): void {
-    if (!this.enabled) return;
+    if (!this.enabled) {return;}
 
     const audio = this.sounds.get(soundId);
     if (!audio) {
@@ -150,9 +150,9 @@ export class SoundManager {
     }
   }
 
-  fadeOut(soundId: string, duration: number = 1000): void {
+  fadeOut(soundId: string, duration = 1000): void {
     const audio = this.sounds.get(soundId) || this.currentMusic;
-    if (!audio) return;
+    if (!audio) {return;}
 
     const startVolume = audio.volume;
     const fadeInterval = 50; // ms

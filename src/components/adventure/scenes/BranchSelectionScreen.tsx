@@ -89,7 +89,7 @@ export const BranchSelectionScreen = () => {
   const { pushScene } = useBrowserNavigation();
   const { isSmallScreen, isTouch } = useMobile();
   const reducedMotion = useReducedMotion();
-  const { playPortalSelect, playButtonHover, playMusic, fadeOutMusic } = useSound();
+  const { playPortalSelect, playButtonHover } = useSound();
 
   const handlePortalClick = async (portal: Portal) => {
     // Play portal selection sound

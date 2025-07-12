@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 
 import { useGameStore } from '../gameStore';
+
 import { soundManager, SOUND_EFFECTS } from './SoundManager';
 
 export const useSound = () => {
@@ -73,7 +74,7 @@ export const useSound = () => {
     soundManager.stopMusic();
   }, []);
 
-  const fadeOutMusic = useCallback((duration: number = 1000) => {
+  const fadeOutMusic = useCallback((duration = 1000) => {
     soundManager.fadeOut('', duration);
   }, []);
 

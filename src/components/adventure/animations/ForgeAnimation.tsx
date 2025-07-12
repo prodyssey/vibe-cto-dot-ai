@@ -8,10 +8,12 @@ interface ForgeAnimationProps {
 }
 
 export const ForgeAnimation = ({ className, isActive = true }: ForgeAnimationProps) => {
-  const [sparks, setSparks] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const [sparks, setSparks] = useState<{ id: number; x: number; y: number }[]>([]);
 
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {
+      return;
+    }
 
     const interval = setInterval(() => {
       setSparks(prev => {

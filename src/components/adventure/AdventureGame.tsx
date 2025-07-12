@@ -22,12 +22,12 @@ import { IgnitionPaymentInfoScreen } from './scenes/ignition/IgnitionPaymentInfo
 import { IgnitionProcessScreen } from './scenes/ignition/IgnitionProcessScreen';
 import { IgnitionQualificationScreen } from './scenes/ignition/IgnitionQualificationScreen';
 import { InterstellarCapabilitiesScreen } from './scenes/interstellar/InterstellarCapabilitiesScreen';
+import { InterstellarContactScreen } from './scenes/interstellar/InterstellarContactScreen';
 import { InterstellarDetailScreen } from './scenes/interstellar/InterstellarDetailScreen';
 import { InterstellarEngagementScreen } from './scenes/interstellar/InterstellarEngagementScreen';
 import { InterstellarFeaturesScreen } from './scenes/interstellar/InterstellarFeaturesScreen';
 import { InterstellarFinalScreen } from './scenes/interstellar/InterstellarFinalScreen';
 import { InterstellarPartnershipScreen } from './scenes/interstellar/InterstellarPartnershipScreen';
-import { InterstellarContactScreen } from './scenes/interstellar/InterstellarContactScreen';
 import { LaunchControlApplicationScreen } from './scenes/launchcontrol/LaunchControlApplicationScreen';
 import { LaunchControlCapabilitiesScreen } from './scenes/launchcontrol/LaunchControlCapabilitiesScreen';
 import { LaunchControlDetailScreen } from './scenes/launchcontrol/LaunchControlDetailScreen';

@@ -1,13 +1,11 @@
 import { Flame, Zap, Cpu, Gauge, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 import { ForgeAnimation } from '../../animations';
 import { ForgeBackground } from '../../assets';
 import { AnimatedButton } from '../../components/AnimatedButton';
-import { useGameStore } from '../../gameStore';
 import { useBrowserNavigation } from '../../hooks';
 import { Scene } from '../../Scene';
 import { SceneNavigation } from '../../SceneNavigation';

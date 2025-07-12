@@ -68,7 +68,9 @@ export const ParticleEffect = ({
 
       // Start animation
       const animate = (currentTime: number) => {
-        if (!startTimeRef.current) return;
+        if (!startTimeRef.current) {
+          return;
+        }
         
         const elapsed = currentTime - startTimeRef.current;
         const progress = Math.min(elapsed / duration, 1);

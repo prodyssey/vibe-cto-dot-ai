@@ -25,7 +25,7 @@ export const EntryScreen = () => {
   const [showButton, setShowButton] = useState(false);
   const { pushScene } = useBrowserNavigation();
   const { isMobile, isSmallScreen } = useMobile();
-  const { playButtonClick, playButtonHover, playSceneTransition, playMusic } = useSound();
+  const { playSceneTransition, playMusic } = useSound();
 
   useEffect(() => {
     // Simulate asset loading
