@@ -29,7 +29,6 @@ export const useBrowserNavigation = () => {
   }, [currentSceneId, navigateToScene]);
 
   const pushScene = useCallback((sceneId: string) => {
-    console.log('pushScene called with:', sceneId);
     window.history.pushState({ sceneId }, '', window.location.pathname);
     navigateToScene(sceneId);
   }, [navigateToScene]);

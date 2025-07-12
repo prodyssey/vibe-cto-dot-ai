@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import { useSound } from './sound';
+
 interface TypewriterTextProps {
   text: string;
   speed?: number;
   className?: string;
   onComplete?: () => void;
+  playSound?: boolean;
 }
 
 export const TypewriterText = ({
@@ -14,16 +17,23 @@ export const TypewriterText = ({
   speed = 50,
   className,
   onComplete,
+  playSound = true,
 }: TypewriterTextProps) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
+  const { playTypewriter, soundEnabled } = useSound();
 
   useEffect(() => {
     if (currentIndex < text.length) {
       const timer = setTimeout(() => {
         setDisplayText(text.substring(0, currentIndex + 1));
         setCurrentIndex(currentIndex + 1);
+        
+        // Play typewriter sound occasionally (every 3rd character that's not a space)
+        if (playSound && soundEnabled && text[currentIndex] !== ' ' && currentIndex % 3 === 0) {
+          playTypewriter();
+        }
       }, speed);
 
       return () => clearTimeout(timer);
@@ -34,7 +44,7 @@ export const TypewriterText = ({
         onComplete?.();
       }, 500);
     }
-  }, [currentIndex, text, speed, onComplete]);
+  }, [currentIndex, text, speed, onComplete, playSound, soundEnabled, playTypewriter]);
 
   // Cursor blink effect
   useEffect(() => {

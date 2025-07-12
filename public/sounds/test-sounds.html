@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Adventure Game Sounds</title>
+    <style>
+        body {
+            font-family: system-ui;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .sound-test {
+            margin: 10px 0;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            padding: 8px 16px;
+            background: #4a5568;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #5a6578;
+        }
+        .status {
+            color: #48bb78;
+            font-size: 14px;
+        }
+        .error {
+            color: #f56565;
+        }
+        h1 {
+            color: #a78bfa;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔊 Test Adventure Game Sounds</h1>
+    <p>Click each button to test if the sound files are loading correctly:</p>
+
+    <div id="sound-tests"></div>
+
+    <script>
+        const sounds = [
+            { name: 'UI Hover', file: 'ui-hover.wav' },
+            { name: 'UI Click', file: 'ui-click.wav' },
+            { name: 'Whoosh', file: 'whoosh.wav' },
+            { name: 'Portal Activate', file: 'portal-activate.wav' },
+            { name: 'Success Chime', file: 'success-chime.wav' },
+            { name: 'Error Buzz', file: 'error-buzz.wav' },
+            { name: 'Typewriter Key', file: 'typewriter-key.wav' },
+            { name: 'Space Ambience', file: 'space-ambience.wav' }
+        ];
+
+        const container = document.getElementById('sound-tests');
+
+        sounds.forEach(sound => {
+            const div = document.createElement('div');
+            div.className = 'sound-test';
+            
+            const info = document.createElement('div');
+            info.innerHTML = `
+                <strong>${sound.name}</strong><br>
+                <small>${sound.file}</small>
+            `;
+            
+            const status = document.createElement('span');
+            status.className = 'status';
+            status.textContent = 'Ready';
+            
+            const button = document.createElement('button');
+            button.textContent = 'Play';
+            button.onclick = () => playSound(sound.file, status);
+            
+            div.appendChild(info);
+            div.appendChild(status);
+            div.appendChild(button);
+            container.appendChild(div);
+        });
+
+        function playSound(filename, statusElement) {
+            const audio = new Audio(`/sounds/${filename}`);
+            
+            audio.onloadstart = () => {
+                statusElement.textContent = 'Loading...';
+                statusElement.className = 'status';
+            };
+            
+            audio.oncanplaythrough = () => {
+                statusElement.textContent = 'Playing...';
+                statusElement.className = 'status';
+            };
+            
+            audio.onended = () => {
+                statusElement.textContent = '✓ Success';
+                statusElement.className = 'status';
+            };
+            
+            audio.onerror = (e) => {
+                statusElement.textContent = '✗ Error loading file';
+                statusElement.className = 'status error';
+                console.error(`Failed to load ${filename}:`, e);
+            };
+            
+            audio.play().catch(err => {
+                statusElement.textContent = '✗ Playback error';
+                statusElement.className = 'status error';
+                console.error(`Failed to play ${filename}:`, err);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,12 +1,12 @@
 import { ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 import { SpaceStationLobby, LoadingSpinner, WalkingFounders } from '../assets';
 import { useBrowserNavigation, useMobile } from '../hooks';
+import { useSound } from '../sound';
 import type { Scene as SceneType } from '../types';
 import { TypewriterText } from '../TypewriterText';
 
@@ -22,7 +22,8 @@ export const EntryScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showButton, setShowButton] = useState(false);
   const { pushScene } = useBrowserNavigation();
-  const { isMobile, isSmallScreen, isTouch } = useMobile();
+  const { isMobile, isSmallScreen } = useMobile();
+  const { playButtonClick, playButtonHover, playSceneTransition, playMusic } = useSound();
 
   useEffect(() => {
     // Simulate asset loading
@@ -33,8 +34,27 @@ export const EntryScreen = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Start ambient sound on first user interaction
+  useEffect(() => {
+    const startAmbientMusic = () => {
+      playMusic('space-ambient');
+      // Remove listeners after first play
+      document.removeEventListener('click', startAmbientMusic);
+      document.removeEventListener('touchstart', startAmbientMusic);
+    };
+
+    document.addEventListener('click', startAmbientMusic, { once: true });
+    document.addEventListener('touchstart', startAmbientMusic, { once: true });
+
+    return () => {
+      document.removeEventListener('click', startAmbientMusic);
+      document.removeEventListener('touchstart', startAmbientMusic);
+    };
+  }, [playMusic]);
+
   const handleBeginJourney = () => {
-    console.log('Begin journey clicked');
+    playButtonClick();
+    playSceneTransition();
     pushScene('playerSetup');
   };
 
@@ -129,6 +149,7 @@ export const EntryScreen = () => {
                     <button
                       type="button"
                       onClick={handleBeginJourney}
+                      onMouseEnter={() => !isMobile && playButtonHover()}
                       className={cn(
                         "inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold",
                         isMobile ? "px-6 py-3 min-h-[44px] w-full text-base" : "px-8 py-4 text-lg",

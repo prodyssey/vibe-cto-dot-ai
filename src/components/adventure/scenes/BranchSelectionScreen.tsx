@@ -7,6 +7,7 @@ import { IgnitionPortal, LaunchControlPortal, InterstellarPortal } from '../asse
 import { useGameStore } from '../gameStore';
 import { useBrowserNavigation, useMobile } from '../hooks';
 import { Scene } from '../Scene';
+import { useSound } from '../sound';
 import type { Scene as SceneType } from '../types';
 import { saveChoice, saveSceneVisit } from '../utils';
 
@@ -87,8 +88,25 @@ export const BranchSelectionScreen = () => {
   const { sessionId, visitedScenes, makeChoice } = useGameStore();
   const { pushScene } = useBrowserNavigation();
   const { isSmallScreen, isTouch } = useMobile();
+  const { playPortalSelect, playButtonHover, playMusic, fadeOutMusic } = useSound();
 
   const handlePortalClick = async (portal: Portal) => {
+    // Play portal selection sound
+    playPortalSelect();
+    
+    // Fade out current music and play path-specific music
+    // TODO: Uncomment when we have music files
+    // fadeOutMusic(500);
+    // setTimeout(() => {
+    //   if (portal.id === 'ignition-path') {
+    //     playMusic('music-ignition');
+    //   } else if (portal.id === 'launch-control-path') {
+    //     playMusic('music-launch');
+    //   } else if (portal.id === 'interstellar-path') {
+    //     playMusic('music-interstellar');
+    //   }
+    // }, 500);
+    
     // Save choice to store
     makeChoice(BRANCH_SCENE.id, portal.id, portal.pathWeight);
     
@@ -101,6 +119,13 @@ export const BranchSelectionScreen = () => {
     // Save scene visit
     const visitCount = (visitedScenes[portal.nextScene] || 0) + 1;
     await saveSceneVisit(sessionId, portal.nextScene, visitCount);
+  };
+
+  const handlePortalHover = (portal: Portal) => {
+    if (!isTouch) {
+      setHoveredPortal(portal.id);
+      playButtonHover();
+    }
   };
 
   const handleStationTour = async () => {
@@ -150,7 +175,7 @@ export const BranchSelectionScreen = () => {
               <button
                 key={portal.id}
                 onClick={() => handlePortalClick(portal)}
-                onMouseEnter={() => !isTouch && setHoveredPortal(portal.id)}
+                onMouseEnter={() => !isTouch && handlePortalHover(portal)}
                 onMouseLeave={() => !isTouch && setHoveredPortal(null)}
                 onTouchStart={() => isTouch && setHoveredPortal(portal.id)}
                 onTouchEnd={() => isTouch && setTimeout(() => setHoveredPortal(null), 300)}

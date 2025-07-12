@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 
 import { useGameStore } from './gameStore';
 import { useBrowserNavigation, usePreferences, useSessionTimer, useMobile } from './hooks';
+import { useSound } from './sound';
 
 interface SceneNavigationProps {
   showBack?: boolean;
@@ -26,8 +27,11 @@ export const SceneNavigation = ({
   const { soundEnabled, toggleSound } = usePreferences();
   const { formattedDuration } = useSessionTimer();
   const { isMobile, isSmallScreen, isTouch } = useMobile();
+  const { playButtonClick, playButtonHover, playSceneTransition } = useSound();
 
   const handleBack = () => {
+    playButtonClick();
+    playSceneTransition();
     // Handle special back navigation cases
     if (currentSceneId === 'stationTour') {
       pushScene('destinationSelection');
@@ -38,9 +42,16 @@ export const SceneNavigation = ({
 
   const handleReset = () => {
     if (window.confirm('Are you sure you want to start over?')) {
+      playButtonClick();
       resetGame();
       pushScene('entry');
     }
+  };
+
+  const handleNext = () => {
+    playButtonClick();
+    playSceneTransition();
+    onNext?.();
   };
 
   return (
@@ -82,6 +93,7 @@ export const SceneNavigation = ({
             <Button
               variant="ghost"
               onClick={handleBack}
+              onMouseEnter={() => !isMobile && playButtonHover()}
               className={cn(
                 "text-gray-400 hover:text-white",
                 isMobile && "min-h-[44px] w-full",
@@ -105,6 +117,7 @@ export const SceneNavigation = ({
             <Button
               variant="ghost"
               onClick={handleReset}
+              onMouseEnter={() => !isMobile && playButtonHover()}
               className={cn(
                 "text-gray-400 hover:text-white",
                 isMobile && "min-h-[44px] w-full",
@@ -119,7 +132,8 @@ export const SceneNavigation = ({
 
           {showNext && onNext && (
             <Button
-              onClick={onNext}
+              onClick={handleNext}
+              onMouseEnter={() => !isMobile && playButtonHover()}
               className={cn(
                 "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white",
                 isMobile && "min-h-[44px] w-full font-medium",

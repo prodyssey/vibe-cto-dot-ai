@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 import { useMobile } from './hooks';
+import { useSound } from './sound';
 import type { Choice as ChoiceType } from './types';
 
 interface ChoiceProps {
@@ -12,10 +13,23 @@ interface ChoiceProps {
 
 export const Choice = ({ choice, onClick, className }: ChoiceProps) => {
   const { isMobile, isTouch } = useMobile();
+  const { playButtonClick, playButtonHover } = useSound();
+
+  const handleClick = () => {
+    playButtonClick();
+    onClick();
+  };
+
+  const handleMouseEnter = () => {
+    if (!isMobile) {
+      playButtonHover();
+    }
+  };
 
   return (
     <Button
-      onClick={onClick}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
       variant="outline"
       className={cn(
         'w-full text-left h-auto',
