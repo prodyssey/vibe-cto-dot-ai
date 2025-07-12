@@ -1,13 +1,16 @@
+import { DollarSign, CheckCircle, XCircle, Info } from 'lucide-react';
 import { useState } from 'react';
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
 import { useGameStore } from '../../gameStore';
 import { useBrowserNavigation } from '../../hooks';
-import { saveChoice } from '../../utils';
-import { Button } from '@/components/ui/button';
-import { DollarSign, CheckCircle, XCircle, Info } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
+import { saveChoice } from '../../utils';
+
 
 const BUDGET_SCENE: SceneType = {
   id: 'ignitionBudget',

@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { GameState, ServicePath, AnalyticsEvent } from './types';
+
 import { analytics } from './analytics';
+import type { GameState, ServicePath, AnalyticsEvent } from './types';
 
 interface GameStore extends GameState {
   // Actions
@@ -130,7 +131,7 @@ export const useGameStore = create<GameStore>()(
 
       calculateFinalPath: () => {
         const { pathScores } = get();
-        const entries = Object.entries(pathScores) as Array<[ServicePath, number]>;
+        const entries = Object.entries(pathScores) as [ServicePath, number][];
         const [finalPath] = entries.reduce((a, b) => (a[1] > b[1] ? a : b));
         
         set({ finalPath });
@@ -233,7 +234,7 @@ export const useGameStore = create<GameStore>()(
 
       getSessionDuration: () => {
         const { sessionStartTime } = get();
-        if (!sessionStartTime) return 0;
+        if (!sessionStartTime) {return 0;}
         
         const start = new Date(sessionStartTime).getTime();
         const now = new Date().getTime();

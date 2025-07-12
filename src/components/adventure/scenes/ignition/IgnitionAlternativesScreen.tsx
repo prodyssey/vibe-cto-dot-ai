@@ -1,8 +1,10 @@
+import { Lightbulb, BookOpen, Users } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+
+import { useBrowserNavigation } from '../../hooks';
 import { Scene } from '../../Scene';
 import { SceneNavigation } from '../../SceneNavigation';
-import { useBrowserNavigation } from '../../hooks';
-import { Button } from '@/components/ui/button';
-import { Lightbulb, BookOpen, Users } from 'lucide-react';
 import type { Scene as SceneType } from '../../types';
 
 const ALTERNATIVES_SCENE: SceneType = {

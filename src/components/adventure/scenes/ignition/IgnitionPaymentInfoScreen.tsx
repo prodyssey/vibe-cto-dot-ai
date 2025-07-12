@@ -1,8 +1,10 @@
+import { CreditCard, Calendar, Shield } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+
+import { useBrowserNavigation } from '../../hooks';
 import { Scene } from '../../Scene';
 import { SceneNavigation } from '../../SceneNavigation';
-import { useBrowserNavigation } from '../../hooks';
-import { Button } from '@/components/ui/button';
-import { CreditCard, Calendar, Shield } from 'lucide-react';
 import type { Scene as SceneType } from '../../types';
 
 const PAYMENT_INFO_SCENE: SceneType = {

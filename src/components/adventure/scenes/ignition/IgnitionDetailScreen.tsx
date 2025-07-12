@@ -1,14 +1,20 @@
+import { Flame, Zap, Cpu, Gauge, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
-import { TypewriterText } from '../../TypewriterText';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+import { ForgeBackground } from '../../assets';
 import { useGameStore } from '../../gameStore';
 import { useBrowserNavigation } from '../../hooks';
-import { Button } from '@/components/ui/button';
-import { Flame, Zap, Cpu, Gauge, ArrowRight } from 'lucide-react';
-import { ForgeBackground } from '../../assets';
-import { cn } from '@/lib/utils';
+import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
+import { TypewriterText } from '../../TypewriterText';
+
+
+
+
 
 const DETAIL_SCENE: SceneType = {
   id: 'ignitionDetail',

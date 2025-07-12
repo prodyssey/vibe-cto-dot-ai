@@ -1,6 +1,9 @@
 import { ReactNode } from 'react';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+
+import { useMobile } from './hooks';
 import type { Scene as SceneType } from './types';
 
 interface SceneProps {
@@ -10,24 +13,40 @@ interface SceneProps {
 }
 
 export const Scene = ({ scene, children, className }: SceneProps) => {
+  const { isMobile, isSmallScreen } = useMobile();
+
   return (
-    <div className={cn('min-h-screen flex items-center justify-center p-6', scene.backgroundClass)}>
+    <div className={cn(
+      'min-h-screen flex items-center justify-center',
+      isMobile ? 'p-4' : 'p-6',
+      scene.backgroundClass
+    )}>
       <Card className={cn(
-        'w-full max-w-3xl bg-gray-900/80 backdrop-blur-sm border-purple-500/30',
+        'w-full bg-gray-900/80 backdrop-blur-sm border-purple-500/30',
+        isSmallScreen ? 'max-w-full mx-2' : 'max-w-3xl',
         className
       )}>
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-white mb-4">
+          <CardTitle className={cn(
+            'font-bold text-white mb-4',
+            isSmallScreen ? 'text-2xl' : 'text-3xl'
+          )}>
             {scene.title}
           </CardTitle>
           {scene.description && (
-            <p className="text-gray-300 text-lg">
+            <p className={cn(
+              'text-gray-300',
+              isSmallScreen ? 'text-base' : 'text-lg'
+            )}>
               {scene.description}
             </p>
           )}
         </CardHeader>
         {children && (
-          <CardContent className="space-y-6">
+          <CardContent className={cn(
+            'space-y-6',
+            isSmallScreen && 'space-y-4'
+          )}>
             {children}
           </CardContent>
         )}

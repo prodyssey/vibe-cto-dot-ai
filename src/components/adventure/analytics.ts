@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+
 import type { AnalyticsEvent } from './types';
 
 interface AnalyticsService {

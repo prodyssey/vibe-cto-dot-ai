@@ -1,8 +1,3 @@
-import { useState } from 'react';
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
-import { useBrowserNavigation } from '../../hooks';
-import { Button } from '@/components/ui/button';
 import { 
   Rocket, 
   Target, 
@@ -12,7 +7,14 @@ import {
   ArrowRight,
   CheckCircle
 } from 'lucide-react';
+import { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
+import { useBrowserNavigation } from '../../hooks';
+import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
 
 const PROCESS_SCENE: SceneType = {
@@ -165,7 +167,7 @@ export const LaunchControlProcessScreen = () => {
               <div className="animate-fadeIn bg-gray-800/30 backdrop-blur-sm border border-cyan-500/30 rounded-xl p-6">
                 {(() => {
                   const phase = MISSION_PHASES.find(p => p.id === selectedPhase);
-                  if (!phase) return null;
+                  if (!phase) {return null;}
                   
                   return (
                     <div className="space-y-4">

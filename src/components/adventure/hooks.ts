@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useGameStore } from './gameStore';
 import type { ServicePath } from './types';
 
@@ -28,6 +29,7 @@ export const useBrowserNavigation = () => {
   }, [currentSceneId, navigateToScene]);
 
   const pushScene = useCallback((sceneId: string) => {
+    console.log('pushScene called with:', sceneId);
     window.history.pushState({ sceneId }, '', window.location.pathname);
     navigateToScene(sceneId);
   }, [navigateToScene]);
@@ -42,7 +44,7 @@ export const useSessionTimer = () => {
   const { sessionStartTime, getSessionDuration } = useGameStore();
   
   useEffect(() => {
-    if (!sessionStartTime) return;
+    if (!sessionStartTime) {return;}
 
     const interval = setInterval(() => {
       // Force re-render to update timer display
@@ -168,3 +170,6 @@ function formatDuration(seconds: number): string {
   const secs = seconds % 60;
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
+
+// Export mobile hooks from the hooks directory
+export { useMobile, useReducedMotion } from './hooks/useMobile';

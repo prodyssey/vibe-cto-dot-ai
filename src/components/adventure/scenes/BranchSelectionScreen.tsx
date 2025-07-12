@@ -1,12 +1,14 @@
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
-import { Scene } from '../Scene';
-import { useGameStore } from '../gameStore';
-import { useBrowserNavigation } from '../hooks';
-import { saveChoice, saveSceneVisit } from '../utils';
 import { Flame, Rocket, Sparkles, Radio } from 'lucide-react';
+import { useState } from 'react';
+
+import { cn } from '@/lib/utils';
+
 import { IgnitionPortal, LaunchControlPortal, InterstellarPortal } from '../assets';
+import { useGameStore } from '../gameStore';
+import { useBrowserNavigation, useMobile } from '../hooks';
+import { Scene } from '../Scene';
 import type { Scene as SceneType } from '../types';
+import { saveChoice, saveSceneVisit } from '../utils';
 
 const BRANCH_SCENE: SceneType = {
   id: 'destinationSelection',
@@ -84,6 +86,7 @@ export const BranchSelectionScreen = () => {
   const [hoveredPortal, setHoveredPortal] = useState<string | null>(null);
   const { sessionId, visitedScenes, makeChoice } = useGameStore();
   const { pushScene } = useBrowserNavigation();
+  const { isSmallScreen, isTouch } = useMobile();
 
   const handlePortalClick = async (portal: Portal) => {
     // Save choice to store
@@ -137,20 +140,31 @@ export const BranchSelectionScreen = () => {
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
         <Scene scene={BRANCH_SCENE} className="max-w-6xl w-full">
           {/* Portals Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8">
+          <div className={cn(
+            "grid gap-6 mb-8",
+            isSmallScreen 
+              ? "grid-cols-1 gap-4" 
+              : "grid-cols-1 md:grid-cols-3 md:gap-8"
+          )}>
             {PORTALS.map((portal) => (
               <button
                 key={portal.id}
                 onClick={() => handlePortalClick(portal)}
-                onMouseEnter={() => setHoveredPortal(portal.id)}
-                onMouseLeave={() => setHoveredPortal(null)}
-                className="group relative"
+                onMouseEnter={() => !isTouch && setHoveredPortal(portal.id)}
+                onMouseLeave={() => !isTouch && setHoveredPortal(null)}
+                onTouchStart={() => isTouch && setHoveredPortal(portal.id)}
+                onTouchEnd={() => isTouch && setTimeout(() => setHoveredPortal(null), 300)}
+                className={cn(
+                  "group relative w-full",
+                  isTouch && "active:scale-95 transition-transform"
+                )}
               >
                 {/* Portal Container */}
                 <div className={cn(
-                  "relative h-80 rounded-2xl overflow-hidden transition-all duration-500",
+                  "relative rounded-2xl overflow-hidden transition-all duration-500",
                   "border-2 border-gray-700/50",
-                  "hover:border-transparent hover:scale-105",
+                  isSmallScreen ? "h-64" : "h-80",
+                  !isTouch && "hover:border-transparent hover:scale-105",
                   hoveredPortal === portal.id && `shadow-2xl ${portal.glowColor}`
                 )}>
                   {/* Energy Field Background */}

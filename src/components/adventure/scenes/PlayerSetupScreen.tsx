@@ -1,14 +1,18 @@
+import { ArrowRight, Sparkles, Shuffle, Terminal } from 'lucide-react';
 import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowRight, Sparkles, Shuffle, Terminal } from 'lucide-react';
-import { Scene } from '../Scene';
-import { useGameStore } from '../gameStore';
-import { generateRandomName } from '../utils';
 import { supabase } from '@/integrations/supabase/client';
+
+import { useGameStore } from '../gameStore';
 import { useBrowserNavigation } from '../hooks';
+import { Scene } from '../Scene';
 import type { Scene as SceneType } from '../types';
+import { generateRandomName } from '../utils';
+
+
 
 const PLAYER_SETUP_SCENE: SceneType = {
   id: 'playerSetup',

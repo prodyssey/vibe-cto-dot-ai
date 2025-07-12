@@ -1,10 +1,12 @@
+import { Sparkles, Orbit, Zap, Infinity } from 'lucide-react';
 import { useState, useEffect } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+import { useBrowserNavigation } from '../../hooks';
 import { Scene } from '../../Scene';
 import { SceneNavigation } from '../../SceneNavigation';
-import { useBrowserNavigation } from '../../hooks';
-import { Button } from '@/components/ui/button';
-import { Sparkles, Orbit, Zap, Infinity } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import type { Scene as SceneType } from '../../types';
 
 const INTERSTELLAR_SCENE: SceneType = {

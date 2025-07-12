@@ -1,9 +1,3 @@
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
-import { useBrowserNavigation } from '../../hooks';
-import { useGameStore } from '../../gameStore';
-import { saveChoice } from '../../utils';
-import { Button } from '@/components/ui/button';
 import { 
   Calendar, 
   Clock, 
@@ -13,8 +7,19 @@ import {
   CheckCircle,
   ArrowRight
 } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
+import { useGameStore } from '../../gameStore';
+import { useBrowserNavigation } from '../../hooks';
+import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
+import { saveChoice } from '../../utils';
+
+
+
 
 const TIMELINE_SCENE: SceneType = {
   id: 'launchControlTimeline',

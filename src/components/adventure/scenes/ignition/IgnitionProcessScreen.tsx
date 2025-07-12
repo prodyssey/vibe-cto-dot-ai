@@ -1,9 +1,3 @@
-import { useState } from 'react';
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
-import { useGameStore } from '../../gameStore';
-import { useBrowserNavigation } from '../../hooks';
-import { Button } from '@/components/ui/button';
 import { 
   Flame, 
   ArrowRight, 
@@ -14,7 +8,15 @@ import {
   TestTube,
   Rocket
 } from 'lucide-react';
+import { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
+import { useGameStore } from '../../gameStore';
+import { useBrowserNavigation } from '../../hooks';
+import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
 
 const PROCESS_SCENE: SceneType = {

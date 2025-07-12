@@ -1,6 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
-import type { GameProgress, ServicePath } from './types';
+
 import { useGameStore } from './gameStore';
+import type { GameProgress, ServicePath } from './types';
 
 export const RETRO_NAMES = [
   'PixelMaster', 'ByteBlade', 'CodeCrusher', 'DataDragon', 'VibeViper',
@@ -32,7 +33,7 @@ export const saveGameProgress = async (progress: GameProgress): Promise<void> =>
         session_duration: gameState.getSessionDuration(),
       });
 
-    if (error) throw error;
+    if (error) {throw error;}
   } catch (error) {
     console.error('Error saving game progress:', error);
   }
@@ -53,7 +54,7 @@ export const saveSceneVisit = async (
         last_visited_at: new Date().toISOString(),
       });
 
-    if (error) throw error;
+    if (error) {throw error;}
   } catch (error) {
     console.error('Error saving scene visit:', error);
   }
@@ -76,7 +77,7 @@ export const saveChoice = async (
         made_at: new Date().toISOString(),
       });
 
-    if (error) throw error;
+    if (error) {throw error;}
   } catch (error) {
     console.error('Error saving choice:', error);
   }
@@ -116,8 +117,8 @@ export const loadGameProgress = async (sessionId: string): Promise<GameProgress 
       .eq('id', sessionId)
       .single();
 
-    if (error) throw error;
-    if (!data) return null;
+    if (error) {throw error;}
+    if (!data) {return null;}
 
     return {
       sessionId: data.id,
@@ -144,7 +145,7 @@ export const clearGameProgress = async (sessionId: string): Promise<void> => {
       .delete()
       .eq('id', sessionId);
 
-    if (error) throw error;
+    if (error) {throw error;}
   } catch (error) {
     console.error('Error clearing game progress:', error);
   }

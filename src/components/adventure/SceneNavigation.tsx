@@ -1,7 +1,10 @@
-import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, RotateCcw, Volume2, VolumeX } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
 import { useGameStore } from './gameStore';
-import { useBrowserNavigation, usePreferences, useSessionTimer } from './hooks';
+import { useBrowserNavigation, usePreferences, useSessionTimer, useMobile } from './hooks';
 
 interface SceneNavigationProps {
   showBack?: boolean;
@@ -22,6 +25,7 @@ export const SceneNavigation = ({
   const { pushScene, canNavigateBack } = useBrowserNavigation();
   const { soundEnabled, toggleSound } = usePreferences();
   const { formattedDuration } = useSessionTimer();
+  const { isMobile, isSmallScreen, isTouch } = useMobile();
 
   const handleBack = () => {
     // Handle special back navigation cases
@@ -40,47 +44,75 @@ export const SceneNavigation = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className={cn("space-y-4", isMobile && "space-y-3")}>
       {/* Timer and Sound Controls */}
-      <div className="flex justify-between items-center text-sm text-gray-400">
+      <div className={cn(
+        "flex justify-between items-center text-sm text-gray-400",
+        isSmallScreen && "text-xs"
+      )}>
         <span>Session Time: {formattedDuration}</span>
         <Button
           variant="ghost"
-          size="sm"
+          size={isMobile ? "sm" : "sm"}
           onClick={toggleSound}
-          className="text-gray-400 hover:text-white"
+          className={cn(
+            "text-gray-400 hover:text-white",
+            isMobile && "min-h-[44px] min-w-[44px]",
+            isTouch && "active:scale-95 transition-transform"
+          )}
+          onTouchStart={() => isTouch && undefined}
         >
           {soundEnabled ? (
-            <Volume2 className="w-4 h-4" />
+            <Volume2 className={cn("w-4 h-4", isMobile && "w-5 h-5")} />
           ) : (
-            <VolumeX className="w-4 h-4" />
+            <VolumeX className={cn("w-4 h-4", isMobile && "w-5 h-5")} />
           )}
         </Button>
       </div>
 
       {/* Navigation Controls */}
-      <div className="flex justify-between items-center">
-        <div>
-          {showBack && canNavigateBack && (
+      <div className={cn(
+        isSmallScreen 
+          ? "flex flex-col space-y-3" 
+          : "flex justify-between items-center"
+      )}>
+        {/* Back Button */}
+        {showBack && canNavigateBack && (
+          <div className={cn(isSmallScreen && "order-2")}>
             <Button
               variant="ghost"
               onClick={handleBack}
-              className="text-gray-400 hover:text-white"
+              className={cn(
+                "text-gray-400 hover:text-white",
+                isMobile && "min-h-[44px] w-full",
+                isTouch && "active:scale-95 transition-transform"
+              )}
+              onTouchStart={() => isTouch && undefined}
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className={cn("w-4 h-4 mr-2", isMobile && "w-5 h-5")} />
               Back
             </Button>
-          )}
-        </div>
+          </div>
+        )}
 
-        <div className="flex gap-4">
+        {/* Action Buttons */}
+        <div className={cn(
+          isSmallScreen 
+            ? "flex flex-col space-y-2 order-1" 
+            : "flex gap-4"
+        )}>
           {showReset && (
             <Button
               variant="ghost"
               onClick={handleReset}
-              className="text-gray-400 hover:text-white"
+              className={cn(
+                "text-gray-400 hover:text-white",
+                isMobile && "min-h-[44px] w-full",
+                isTouch && "active:scale-95 transition-transform"
+              )}
+              onTouchStart={() => isTouch && undefined}
             >
-              <RotateCcw className="w-4 h-4 mr-2" />
+              <RotateCcw className={cn("w-4 h-4 mr-2", isMobile && "w-5 h-5")} />
               Start Over
             </Button>
           )}
@@ -88,10 +120,15 @@ export const SceneNavigation = ({
           {showNext && onNext && (
             <Button
               onClick={onNext}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+              className={cn(
+                "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white",
+                isMobile && "min-h-[44px] w-full font-medium",
+                isTouch && "active:scale-95 transition-transform"
+              )}
+              onTouchStart={() => isTouch && undefined}
             >
               {nextLabel}
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowRight className={cn("w-4 h-4 ml-2", isMobile && "w-5 h-5")} />
             </Button>
           )}
         </div>

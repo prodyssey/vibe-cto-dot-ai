@@ -1,8 +1,3 @@
-import { useState } from 'react';
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
-import { useBrowserNavigation } from '../../hooks';
-import { Button } from '@/components/ui/button';
 import { 
   Brain, 
   Cpu, 
@@ -14,7 +9,14 @@ import {
   Sparkles,
   ChevronRight
 } from 'lucide-react';
+import { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
+import { useBrowserNavigation } from '../../hooks';
+import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
 
 const CAPABILITIES_SCENE: SceneType = {

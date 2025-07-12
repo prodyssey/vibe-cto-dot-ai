@@ -3,9 +3,10 @@ import { cn } from '@/lib/utils';
 interface PortalProps {
   className?: string;
   isActive?: boolean;
+  reducedMotion?: boolean;
 }
 
-export const IgnitionPortal = ({ className, isActive = false }: PortalProps) => {
+export const IgnitionPortal = ({ className, isActive = false, reducedMotion = false }: PortalProps) => {
   return (
     <svg viewBox="0 0 200 200" className={cn("w-full h-full", className)}>
       <defs>

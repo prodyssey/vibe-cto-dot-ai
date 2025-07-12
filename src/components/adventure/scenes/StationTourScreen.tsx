@@ -1,9 +1,11 @@
-import { Scene } from '../Scene';
-import { SceneNavigation } from '../SceneNavigation';
+import { Info, Flame, Rocket, Sparkles } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+
 import { useGameStore } from '../gameStore';
 import { useBrowserNavigation } from '../hooks';
-import { Button } from '@/components/ui/button';
-import { Info, Flame, Rocket, Sparkles } from 'lucide-react';
+import { Scene } from '../Scene';
+import { SceneNavigation } from '../SceneNavigation';
 import type { Scene as SceneType } from '../types';
 
 const TOUR_SCENE: SceneType = {

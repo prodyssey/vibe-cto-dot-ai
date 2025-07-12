@@ -1,13 +1,16 @@
+import { CheckCircle2, Circle, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
 import { useGameStore } from '../../gameStore';
 import { useBrowserNavigation } from '../../hooks';
-import { saveChoice } from '../../utils';
-import { Button } from '@/components/ui/button';
-import { CheckCircle2, Circle, AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
+import { saveChoice } from '../../utils';
+
 
 const QUALIFICATION_SCENE: SceneType = {
   id: 'ignitionQualification',

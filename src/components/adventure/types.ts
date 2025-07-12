@@ -35,11 +35,11 @@ export interface GameState {
     interstellar: number;
   };
   finalPath: ServicePath | null;
-  choices: Array<{
+  choices: {
     sceneId: string;
     choiceId: string;
     timestamp: string;
-  }>;
+  }[];
   discoveredPaths: Set<ServicePath>;
   unlockedContent: string[];
   preferences: {

@@ -1,8 +1,3 @@
-import { Scene } from '../../Scene';
-import { useGameStore } from '../../gameStore';
-import { useGameCompletion } from '../../hooks';
-import { Button } from '@/components/ui/button';
-import { EmailOptIn } from '@/components/EmailOptIn';
 import { 
   Rocket, 
   Calendar, 
@@ -11,7 +6,14 @@ import {
   CheckCircle,
   Sparkles
 } from 'lucide-react';
+
+import { EmailOptIn } from '@/components/EmailOptIn';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
+import { useGameStore } from '../../gameStore';
+import { useGameCompletion } from '../../hooks';
+import { Scene } from '../../Scene';
 import type { Scene as SceneType } from '../../types';
 
 const FINAL_SCENE: SceneType = {
