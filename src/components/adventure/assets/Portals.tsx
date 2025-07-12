@@ -11,8 +11,16 @@ export const IgnitionPortal = ({ className, isActive = false, reducedMotion = fa
     <svg viewBox="0 0 200 200" className={cn("w-full h-full", className)}>
       <defs>
         <radialGradient id="ignitionGradient" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#ff6b35" stopOpacity="0.8" />
-          <stop offset="50%" stopColor="#f7931e" stopOpacity="0.6" />
+          <stop offset="0%" stopColor="#ff6b35" stopOpacity="0.8">
+            {isActive && !reducedMotion && (
+              <animate attributeName="stopOpacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+            )}
+          </stop>
+          <stop offset="50%" stopColor="#f7931e" stopOpacity="0.6">
+            {isActive && !reducedMotion && (
+              <animate attributeName="stopOpacity" values="0.6;0.8;0.6" dur="2s" repeatCount="indefinite" />
+            )}
+          </stop>
           <stop offset="100%" stopColor="#dc2626" stopOpacity="0.2" />
         </radialGradient>
         
@@ -38,7 +46,7 @@ export const IgnitionPortal = ({ className, isActive = false, reducedMotion = fa
         stroke="#ff6b35"
         strokeWidth="4"
         opacity="0.5"
-        className={isActive ? "animate-pulse" : ""}
+        className={isActive && !reducedMotion ? "animate-pulse" : ""}
       />
       
       {/* Energy field */}
@@ -48,7 +56,7 @@ export const IgnitionPortal = ({ className, isActive = false, reducedMotion = fa
         r="80"
         fill="url(#ignitionGradient)"
         filter="url(#ignitionGlow)"
-        className={isActive ? "animate-pulse" : ""}
+        className={isActive && !reducedMotion ? "animate-pulse" : ""}
       />
       
       {/* Pixel overlay */}
@@ -66,7 +74,7 @@ export const IgnitionPortal = ({ className, isActive = false, reducedMotion = fa
           strokeWidth="2"
           opacity={0.3 + i * 0.2}
           strokeDasharray="10 5"
-          className={isActive ? "animate-spin" : ""}
+          className={isActive && !reducedMotion ? "animate-spin" : ""}
           style={{
             animationDuration: `${10 - i * 2}s`,
             animationDirection: i % 2 === 0 ? 'normal' : 'reverse',
@@ -79,7 +87,7 @@ export const IgnitionPortal = ({ className, isActive = false, reducedMotion = fa
       <circle cx="100" cy="100" r="10" fill="#fff" opacity="0.9" />
       
       {/* Energy particles */}
-      {isActive && [...Array(8)].map((_, i) => {
+      {isActive && !reducedMotion && [...Array(8)].map((_, i) => {
         const angle = (i * 45) * Math.PI / 180;
         const x = 100 + 50 * Math.cos(angle);
         const y = 100 + 50 * Math.sin(angle);
@@ -99,12 +107,16 @@ export const IgnitionPortal = ({ className, isActive = false, reducedMotion = fa
   );
 };
 
-export const LaunchControlPortal = ({ className, isActive = false }: PortalProps) => {
+export const LaunchControlPortal = ({ className, isActive = false, reducedMotion = false }: PortalProps) => {
   return (
     <svg viewBox="0 0 200 200" className={cn("w-full h-full", className)}>
       <defs>
         <radialGradient id="launchGradient" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
+          <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8">
+            {isActive && !reducedMotion && (
+              <animate attributeName="stopOpacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" />
+            )}
+          </stop>
           <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.6" />
           <stop offset="100%" stopColor="#0284c7" stopOpacity="0.2" />
         </radialGradient>
@@ -129,7 +141,7 @@ export const LaunchControlPortal = ({ className, isActive = false }: PortalProps
         stroke="#3b82f6"
         strokeWidth="4"
         opacity="0.5"
-        className={isActive ? "animate-pulse" : ""}
+        className={isActive && !reducedMotion ? "animate-pulse" : ""}
       />
       
       {/* Energy field */}
@@ -137,7 +149,7 @@ export const LaunchControlPortal = ({ className, isActive = false }: PortalProps
         points="100,30 160,65 160,135 100,170 40,135 40,65"
         fill="url(#launchGradient)"
         filter="url(#launchGlow)"
-        className={isActive ? "animate-pulse" : ""}
+        className={isActive && !reducedMotion ? "animate-pulse" : ""}
       />
       
       {/* Grid overlay */}
@@ -155,7 +167,7 @@ export const LaunchControlPortal = ({ className, isActive = false }: PortalProps
         stroke="#06b6d4"
         strokeWidth="2"
         strokeDasharray="5 3"
-        className={isActive ? "animate-spin" : ""}
+        className={isActive && !reducedMotion ? "animate-spin" : ""}
         style={{ animationDuration: '8s' }}
       />
       <circle
@@ -166,7 +178,7 @@ export const LaunchControlPortal = ({ className, isActive = false }: PortalProps
         stroke="#3b82f6"
         strokeWidth="2"
         strokeDasharray="8 2"
-        className={isActive ? "animate-spin" : ""}
+        className={isActive && !reducedMotion ? "animate-spin" : ""}
         style={{ animationDuration: '6s', animationDirection: 'reverse' }}
       />
       
@@ -176,7 +188,7 @@ export const LaunchControlPortal = ({ className, isActive = false }: PortalProps
       <circle cx="100" cy="100" r="10" fill="#fff" opacity="0.9" />
       
       {/* Data streams */}
-      {isActive && [...Array(6)].map((_, i) => {
+      {isActive && !reducedMotion && [...Array(6)].map((_, i) => {
         const angle = (i * 60) * Math.PI / 180;
         return (
           <line
@@ -198,12 +210,16 @@ export const LaunchControlPortal = ({ className, isActive = false }: PortalProps
   );
 };
 
-export const InterstellarPortal = ({ className, isActive = false }: PortalProps) => {
+export const InterstellarPortal = ({ className, isActive = false, reducedMotion = false }: PortalProps) => {
   return (
     <svg viewBox="0 0 200 200" className={cn("w-full h-full", className)}>
       <defs>
         <radialGradient id="stellarGradient" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#a855f7" stopOpacity="0.8" />
+          <stop offset="0%" stopColor="#a855f7" stopOpacity="0.8">
+            {isActive && !reducedMotion && (
+              <animate attributeName="stopColor" values="#a855f7;#6366f1;#a855f7" dur="4s" repeatCount="indefinite" />
+            )}
+          </stop>
           <stop offset="30%" stopColor="#6366f1" stopOpacity="0.6" />
           <stop offset="60%" stopColor="#8b5cf6" stopOpacity="0.4" />
           <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.2" />
@@ -234,7 +250,7 @@ export const InterstellarPortal = ({ className, isActive = false }: PortalProps)
         ry="85"
         fill="url(#stellarGradient)"
         filter="url(#stellarGlow)"
-        className={isActive ? "animate-pulse" : ""}
+        className={isActive && !reducedMotion ? "animate-pulse" : ""}
       />
       
       {/* Star field */}
@@ -250,7 +266,7 @@ export const InterstellarPortal = ({ className, isActive = false }: PortalProps)
           strokeWidth="3"
           opacity="0.4"
           transform={`rotate(${rotation} 100 100)`}
-          className={isActive ? "animate-spin" : ""}
+          className={isActive && !reducedMotion ? "animate-spin" : ""}
           style={{ 
             animationDuration: '20s',
             transformOrigin: '100px 100px',
@@ -268,7 +284,7 @@ export const InterstellarPortal = ({ className, isActive = false }: PortalProps)
         strokeWidth="2"
         opacity="0.5"
         strokeDasharray="15 5"
-        className={isActive ? "animate-spin" : ""}
+        className={isActive && !reducedMotion ? "animate-spin" : ""}
         style={{ animationDuration: '15s' }}
       />
       <circle
@@ -280,7 +296,7 @@ export const InterstellarPortal = ({ className, isActive = false }: PortalProps)
         strokeWidth="2"
         opacity="0.5"
         strokeDasharray="10 10"
-        className={isActive ? "animate-spin" : ""}
+        className={isActive && !reducedMotion ? "animate-spin" : ""}
         style={{ animationDuration: '10s', animationDirection: 'reverse' }}
       />
       
@@ -291,7 +307,7 @@ export const InterstellarPortal = ({ className, isActive = false }: PortalProps)
       <circle cx="100" cy="100" r="10" fill="#fff" opacity="0.9" />
       
       {/* Constellation points */}
-      {isActive && [...Array(8)].map((_, i) => {
+      {isActive && !reducedMotion && [...Array(8)].map((_, i) => {
         const angle = (i * 45) * Math.PI / 180;
         const r = 40 + Math.random() * 30;
         const x = 100 + r * Math.cos(angle);

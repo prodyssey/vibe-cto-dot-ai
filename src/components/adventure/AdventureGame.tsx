@@ -5,6 +5,7 @@ import { EmailOptIn } from '@/components/EmailOptIn';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 
+import { SceneTransition } from './animations';
 import { Choice } from './Choice';
 import { useGameStore } from './gameStore';
 import { useBrowserNavigation, useGameCompletion } from './hooks';
@@ -140,130 +141,234 @@ export const AdventureGame = () => {
 
   // Entry scene
   if (currentSceneId === 'entry') {
-    return <EntryScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="fade">
+        <EntryScreen />
+      </SceneTransition>
+    );
   }
 
   // Player setup scene
   if (currentSceneId === 'playerSetup') {
-    return <PlayerSetupScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <PlayerSetupScreen />
+      </SceneTransition>
+    );
   }
 
   // Branch selection scene
   if (currentSceneId === 'destinationSelection') {
-    return <BranchSelectionScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="portal">
+        <BranchSelectionScreen />
+      </SceneTransition>
+    );
   }
 
   // Station tour scene
   if (currentSceneId === 'stationTour') {
-    return <StationTourScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="fade">
+        <StationTourScreen />
+      </SceneTransition>
+    );
   }
 
   // Ignition path scenes
   if (currentSceneId === 'ignitionDetail') {
-    return <IgnitionDetailScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="zoom">
+        <IgnitionDetailScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'ignitionProcess') {
-    return <IgnitionProcessScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <IgnitionProcessScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'ignitionBudget') {
-    return <IgnitionBudgetScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <IgnitionBudgetScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'ignitionQualification') {
-    return <IgnitionQualificationScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <IgnitionQualificationScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'ignitionFinal') {
-    return <IgnitionFinalScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="zoom">
+        <IgnitionFinalScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'ignitionAlternatives') {
-    return <IgnitionAlternativesScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="fade">
+        <IgnitionAlternativesScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'ignitionPaymentInfo') {
-    return <IgnitionPaymentInfoScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <IgnitionPaymentInfoScreen />
+      </SceneTransition>
+    );
   }
 
   // Launch Control path scenes
   if (currentSceneId === 'launchControlDetail') {
-    return <LaunchControlDetailScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="zoom">
+        <LaunchControlDetailScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'launchControlProcess') {
-    return <LaunchControlProcessScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <LaunchControlProcessScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'launchControlCapabilities') {
-    return <LaunchControlCapabilitiesScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <LaunchControlCapabilitiesScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'launchControlTimeline') {
-    return <LaunchControlTimelineScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <LaunchControlTimelineScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'launchControlTestimonials') {
-    return <LaunchControlTestimonialsScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="fade">
+        <LaunchControlTestimonialsScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'launchControlApplication') {
-    return <LaunchControlApplicationScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <LaunchControlApplicationScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'launchControlFinal') {
-    return <LaunchControlFinalScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="zoom">
+        <LaunchControlFinalScreen />
+      </SceneTransition>
+    );
   }
 
   // Interstellar path scenes
   if (currentSceneId === 'interstellarDetail') {
-    return <InterstellarDetailScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="zoom">
+        <InterstellarDetailScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'interstellarCapabilities') {
-    return <InterstellarCapabilitiesScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <InterstellarCapabilitiesScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'interstellarEngagement') {
-    return <InterstellarEngagementScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <InterstellarEngagementScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'interstellarFeatures') {
-    return <InterstellarFeaturesScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <InterstellarFeaturesScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'interstellarPartnership') {
-    return <InterstellarPartnershipScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="fade">
+        <InterstellarPartnershipScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'interstellarContact') {
-    return <InterstellarContactScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <InterstellarContactScreen />
+      </SceneTransition>
+    );
   }
   if (currentSceneId === 'interstellarFinal') {
-    return <InterstellarFinalScreen />;
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="portal">
+        <InterstellarFinalScreen />
+      </SceneTransition>
+    );
   }
 
   // Other choice scenes
   if (currentScene.type === 'choice' && currentScene.choices) {
     return (
-      <Scene scene={currentScene}>
-        <div className="flex justify-between items-center text-sm text-gray-400 mb-4">
-          <span>Player: {playerName}</span>
-        </div>
-        <div className="space-y-4">
-          {currentScene.choices.map((choice) => (
-            <Choice
-              key={choice.id}
-              choice={choice}
-              onClick={() => handleChoice(choice)}
-            />
-          ))}
-        </div>
-        <SceneNavigation showReset />
-      </Scene>
+      <SceneTransition sceneId={currentSceneId} transitionType="fade">
+        <Scene scene={currentScene}>
+          <div className="flex justify-between items-center text-sm text-gray-400 mb-4">
+            <span>Player: {playerName}</span>
+          </div>
+          <div className="space-y-4">
+            {currentScene.choices.map((choice) => (
+              <Choice
+                key={choice.id}
+                choice={choice}
+                onClick={() => handleChoice(choice)}
+              />
+            ))}
+          </div>
+          <SceneNavigation showReset />
+        </Scene>
+      </SceneTransition>
     );
   }
 
   // Detail scenes
   if (currentScene.type === 'detail') {
     return (
-      <Scene scene={currentScene}>
-        <div className="text-center">
-          <Button
-            onClick={() => pushScene(currentScene.nextScene || '')}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
-            size="lg"
-          >
-            Continue Journey
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
-        </div>
-        <SceneNavigation showBack showReset />
-      </Scene>
+      <SceneTransition sceneId={currentSceneId} transitionType="fade">
+        <Scene scene={currentScene}>
+          <div className="text-center">
+            <Button
+              onClick={() => pushScene(currentScene.nextScene || '')}
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+              size="lg"
+            >
+              Continue Journey
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
+          </div>
+          <SceneNavigation showBack showReset />
+        </Scene>
+      </SceneTransition>
     );
   }
 
@@ -271,13 +376,14 @@ export const AdventureGame = () => {
   if (currentScene.type === 'result' && finalPath) {
     const pathInfo = getPathInfo(finalPath);
     return (
-      <Scene scene={currentScene} className="max-w-4xl">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-white mb-4">🎯 Quest Complete!</h2>
-          <p className="text-gray-300">
-            {playerName}, your adventure has revealed the perfect path for your journey.
-          </p>
-        </div>
+      <SceneTransition sceneId={currentSceneId} transitionType="zoom">
+        <Scene scene={currentScene} className="max-w-4xl">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-white mb-4">🎯 Quest Complete!</h2>
+            <p className="text-gray-300">
+              {playerName}, your adventure has revealed the perfect path for your journey.
+            </p>
+          </div>
 
         <div className="text-center">
           <h3 className="text-2xl font-bold text-white mb-4">{pathInfo.title}</h3>
@@ -327,7 +433,8 @@ export const AdventureGame = () => {
         </div>
 
         <SceneNavigation showReset />
-      </Scene>
+        </Scene>
+      </SceneTransition>
     );
   }
 

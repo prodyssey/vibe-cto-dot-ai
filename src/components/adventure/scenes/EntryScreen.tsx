@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-import { SpaceStationLobby, LoadingSpinner, WalkingFounders } from '../assets';
+import { LoadingAnimation } from '../animations';
+import { SpaceStationLobby, WalkingFounders } from '../assets';
+import { AnimatedButton } from '../components/AnimatedButton';
 import { useBrowserNavigation, useMobile } from '../hooks';
 import { useSound } from '../sound';
 import type { Scene as SceneType } from '../types';
@@ -53,7 +55,6 @@ export const EntryScreen = () => {
   }, [playMusic]);
 
   const handleBeginJourney = () => {
-    playButtonClick();
     playSceneTransition();
     pushScene('playerSetup');
   };
@@ -65,10 +66,11 @@ export const EntryScreen = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <LoadingSpinner className="w-24 h-24 mx-auto" />
-          <p className="text-purple-300 animate-pulse font-mono">Initializing VibeCTO Station...</p>
-        </div>
+        <LoadingAnimation 
+          type="orbit" 
+          size="lg" 
+          text="Initializing VibeCTO Station..."
+        />
       </div>
     );
   }
@@ -146,25 +148,21 @@ export const EntryScreen = () => {
 
                 {showButton && (
                   <div className="text-center animate-fadeIn">
-                    <button
-                      type="button"
+                    <AnimatedButton
                       onClick={handleBeginJourney}
-                      onMouseEnter={() => !isMobile && playButtonHover()}
                       className={cn(
-                        "inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold",
+                        "bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold",
                         isMobile ? "px-6 py-3 min-h-[44px] w-full text-base" : "px-8 py-4 text-lg",
-                        "hover:from-purple-700 hover:to-blue-700",
-                        "focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2",
-                        "active:scale-95 transition-transform"
+                        "hover:from-purple-700 hover:to-blue-700"
                       )}
-                      style={{ touchAction: 'manipulation' }}
+                      particleColors={['#a855f7', '#7c3aed', '#6366f1']}
                     >
                       BEGIN JOURNEY
                       <ArrowRight className={cn(
-                        "inline-block",
+                        "inline-block ml-2",
                         isMobile ? "w-4 h-4" : "w-5 h-5"
                       )} />
-                    </button>
+                    </AnimatedButton>
                   </div>
                 )}
               </div>

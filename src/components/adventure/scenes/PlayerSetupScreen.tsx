@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 
+import { AnimatedButton } from '../components/AnimatedButton';
 import { useGameStore } from '../gameStore';
 import { useBrowserNavigation } from '../hooks';
 import { Scene } from '../Scene';
@@ -126,15 +127,16 @@ export const PlayerSetupScreen = () => {
                       disabled={isLoading}
                     />
                   </div>
-                  <Button
+                  <AnimatedButton
                     onClick={handleGenerateRandomName}
                     variant="outline"
                     className="border-green-500/50 text-green-400 bg-green-500/10 hover:bg-green-500/20 whitespace-nowrap font-mono"
                     disabled={isLoading}
+                    particleColors={['#10b981', '#34d399', '#6ee7b7']}
                   >
                     <Shuffle className="w-4 h-4 mr-2" />
                     RANDOM
-                  </Button>
+                  </AnimatedButton>
                 </div>
                 {isGeneratedName && (
                   <p className="text-green-400 text-xs mt-2 font-mono animate-fadeIn">
@@ -145,11 +147,12 @@ export const PlayerSetupScreen = () => {
               </div>
 
               <div className="pt-4 border-t border-gray-700/50">
-                <Button
+                <AnimatedButton
                   onClick={startGame}
                   disabled={!playerName.trim() || isLoading}
                   className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-mono uppercase tracking-wider"
                   size="lg"
+                  particleColors={['#10b981', '#3b82f6', '#06b6d4']}
                 >
                   {isLoading ? (
                     <>
@@ -162,7 +165,7 @@ export const PlayerSetupScreen = () => {
                       <ArrowRight className="ml-2 w-5 h-5" />
                     </>
                   )}
-                </Button>
+                </AnimatedButton>
               </div>
 
               {isLoading && (

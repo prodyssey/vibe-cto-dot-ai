@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+import { ForgeAnimation } from '../../animations';
 import { ForgeBackground } from '../../assets';
+import { AnimatedButton } from '../../components/AnimatedButton';
 import { useGameStore } from '../../gameStore';
 import { useBrowserNavigation } from '../../hooks';
 import { Scene } from '../../Scene';
@@ -90,6 +92,13 @@ export const IgnitionDetailScreen = () => {
                 />
               </div>
 
+              {/* Forge Animation */}
+              {showButton && (
+                <div className="flex justify-center animate-fadeIn">
+                  <ForgeAnimation className="mb-8" />
+                </div>
+              )}
+
               {/* Terminal Display */}
               {showButton && (
                 <div className="bg-gray-900/50 backdrop-blur-sm border border-orange-500/30 rounded-lg p-6 font-mono text-sm animate-fadeIn">
@@ -131,20 +140,19 @@ export const IgnitionDetailScreen = () => {
               {/* CTA Button */}
               {showButton && (
                 <div className="text-center animate-fadeIn" style={{ animationDelay: '0.5s' }}>
-                  <Button
+                  <AnimatedButton
                     onClick={handleContinue}
                     size="lg"
                     className={cn(
-                      "group relative",
                       "bg-gradient-to-r from-orange-600 to-red-600",
                       "hover:from-orange-700 hover:to-red-700",
                       "text-white font-semibold px-8 py-4"
                     )}
+                    particleColors={['#dc2626', '#ea580c', '#f97316']}
                   >
-                    <span className="relative z-10">Enter the Forge</span>
-                    <ArrowRight className="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 rounded-md blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
-                  </Button>
+                    Enter the Forge
+                    <ArrowRight className="inline-block ml-2 w-5 h-5" />
+                  </AnimatedButton>
                 </div>
               )}
             </div>

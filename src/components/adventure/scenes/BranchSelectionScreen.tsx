@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 import { IgnitionPortal, LaunchControlPortal, InterstellarPortal } from '../assets';
 import { useGameStore } from '../gameStore';
-import { useBrowserNavigation, useMobile } from '../hooks';
+import { useBrowserNavigation, useMobile, useReducedMotion } from '../hooks';
 import { Scene } from '../Scene';
 import { useSound } from '../sound';
 import type { Scene as SceneType } from '../types';
@@ -88,6 +88,7 @@ export const BranchSelectionScreen = () => {
   const { sessionId, visitedScenes, makeChoice } = useGameStore();
   const { pushScene } = useBrowserNavigation();
   const { isSmallScreen, isTouch } = useMobile();
+  const reducedMotion = useReducedMotion();
   const { playPortalSelect, playButtonHover, playMusic, fadeOutMusic } = useSound();
 
   const handlePortalClick = async (portal: Portal) => {
@@ -222,9 +223,9 @@ export const BranchSelectionScreen = () => {
 
                   {/* Portal Asset */}
                   <div className="absolute inset-0">
-                    {portal.id === 'ignition-path' && <IgnitionPortal isActive={hoveredPortal === portal.id} />}
-                    {portal.id === 'launch-control-path' && <LaunchControlPortal isActive={hoveredPortal === portal.id} />}
-                    {portal.id === 'interstellar-path' && <InterstellarPortal isActive={hoveredPortal === portal.id} />}
+                    {portal.id === 'ignition-path' && <IgnitionPortal isActive={hoveredPortal === portal.id} reducedMotion={reducedMotion} />}
+                    {portal.id === 'launch-control-path' && <LaunchControlPortal isActive={hoveredPortal === portal.id} reducedMotion={reducedMotion} />}
+                    {portal.id === 'interstellar-path' && <InterstellarPortal isActive={hoveredPortal === portal.id} reducedMotion={reducedMotion} />}
                   </div>
 
                   {/* Portal Content */}
