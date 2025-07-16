@@ -100,6 +100,47 @@ export const SCENES: Record<string, Scene> = {
     backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
   },
 
+  ignitionBudget: {
+    id: 'ignitionBudget',
+    type: 'choice',
+    title: 'Investment Check',
+    description: 'Let\'s ensure we\'re aligned on the investment required',
+    backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
+  },
+
+  ignitionQualification: {
+    id: 'ignitionQualification',
+    type: 'choice',
+    title: 'Qualification Check',
+    description: 'Let\'s make sure we\'re a great fit for each other',
+    backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
+  },
+
+  ignitionFinal: {
+    id: 'ignitionFinal',
+    type: 'result',
+    title: 'Welcome to the Forge!',
+    description: 'You\'re ready to transform your idea into reality',
+    backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
+  },
+
+  ignitionAlternatives: {
+    id: 'ignitionAlternatives',
+    type: 'choice',
+    title: 'Alternative Paths',
+    description: 'Let\'s find the right path for your current situation',
+    backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
+  },
+
+  ignitionPaymentInfo: {
+    id: 'ignitionPaymentInfo',
+    type: 'detail',
+    title: 'Payment Options',
+    description: 'Flexible payment plans to match your needs',
+    backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
+    nextScene: 'ignitionQualification',
+  },
+
   launchControlProcess: {
     id: 'launchControlProcess',
     type: 'result',
@@ -108,11 +149,99 @@ export const SCENES: Record<string, Scene> = {
     backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
   },
 
+  launchControlCapabilities: {
+    id: 'launchControlCapabilities',
+    type: 'detail',
+    title: 'Our Capabilities',
+    description: 'See how we help startups reach escape velocity',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  },
+
+  launchControlTimeline: {
+    id: 'launchControlTimeline',
+    type: 'choice',
+    title: 'Engagement Timeline',
+    description: 'Choose the support level that matches your growth trajectory',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  },
+
+  launchControlTestimonials: {
+    id: 'launchControlTestimonials',
+    type: 'detail',
+    title: 'Mission Success Stories',
+    description: 'See how we\'ve helped other startups achieve orbit',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  },
+
+  launchControlApplication: {
+    id: 'launchControlApplication',
+    type: 'choice',
+    title: 'Pre-Launch Assessment',
+    description: 'Let\'s ensure we\'re ready for liftoff together',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  },
+
+  launchControlFinal: {
+    id: 'launchControlFinal',
+    type: 'result',
+    title: 'Ready for Launch!',
+    description: 'Your scaling journey begins now',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  },
+
   interstellarProcess: {
     id: 'interstellarProcess',
     type: 'result',
     title: 'Interstellar Process',
     description: 'Ready to accelerate your team with AI-powered transformation.',
+    backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
+  },
+
+  interstellarCapabilities: {
+    id: 'interstellarCapabilities',
+    type: 'detail',
+    title: 'Advanced Capabilities',
+    description: 'Explore our enterprise-grade acceleration services',
+    backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
+  },
+
+  interstellarEngagement: {
+    id: 'interstellarEngagement',
+    type: 'choice',
+    title: 'Engagement Model',
+    description: 'Choose how we can best accelerate your journey',
+    backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
+  },
+
+  interstellarFeatures: {
+    id: 'interstellarFeatures',
+    type: 'detail',
+    title: 'AI-Powered Features',
+    description: 'See how AI transforms your development velocity',
+    backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
+  },
+
+  interstellarPartnership: {
+    id: 'interstellarPartnership',
+    type: 'choice',
+    title: 'Partnership Options',
+    description: 'Select the partnership model that aligns with your goals',
+    backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
+  },
+
+  interstellarContact: {
+    id: 'interstellarContact',
+    type: 'choice',
+    title: 'Connect with Command',
+    description: 'Ready to explore the possibilities?',
+    backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
+  },
+
+  interstellarFinal: {
+    id: 'interstellarFinal',
+    type: 'result',
+    title: 'Welcome to Warp Speed!',
+    description: 'Your acceleration journey begins now',
     backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
   },
 };

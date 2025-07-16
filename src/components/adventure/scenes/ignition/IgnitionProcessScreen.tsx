@@ -1,6 +1,7 @@
 import { 
   Flame, 
   ArrowRight, 
+  ArrowLeft,
   CheckCircle2, 
   Circle,
   Lightbulb,
@@ -13,7 +14,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-import { useGameStore } from '../../gameStore';
+import { AnimatedButton } from '../../components/AnimatedButton';
 import { useBrowserNavigation } from '../../hooks';
 import { Scene } from '../../Scene';
 import { SceneNavigation } from '../../SceneNavigation';
@@ -92,6 +93,18 @@ export const IgnitionProcessScreen = () => {
       setIsAnimating(true);
       setActiveStep(index);
       setTimeout(() => setIsAnimating(false), 300);
+    }
+  };
+
+  const handleNext = () => {
+    if (activeStep < PROCESS_STEPS.length - 1) {
+      handleStepClick(activeStep + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (activeStep > 0) {
+      handleStepClick(activeStep - 1);
     }
   };
 
@@ -222,15 +235,38 @@ export const IgnitionProcessScreen = () => {
                 Step {activeStep + 1} of {PROCESS_STEPS.length}
               </div>
               
-              {activeStep === PROCESS_STEPS.length - 1 && (
-                <Button
-                  onClick={handleContinue}
-                  className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
-                >
-                  Continue to Budget Check
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              )}
+              <div className="flex gap-3">
+                {activeStep > 0 && (
+                  <Button
+                    onClick={handlePrevious}
+                    variant="outline"
+                    className="border-orange-500/30 text-orange-300 hover:bg-orange-500/10"
+                  >
+                    <ArrowLeft className="mr-2 w-4 h-4" />
+                    Previous
+                  </Button>
+                )}
+                
+                {activeStep < PROCESS_STEPS.length - 1 ? (
+                  <AnimatedButton
+                    onClick={handleNext}
+                    className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+                    particleColors={['#dc2626', '#ea580c', '#f97316']}
+                  >
+                    Next Step
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </AnimatedButton>
+                ) : (
+                  <AnimatedButton
+                    onClick={handleContinue}
+                    className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+                    particleColors={['#dc2626', '#ea580c', '#f97316']}
+                  >
+                    Continue to Budget Check
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </AnimatedButton>
+                )}
+              </div>
             </div>
           </div>
 
