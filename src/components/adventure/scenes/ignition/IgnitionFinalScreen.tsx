@@ -3,15 +3,21 @@ import {
   Calendar, 
   MessageSquare, 
   ArrowRight,
-  CheckCircle 
+  CheckCircle,
+  RefreshCw
 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 import { EmailOptIn } from '@/components/EmailOptIn';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 
+import { AnimatedButton } from '../../components/AnimatedButton';
+import { IgnitionWaitlistForm } from '../../components/IgnitionWaitlistForm';
+import { SessionEmailForm } from '../../components/SessionEmailForm';
 import { useGameStore } from '../../gameStore';
-import { useGameCompletion } from '../../hooks';
+import { useGameCompletion, useBrowserNavigation } from '../../hooks';
 import { Scene } from '../../Scene';
 import type { Scene as SceneType } from '../../types';
 
@@ -23,7 +29,25 @@ const FINAL_SCENE: SceneType = {
   backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
 };
 
-const NEXT_STEPS = [
+const NEXT_STEPS_WAITLIST = [
+  {
+    icon: <MessageSquare className="w-5 h-5" />,
+    title: 'Submit Your Contact Info',
+    description: 'Tell us how you prefer to be contacted',
+  },
+  {
+    icon: <Calendar className="w-5 h-5" />,
+    title: 'We\'ll Reach Out Within 2 Days',
+    description: 'Our team will contact you to schedule your discovery call',
+  },
+  {
+    icon: <Flame className="w-5 h-5" />,
+    title: 'Start Your Journey',
+    description: 'Begin your 2-4 week transformation',
+  },
+];
+
+const NEXT_STEPS_DIRECT = [
   {
     icon: <Calendar className="w-5 h-5" />,
     title: 'Schedule Discovery Call',
@@ -42,17 +66,60 @@ const NEXT_STEPS = [
 ];
 
 export const IgnitionFinalScreen = () => {
-  const { playerName, completeGame } = useGameStore();
+  const { playerName, isGeneratedName, sessionId, completeGame, resetGame } = useGameStore();
   const { handleEmailSignup, handleExploreService } = useGameCompletion();
+  const { pushScene } = useBrowserNavigation();
+  const [showWaitlistForm, setShowWaitlistForm] = useState(false);
+  const [isWaitlistActive, setIsWaitlistActive] = useState(false); // Default to no waitlist
+  const [hasSubmittedWaitlist, setHasSubmittedWaitlist] = useState(false);
+  const [hasCollectedEmail, setHasCollectedEmail] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  // Check if there are active projects (in real app, this would be from database)
+  useEffect(() => {
+    // For now, we'll simulate this with a simple check
+    // In production, query the database for active project slots
+    const checkActiveProjects = async () => {
+      // TODO: Query database for active project count
+      // For now, default to direct booking (no waitlist)
+      setIsWaitlistActive(false);
+    };
+    checkActiveProjects();
+  }, []);
 
   const handleScheduleCall = async () => {
-    await completeGame('explore_service');
-    // In a real implementation, this would open a calendar booking widget
-    window.open('https://calendly.com/vibecto/ignition-discovery', '_blank');
+    if (!hasCollectedEmail) {
+      // First show email collection form
+      setShowEmailForm(true);
+    } else {
+      // Then open SavvyCal
+      await completeGame('explore_service');
+      window.open('https://savvycal.com/craigsturgis/ignition-discovery', '_blank');
+    }
   };
 
-  const handleEmailSignupWrapper = async () => {
-    await handleEmailSignup();
+  const handleEmailSubmit = async (email: string, name: string) => {
+    setUserEmail(email);
+    setHasCollectedEmail(true);
+    setShowEmailForm(false);
+    
+    // Mark game as completed
+    await completeGame('explore_service');
+    
+    // Open SavvyCal with email and name prefilled
+    const savvycalUrl = `https://savvycal.com/craigsturgis/ignition-discovery?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
+    window.open(savvycalUrl, '_blank');
+  };
+
+  const handleWaitlistSuccess = () => {
+    setHasSubmittedWaitlist(true);
+    setShowWaitlistForm(false);
+  };
+
+  const handleStartOver = () => {
+    resetGame();
+    pushScene('entry');
   };
 
   return (
@@ -102,7 +169,7 @@ export const IgnitionFinalScreen = () => {
               <h3 className="text-xl font-bold text-white mb-6">Your Next Steps</h3>
               
               <div className="space-y-4 mb-8">
-                {NEXT_STEPS.map((step, idx) => (
+                {(isWaitlistActive ? NEXT_STEPS_WAITLIST : NEXT_STEPS_DIRECT).map((step, idx) => (
                   <div 
                     key={idx} 
                     className="flex items-start space-x-4 animate-fadeIn"
@@ -120,54 +187,114 @@ export const IgnitionFinalScreen = () => {
               </div>
 
               {/* CTAs */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-white">Ready to start now?</h4>
-                  <Button
-                    onClick={handleScheduleCall}
-                    size="lg"
-                    className={cn(
-                      "w-full",
-                      "bg-gradient-to-r from-orange-600 to-red-600",
-                      "hover:from-orange-700 hover:to-red-700"
+              {showEmailForm ? (
+                <SessionEmailForm
+                  sessionId={sessionId}
+                  playerName={playerName}
+                  isGeneratedName={isGeneratedName}
+                  onSuccess={handleEmailSubmit}
+                  onBack={() => setShowEmailForm(false)}
+                />
+              ) : showWaitlistForm ? (
+                <IgnitionWaitlistForm
+                  sessionId={sessionId}
+                  playerName={playerName}
+                  isGeneratedName={isGeneratedName}
+                  onSuccess={handleWaitlistSuccess}
+                />
+              ) : hasSubmittedWaitlist ? (
+                <div className="text-center p-8 bg-green-900/20 border border-green-500/30 rounded-lg">
+                  <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-4" />
+                  <h4 className="text-lg font-semibold text-white mb-2">You're on the list!</h4>
+                  <p className="text-gray-300">
+                    We'll reach out within 2 business days at your preferred contact.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white">Ready to start now?</h4>
+                    {isWaitlistActive ? (
+                      <>
+                        <AnimatedButton
+                          onClick={() => setShowWaitlistForm(true)}
+                          size="lg"
+                          className={cn(
+                            "w-full",
+                            "bg-gradient-to-r from-orange-600 to-red-600",
+                            "hover:from-orange-700 hover:to-red-700"
+                          )}
+                          particleColors={['#dc2626', '#ea580c', '#f97316']}
+                        >
+                          Join the Waitlist
+                          <ArrowRight className="ml-2 w-5 h-5" />
+                        </AnimatedButton>
+                        <p className="text-xs text-gray-400 text-center">
+                          We'll contact you within 2 business days
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <AnimatedButton
+                          onClick={handleScheduleCall}
+                          size="lg"
+                          className={cn(
+                            "w-full",
+                            "bg-gradient-to-r from-orange-600 to-red-600",
+                            "hover:from-orange-700 hover:to-red-700"
+                          )}
+                          particleColors={['#dc2626', '#ea580c', '#f97316']}
+                        >
+                          {hasCollectedEmail ? 'Schedule Discovery Call' : 'Get Started'}
+                          <ArrowRight className="ml-2 w-5 h-5" />
+                        </AnimatedButton>
+                        <p className="text-xs text-gray-400 text-center">
+                          {hasCollectedEmail ? 'Opens SavvyCal booking' : 'First, we\'ll collect your email'}
+                        </p>
+                      </>
                     )}
-                  >
-                    Schedule Discovery Call
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                  <p className="text-xs text-gray-400 text-center">
-                    Takes 2 minutes • Find a time that works for you
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-white">Want to learn more first?</h4>
-                  <div onClick={handleEmailSignupWrapper}>
-                    <EmailOptIn
-                      variant="minimal"
-                      buttonText="Get Ignition Guide"
-                      className="w-full"
-                    />
                   </div>
-                  <p className="text-xs text-gray-400 text-center">
-                    Free guide • What to expect • Success stories
-                  </p>
+
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white">Want to learn more first?</h4>
+                    <div onClick={() => handleEmailSignup()}>
+                      <EmailOptIn
+                        variant="minimal"
+                        buttonText="Get Ignition Guide"
+                        className="w-full"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-400 text-center">
+                      Free guide • What to expect • Program details
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Additional Options */}
             <div className="text-center space-y-4">
-              <Button
-                onClick={handleExploreService}
-                variant="ghost"
-                className="text-gray-400 hover:text-white"
-              >
-                Visit Ignition Page for More Details
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  onClick={() => window.location.href = '/ignition'}
+                  variant="ghost"
+                  className="text-gray-400 hover:text-white"
+                >
+                  Visit Ignition Page
+                </Button>
+                
+                <Button
+                  onClick={handleStartOver}
+                  variant="ghost"
+                  className="text-gray-400 hover:text-white flex items-center"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Start Over
+                </Button>
+              </div>
               
               <p className="text-sm text-gray-500">
-                Questions? Email us at ignition@vibecto.com
+                Questions? Email us at craig@vibectoai.com
               </p>
             </div>
           </div>

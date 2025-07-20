@@ -188,6 +188,50 @@ export interface Database {
         }
         Relationships: []
       }
+      ignition_waitlist: {
+        Row: {
+          id: string
+          session_id: string | null
+          player_name: string | null
+          preferred_contact: string
+          contact_method: string
+          status: string
+          notes: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          session_id?: string | null
+          player_name?: string | null
+          preferred_contact: string
+          contact_method: string
+          status?: string
+          notes?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          session_id?: string | null
+          player_name?: string | null
+          preferred_contact?: string
+          contact_method?: string
+          status?: string
+          notes?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ignition_waitlist_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
