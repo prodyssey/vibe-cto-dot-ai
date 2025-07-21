@@ -1,31 +1,41 @@
-import { Mail, Phone, UserCheck, User, MessageSquare } from 'lucide-react';
-import { useState } from 'react';
+import { Mail, Phone, UserCheck, User, MessageSquare } from "lucide-react";
+import { useState } from "react";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { supabase } from '@/integrations/supabase/client';
-import { cn } from '@/lib/utils';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { supabase } from "@/integrations/supabase/client";
+import { cn } from "@/lib/utils";
 
-import { AnimatedButton } from './AnimatedButton';
+import { AnimatedButton } from "./AnimatedButton";
 
 interface IgnitionWaitlistFormProps {
   sessionId: string;
   playerName: string;
   isGeneratedName: boolean;
   onSuccess: () => void;
+  isWaitlistActive?: boolean;
 }
 
-export const IgnitionWaitlistForm = ({ sessionId, playerName, isGeneratedName, onSuccess }: IgnitionWaitlistFormProps) => {
+export const IgnitionWaitlistForm = ({
+  sessionId,
+  playerName,
+  isGeneratedName,
+  onSuccess,
+  isWaitlistActive = false,
+}: IgnitionWaitlistFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    name: isGeneratedName ? '' : playerName,
-    email: '',
-    phone: '',
-    contactMethod: 'email',
+    name: isGeneratedName ? "" : playerName,
+    email: "",
+    phone: "",
+    contactMethod: "email",
   });
   const [error, setError] = useState<string | null>(null);
+
+  // Check if phone number is valid (has any content)
+  const isPhoneValid = formData.phone && formData.phone.length > 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,20 +45,30 @@ export const IgnitionWaitlistForm = ({ sessionId, playerName, isGeneratedName, o
     try {
       // Determine preferred contact based on method
       let preferredContact = formData.email;
-      if ((formData.contactMethod === 'phone' || formData.contactMethod === 'text') && formData.phone) {
+      if (
+        (formData.contactMethod === "phone" ||
+          formData.contactMethod === "text") &&
+        formData.phone
+      ) {
         preferredContact = formData.phone;
-      } else if (formData.contactMethod === 'either') {
-        preferredContact = formData.email + (formData.phone ? ` / ${formData.phone}` : '');
+      } else if (formData.contactMethod === "either") {
+        preferredContact =
+          formData.email + (formData.phone ? ` / ${formData.phone}` : "");
       }
 
       const { error: dbError } = await supabase
-        .from('ignition_waitlist')
+        .from("ignition_waitlist")
         .insert({
           session_id: sessionId,
           player_name: formData.name || playerName,
           preferred_contact: preferredContact,
           contact_method: formData.contactMethod,
-          notes: formData.phone && formData.contactMethod !== 'phone' && formData.contactMethod !== 'text' ? `Phone: ${formData.phone}` : null,
+          notes:
+            formData.phone &&
+            formData.contactMethod !== "phone" &&
+            formData.contactMethod !== "text"
+              ? `Phone: ${formData.phone}`
+              : null,
         });
 
       if (dbError) {
@@ -57,8 +77,8 @@ export const IgnitionWaitlistForm = ({ sessionId, playerName, isGeneratedName, o
 
       onSuccess();
     } catch (err) {
-      console.error('Error submitting waitlist form:', err);
-      setError('Failed to submit. Please try again.');
+      console.error("Error submitting waitlist form:", err);
+      setError("Failed to submit. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -96,7 +116,9 @@ export const IgnitionWaitlistForm = ({ sessionId, playerName, isGeneratedName, o
             type="email"
             placeholder="your@email.com"
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
             required
             className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-500"
           />
@@ -111,7 +133,22 @@ export const IgnitionWaitlistForm = ({ sessionId, playerName, isGeneratedName, o
             type="tel"
             placeholder="(555) 123-4567"
             value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            onChange={(e) => {
+              const value = e.target.value;
+              setFormData({ ...formData, phone: value });
+              // Reset to email if phone is cleared and phone/text was selected
+              if (
+                !value &&
+                (formData.contactMethod === "phone" ||
+                  formData.contactMethod === "text")
+              ) {
+                setFormData({
+                  ...formData,
+                  phone: value,
+                  contactMethod: "email",
+                });
+              }
+            }}
             className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-500"
           />
           <p className="text-xs text-gray-400 mt-1">
@@ -120,60 +157,78 @@ export const IgnitionWaitlistForm = ({ sessionId, playerName, isGeneratedName, o
         </div>
 
         <div>
-          <Label className="text-white mb-3 block">Preferred Contact Method</Label>
+          <Label className="text-white mb-3 block">
+            Preferred Contact Method
+          </Label>
           <RadioGroup
             value={formData.contactMethod}
-            onValueChange={(value) => setFormData({ ...formData, contactMethod: value })}
+            onValueChange={(value) =>
+              setFormData({ ...formData, contactMethod: value })
+            }
             className="space-y-3"
           >
             <div className="flex items-center space-x-3">
-              <RadioGroupItem value="email" id="method-email" className="border-gray-600" />
-              <Label htmlFor="method-email" className="flex items-center cursor-pointer text-gray-300">
+              <RadioGroupItem
+                value="email"
+                id="method-email"
+                className="border-gray-400 text-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500/10"
+              />
+              <Label
+                htmlFor="method-email"
+                className="flex items-center cursor-pointer text-gray-300"
+              >
                 <Mail className="w-4 h-4 mr-2" />
                 Email (recommended)
               </Label>
             </div>
             <div className="flex items-center space-x-3">
-              <RadioGroupItem 
-                value="phone" 
-                id="method-phone" 
-                className="border-gray-600"
-                disabled={!formData.phone}
+              <RadioGroupItem
+                value="phone"
+                id="method-phone"
+                className="border-gray-400 text-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!isPhoneValid}
               />
-              <Label 
-                htmlFor="method-phone" 
+              <Label
+                htmlFor="method-phone"
                 className={cn(
                   "flex items-center cursor-pointer",
-                  formData.phone ? "text-gray-300" : "text-gray-500"
+                  isPhoneValid ? "text-gray-300" : "text-gray-500"
                 )}
               >
                 <Phone className="w-4 h-4 mr-2" />
-                Phone {!formData.phone && "(enter number above)"}
+                Phone {!isPhoneValid && "(enter number above)"}
               </Label>
             </div>
             <div className="flex items-center space-x-3">
-              <RadioGroupItem 
-                value="text" 
-                id="method-text" 
-                className="border-gray-600"
-                disabled={!formData.phone}
+              <RadioGroupItem
+                value="text"
+                id="method-text"
+                className="border-gray-400 text-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!isPhoneValid}
               />
-              <Label 
-                htmlFor="method-text" 
+              <Label
+                htmlFor="method-text"
                 className={cn(
                   "flex items-center cursor-pointer",
-                  formData.phone ? "text-gray-300" : "text-gray-500"
+                  isPhoneValid ? "text-gray-300" : "text-gray-500"
                 )}
               >
                 <MessageSquare className="w-4 h-4 mr-2" />
-                Text/SMS {!formData.phone && "(enter number above)"}
+                Text/SMS {!isPhoneValid && "(enter number above)"}
               </Label>
             </div>
             <div className="flex items-center space-x-3">
-              <RadioGroupItem value="either" id="method-either" className="border-gray-600" />
-              <Label htmlFor="method-either" className="flex items-center cursor-pointer text-gray-300">
+              <RadioGroupItem
+                value="either"
+                id="method-either"
+                className="border-gray-400 text-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500/10"
+              />
+              <Label
+                htmlFor="method-either"
+                className="flex items-center cursor-pointer text-gray-300"
+              >
                 <UserCheck className="w-4 h-4 mr-2" />
-                Either works for me
+                Anything works for me
               </Label>
             </div>
           </RadioGroup>
@@ -194,7 +249,7 @@ export const IgnitionWaitlistForm = ({ sessionId, playerName, isGeneratedName, o
           "bg-gradient-to-r from-orange-600 to-red-600",
           "hover:from-orange-700 hover:to-red-700"
         )}
-        particleColors={['#dc2626', '#ea580c', '#f97316']}
+        particleColors={["#dc2626", "#ea580c", "#f97316"]}
       >
         {isSubmitting ? (
           <>
@@ -202,12 +257,14 @@ export const IgnitionWaitlistForm = ({ sessionId, playerName, isGeneratedName, o
             Submitting...
           </>
         ) : (
-          'Join the Forge Waitlist'
+          isWaitlistActive ? "Join the Forge Waitlist" : "Submit Contact Info"
         )}
       </AnimatedButton>
 
       <p className="text-xs text-gray-400 text-center">
-        We'll reach out within 2 business days to schedule your discovery call
+        {isWaitlistActive 
+          ? "We'll reach out within 2 business days when a spot opens up" 
+          : "We'll reach out within 2 business days to schedule your discovery call"}
       </p>
     </form>
   );

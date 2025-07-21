@@ -92,7 +92,8 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
       
       // Log more details for debugging
       console.error('Session ID:', sessionId);
-      console.error('Update data:', updateData);
+      console.error('Email:', email);
+      console.error('Name:', name);
     } finally {
       setIsSubmitting(false);
     }
