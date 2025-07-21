@@ -29,13 +29,17 @@ import { InterstellarEngagementScreen } from './scenes/interstellar/Interstellar
 import { InterstellarFeaturesScreen } from './scenes/interstellar/InterstellarFeaturesScreen';
 import { InterstellarFinalScreen } from './scenes/interstellar/InterstellarFinalScreen';
 import { InterstellarPartnershipScreen } from './scenes/interstellar/InterstellarPartnershipScreen';
+import { LaunchControlAlternativesScreen } from './scenes/launchcontrol/LaunchControlAlternativesScreen';
 import { LaunchControlApplicationScreen } from './scenes/launchcontrol/LaunchControlApplicationScreen';
+import { LaunchControlBudgetScreen } from './scenes/launchcontrol/LaunchControlBudgetScreen';
 import { LaunchControlCapabilitiesScreen } from './scenes/launchcontrol/LaunchControlCapabilitiesScreen';
 import { LaunchControlDetailScreen } from './scenes/launchcontrol/LaunchControlDetailScreen';
 import { LaunchControlFinalScreen } from './scenes/launchcontrol/LaunchControlFinalScreen';
 import { LaunchControlProcessScreen } from './scenes/launchcontrol/LaunchControlProcessScreen';
+import { LaunchControlQualificationScreen } from './scenes/launchcontrol/LaunchControlQualificationScreen';
 import { LaunchControlTestimonialsScreen } from './scenes/launchcontrol/LaunchControlTestimonialsScreen';
 import { LaunchControlTimelineScreen } from './scenes/launchcontrol/LaunchControlTimelineScreen';
+import { LaunchControlWaitlistScreen } from './scenes/launchcontrol/LaunchControlWaitlistScreen';
 import { PlayerSetupScreen } from './scenes/PlayerSetupScreen';
 import { StationTourScreen } from './scenes/StationTourScreen';
 import { saveGameProgress, saveSceneVisit, saveChoice, getPathInfo } from './utils';
@@ -242,6 +246,13 @@ export const AdventureGame = () => {
       </SceneTransition>
     );
   }
+  if (currentSceneId === 'launchControlBudget') {
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <LaunchControlBudgetScreen />
+      </SceneTransition>
+    );
+  }
   if (currentSceneId === 'launchControlProcess') {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
@@ -253,6 +264,27 @@ export const AdventureGame = () => {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlCapabilitiesScreen />
+      </SceneTransition>
+    );
+  }
+  if (currentSceneId === 'launchControlQualification') {
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <LaunchControlQualificationScreen />
+      </SceneTransition>
+    );
+  }
+  if (currentSceneId === 'launchControlAlternatives') {
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="fade">
+        <LaunchControlAlternativesScreen />
+      </SceneTransition>
+    );
+  }
+  if (currentSceneId === 'launchControlWaitlist') {
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <LaunchControlWaitlistScreen />
       </SceneTransition>
     );
   }

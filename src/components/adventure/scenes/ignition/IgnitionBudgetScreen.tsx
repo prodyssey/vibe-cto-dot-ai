@@ -200,10 +200,10 @@ export const IgnitionBudgetScreen = () => {
             </div>
 
             {/* Additional Info */}
-            <div className="text-center text-sm text-gray-400">
+            {/* <div className="text-center text-sm text-gray-400">
               <p>All investments are backed by our satisfaction guarantee</p>
               <p>We only succeed when you succeed</p>
-            </div>
+            </div> */}
           </div>
 
           <SceneNavigation showBack showReset />

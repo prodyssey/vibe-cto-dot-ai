@@ -149,11 +149,44 @@ export const SCENES: Record<string, Scene> = {
     nextScene: 'ignitionQualification',
   },
 
+  launchControlBudget: {
+    id: 'launchControlBudget',
+    type: 'choice',
+    title: 'Investment Readiness',
+    description: 'Let\'s discuss your investment capacity for scaling transformation',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  },
+
   launchControlProcess: {
     id: 'launchControlProcess',
-    type: 'result',
+    type: 'detail',
     title: 'Launch Control Process',
     description: 'Ready to scale your prototype with fractional CTO guidance.',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+    nextScene: 'launchControlBudget',
+  },
+
+  launchControlQualification: {
+    id: 'launchControlQualification',
+    type: 'choice',
+    title: 'Readiness Assessment',
+    description: 'Let\'s ensure Launch Control is the right fit for your scaling needs',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  },
+
+  launchControlAlternatives: {
+    id: 'launchControlAlternatives',
+    type: 'choice',
+    title: 'Alternative Paths',
+    description: 'Let\'s find the right resources for your current stage',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  },
+
+  launchControlWaitlist: {
+    id: 'launchControlWaitlist',
+    type: 'detail',
+    title: 'Join the Waitlist',
+    description: 'Reserve your spot for when Launch Control capacity opens up',
     backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
   },
 
@@ -163,6 +196,7 @@ export const SCENES: Record<string, Scene> = {
     title: 'Our Capabilities',
     description: 'See how we help startups reach escape velocity',
     backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+    nextScene: 'launchControlQualification',
   },
 
   launchControlTimeline: {
