@@ -74,13 +74,13 @@ export const LaunchControlRateReductionScreen = () => {
       JSON.stringify(applicationData)
     );
 
-    pushScene('launchControlCapabilities');
+    pushScene('launchControlQualification');
   };
 
   const handleSkip = async () => {
     makeChoice('launchControlRateReduction', 'skipped', { launchControl: 2 });
     await saveChoice(sessionId, 'launchControlRateReduction', 'skipped', 'Skipped rate reduction');
-    pushScene('launchControlCapabilities');
+    pushScene('launchControlQualification');
   };
 
   return (

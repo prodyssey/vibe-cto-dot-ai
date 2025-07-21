@@ -23,7 +23,7 @@ export const LaunchControlBudgetScreen = () => {
       id: "ready-high",
       amount: "$40K - $75K+",
       description: "Ready to invest in production excellence",
-      nextScene: "launchControlCapabilities",
+      nextScene: "launchControlQualification",
       pathWeight: { launchControl: 3 },
     },
     {

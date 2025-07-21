@@ -32,7 +32,6 @@ import { InterstellarPartnershipScreen } from './scenes/interstellar/Interstella
 import { LaunchControlAlternativesScreen } from './scenes/launchcontrol/LaunchControlAlternativesScreen';
 import { LaunchControlApplicationScreen } from './scenes/launchcontrol/LaunchControlApplicationScreen';
 import { LaunchControlBudgetScreen } from './scenes/launchcontrol/LaunchControlBudgetScreen';
-import { LaunchControlCapabilitiesScreen } from './scenes/launchcontrol/LaunchControlCapabilitiesScreen';
 import { LaunchControlDetailScreen } from './scenes/launchcontrol/LaunchControlDetailScreen';
 import { LaunchControlFinalScreen } from './scenes/launchcontrol/LaunchControlFinalScreen';
 import { LaunchControlProcessScreen } from './scenes/launchcontrol/LaunchControlProcessScreen';
@@ -258,13 +257,6 @@ export const AdventureGame = () => {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlProcessScreen />
-      </SceneTransition>
-    );
-  }
-  if (currentSceneId === 'launchControlCapabilities') {
-    return (
-      <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <LaunchControlCapabilitiesScreen />
       </SceneTransition>
     );
   }

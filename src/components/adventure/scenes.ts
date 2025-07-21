@@ -198,15 +198,6 @@ export const SCENES: Record<string, Scene> = {
     backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
   },
 
-  launchControlCapabilities: {
-    id: 'launchControlCapabilities',
-    type: 'detail',
-    title: 'Our Capabilities',
-    description: 'See how we help startups reach escape velocity',
-    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
-    nextScene: 'launchControlQualification',
-  },
-
   launchControlTimeline: {
     id: 'launchControlTimeline',
     type: 'choice',
