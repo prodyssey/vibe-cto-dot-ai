@@ -29,47 +29,25 @@ const APPLICATION_SCENE: SceneType = {
 
 const APPLICATION_STEPS = [
   {
-    id: 'technical',
-    question: 'Tell us about your current technical stack and architecture',
-    type: 'technical',
+    id: 'challenge',
+    question: 'What is your biggest scaling challenge right now?',
+    type: 'challenge',
     options: [
-      'Modern cloud-native (AWS/GCP/Azure)',
-      'Traditional monolith needing migration',
-      'Microservices architecture',
-      'Hybrid on-premise and cloud',
+      'System crashes under heavy load',
+      'Can\'t ship features fast enough',
+      'Security vulnerabilities worry me',
+      'Infrastructure costs are exploding',
     ],
   },
   {
-    id: 'scale',
-    question: 'What are your scaling challenges?',
-    type: 'challenges',
+    id: 'impact',
+    question: 'What\'s the business impact of not solving this?',
+    type: 'impact',
     options: [
-      'Performance bottlenecks',
-      'Infrastructure costs',
-      'Team bandwidth',
-      'Technical debt',
-    ],
-  },
-  {
-    id: 'timeline',
-    question: 'When do you need to achieve your scaling goals?',
-    type: 'timeline',
-    options: [
-      'ASAP - Critical business need',
-      '1-3 months - Planning ahead',
-      '3-6 months - Strategic initiative',
-      '6+ months - Long-term planning',
-    ],
-  },
-  {
-    id: 'team',
-    question: 'What is your current team structure?',
-    type: 'team',
-    options: [
-      '1-5 engineers',
-      '5-15 engineers',
-      '15-50 engineers',
-      '50+ engineers',
+      'Losing customers to competitors',
+      'Can\'t close enterprise deals',
+      'Team is burning out',
+      'Investors are concerned',
     ],
   },
 ];
@@ -252,10 +230,10 @@ export const LaunchControlApplicationScreen = () => {
                       What happens next?
                     </h4>
                     <ol className="space-y-2 text-sm text-gray-300">
-                      <li>1. Technical assessment call within 24 hours</li>
-                      <li>2. Custom scaling roadmap delivered in 48 hours</li>
-                      <li>3. Team matching and project kickoff</li>
-                      <li>4. Weekly progress updates and milestones</li>
+                      <li>1. We'll review your application within 24 hours</li>
+                      <li>2. Schedule a technical deep-dive call</li>
+                      <li>3. Receive a custom scaling roadmap</li>
+                      <li>4. Begin your transformation journey</li>
                     </ol>
                   </div>
 

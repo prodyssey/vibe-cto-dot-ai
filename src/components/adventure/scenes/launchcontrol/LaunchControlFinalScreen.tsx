@@ -4,8 +4,10 @@ import {
   Phone, 
   ArrowRight,
   CheckCircle,
-  Sparkles
+  Sparkles,
+  Clock
 } from 'lucide-react';
+import { useState } from 'react';
 
 import { EmailOptIn } from '@/components/EmailOptIn';
 import { Button } from '@/components/ui/button';
@@ -15,6 +17,8 @@ import { useGameStore } from '../../gameStore';
 import { useGameCompletion } from '../../hooks';
 import { Scene } from '../../Scene';
 import type { Scene as SceneType } from '../../types';
+import { SessionEmailForm } from '../../components/SessionEmailForm';
+import { LaunchControlWaitlistForm } from './LaunchControlWaitlistForm';
 
 const FINAL_SCENE: SceneType = {
   id: 'launchControlFinal',
@@ -46,13 +50,50 @@ const NEXT_STEPS = [
 ];
 
 export const LaunchControlFinalScreen = () => {
-  const { playerName, completeGame } = useGameStore();
+  const { playerName, completeGame, choices } = useGameStore();
   const { handleEmailSignup, handleExploreService } = useGameCompletion();
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [showWaitlistForm, setShowWaitlistForm] = useState(false);
+  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
+
+  // Check user's path through the adventure
+  const budgetChoice = choices['launchControlBudget']?.choiceId;
+  const qualificationResult = choices['launchControlQualification']?.choiceId;
+  const isQualified = qualificationResult === 'qualified';
+  const hasHighBudget = budgetChoice === 'ready-high';
+  const hasMidBudget = budgetChoice === 'ready-mid';
+  
+  // TODO: Replace with actual database query
+  const isWaitlistActive = false;
+  
+  // Determine which flow to show
+  const showDirectBooking = isQualified && hasHighBudget && !isWaitlistActive;
+  const showReviewFlow = isQualified && hasMidBudget && !isWaitlistActive;
+  const showWaitlistFlow = isQualified && isWaitlistActive;
 
   const handleScheduleCall = async () => {
+    if (showDirectBooking) {
+      setShowEmailForm(true);
+    } else if (showReviewFlow || showWaitlistFlow) {
+      setShowWaitlistForm(true);
+    }
+  };
+
+  const handleEmailSubmit = async (email: string, name: string) => {
+    setEmailSubmitted(true);
     await completeGame('explore_service');
-    // In a real implementation, this would open a calendar booking widget
-    window.open('https://calendly.com/vibecto/launch-control-assessment', '_blank');
+    // Open calendar with pre-filled info
+    const params = new URLSearchParams({
+      name: name || playerName || '',
+      email: email,
+    });
+    window.open(`https://savvycal.com/craigsturgis/launch-control-assessment?${params}`, '_blank');
+  };
+
+  const handleWaitlistSubmit = () => {
+    setWaitlistSubmitted(true);
+    completeGame('waitlist');
   };
 
   const handleEmailSignupWrapper = async () => {
@@ -122,8 +163,15 @@ export const LaunchControlFinalScreen = () => {
               </h2>
               
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                You're cleared for launch! Your application has been received and our mission 
-                specialists are preparing your custom scaling strategy.
+                {showDirectBooking ? (
+                  <>You're cleared for launch! Let's schedule your technical assessment call to begin your scaling transformation.</>
+                ) : showReviewFlow ? (
+                  <>Your application has been received! We'll review your scaling needs and reach out within 1-2 business days with a custom plan.</>
+                ) : showWaitlistFlow ? (
+                  <>You're qualified for Launch Control! Join our priority waitlist and we'll notify you as soon as a spot opens up.</>
+                ) : (
+                  <>Thank you for your interest! Check out our resources to continue your scaling journey.</>
+                )}
               </p>
             </div>
 
@@ -154,40 +202,85 @@ export const LaunchControlFinalScreen = () => {
               </div>
 
               {/* CTAs */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-white">Ready to accelerate?</h4>
-                  <Button
-                    onClick={handleScheduleCall}
-                    size="lg"
-                    className={cn(
-                      "w-full",
-                      "bg-gradient-to-r from-blue-600 to-cyan-600",
-                      "hover:from-blue-700 hover:to-cyan-700"
-                    )}
-                  >
-                    Schedule Assessment Call
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                  <p className="text-xs text-gray-400 text-center">
-                    30-minute technical deep dive • No obligations
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-white">Want scaling insights?</h4>
-                  <div onClick={handleEmailSignupWrapper}>
-                    <EmailOptIn
-                      variant="minimal"
-                      buttonText="Get Scaling Guide"
-                      className="w-full"
-                    />
+              {!showEmailForm && !showWaitlistForm && !emailSubmitted && !waitlistSubmitted ? (
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white">
+                      {showDirectBooking ? 'Ready to accelerate?' : 
+                       showReviewFlow ? 'Submit your contact info' :
+                       showWaitlistFlow ? 'Join the waitlist' :
+                       'Explore resources'}
+                    </h4>
+                    <Button
+                      onClick={handleScheduleCall}
+                      size="lg"
+                      className={cn(
+                        "w-full",
+                        "bg-gradient-to-r from-blue-600 to-cyan-600",
+                        "hover:from-blue-700 hover:to-cyan-700"
+                      )}
+                    >
+                      {showDirectBooking ? 'Schedule Assessment Call' :
+                       showReviewFlow ? 'Submit Contact Info' :
+                       showWaitlistFlow ? 'Join Waitlist' :
+                       'View Resources'}
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                    <p className="text-xs text-gray-400 text-center">
+                      {showDirectBooking ? '30-minute technical deep dive • No obligations' :
+                       showReviewFlow ? 'We\'ll reach out within 1-2 business days' :
+                       showWaitlistFlow ? 'Priority access when spots open' :
+                       'Free scaling guides and templates'}
+                    </p>
                   </div>
-                  <p className="text-xs text-gray-400 text-center">
-                    Free guide • Scaling best practices • Case studies
+
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white">Want scaling insights?</h4>
+                    <div onClick={handleEmailSignupWrapper}>
+                      <EmailOptIn
+                        variant="minimal"
+                        buttonText="Get Scaling Guide"
+                        className="w-full"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-400 text-center">
+                      Free guide • Scaling best practices • Case studies
+                    </p>
+                  </div>
+                </div>
+              ) : showEmailForm && !emailSubmitted ? (
+                <div className="max-w-md mx-auto">
+                  <SessionEmailForm 
+                    onSubmit={handleEmailSubmit}
+                    submitText="Continue to Calendar"
+                  />
+                </div>
+              ) : showWaitlistForm && !waitlistSubmitted ? (
+                <div className="max-w-md mx-auto">
+                  <LaunchControlWaitlistForm 
+                    onSuccess={handleWaitlistSubmit}
+                    isWaitlist={showWaitlistFlow}
+                  />
+                </div>
+              ) : (
+                <div className="text-center space-y-4">
+                  <div className="flex justify-center mb-4">
+                    <div className="p-3 bg-green-500/20 rounded-full">
+                      <CheckCircle className="w-12 h-12 text-green-400" />
+                    </div>
+                  </div>
+                  <h4 className="text-xl font-semibold text-white">
+                    {emailSubmitted ? 'Calendar opened!' : 'Submitted successfully!'}
+                  </h4>
+                  <p className="text-gray-300">
+                    {emailSubmitted ? 
+                      'Complete your booking in the calendar window that just opened.' :
+                      showWaitlistFlow ?
+                        'We\'ll notify you as soon as a spot opens up!' :
+                        'We\'ll reach out within 1-2 business days to discuss your scaling needs.'}
                   </p>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Mission Stats */}

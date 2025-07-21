@@ -1,7 +1,6 @@
 import { 
   Calendar, 
   Clock, 
-  DollarSign, 
   Users,
   Zap,
   CheckCircle,
@@ -35,7 +34,6 @@ const TIMELINE_OPTIONS = [
     title: 'Standard Mission',
     duration: '3-4 months',
     commitment: 'Part-time team integration',
-    investment: '$50,000 - $100,000',
     features: [
       'Infrastructure optimization',
       'Performance improvements',
@@ -50,7 +48,6 @@ const TIMELINE_OPTIONS = [
     title: 'Accelerated Mission',
     duration: '6-8 weeks',
     commitment: 'Full-time dedicated team',
-    investment: '$100,000 - $200,000',
     features: [
       'All Standard features',
       'Rapid feature development',
@@ -65,7 +62,6 @@ const TIMELINE_OPTIONS = [
     title: 'Enterprise Mission',
     duration: '6+ months',
     commitment: 'Embedded team & ongoing support',
-    investment: '$200,000+',
     features: [
       'All Accelerated features',
       'Custom team building',
@@ -162,7 +158,6 @@ export const LaunchControlTimelineScreen = () => {
                       )}>
                         {option.icon}
                       </div>
-                      <DollarSign className="w-5 h-5 text-gray-400" />
                     </div>
 
                     {/* Title & Details */}
@@ -170,7 +165,6 @@ export const LaunchControlTimelineScreen = () => {
                     <div className="space-y-2 mb-4">
                       <p className="text-cyan-400 font-medium">{option.duration}</p>
                       <p className="text-sm text-gray-400">{option.commitment}</p>
-                      <p className="text-lg font-semibold text-white">{option.investment}</p>
                     </div>
 
                     {/* Features */}
@@ -198,7 +192,7 @@ export const LaunchControlTimelineScreen = () => {
               <h4 className="text-lg font-semibold text-white mb-2">Flexible Engagement Models</h4>
               <p className="text-gray-300 max-w-2xl mx-auto">
                 All missions include our satisfaction guarantee. We can adjust scope and timeline based on your 
-                evolving needs. Monthly payments and equity partnerships available for qualified startups.
+                evolving needs. Schedule a call to discuss investment options tailored to your situation.
               </p>
             </div>
           </div>
