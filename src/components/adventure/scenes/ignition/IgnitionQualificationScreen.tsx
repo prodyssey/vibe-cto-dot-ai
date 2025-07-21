@@ -79,14 +79,30 @@ export const IgnitionQualificationScreen = () => {
   );
 
   const handleAnswer = (questionId: string, answer: boolean) => {
-    setAnswers({ ...answers, [questionId]: answer });
+    const newAnswers = { ...answers, [questionId]: answer };
+    setAnswers(newAnswers);
+    
+    // If user answers "not quite" to any question, immediately show results
+    if (!answer) {
+      setShowResults(true);
+      
+      // Save the disqualification
+      makeChoice(QUALIFICATION_SCENE.id, "qualification-incomplete");
+      saveChoice(
+        sessionId,
+        QUALIFICATION_SCENE.id,
+        "qualification-incomplete",
+        `Answered "Not quite" to: ${questionId}`
+      );
+    }
   };
 
   const allAnswered = QUALIFICATION_QUESTIONS.every(
     (q) => answers[q.id] !== undefined
   );
   const qualificationScore = Object.values(answers).filter(Boolean).length;
-  const isQualified = qualificationScore >= 3;
+  const hasAnyNoAnswers = Object.values(answers).some(answer => answer === false);
+  const isQualified = qualificationScore === QUALIFICATION_QUESTIONS.length && !hasAnyNoAnswers;
 
   const handleCheckResults = async () => {
     setShowResults(true);
@@ -141,7 +157,14 @@ export const IgnitionQualificationScreen = () => {
                   style={{ animationDelay: `${idx * 0.1}s` }}
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="text-orange-400 mt-1">
+                    <div 
+                      className="text-orange-400 mt-1 cursor-pointer"
+                      onClick={() => {
+                        if (answers[q.id] === undefined) {
+                          handleAnswer(q.id, true);
+                        }
+                      }}
+                    >
                       {answers[q.id] !== undefined ? (
                         answers[q.id] ? (
                           <CheckCircle2 className="w-6 h-6 text-green-400" />
@@ -149,7 +172,7 @@ export const IgnitionQualificationScreen = () => {
                           <CheckCircle2 className="w-6 h-6 text-red-400" />
                         )
                       ) : (
-                        <Circle className="w-6 h-6" />
+                        <Circle className="w-6 h-6 hover:text-orange-300 transition-colors" />
                       )}
                     </div>
                     <div className="flex-1">
@@ -241,14 +264,18 @@ export const IgnitionQualificationScreen = () => {
                 </h3>
 
                 <p className="text-lg text-gray-300 mb-4">
-                  You answered yes to {qualificationScore} out of{" "}
-                  {QUALIFICATION_QUESTIONS.length} questions
+                  {allAnswered 
+                    ? `You answered yes to ${qualificationScore} out of ${QUALIFICATION_QUESTIONS.length} questions`
+                    : "Ignition requires a strong commitment to all aspects of the program"
+                  }
                 </p>
 
                 <p className="text-gray-400 max-w-md mx-auto">
                   {isQualified
                     ? "You're a great potential candidate for the Ignition program! Let's look at the next steps for a jump start to your idea."
-                    : "It looks like Ignition might not be the perfect fit right now, but we have other ways to help you."}
+                    : allAnswered
+                    ? "It looks like Ignition might not be the perfect fit right now, but we have other ways to help you."
+                    : "Don't worry! We have other options that might be a better fit for your current situation."}
                 </p>
               </div>
 
@@ -272,7 +299,17 @@ export const IgnitionQualificationScreen = () => {
             </div>
           )}
 
-          <SceneNavigation showBack={!showResults} showReset />
+          <SceneNavigation 
+            showBack 
+            showReset 
+            onBack={() => {
+              if (showResults) {
+                setShowResults(false);
+                // Clear answers to let them try again
+                setAnswers({});
+              }
+            }}
+          />
         </Scene>
       </div>
     </div>
