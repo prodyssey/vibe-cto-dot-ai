@@ -55,13 +55,15 @@ const NEXT_STEPS_REVIEW = [
   },
   {
     icon: <Calendar className="w-5 h-5" />,
-    title: "Virtual Call Within 1-2 Days",
-    description: "We'll contact you to schedule a virtual discussion",
+    title: "Response Within 1-2 Business Days",
+    description:
+      "We'll contact you to schedule a virtual discussion if approved",
   },
   {
     icon: <Flame className="w-5 h-5" />,
     title: "Custom Plan",
-    description: "We'll create a plan that works for your budget",
+    description:
+      "We'll work to align on a plan that works for you and our team",
   },
 ];
 
@@ -273,6 +275,7 @@ export const IgnitionFinalScreen = () => {
                   playerName={playerName}
                   isGeneratedName={isGeneratedName}
                   onSuccess={handleWaitlistSuccess}
+                  isWaitlistActive={isWaitlistActive}
                 />
               ) : hasSubmittedWaitlist ? (
                 <div className="text-center p-8 bg-green-900/20 border border-green-500/30 rounded-lg">
@@ -385,7 +388,7 @@ export const IgnitionFinalScreen = () => {
                     )}
                   </div>
 
-                  <div className="space-y-4">
+                  {/* <div className="space-y-4">
                     <h4 className="text-lg font-semibold text-white">
                       Want to learn more first?
                     </h4>
@@ -399,7 +402,7 @@ export const IgnitionFinalScreen = () => {
                     <p className="text-xs text-gray-400 text-center">
                       Free guide • What to expect • Program details
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>
