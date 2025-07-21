@@ -124,14 +124,15 @@ export const IgnitionDetailScreen = () => {
                       <span className="text-orange-500 mr-2">•</span>
                       <span>
                         <span className="text-orange-300">Outcome:</span>{" "}
-                        Working MVP + validation framework
+                        Working MVP + validation framework from an expert 0 to 1
+                        builder
                       </span>
                     </div>
                     <div className="flex items-start">
                       <span className="text-orange-500 mr-2">•</span>
                       <span>
                         <span className="text-orange-300">Investment:</span>{" "}
-                        Starting at $5,000 (Extremely qualified applicants) to
+                        Starting at $5,000 (with qualified rate reduction) to
                         $50,000+
                       </span>
                     </div>
