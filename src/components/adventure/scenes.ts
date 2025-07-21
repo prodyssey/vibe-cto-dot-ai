@@ -108,6 +108,14 @@ export const SCENES: Record<string, Scene> = {
     backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
   },
 
+  ignitionRateReduction: {
+    id: 'ignitionRateReduction',
+    type: 'choice',
+    title: 'Rate Reduction Opportunity',
+    description: 'You may qualify for our reduced rate program. Let\'s learn more about your situation.',
+    backgroundClass: 'bg-gradient-to-br from-orange-900 via-red-900 to-slate-900',
+  },
+
   ignitionQualification: {
     id: 'ignitionQualification',
     type: 'choice',

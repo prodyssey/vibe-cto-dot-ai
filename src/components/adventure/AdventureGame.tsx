@@ -21,6 +21,7 @@ import { IgnitionFinalScreen } from './scenes/ignition/IgnitionFinalScreen';
 import { IgnitionPaymentInfoScreen } from './scenes/ignition/IgnitionPaymentInfoScreen';
 import { IgnitionProcessScreen } from './scenes/ignition/IgnitionProcessScreen';
 import { IgnitionQualificationScreen } from './scenes/ignition/IgnitionQualificationScreen';
+import { IgnitionRateReductionScreen } from './scenes/ignition/IgnitionRateReductionScreen';
 import { InterstellarCapabilitiesScreen } from './scenes/interstellar/InterstellarCapabilitiesScreen';
 import { InterstellarContactScreen } from './scenes/interstellar/InterstellarContactScreen';
 import { InterstellarDetailScreen } from './scenes/interstellar/InterstellarDetailScreen';
@@ -194,6 +195,13 @@ export const AdventureGame = () => {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <IgnitionBudgetScreen />
+      </SceneTransition>
+    );
+  }
+  if (currentSceneId === 'ignitionRateReduction') {
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <IgnitionRateReductionScreen />
       </SceneTransition>
     );
   }
