@@ -10,7 +10,7 @@ import { useBrowserNavigation } from "../../hooks";
 import { Scene } from "../../Scene";
 import { SceneNavigation } from "../../SceneNavigation";
 import type { Scene as SceneType } from "../../types";
-import { TypewriterText } from "../../TypewriterText";
+import { FadeInText } from "../../FadeInText";
 
 const DETAIL_SCENE: SceneType = {
   id: "ignitionDetail",
@@ -81,11 +81,10 @@ export const IgnitionDetailScreen = () => {
             <div className="space-y-8 animate-fadeIn">
               {/* Welcome Message */}
               <div className="text-center">
-                <TypewriterText
+                <FadeInText
                   text="The Ignition Forge - where raw ideas transform into validated ventures. Here, we compress months of wandering into weeks of clarity."
                   className="text-xl text-gray-300 leading-relaxed"
                   onComplete={() => setShowButton(true)}
-                  speed={30}
                 />
               </div>
 

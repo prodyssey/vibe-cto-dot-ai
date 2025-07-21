@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils';
 import { LoadingAnimation } from '../animations';
 import { SpaceStationLobby, WalkingFounders } from '../assets';
 import { AnimatedButton } from '../components/AnimatedButton';
+import { FadeInText } from '../FadeInText';
 import { useBrowserNavigation, useMobile } from '../hooks';
 import { useSound } from '../sound';
 import type { Scene as SceneType } from '../types';
-import { TypewriterText } from '../TypewriterText';
 
 const ENTRY_SCENE: SceneType = {
   id: 'entry',
@@ -136,7 +136,7 @@ export const EntryScreen = () => {
             <CardContent className={cn('space-y-6', isSmallScreen && 'space-y-4')}>
               <div className="space-y-8 relative z-20">
                 <div className="text-center space-y-4">
-                  <TypewriterText
+                  <FadeInText
                     text="Welcome to VibeCTO Station. Your vision is ready for phase transition. Which docking bay matches your current trajectory?"
                     className={cn(
                       "text-gray-300 leading-relaxed",
