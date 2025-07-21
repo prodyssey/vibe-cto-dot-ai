@@ -166,6 +166,14 @@ export const SCENES: Record<string, Scene> = {
     nextScene: 'launchControlBudget',
   },
 
+  launchControlRateReduction: {
+    id: 'launchControlRateReduction',
+    type: 'choice',
+    title: 'Rate Reduction Opportunity',
+    description: 'You may qualify for our reduced rate program',
+    backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  },
+
   launchControlQualification: {
     id: 'launchControlQualification',
     type: 'choice',
