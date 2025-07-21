@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import { SceneTransition } from '../../animations';
 import { useGameStore } from '../../gameStore';
 import { useBrowserNavigation } from '../../hooks';
@@ -29,6 +30,9 @@ export const LaunchControlQualificationScreen = () => {
 
   // Check if waitlist is active (TODO: Replace with actual database query)
   const isWaitlistActive = false;
+  
+  // Check if user applied for rate reduction
+  const appliedForRateReduction = choices['launchControlRateReduction']?.choiceId === 'applied';
 
   const questions: QualificationQuestion[] = [
     {
@@ -54,8 +58,12 @@ export const LaunchControlQualificationScreen = () => {
     },
     {
       id: 'budget',
-      question: 'Do you have budget allocated for infrastructure and team augmentation?',
-      subtext: 'Beyond our fees, scaling requires investment in tools and talent',
+      question: appliedForRateReduction 
+        ? 'Do you have budget allocated (including with our reduced rate)?'
+        : 'Do you have budget allocated for infrastructure and team augmentation?',
+      subtext: appliedForRateReduction
+        ? 'We'll work with you to find an accessible rate'
+        : 'Beyond our fees, scaling requires investment in tools and talent',
       yesAnswer: 'Yes, ready to invest',
       noAnswer: 'Need to plan for it',
     },
@@ -209,6 +217,8 @@ export const LaunchControlQualificationScreen = () => {
             </Button>
           </div>
         )}
+
+        <SceneNavigation showBack showReset />
       </Scene>
     </SceneTransition>
   );

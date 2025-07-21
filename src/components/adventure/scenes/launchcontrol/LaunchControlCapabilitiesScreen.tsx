@@ -20,7 +20,7 @@ import type { Scene as SceneType } from '../../types';
 const CAPABILITIES_SCENE: SceneType = {
   id: 'launchControlCapabilities',
   type: 'detail',
-  title: 'Mission Specialists',
+  title: 'Team Capabilities',
   description: 'Elite engineers ready to scale your success',
   backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
 };

@@ -1,56 +1,62 @@
-import { DollarSign } from 'lucide-react';
+import { DollarSign } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
-import { Scene } from '../../Scene';
-import { SceneTransition } from '../../animations';
-import { useGameStore } from '../../gameStore';
-import { useBrowserNavigation } from '../../hooks';
-import { getScene } from '../../scenes';
-import { saveChoice } from '../../utils';
+import { Scene } from "../../Scene";
+import { SceneNavigation } from "../../SceneNavigation";
+import { SceneTransition } from "../../animations";
+import { useGameStore } from "../../gameStore";
+import { useBrowserNavigation } from "../../hooks";
+import { getScene } from "../../scenes";
+import { saveChoice } from "../../utils";
 
 export const LaunchControlBudgetScreen = () => {
   const { sessionId, makeChoice } = useGameStore();
   const { pushScene } = useBrowserNavigation();
-  const scene = getScene('launchControlBudget');
+  const scene = getScene("launchControlBudget");
 
   if (!scene) return null;
 
   const budgetOptions = [
     {
-      id: 'ready-high',
-      amount: '$100K - $200K+',
-      description: 'Ready to invest in production excellence',
-      nextScene: 'launchControlProcess',
+      id: "ready-high",
+      amount: "$40K - $75K+",
+      description: "Ready to invest in production excellence",
+      nextScene: "launchControlCapabilities",
       pathWeight: { launchControl: 3 },
     },
     {
-      id: 'ready-mid',
-      amount: '$50K - $100K',
-      description: 'Significant budget available',
-      nextScene: 'launchControlProcess',
+      id: "ready-mid",
+      amount: "$15K - $40K",
+      description: "I can invest, but not a lot yet",
+      nextScene: "launchControlRateReduction",
       pathWeight: { launchControl: 2 },
     },
     {
-      id: 'ready-low',
-      amount: '$10K - $50K',
-      description: 'Limited budget for critical improvements',
-      nextScene: 'launchControlAlternatives',
+      id: "ready-low",
+      amount: "$1 - $14,999",
+      description: "I can't really invest yet",
+      nextScene: "launchControlAlternatives",
       pathWeight: { launchControl: 1 },
     },
     {
-      id: 'not-ready',
-      amount: 'Not ready yet',
-      description: 'Still evaluating our needs',
-      nextScene: 'launchControlAlternatives',
+      id: "not-ready",
+      amount: "Just my time",
+      description: "No budget available",
+      nextScene: "launchControlAlternatives",
       pathWeight: { launchControl: 0 },
     },
   ];
 
-  const handleBudgetChoice = async (option: typeof budgetOptions[0]) => {
-    makeChoice('launchControlBudget', option.id, option.pathWeight);
-    await saveChoice(sessionId, 'launchControlBudget', option.id, `Budget: ${option.amount}`);
+  const handleBudgetChoice = async (option: (typeof budgetOptions)[0]) => {
+    makeChoice("launchControlBudget", option.id, option.pathWeight);
+    await saveChoice(
+      sessionId,
+      "launchControlBudget",
+      option.id,
+      `Budget: ${option.amount}`
+    );
     pushScene(option.nextScene);
   };
 
@@ -63,10 +69,13 @@ export const LaunchControlBudgetScreen = () => {
               <DollarSign className="w-12 h-12 text-white" />
             </div>
           </div>
-          <h2 className="text-3xl font-bold text-white mb-4">Investment Readiness</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Investment Readiness
+          </h2>
           <p className="text-gray-300 text-lg">
-            Launch Control is a comprehensive production readiness program. To ensure we can deliver
-            the transformative results you need, let's discuss your investment capacity.
+            Launch Control is a comprehensive production readiness program. To
+            ensure we can deliver the transformative results you need, let's
+            discuss your investment capacity.
           </p>
         </div>
 
@@ -80,7 +89,9 @@ export const LaunchControlBudgetScreen = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-1">{option.amount}</h3>
+                    <h3 className="text-xl font-semibold text-white mb-1">
+                      {option.amount}
+                    </h3>
                     <p className="text-gray-400">{option.description}</p>
                   </div>
                   <Button
@@ -96,7 +107,9 @@ export const LaunchControlBudgetScreen = () => {
         </div>
 
         <div className="bg-blue-500/10 backdrop-blur-sm rounded-lg p-6 border border-blue-500/20">
-          <h4 className="text-lg font-semibold text-white mb-2">What's Included</h4>
+          <h4 className="text-lg font-semibold text-white mb-2">
+            What's Included
+          </h4>
           <ul className="space-y-2 text-gray-300">
             <li className="flex items-start">
               <span className="text-blue-400 mr-2">•</span>
@@ -118,8 +131,11 @@ export const LaunchControlBudgetScreen = () => {
         </div>
 
         <div className="text-center mt-6 text-sm text-gray-400">
-          Your response helps us tailor our approach to your specific needs and constraints.
+          Your response helps us tailor our approach to your specific needs and
+          constraints.
         </div>
+
+        <SceneNavigation showBack showReset />
       </Scene>
     </SceneTransition>
   );

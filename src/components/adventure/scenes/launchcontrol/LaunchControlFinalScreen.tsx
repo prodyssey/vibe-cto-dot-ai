@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { useGameStore } from '../../gameStore';
 import { useGameCompletion } from '../../hooks';
 import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
 import { SessionEmailForm } from '../../components/SessionEmailForm';
 import { LaunchControlWaitlistForm } from './LaunchControlWaitlistForm';
@@ -60,6 +61,7 @@ export const LaunchControlFinalScreen = () => {
   // Check user's path through the adventure
   const budgetChoice = choices['launchControlBudget']?.choiceId;
   const qualificationResult = choices['launchControlQualification']?.choiceId;
+  const appliedForRateReduction = choices['launchControlRateReduction']?.choiceId === 'applied';
   const isQualified = qualificationResult === 'qualified';
   const hasHighBudget = budgetChoice === 'ready-high';
   const hasMidBudget = budgetChoice === 'ready-mid';
@@ -68,8 +70,8 @@ export const LaunchControlFinalScreen = () => {
   const isWaitlistActive = false;
   
   // Determine which flow to show
-  const showDirectBooking = isQualified && hasHighBudget && !isWaitlistActive;
-  const showReviewFlow = isQualified && hasMidBudget && !isWaitlistActive;
+  const showDirectBooking = isQualified && hasHighBudget && !appliedForRateReduction && !isWaitlistActive;
+  const showReviewFlow = isQualified && (hasMidBudget || appliedForRateReduction) && !isWaitlistActive;
   const showWaitlistFlow = isQualified && isWaitlistActive;
 
   const handleScheduleCall = async () => {
@@ -320,6 +322,8 @@ export const LaunchControlFinalScreen = () => {
               </p>
             </div>
           </div>
+
+          <SceneNavigation showReset />
         </Scene>
       </div>
     </div>

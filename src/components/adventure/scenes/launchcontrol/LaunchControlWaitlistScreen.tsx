@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import { SceneTransition } from '../../animations';
 import { useGameStore } from '../../gameStore';
 import { useBrowserNavigation } from '../../hooks';
@@ -102,6 +103,8 @@ export const LaunchControlWaitlistScreen = () => {
             </p>
           </div>
         )}
+
+        <SceneNavigation showBack showReset />
       </Scene>
     </SceneTransition>
   );

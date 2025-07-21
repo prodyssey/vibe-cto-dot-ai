@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { Scene } from '../../Scene';
+import { SceneNavigation } from '../../SceneNavigation';
 import { SceneTransition } from '../../animations';
 import { useGameStore } from '../../gameStore';
 import { useBrowserNavigation } from '../../hooks';
@@ -146,6 +147,8 @@ export const LaunchControlAlternativesScreen = () => {
             Return to Mission Selection
           </Button>
         </div>
+
+        <SceneNavigation showBack showReset />
       </Scene>
     </SceneTransition>
   );
