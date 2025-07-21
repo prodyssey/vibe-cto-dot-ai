@@ -118,7 +118,9 @@ export const IgnitionBudgetScreen = () => {
                   </h4>
                   <ul className="space-y-1 text-sm">
                     <li>• 2-4+ week intensive jumpstart</li>
-                    <li>• Working vibe codeable MVP</li>
+                    <li>
+                      • Working vibe codeable MVP from an expert 0 to 1 builder
+                    </li>
                     <li>• Guidance for testing + validation</li>
                     <li>• 4 weeks of prototyping support (can be extended)</li>
                   </ul>
