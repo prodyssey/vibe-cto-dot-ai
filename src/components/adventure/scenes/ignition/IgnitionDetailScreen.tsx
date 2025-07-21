@@ -128,14 +128,14 @@ export const IgnitionDetailScreen = () => {
                         builder
                       </span>
                     </div>
-                    <div className="flex items-start">
+                    {/* <div className="flex items-start">
                       <span className="text-orange-500 mr-2">•</span>
                       <span>
                         <span className="text-orange-300">Investment:</span>{" "}
-                        Starting at $5,000 (with qualified rate reduction) to
-                        $50,000+
+                        Starting at $5,000 (with qualified rate reduction) up to
+                        $50,000+ based on scope
                       </span>
-                    </div>
+                    </div> */}
                     <div className="flex items-start">
                       <span className="text-orange-500 mr-2">•</span>
                       <span>
