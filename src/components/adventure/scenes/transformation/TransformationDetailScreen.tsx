@@ -9,15 +9,15 @@ import { Scene } from '../../Scene';
 import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
 
-const INTERSTELLAR_SCENE: SceneType = {
-  id: 'interstellarDetail',
+const TRANSFORMATION_SCENE: SceneType = {
+  id: 'transformationDetail',
   type: 'detail',
   title: 'The Observatory',
   description: 'Where visionaries chart courses to unexplored territories',
   backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
 };
 
-export const InterstellarDetailScreen = () => {
+export const TransformationDetailScreen = () => {
   const { pushScene } = useBrowserNavigation();
   const [showConstellation, setShowConstellation] = useState(false);
 
@@ -111,7 +111,7 @@ export const InterstellarDetailScreen = () => {
 
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
-        <Scene scene={INTERSTELLAR_SCENE} className="max-w-4xl w-full">
+        <Scene scene={TRANSFORMATION_SCENE} className="max-w-4xl w-full">
           <div className="space-y-8">
             {/* Observatory Interface */}
             <div className="bg-gray-900/60 backdrop-blur-sm border border-purple-500/50 rounded-lg p-6 animate-fadeIn">
@@ -182,7 +182,7 @@ export const InterstellarDetailScreen = () => {
             {/* CTA */}
             <div className="text-center">
               <Button
-                onClick={() => pushScene('interstellarCapabilities')}
+                onClick={() => pushScene('transformationCapabilities')}
                 size="lg"
                 className={cn(
                   "bg-gradient-to-r from-purple-600 to-indigo-600",

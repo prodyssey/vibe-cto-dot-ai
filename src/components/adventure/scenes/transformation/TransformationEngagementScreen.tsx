@@ -22,7 +22,7 @@ import { saveChoice } from '../../utils';
 
 
 const ENGAGEMENT_SCENE: SceneType = {
-  id: 'interstellarEngagement',
+  id: 'transformationEngagement',
   type: 'choice',
   title: 'Engagement Models',
   description: 'Choose your path to transformation',
@@ -108,7 +108,7 @@ const ENGAGEMENT_OPTIONS = [
   },
 ];
 
-export const InterstellarEngagementScreen = () => {
+export const TransformationEngagementScreen = () => {
   const { sessionId, makeChoice } = useGameStore();
   const { pushScene } = useBrowserNavigation();
 
@@ -123,7 +123,7 @@ export const InterstellarEngagementScreen = () => {
     );
 
     // Navigate to features screen
-    pushScene('interstellarFeatures');
+    pushScene('transformationFeatures');
   };
 
   return (

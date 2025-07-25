@@ -43,7 +43,7 @@ export const Paths = () => {
     },
     {
       icon: Sparkles,
-      title: "Interstellar",
+      title: "Transformation",
       subtitle:
         "For established teams that want to build quality products much faster",
       description:
@@ -55,7 +55,7 @@ export const Paths = () => {
         "Enterprise support",
       ],
       cta: "Schedule Team Call",
-      link: "/interstellar",
+      link: "/transformation",
       color: "from-purple-600 to-blue-600",
     },
   ];

@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { IgnitionPortal, LaunchControlPortal, InterstellarPortal } from '../assets';
+import { IgnitionPortal, LaunchControlPortal, TransformationPortal } from '../assets';
 import { useGameStore } from '../gameStore';
 import { useBrowserNavigation, useMobile, useReducedMotion } from '../hooks';
 import { Scene } from '../Scene';
@@ -31,7 +31,7 @@ interface Portal {
   pathWeight: {
     ignition: number;
     launch_control: number;
-    interstellar: number;
+    transformation: number;
   };
 }
 
@@ -48,7 +48,7 @@ const PORTALS: Portal[] = [
     pathWeight: {
       ignition: 3,
       launch_control: 0,
-      interstellar: 0,
+      transformation: 0,
     },
   },
   {
@@ -63,22 +63,22 @@ const PORTALS: Portal[] = [
     pathWeight: {
       ignition: 0,
       launch_control: 3,
-      interstellar: 0,
+      transformation: 0,
     },
   },
   {
-    id: 'interstellar-path',
-    title: 'Interstellar',
+    id: 'transformation-path',
+    title: 'Transformation',
     icon: <Sparkles className="w-12 h-12" />,
     description: "✨ We're well on our way - but want help to go further, faster",
     fullDescription: 'Accelerate your velocity with AI-powered transformation and enterprise solutions.',
     color: 'from-purple-600 to-indigo-600',
     glowColor: 'shadow-purple-500/50',
-    nextScene: 'interstellarDetail',
+    nextScene: 'transformationDetail',
     pathWeight: {
       ignition: 0,
       launch_control: 0,
-      interstellar: 3,
+      transformation: 3,
     },
   },
 ];
@@ -103,8 +103,8 @@ export const BranchSelectionScreen = () => {
     //     playMusic('music-ignition');
     //   } else if (portal.id === 'launch-control-path') {
     //     playMusic('music-launch');
-    //   } else if (portal.id === 'interstellar-path') {
-    //     playMusic('music-interstellar');
+    //   } else if (portal.id === 'transformation-path') {
+    //     playMusic('music-transformation');
     //   }
     // }, 500);
     
@@ -225,7 +225,7 @@ export const BranchSelectionScreen = () => {
                   <div className="absolute inset-0">
                     {portal.id === 'ignition-path' && <IgnitionPortal isActive={hoveredPortal === portal.id} reducedMotion={reducedMotion} />}
                     {portal.id === 'launch-control-path' && <LaunchControlPortal isActive={hoveredPortal === portal.id} reducedMotion={reducedMotion} />}
-                    {portal.id === 'interstellar-path' && <InterstellarPortal isActive={hoveredPortal === portal.id} reducedMotion={reducedMotion} />}
+                    {portal.id === 'transformation-path' && <TransformationPortal isActive={hoveredPortal === portal.id} reducedMotion={reducedMotion} />}
                   </div>
 
                   {/* Portal Content */}

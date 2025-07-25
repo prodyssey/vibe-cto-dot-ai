@@ -39,7 +39,7 @@ const initialState: GameState = {
   pathScores: {
     ignition: 0,
     launch_control: 0,
-    interstellar: 0,
+    transformation: 0,
   },
   finalPath: null,
   choices: [],
@@ -118,7 +118,7 @@ export const useGameStore = create<GameStore>()(
             newPathScores = {
               ignition: state.pathScores.ignition + (pathWeight.ignition || 0),
               launch_control: state.pathScores.launch_control + (pathWeight.launch_control || 0),
-              interstellar: state.pathScores.interstellar + (pathWeight.interstellar || 0),
+              transformation: state.pathScores.transformation + (pathWeight.transformation || 0),
             };
           }
 

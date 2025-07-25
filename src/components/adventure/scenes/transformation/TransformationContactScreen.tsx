@@ -21,7 +21,7 @@ import { saveChoice } from '../../utils';
 
 
 const CONTACT_SCENE: SceneType = {
-  id: 'interstellarContact',
+  id: 'transformationContact',
   type: 'detail',
   title: 'Executive Briefing Request',
   description: 'Let\'s explore the possibilities together',
@@ -75,7 +75,7 @@ const CONSULTATION_QUESTIONS = [
   },
 ];
 
-export const InterstellarContactScreen = () => {
+export const TransformationContactScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showSummary, setShowSummary] = useState(false);
@@ -103,7 +103,7 @@ export const InterstellarContactScreen = () => {
     );
 
     // Navigate to final screen
-    pushScene('interstellarFinal');
+    pushScene('transformationFinal');
   };
 
   const currentQuestion = CONSULTATION_QUESTIONS[currentStep];

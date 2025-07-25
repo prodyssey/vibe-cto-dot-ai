@@ -18,7 +18,7 @@ import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
 
 const FEATURES_SCENE: SceneType = {
-  id: 'interstellarFeatures',
+  id: 'transformationFeatures',
   type: 'detail',
   title: 'Enterprise Excellence',
   description: 'Features designed for organizations that never compromise',
@@ -100,7 +100,7 @@ const ENTERPRISE_FEATURES = [
   },
 ];
 
-export const InterstellarFeaturesScreen = () => {
+export const TransformationFeaturesScreen = () => {
   const { pushScene } = useBrowserNavigation();
 
   return (
@@ -189,7 +189,7 @@ export const InterstellarFeaturesScreen = () => {
 
             {/* Partnership Benefits */}
             <div className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8">
-              <h3 className="text-2xl font-bold text-white mb-6 text-center">The Interstellar Advantage</h3>
+              <h3 className="text-2xl font-bold text-white mb-6 text-center">The Transformation Advantage</h3>
               
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
@@ -210,7 +210,7 @@ export const InterstellarFeaturesScreen = () => {
             {/* CTA */}
             <div className="text-center">
               <Button
-                onClick={() => pushScene('interstellarPartnership')}
+                onClick={() => pushScene('transformationPartnership')}
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
               >

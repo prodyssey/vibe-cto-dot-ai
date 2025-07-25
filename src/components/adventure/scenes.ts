@@ -60,16 +60,16 @@ export const SCENES: Record<string, Scene> = {
     nextScene: "launchControlProcess",
   },
 
-  // Interstellar Path Detail
-  interstellarDetail: {
-    id: "interstellarDetail",
+  // Transformation Path Detail
+  transformationDetail: {
+    id: "transformationDetail",
     type: "detail",
-    title: "Interstellar Command",
+    title: "Transformation Command",
     description:
-      "Interstellar Command - where established ventures accelerate beyond conventional limits. Transform your velocity with AI-powered innovation.",
+      "Transformation Command - where established ventures accelerate beyond conventional limits. Transform your velocity with AI-powered innovation.",
     backgroundClass:
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
-    nextScene: "interstellarCapabilities",
+    nextScene: "transformationCapabilities",
   },
 
   // Station Tour
@@ -93,9 +93,9 @@ export const SCENES: Record<string, Scene> = {
         nextScene: "launchControlDetail",
       },
       {
-        id: "learn-interstellar",
-        text: "Explore Interstellar Command",
-        nextScene: "interstellarDetail",
+        id: "learn-transformation",
+        text: "Explore Transformation Command",
+        nextScene: "transformationDetail",
       },
       {
         id: "back-to-paths",
@@ -228,7 +228,6 @@ export const SCENES: Record<string, Scene> = {
       "bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900",
   },
 
-
   launchControlTestimonials: {
     id: "launchControlTestimonials",
     type: "detail",
@@ -256,18 +255,18 @@ export const SCENES: Record<string, Scene> = {
       "bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900",
   },
 
-  interstellarProcess: {
-    id: "interstellarProcess",
+  transformationProcess: {
+    id: "transformationProcess",
     type: "result",
-    title: "Interstellar Process",
+    title: "Transformation Process",
     description:
       "Ready to accelerate your team with AI-powered transformation.",
     backgroundClass:
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
   },
 
-  interstellarCapabilities: {
-    id: "interstellarCapabilities",
+  transformationCapabilities: {
+    id: "transformationCapabilities",
     type: "detail",
     title: "Advanced Capabilities",
     description: "Explore our enterprise-grade acceleration services",
@@ -275,8 +274,8 @@ export const SCENES: Record<string, Scene> = {
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
   },
 
-  interstellarEngagement: {
-    id: "interstellarEngagement",
+  transformationEngagement: {
+    id: "transformationEngagement",
     type: "choice",
     title: "Engagement Model",
     description: "Choose how we can best accelerate your journey",
@@ -284,8 +283,8 @@ export const SCENES: Record<string, Scene> = {
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
   },
 
-  interstellarFeatures: {
-    id: "interstellarFeatures",
+  transformationFeatures: {
+    id: "transformationFeatures",
     type: "detail",
     title: "AI-Powered Features",
     description: "See how AI transforms your development velocity",
@@ -293,8 +292,8 @@ export const SCENES: Record<string, Scene> = {
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
   },
 
-  interstellarPartnership: {
-    id: "interstellarPartnership",
+  transformationPartnership: {
+    id: "transformationPartnership",
     type: "choice",
     title: "Partnership Options",
     description: "Select the partnership model that aligns with your goals",
@@ -302,8 +301,8 @@ export const SCENES: Record<string, Scene> = {
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
   },
 
-  interstellarContact: {
-    id: "interstellarContact",
+  transformationContact: {
+    id: "transformationContact",
     type: "choice",
     title: "Connect with Command",
     description: "Ready to explore the possibilities?",
@@ -311,8 +310,8 @@ export const SCENES: Record<string, Scene> = {
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
   },
 
-  interstellarFinal: {
-    id: "interstellarFinal",
+  transformationFinal: {
+    id: "transformationFinal",
     type: "result",
     title: "Welcome to Warp Speed!",
     description: "Your acceleration journey begins now",

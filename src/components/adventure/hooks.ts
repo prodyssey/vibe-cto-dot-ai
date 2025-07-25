@@ -81,8 +81,8 @@ export const useGameCompletion = () => {
       navigate('/ignition');
     } else if (finalPath === 'launch_control') {
       navigate('/launch-control');
-    } else if (finalPath === 'interstellar') {
-      navigate('/interstellar');
+    } else if (finalPath === 'transformation') {
+      navigate('/transformation');
     }
   }, [completeGame, finalPath, navigate]);
 

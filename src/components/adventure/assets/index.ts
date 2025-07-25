@@ -5,7 +5,7 @@ export { SpaceStationLobby } from './SpaceStationLobby';
 export { 
   IgnitionPortal, 
   LaunchControlPortal, 
-  InterstellarPortal 
+  TransformationPortal 
 } from './Portals';
 
 // Scene Backgrounds

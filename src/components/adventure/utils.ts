@@ -99,9 +99,9 @@ export const getPathInfo = (path: ServicePath) => {
         features: ['Architecture & scaling strategy', 'Security & compliance', 'Team & process optimization'],
         color: 'from-blue-600 to-cyan-600',
       };
-    case 'interstellar':
+    case 'transformation':
       return {
-        title: 'Interstellar Path',
+        title: 'Transformation Path',
         description: 'Transform your team\'s velocity with AI agents. Ship features 10x faster while maintaining quality.',
         features: ['AI agent integration', 'Team transformation', 'Enterprise support'],
         color: 'from-purple-600 to-indigo-600',

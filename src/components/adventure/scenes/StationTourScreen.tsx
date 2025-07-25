@@ -46,8 +46,8 @@ const SERVICES = [
     color: 'from-blue-600 to-cyan-600',
   },
   {
-    id: 'interstellar',
-    title: 'Interstellar Command',
+    id: 'transformation',
+    title: 'Transformation Command',
     icon: <Sparkles className="w-8 h-8" />,
     description: 'For companies seeking exponential acceleration',
     features: [
@@ -56,7 +56,7 @@ const SERVICES = [
       'Strategic partnerships',
       'Innovation at scale',
     ],
-    nextScene: 'interstellarDetail',
+    nextScene: 'transformationDetail',
     color: 'from-purple-600 to-indigo-600',
   },
 ];

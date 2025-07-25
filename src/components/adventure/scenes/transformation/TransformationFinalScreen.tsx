@@ -18,7 +18,7 @@ import { Scene } from '../../Scene';
 import type { Scene as SceneType } from '../../types';
 
 const FINAL_SCENE: SceneType = {
-  id: 'interstellarFinal',
+  id: 'transformationFinal',
   type: 'result',
   title: 'Welcome to the Observatory',
   description: 'Your journey to the stars begins now',
@@ -46,7 +46,7 @@ const NEXT_STEPS = [
   },
 ];
 
-export const InterstellarFinalScreen = () => {
+export const TransformationFinalScreen = () => {
   const { playerName, completeGame } = useGameStore();
   const { handleEmailSignup, handleExploreService } = useGameCompletion();
 
@@ -62,7 +62,7 @@ export const InterstellarFinalScreen = () => {
 
   const handleExploreServiceWrapper = async () => {
     await handleExploreService();
-    window.location.href = '/interstellar';
+    window.location.href = '/transformation';
   };
 
   return (
@@ -252,7 +252,7 @@ export const InterstellarFinalScreen = () => {
                 variant="ghost"
                 className="text-gray-400 hover:text-white"
               >
-                Visit Interstellar Page for More Details
+                Visit Transformation Page for More Details
               </Button>
               
               <p className="text-sm text-gray-500">

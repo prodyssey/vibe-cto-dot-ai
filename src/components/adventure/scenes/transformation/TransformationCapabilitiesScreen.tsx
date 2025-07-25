@@ -20,7 +20,7 @@ import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
 
 const CAPABILITIES_SCENE: SceneType = {
-  id: 'interstellarCapabilities',
+  id: 'transformationCapabilities',
   type: 'detail',
   title: 'Quantum Capabilities',
   description: 'Technologies that bend the rules of what\'s possible',
@@ -90,7 +90,7 @@ const ADVANCED_CAPABILITIES = [
   },
 ];
 
-export const InterstellarCapabilitiesScreen = () => {
+export const TransformationCapabilitiesScreen = () => {
   const { pushScene } = useBrowserNavigation();
   const [selectedCapability, setSelectedCapability] = useState<string | null>(null);
 
@@ -265,7 +265,7 @@ export const InterstellarCapabilitiesScreen = () => {
             {/* CTA */}
             <div className="text-center">
               <Button
-                onClick={() => pushScene('interstellarEngagement')}
+                onClick={() => pushScene('transformationEngagement')}
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
               >

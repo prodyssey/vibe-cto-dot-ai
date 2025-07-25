@@ -17,7 +17,7 @@ import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
 
 const PARTNERSHIP_SCENE: SceneType = {
-  id: 'interstellarPartnership',
+  id: 'transformationPartnership',
   type: 'detail',
   title: 'Strategic Alliances',
   description: 'Partnership models that align with your vision',
@@ -97,7 +97,7 @@ const SUCCESS_METRICS = [
   { label: 'NPS Score', value: '92' },
 ];
 
-export const InterstellarPartnershipScreen = () => {
+export const TransformationPartnershipScreen = () => {
   const { pushScene } = useBrowserNavigation();
 
   return (
@@ -246,7 +246,7 @@ export const InterstellarPartnershipScreen = () => {
             {/* CTA */}
             <div className="text-center">
               <Button
-                onClick={() => pushScene('interstellarContact')}
+                onClick={() => pushScene('transformationContact')}
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
               >

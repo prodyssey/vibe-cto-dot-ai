@@ -210,7 +210,7 @@ export const LaunchControlPortal = ({ className, isActive = false, reducedMotion
   );
 };
 
-export const InterstellarPortal = ({ className, isActive = false, reducedMotion = false }: PortalProps) => {
+export const TransformationPortal = ({ className, isActive = false, reducedMotion = false }: PortalProps) => {
   return (
     <svg viewBox="0 0 200 200" className={cn("w-full h-full", className)}>
       <defs>

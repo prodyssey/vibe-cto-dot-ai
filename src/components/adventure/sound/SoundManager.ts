@@ -240,7 +240,7 @@ export const SOUND_EFFECTS: Sound[] = [
   // { id: 'music-main', type: 'music', url: '/sounds/music-main-theme.wav', volume: 0.4, loop: true },
   // { id: 'music-ignition', type: 'music', url: '/sounds/music-ignition-forge.wav', volume: 0.4, loop: true },
   // { id: 'music-launch', type: 'music', url: '/sounds/music-launch-control.wav', volume: 0.4, loop: true },
-  // { id: 'music-interstellar', type: 'music', url: '/sounds/music-interstellar.wav', volume: 0.4, loop: true },
+  // { id: 'music-transformation', type: 'music', url: '/sounds/music-transformation.wav', volume: 0.4, loop: true },
 ];
 
 // Helper function to get sound manager instance

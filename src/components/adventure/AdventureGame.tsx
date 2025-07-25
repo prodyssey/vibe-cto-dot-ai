@@ -1,47 +1,52 @@
-import { ArrowRight } from 'lucide-react';
-import { useEffect } from 'react';
+import { ArrowRight } from "lucide-react";
+import { useEffect } from "react";
 
-import { EmailOptIn } from '@/components/EmailOptIn';
-import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import { EmailOptIn } from "@/components/EmailOptIn";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
-import { SceneTransition } from './animations';
-import { Choice } from './Choice';
-import { useGameStore } from './gameStore';
-import { useBrowserNavigation, useGameCompletion } from './hooks';
-import { Scene } from './Scene';
-import { SceneNavigation } from './SceneNavigation';
-import { getScene } from './scenes';
-import { BranchSelectionScreen } from './scenes/BranchSelectionScreen';
-import { EntryScreen } from './scenes/EntryScreen';
-import { IgnitionAlternativesScreen } from './scenes/ignition/IgnitionAlternativesScreen';
-import { IgnitionBudgetScreen } from './scenes/ignition/IgnitionBudgetScreen';
-import { IgnitionDetailScreen } from './scenes/ignition/IgnitionDetailScreen';
-import { IgnitionFinalScreen } from './scenes/ignition/IgnitionFinalScreen';
-import { IgnitionPaymentInfoScreen } from './scenes/ignition/IgnitionPaymentInfoScreen';
-import { IgnitionProcessScreen } from './scenes/ignition/IgnitionProcessScreen';
-import { IgnitionQualificationScreen } from './scenes/ignition/IgnitionQualificationScreen';
-import { IgnitionRateReductionScreen } from './scenes/ignition/IgnitionRateReductionScreen';
-import { InterstellarCapabilitiesScreen } from './scenes/interstellar/InterstellarCapabilitiesScreen';
-import { InterstellarContactScreen } from './scenes/interstellar/InterstellarContactScreen';
-import { InterstellarDetailScreen } from './scenes/interstellar/InterstellarDetailScreen';
-import { InterstellarEngagementScreen } from './scenes/interstellar/InterstellarEngagementScreen';
-import { InterstellarFeaturesScreen } from './scenes/interstellar/InterstellarFeaturesScreen';
-import { InterstellarFinalScreen } from './scenes/interstellar/InterstellarFinalScreen';
-import { InterstellarPartnershipScreen } from './scenes/interstellar/InterstellarPartnershipScreen';
-import { LaunchControlAlternativesScreen } from './scenes/launchcontrol/LaunchControlAlternativesScreen';
-import { LaunchControlApplicationScreen } from './scenes/launchcontrol/LaunchControlApplicationScreen';
-import { LaunchControlBudgetScreen } from './scenes/launchcontrol/LaunchControlBudgetScreen';
-import { LaunchControlDetailScreen } from './scenes/launchcontrol/LaunchControlDetailScreen';
-import { LaunchControlFinalScreen } from './scenes/launchcontrol/LaunchControlFinalScreen';
-import { LaunchControlProcessScreen } from './scenes/launchcontrol/LaunchControlProcessScreen';
-import { LaunchControlQualificationScreen } from './scenes/launchcontrol/LaunchControlQualificationScreen';
-import { LaunchControlRateReductionScreen } from './scenes/launchcontrol/LaunchControlRateReductionScreen';
-import { LaunchControlTestimonialsScreen } from './scenes/launchcontrol/LaunchControlTestimonialsScreen';
-import { LaunchControlWaitlistScreen } from './scenes/launchcontrol/LaunchControlWaitlistScreen';
-import { PlayerSetupScreen } from './scenes/PlayerSetupScreen';
-import { StationTourScreen } from './scenes/StationTourScreen';
-import { saveGameProgress, saveSceneVisit, saveChoice, getPathInfo } from './utils';
+import { SceneTransition } from "./animations";
+import { Choice } from "./Choice";
+import { useGameStore } from "./gameStore";
+import { useBrowserNavigation, useGameCompletion } from "./hooks";
+import { Scene } from "./Scene";
+import { SceneNavigation } from "./SceneNavigation";
+import { getScene } from "./scenes";
+import { BranchSelectionScreen } from "./scenes/BranchSelectionScreen";
+import { EntryScreen } from "./scenes/EntryScreen";
+import { IgnitionAlternativesScreen } from "./scenes/ignition/IgnitionAlternativesScreen";
+import { IgnitionBudgetScreen } from "./scenes/ignition/IgnitionBudgetScreen";
+import { IgnitionDetailScreen } from "./scenes/ignition/IgnitionDetailScreen";
+import { IgnitionFinalScreen } from "./scenes/ignition/IgnitionFinalScreen";
+import { IgnitionPaymentInfoScreen } from "./scenes/ignition/IgnitionPaymentInfoScreen";
+import { IgnitionProcessScreen } from "./scenes/ignition/IgnitionProcessScreen";
+import { IgnitionQualificationScreen } from "./scenes/ignition/IgnitionQualificationScreen";
+import { IgnitionRateReductionScreen } from "./scenes/ignition/IgnitionRateReductionScreen";
+import { TransformationCapabilitiesScreen } from "./scenes/transformation/TransformationCapabilitiesScreen";
+import { TransformationContactScreen } from "./scenes/transformation/TransformationContactScreen";
+import { TransformationDetailScreen } from "./scenes/transformation/TransformationDetailScreen";
+import { TransformationEngagementScreen } from "./scenes/transformation/TransformationEngagementScreen";
+import { TransformationFeaturesScreen } from "./scenes/transformation/TransformationFeaturesScreen";
+import { TransformationFinalScreen } from "./scenes/transformation/TransformationFinalScreen";
+import { TransformationPartnershipScreen } from "./scenes/transformation/TransformationPartnershipScreen";
+import { LaunchControlAlternativesScreen } from "./scenes/launchcontrol/LaunchControlAlternativesScreen";
+import { LaunchControlApplicationScreen } from "./scenes/launchcontrol/LaunchControlApplicationScreen";
+import { LaunchControlBudgetScreen } from "./scenes/launchcontrol/LaunchControlBudgetScreen";
+import { LaunchControlDetailScreen } from "./scenes/launchcontrol/LaunchControlDetailScreen";
+import { LaunchControlFinalScreen } from "./scenes/launchcontrol/LaunchControlFinalScreen";
+import { LaunchControlProcessScreen } from "./scenes/launchcontrol/LaunchControlProcessScreen";
+import { LaunchControlQualificationScreen } from "./scenes/launchcontrol/LaunchControlQualificationScreen";
+import { LaunchControlRateReductionScreen } from "./scenes/launchcontrol/LaunchControlRateReductionScreen";
+import { LaunchControlTestimonialsScreen } from "./scenes/launchcontrol/LaunchControlTestimonialsScreen";
+import { LaunchControlWaitlistScreen } from "./scenes/launchcontrol/LaunchControlWaitlistScreen";
+import { PlayerSetupScreen } from "./scenes/PlayerSetupScreen";
+import { StationTourScreen } from "./scenes/StationTourScreen";
+import {
+  saveGameProgress,
+  saveSceneVisit,
+  saveChoice,
+  getPathInfo,
+} from "./utils";
 
 export const AdventureGame = () => {
   const {
@@ -52,12 +57,64 @@ export const AdventureGame = () => {
     finalPath,
     makeChoice,
     calculateFinalPath,
+    setSessionId,
+    startSession,
+    navigateToScene,
+    resetGame,
   } = useGameStore();
 
   const { pushScene } = useBrowserNavigation();
-  const { handleEmailSignup: handleEmailSignupBase, handleExploreService: handleExploreServiceBase } = useGameCompletion();
+  const {
+    handleEmailSignup: handleEmailSignupBase,
+    handleExploreService: handleExploreServiceBase,
+  } = useGameCompletion();
   const currentScene = getScene(currentSceneId);
 
+  // Initialize session and handle invalid scenes
+  useEffect(() => {
+    // Handle scene migrations for renamed scenes
+    const sceneMapping: Record<string, string> = {
+      'interstellarDetail': 'transformationDetail',
+      'interstellarCapabilities': 'transformationCapabilities',
+      'interstellarEngagement': 'transformationEngagement',
+      'interstellarFeatures': 'transformationFeatures',
+      'interstellarPartnership': 'transformationPartnership',
+      'interstellarContact': 'transformationContact',
+      'interstellarFinal': 'transformationFinal',
+    };
+    
+    // Check if we need to migrate the scene
+    if (sceneMapping[currentSceneId]) {
+      console.log('Migrating scene:', currentSceneId, 'to', sceneMapping[currentSceneId]);
+      navigateToScene(sceneMapping[currentSceneId]);
+      return;
+    }
+    
+    // Check if current scene exists
+    if (!currentScene && currentSceneId) {
+      console.log('Invalid scene detected:', currentSceneId, '- resetting to entry');
+      // Reset to entry scene if current scene doesn't exist
+      navigateToScene('entry');
+      return;
+    }
+    
+    if (!sessionId) {
+      // Generate a unique session ID
+      const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      setSessionId(newSessionId);
+      startSession();
+      
+      // Save initial scene visit
+      saveSceneVisit(newSessionId, currentSceneId, 1);
+    }
+  }, [sessionId, setSessionId, startSession, currentSceneId, currentScene, navigateToScene]);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('AdventureGame - currentSceneId:', currentSceneId);
+    console.log('AdventureGame - currentScene:', currentScene);
+    console.log('AdventureGame - sessionId:', sessionId);
+  }, [currentSceneId, currentScene, sessionId]);
 
   const handleChoice = async (choice: {
     id: string;
@@ -76,7 +133,7 @@ export const AdventureGame = () => {
     // Navigate to next scene
     if (choice.nextScene) {
       pushScene(choice.nextScene);
-      
+
       // Save scene visit
       const visitCount = (visitedScenes[choice.nextScene] || 0) + 1;
       await saveSceneVisit(sessionId, choice.nextScene, visitCount);
@@ -84,7 +141,7 @@ export const AdventureGame = () => {
 
     // If this is a result scene, calculate final path
     const nextScene = getScene(choice.nextScene);
-    if (nextScene?.type === 'result') {
+    if (nextScene?.type === "result") {
       const path = calculateFinalPath();
       await saveGameProgress({
         sessionId,
@@ -101,26 +158,26 @@ export const AdventureGame = () => {
   const handleEmailSignup = async () => {
     try {
       await supabase
-        .from('adventure_sessions')
-        .update({ final_outcome: 'email_signup' })
-        .eq('id', sessionId);
-      
+        .from("adventure_sessions")
+        .update({ final_outcome: "email_signup" })
+        .eq("id", sessionId);
+
       await handleEmailSignupBase();
     } catch (error) {
-      console.error('Error updating outcome:', error);
+      console.error("Error updating outcome:", error);
     }
   };
 
   const handleExploreService = async () => {
     try {
       await supabase
-        .from('adventure_sessions')
-        .update({ final_outcome: 'explore_service' })
-        .eq('id', sessionId);
-      
+        .from("adventure_sessions")
+        .update({ final_outcome: "explore_service" })
+        .eq("id", sessionId);
+
       await handleExploreServiceBase();
     } catch (error) {
-      console.error('Error updating outcome:', error);
+      console.error("Error updating outcome:", error);
     }
   };
 
@@ -140,11 +197,28 @@ export const AdventureGame = () => {
 
   // Handle different scene types
   if (!currentScene) {
-    return null;
+    console.error('No scene found for id:', currentSceneId);
+    return (
+      <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="text-white text-center">
+          <h2 className="text-2xl mb-4">Loading...</h2>
+          <p className="text-gray-400 mb-4">Redirecting to start</p>
+          <Button
+            onClick={() => {
+              resetGame();
+              navigateToScene('entry');
+            }}
+            className="bg-purple-600 hover:bg-purple-700"
+          >
+            Start Fresh Adventure
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   // Entry scene
-  if (currentSceneId === 'entry') {
+  if (currentSceneId === "entry") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="fade">
         <EntryScreen />
@@ -153,7 +227,7 @@ export const AdventureGame = () => {
   }
 
   // Player setup scene
-  if (currentSceneId === 'playerSetup') {
+  if (currentSceneId === "playerSetup") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <PlayerSetupScreen />
@@ -162,7 +236,7 @@ export const AdventureGame = () => {
   }
 
   // Branch selection scene
-  if (currentSceneId === 'destinationSelection') {
+  if (currentSceneId === "destinationSelection") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="portal">
         <BranchSelectionScreen />
@@ -171,7 +245,7 @@ export const AdventureGame = () => {
   }
 
   // Station tour scene
-  if (currentSceneId === 'stationTour') {
+  if (currentSceneId === "stationTour") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="fade">
         <StationTourScreen />
@@ -180,56 +254,56 @@ export const AdventureGame = () => {
   }
 
   // Ignition path scenes
-  if (currentSceneId === 'ignitionDetail') {
+  if (currentSceneId === "ignitionDetail") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="zoom">
         <IgnitionDetailScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'ignitionProcess') {
+  if (currentSceneId === "ignitionProcess") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <IgnitionProcessScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'ignitionBudget') {
+  if (currentSceneId === "ignitionBudget") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <IgnitionBudgetScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'ignitionRateReduction') {
+  if (currentSceneId === "ignitionRateReduction") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <IgnitionRateReductionScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'ignitionQualification') {
+  if (currentSceneId === "ignitionQualification") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <IgnitionQualificationScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'ignitionFinal') {
+  if (currentSceneId === "ignitionFinal") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="zoom">
         <IgnitionFinalScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'ignitionAlternatives') {
+  if (currentSceneId === "ignitionAlternatives") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="fade">
         <IgnitionAlternativesScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'ignitionPaymentInfo') {
+  if (currentSceneId === "ignitionPaymentInfo") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <IgnitionPaymentInfoScreen />
@@ -238,70 +312,70 @@ export const AdventureGame = () => {
   }
 
   // Launch Control path scenes
-  if (currentSceneId === 'launchControlDetail') {
+  if (currentSceneId === "launchControlDetail") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="zoom">
         <LaunchControlDetailScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'launchControlBudget') {
+  if (currentSceneId === "launchControlBudget") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlBudgetScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'launchControlProcess') {
+  if (currentSceneId === "launchControlProcess") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlProcessScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'launchControlRateReduction') {
+  if (currentSceneId === "launchControlRateReduction") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlRateReductionScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'launchControlQualification') {
+  if (currentSceneId === "launchControlQualification") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlQualificationScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'launchControlAlternatives') {
+  if (currentSceneId === "launchControlAlternatives") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="fade">
         <LaunchControlAlternativesScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'launchControlWaitlist') {
+  if (currentSceneId === "launchControlWaitlist") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlWaitlistScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'launchControlTestimonials') {
+  if (currentSceneId === "launchControlTestimonials") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="fade">
         <LaunchControlTestimonialsScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'launchControlApplication') {
+  if (currentSceneId === "launchControlApplication") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlApplicationScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'launchControlFinal') {
+  if (currentSceneId === "launchControlFinal") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="zoom">
         <LaunchControlFinalScreen />
@@ -309,59 +383,59 @@ export const AdventureGame = () => {
     );
   }
 
-  // Interstellar path scenes
-  if (currentSceneId === 'interstellarDetail') {
+  // Transformation path scenes
+  if (currentSceneId === "transformationDetail") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="zoom">
-        <InterstellarDetailScreen />
+        <TransformationDetailScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'interstellarCapabilities') {
+  if (currentSceneId === "transformationCapabilities") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <InterstellarCapabilitiesScreen />
+        <TransformationCapabilitiesScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'interstellarEngagement') {
+  if (currentSceneId === "transformationEngagement") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <InterstellarEngagementScreen />
+        <TransformationEngagementScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'interstellarFeatures') {
+  if (currentSceneId === "transformationFeatures") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <InterstellarFeaturesScreen />
+        <TransformationFeaturesScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'interstellarPartnership') {
+  if (currentSceneId === "transformationPartnership") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="fade">
-        <InterstellarPartnershipScreen />
+        <TransformationPartnershipScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'interstellarContact') {
+  if (currentSceneId === "transformationContact") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <InterstellarContactScreen />
+        <TransformationContactScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === 'interstellarFinal') {
+  if (currentSceneId === "transformationFinal") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="portal">
-        <InterstellarFinalScreen />
+        <TransformationFinalScreen />
       </SceneTransition>
     );
   }
 
   // Other choice scenes
-  if (currentScene.type === 'choice' && currentScene.choices) {
+  if (currentScene.type === "choice" && currentScene.choices) {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="fade">
         <Scene scene={currentScene}>
@@ -384,13 +458,13 @@ export const AdventureGame = () => {
   }
 
   // Detail scenes
-  if (currentScene.type === 'detail') {
+  if (currentScene.type === "detail") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="fade">
         <Scene scene={currentScene}>
           <div className="text-center">
             <Button
-              onClick={() => pushScene(currentScene.nextScene || '')}
+              onClick={() => pushScene(currentScene.nextScene || "")}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
               size="lg"
             >
@@ -405,66 +479,75 @@ export const AdventureGame = () => {
   }
 
   // Result scenes
-  if (currentScene.type === 'result' && finalPath) {
+  if (currentScene.type === "result" && finalPath) {
     const pathInfo = getPathInfo(finalPath);
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="zoom">
         <Scene scene={currentScene} className="max-w-4xl">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4">🎯 Quest Complete!</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">
+              🎯 Quest Complete!
+            </h2>
             <p className="text-gray-300">
-              {playerName}, your adventure has revealed the perfect path for your journey.
+              {playerName}, your adventure has revealed the perfect path for
+              your journey.
             </p>
           </div>
 
-        <div className="text-center">
-          <h3 className="text-2xl font-bold text-white mb-4">{pathInfo.title}</h3>
-          <p className="text-gray-300 text-lg mb-6">{pathInfo.description}</p>
-          <ul className="space-y-2 text-gray-300 max-w-md mx-auto">
-            {pathInfo.features.map((feature, index) => (
-              <li key={index} className="flex items-center">
-                <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
-                {feature}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6 mt-8">
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">Ready to dive deeper?</h4>
-            <Button
-              onClick={handleExploreService}
-              className={`w-full bg-gradient-to-r ${pathInfo.color} text-white font-semibold`}
-              size="lg"
-            >
-              Explore {pathInfo.title}
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
+          <div className="text-center">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              {pathInfo.title}
+            </h3>
+            <p className="text-gray-300 text-lg mb-6">{pathInfo.description}</p>
+            <ul className="space-y-2 text-gray-300 max-w-md mx-auto">
+              {pathInfo.features.map((feature, index) => (
+                <li key={index} className="flex items-center">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                  {feature}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">Want to learn more first?</h4>
-            <div 
-              onClick={handleEmailSignup}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  handleEmailSignup();
-                }
-              }}
-              role="button"
-              tabIndex={0}
-            >
-              <EmailOptIn
-                variant="minimal"
-                buttonText="Get Updates"
-                className="w-full"
-              />
+          <div className="grid md:grid-cols-2 gap-6 mt-8">
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-white">
+                Ready to dive deeper?
+              </h4>
+              <Button
+                onClick={handleExploreService}
+                className={`w-full bg-gradient-to-r ${pathInfo.color} text-white font-semibold`}
+                size="lg"
+              >
+                Explore {pathInfo.title}
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-white">
+                Want to learn more first?
+              </h4>
+              <div
+                onClick={handleEmailSignup}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handleEmailSignup();
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                <EmailOptIn
+                  variant="minimal"
+                  buttonText="Get Updates"
+                  className="w-full"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <SceneNavigation showReset />
+          <SceneNavigation showReset />
         </Scene>
       </SceneTransition>
     );
