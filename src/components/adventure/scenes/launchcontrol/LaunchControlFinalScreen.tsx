@@ -1,102 +1,100 @@
-import { 
-  Rocket, 
-  Calendar, 
-  Phone, 
-  ArrowRight,
-  CheckCircle,
-  Sparkles,
-  Clock
-} from 'lucide-react';
-import { useState } from 'react';
+import { Rocket, Phone, CheckCircle, Sparkles, Calendar } from "lucide-react";
 
-import { EmailOptIn } from '@/components/EmailOptIn';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { EmailOptIn } from "@/components/EmailOptIn";
+import { Button } from "@/components/ui/button";
 
-import { useGameStore } from '../../gameStore';
-import { useGameCompletion } from '../../hooks';
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
-import type { Scene as SceneType } from '../../types';
-import { SessionEmailForm } from '../../components/SessionEmailForm';
-import { LaunchControlWaitlistForm } from './LaunchControlWaitlistForm';
+import { useGameStore } from "../../gameStore";
+import { useGameCompletion } from "../../hooks";
+import { Scene } from "../../Scene";
+import { SceneNavigation } from "../../SceneNavigation";
+import type { Scene as SceneType } from "../../types";
 
 const FINAL_SCENE: SceneType = {
-  id: 'launchControlFinal',
-  type: 'result',
-  title: 'Mission Control Activated!',
-  description: 'Your scaling journey is about to begin',
-  backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  id: "launchControlFinal",
+  type: "result",
+  title: "Mission Control Activated!",
+  description: "Your scaling journey is about to begin",
+  backgroundClass: "bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900",
 };
 
-const NEXT_STEPS = [
+const NEXT_STEPS_DIRECT = [
+  {
+    icon: <Calendar className="w-5 h-5" />,
+    title: "Alignment Call",
+    description:
+      "30-minute call to understand your scaling challenges and goals",
+    timing: "Book now via SavvyCal",
+  },
   {
     icon: <Phone className="w-5 h-5" />,
-    title: 'Technical Assessment Call',
-    description: 'Deep dive into your architecture and scaling needs',
-    timing: 'Within 24 hours',
+    title: "Mission Assessment",
+    description:
+      "Deep dive into your architecture, bottlenecks, and requirements",
+    timing: "Weeks 1-2",
   },
   {
     icon: <Rocket className="w-5 h-5" />,
-    title: 'Custom Scaling Roadmap',
-    description: 'Detailed plan with timelines and milestones',
-    timing: 'Within 48 hours',
+    title: "Flight Plan Execution",
+    description: "Implement optimal architecture and scaling strategy",
+    timing: "Weeks 2-12",
+  },
+];
+
+const NEXT_STEPS_REVIEW = [
+  {
+    icon: <Phone className="w-5 h-5" />,
+    title: "Application Review",
+    description: "We're reviewing your rate reduction application",
+    timing: "Within 1-2 business days",
   },
   {
     icon: <Calendar className="w-5 h-5" />,
-    title: 'Project Kickoff',
-    description: 'Meet your dedicated team and start scaling',
-    timing: 'Within 1 week',
+    title: "Custom Plan Discussion",
+    description: "Virtual call to align on a plan that works for everyone",
+    timing: "If approved",
+  },
+  {
+    icon: <Rocket className="w-5 h-5" />,
+    title: "Begin Your Journey",
+    description: "Start your transformation with adjusted pricing",
+    timing: "After agreement",
+  },
+];
+
+const NEXT_STEPS_WAITLIST = [
+  {
+    icon: <Phone className="w-5 h-5" />,
+    title: "Waitlist Confirmation",
+    description: "You're on our priority list for Launch Control",
+    timing: "Confirmed",
+  },
+  {
+    icon: <Calendar className="w-5 h-5" />,
+    title: "Spot Opens Up",
+    description: "We'll contact you as soon as capacity becomes available",
+    timing: "Varies",
+  },
+  {
+    icon: <Rocket className="w-5 h-5" />,
+    title: "Fast Track Onboarding",
+    description: "Priority scheduling when your spot is ready",
+    timing: "When available",
   },
 ];
 
 export const LaunchControlFinalScreen = () => {
-  const { playerName, completeGame, choices } = useGameStore();
+  const { playerName, choices } = useGameStore();
   const { handleEmailSignup, handleExploreService } = useGameCompletion();
-  const [showEmailForm, setShowEmailForm] = useState(false);
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const [showWaitlistForm, setShowWaitlistForm] = useState(false);
-  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
 
   // Check user's path through the adventure
-  const budgetChoice = choices['launchControlBudget']?.choiceId;
-  const qualificationResult = choices['launchControlQualification']?.choiceId;
-  const appliedForRateReduction = choices['launchControlRateReduction']?.choiceId === 'applied';
-  const isQualified = qualificationResult === 'qualified';
-  const hasHighBudget = budgetChoice === 'ready-high';
-  const hasMidBudget = budgetChoice === 'ready-mid';
+  const budgetChoice = choices.find(c => c.sceneId === 'launchControlBudget');
+  const rateReductionChoice = choices.find(c => c.sceneId === 'launchControlRateReduction');
+  const needsReview = budgetChoice?.choiceId === 'ready-mid' || 
+                     budgetChoice?.choiceId === 'ready-low' ||
+                     rateReductionChoice?.choiceId === 'applied';
   
   // TODO: Replace with actual database query
   const isWaitlistActive = false;
-  
-  // Determine which flow to show
-  const showDirectBooking = isQualified && hasHighBudget && !appliedForRateReduction && !isWaitlistActive;
-  const showReviewFlow = isQualified && (hasMidBudget || appliedForRateReduction) && !isWaitlistActive;
-  const showWaitlistFlow = isQualified && isWaitlistActive;
-
-  const handleScheduleCall = async () => {
-    if (showDirectBooking) {
-      setShowEmailForm(true);
-    } else if (showReviewFlow || showWaitlistFlow) {
-      setShowWaitlistForm(true);
-    }
-  };
-
-  const handleEmailSubmit = async (email: string, name: string) => {
-    setEmailSubmitted(true);
-    await completeGame('explore_service');
-    // Open calendar with pre-filled info
-    const params = new URLSearchParams({
-      name: name || playerName || '',
-      email: email,
-    });
-    window.open(`https://savvycal.com/craigsturgis/launch-control-assessment?${params}`, '_blank');
-  };
-
-  const handleWaitlistSubmit = () => {
-    setWaitlistSubmitted(true);
-    completeGame('waitlist');
-  };
 
   const handleEmailSignupWrapper = async () => {
     await handleEmailSignup();
@@ -104,7 +102,7 @@ export const LaunchControlFinalScreen = () => {
 
   const handleExploreServiceWrapper = async () => {
     await handleExploreService();
-    window.location.href = '/launch-control';
+    window.location.href = "/launch-control";
   };
 
   return (
@@ -116,7 +114,7 @@ export const LaunchControlFinalScreen = () => {
           <div className="relative">
             {/* Rocket Trail */}
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-96 bg-gradient-to-t from-orange-400 via-yellow-400 to-transparent opacity-60 animate-pulse" />
-            
+
             {/* Exhaust Particles */}
             {[...Array(20)].map((_, i) => (
               <div
@@ -159,21 +157,21 @@ export const LaunchControlFinalScreen = () => {
               <div className="inline-flex p-4 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 mb-6 animate-bounce">
                 <CheckCircle className="w-16 h-16 text-white" />
               </div>
-              
+
               <h2 className="text-3xl font-bold text-white mb-4">
-                Congratulations, {playerName}!
+                {needsReview 
+                  ? `Thank you, ${playerName}!`
+                  : isWaitlistActive
+                  ? `You're on the list, ${playerName}!`
+                  : `Mission Briefing Complete, ${playerName}!`}
               </h2>
-              
+
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                {showDirectBooking ? (
-                  <>You're cleared for launch! Let's schedule your technical assessment call to begin your scaling transformation.</>
-                ) : showReviewFlow ? (
-                  <>Your application has been received! We'll review your scaling needs and reach out within 1-2 business days with a custom plan.</>
-                ) : showWaitlistFlow ? (
-                  <>You're qualified for Launch Control! Join our priority waitlist and we'll notify you as soon as a spot opens up.</>
-                ) : (
-                  <>Thank you for your interest! Check out our resources to continue your scaling journey.</>
-                )}
+                {needsReview 
+                  ? "Your application has been submitted! We'll review it and get back to you within 1-2 business days."
+                  : isWaitlistActive
+                  ? "You're on our priority waitlist! We'll notify you as soon as a spot opens up."
+                  : "You've booked your alignment call. Get ready to transform your startup from prototype to production powerhouse."}
               </p>
             </div>
 
@@ -183,11 +181,15 @@ export const LaunchControlFinalScreen = () => {
                 <Rocket className="w-6 h-6 mr-2 text-cyan-400" />
                 Your Launch Sequence
               </h3>
-              
+
               <div className="space-y-4 mb-8">
-                {NEXT_STEPS.map((step, idx) => (
-                  <div 
-                    key={idx} 
+                {(needsReview 
+                  ? NEXT_STEPS_REVIEW 
+                  : isWaitlistActive 
+                  ? NEXT_STEPS_WAITLIST 
+                  : NEXT_STEPS_DIRECT).map((step, idx) => (
+                  <div
+                    key={idx}
                     className="flex items-start space-x-4 animate-fadeIn"
                     style={{ animationDelay: `${idx * 0.1}s` }}
                   >
@@ -196,97 +198,69 @@ export const LaunchControlFinalScreen = () => {
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-white">{step.title}</h4>
-                      <p className="text-sm text-gray-400">{step.description}</p>
-                      <p className="text-xs text-cyan-400 mt-1">{step.timing}</p>
+                      <p className="text-sm text-gray-400">
+                        {step.description}
+                      </p>
+                      <p className="text-xs text-cyan-400 mt-1">
+                        {step.timing}
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* CTAs */}
-              {!showEmailForm && !showWaitlistForm && !emailSubmitted && !waitlistSubmitted ? (
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-white">
-                      {showDirectBooking ? 'Ready to accelerate?' : 
-                       showReviewFlow ? 'Submit your contact info' :
-                       showWaitlistFlow ? 'Join the waitlist' :
-                       'Explore resources'}
-                    </h4>
-                    <Button
-                      onClick={handleScheduleCall}
-                      size="lg"
-                      className={cn(
-                        "w-full",
-                        "bg-gradient-to-r from-blue-600 to-cyan-600",
-                        "hover:from-blue-700 hover:to-cyan-700"
-                      )}
-                    >
-                      {showDirectBooking ? 'Schedule Assessment Call' :
-                       showReviewFlow ? 'Submit Contact Info' :
-                       showWaitlistFlow ? 'Join Waitlist' :
-                       'View Resources'}
-                      <ArrowRight className="ml-2 w-5 h-5" />
-                    </Button>
-                    <p className="text-xs text-gray-400 text-center">
-                      {showDirectBooking ? '30-minute technical deep dive • No obligations' :
-                       showReviewFlow ? 'We\'ll reach out within 1-2 business days' :
-                       showWaitlistFlow ? 'Priority access when spots open' :
-                       'Free scaling guides and templates'}
-                    </p>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-white">Want scaling insights?</h4>
-                    <div onClick={handleEmailSignupWrapper}>
-                      <EmailOptIn
-                        variant="minimal"
-                        buttonText="Get Scaling Guide"
-                        className="w-full"
-                      />
-                    </div>
-                    <p className="text-xs text-gray-400 text-center">
-                      Free guide • Scaling best practices • Case studies
-                    </p>
-                  </div>
-                </div>
-              ) : showEmailForm && !emailSubmitted ? (
-                <div className="max-w-md mx-auto">
-                  <SessionEmailForm 
-                    onSubmit={handleEmailSubmit}
-                    submitText="Continue to Calendar"
-                  />
-                </div>
-              ) : showWaitlistForm && !waitlistSubmitted ? (
-                <div className="max-w-md mx-auto">
-                  <LaunchControlWaitlistForm 
-                    onSuccess={handleWaitlistSubmit}
-                    isWaitlist={showWaitlistFlow}
-                  />
-                </div>
-              ) : (
-                <div className="text-center space-y-4">
-                  <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-green-500/20 rounded-full">
-                      <CheckCircle className="w-12 h-12 text-green-400" />
-                    </div>
-                  </div>
-                  <h4 className="text-xl font-semibold text-white">
-                    {emailSubmitted ? 'Calendar opened!' : 'Submitted successfully!'}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-white">
+                    Mission Status
                   </h4>
-                  <p className="text-gray-300">
-                    {emailSubmitted ? 
-                      'Complete your booking in the calendar window that just opened.' :
-                      showWaitlistFlow ?
-                        'We\'ll notify you as soon as a spot opens up!' :
-                        'We\'ll reach out within 1-2 business days to discuss your scaling needs.'}
+                  <div className="text-center p-6 bg-green-900/20 border border-green-500/30 rounded-lg">
+                    <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-4" />
+                    <p className="text-white font-medium">
+                      {needsReview 
+                        ? "Application Submitted" 
+                        : isWaitlistActive 
+                        ? "Waitlist Confirmed"
+                        : "Alignment Call Booked"}
+                    </p>
+                    <p className="text-sm text-gray-300 mt-2">
+                      {needsReview 
+                        ? "We'll contact you within 1-2 business days"
+                        : isWaitlistActive 
+                        ? "You're on our priority list"
+                        : "Check your email for calendar confirmation"}
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-400 text-center">
+                    {needsReview 
+                      ? "Rate reduction applications are reviewed quickly"
+                      : isWaitlistActive 
+                      ? "We'll notify you as soon as a spot opens"
+                      : "We'll send a prep guide before your call"}
                   </p>
                 </div>
-              )}
+
+                {/* <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-white">
+                    Want scaling insights?
+                  </h4>
+                  <div onClick={handleEmailSignupWrapper}>
+                    <EmailOptIn
+                      variant="minimal"
+                      buttonText="Get Scaling Guide"
+                      className="w-full"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-400 text-center">
+                    Free guide • Scaling best practices • Case studies
+                  </p>
+                </div> */}
+              </div>
             </div>
 
             {/* Mission Stats */}
-            <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-500/30 rounded-lg p-6">
+            {/* <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-500/30 rounded-lg p-6">
               <div className="flex items-center justify-between flex-wrap gap-4 text-center">
                 <div>
                   <div className="text-2xl font-bold text-cyan-400">24h</div>
@@ -305,7 +279,7 @@ export const LaunchControlFinalScreen = () => {
                   <div className="text-sm text-gray-400">Scaled startups</div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Additional Options */}
             <div className="text-center space-y-4">
@@ -316,9 +290,9 @@ export const LaunchControlFinalScreen = () => {
               >
                 Visit Launch Control Page for More Details
               </Button>
-              
+
               <p className="text-sm text-gray-500">
-                Questions? Email us at scale@vibecto.com
+                Questions? Email us at craig@vibecto.ai
               </p>
             </div>
           </div>

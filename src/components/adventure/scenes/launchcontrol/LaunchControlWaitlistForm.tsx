@@ -165,10 +165,15 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
           onValueChange={(value) =>
             setFormData({ ...formData, preferredContact: value as WaitlistData['preferredContact'] })
           }
+          className="space-y-3"
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="email" id="contact-email" />
-            <Label htmlFor="contact-email" className="text-white cursor-pointer">
+            <RadioGroupItem 
+              value="email" 
+              id="contact-email" 
+              className="border-cyan-400 text-cyan-400 data-[state=checked]:bg-cyan-400 data-[state=checked]:text-gray-900"
+            />
+            <Label htmlFor="contact-email" className="text-white cursor-pointer font-medium">
               Email
             </Label>
           </div>
@@ -177,10 +182,11 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
               value="phone"
               id="contact-phone"
               disabled={phoneOrTextDisabled}
+              className="border-cyan-400 text-cyan-400 data-[state=checked]:bg-cyan-400 data-[state=checked]:text-gray-900 disabled:border-gray-600 disabled:text-gray-600"
             />
             <Label
               htmlFor="contact-phone"
-              className={`cursor-pointer ${phoneOrTextDisabled ? 'text-gray-500' : 'text-white'}`}
+              className={`cursor-pointer font-medium ${phoneOrTextDisabled ? 'text-gray-500' : 'text-white'}`}
             >
               Phone
             </Label>
@@ -190,17 +196,22 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
               value="text"
               id="contact-text"
               disabled={phoneOrTextDisabled}
+              className="border-cyan-400 text-cyan-400 data-[state=checked]:bg-cyan-400 data-[state=checked]:text-gray-900 disabled:border-gray-600 disabled:text-gray-600"
             />
             <Label
               htmlFor="contact-text"
-              className={`cursor-pointer ${phoneOrTextDisabled ? 'text-gray-500' : 'text-white'}`}
+              className={`cursor-pointer font-medium ${phoneOrTextDisabled ? 'text-gray-500' : 'text-white'}`}
             >
               Text/SMS
             </Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="any" id="contact-any" />
-            <Label htmlFor="contact-any" className="text-white cursor-pointer">
+            <RadioGroupItem 
+              value="any" 
+              id="contact-any" 
+              className="border-cyan-400 text-cyan-400 data-[state=checked]:bg-cyan-400 data-[state=checked]:text-gray-900"
+            />
+            <Label htmlFor="contact-any" className="text-white cursor-pointer font-medium">
               Anything works
             </Label>
           </div>

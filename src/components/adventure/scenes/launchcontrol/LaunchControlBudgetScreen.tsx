@@ -125,7 +125,7 @@ export const LaunchControlBudgetScreen = () => {
             </li>
             <li className="flex items-start">
               <span className="text-blue-400 mr-2">•</span>
-              6-12 weeks of hands-on transformation
+              6-12+ weeks of hands-on transformation
             </li>
           </ul>
         </div>

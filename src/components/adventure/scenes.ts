@@ -228,14 +228,6 @@ export const SCENES: Record<string, Scene> = {
       "bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900",
   },
 
-  launchControlTimeline: {
-    id: "launchControlTimeline",
-    type: "choice",
-    title: "Engagement Timeline",
-    description: "Choose the support level that matches your growth trajectory",
-    backgroundClass:
-      "bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900",
-  },
 
   launchControlTestimonials: {
     id: "launchControlTestimonials",

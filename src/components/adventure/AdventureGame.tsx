@@ -38,7 +38,6 @@ import { LaunchControlProcessScreen } from './scenes/launchcontrol/LaunchControl
 import { LaunchControlQualificationScreen } from './scenes/launchcontrol/LaunchControlQualificationScreen';
 import { LaunchControlRateReductionScreen } from './scenes/launchcontrol/LaunchControlRateReductionScreen';
 import { LaunchControlTestimonialsScreen } from './scenes/launchcontrol/LaunchControlTestimonialsScreen';
-import { LaunchControlTimelineScreen } from './scenes/launchcontrol/LaunchControlTimelineScreen';
 import { LaunchControlWaitlistScreen } from './scenes/launchcontrol/LaunchControlWaitlistScreen';
 import { PlayerSetupScreen } from './scenes/PlayerSetupScreen';
 import { StationTourScreen } from './scenes/StationTourScreen';
@@ -285,13 +284,6 @@ export const AdventureGame = () => {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlWaitlistScreen />
-      </SceneTransition>
-    );
-  }
-  if (currentSceneId === 'launchControlTimeline') {
-    return (
-      <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <LaunchControlTimelineScreen />
       </SceneTransition>
     );
   }

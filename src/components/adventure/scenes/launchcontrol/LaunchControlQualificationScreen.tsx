@@ -119,7 +119,7 @@ export const LaunchControlQualificationScreen = () => {
       makeChoice("launchControlQualification", "qualified", {
         launchControl: 3,
       });
-      pushScene("launchControlTimeline");
+      pushScene("launchControlApplication");
     } else {
       makeChoice("launchControlQualification", "not-qualified", {
         launchControl: 0,
@@ -258,7 +258,7 @@ export const LaunchControlQualificationScreen = () => {
                   : "bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700"
               }
             >
-              {isQualified ? "Continue to Timeline" : "Explore Alternatives"}
+              {isQualified ? "Continue Application" : "Explore Alternatives"}
             </Button>
           </div>
         )}
