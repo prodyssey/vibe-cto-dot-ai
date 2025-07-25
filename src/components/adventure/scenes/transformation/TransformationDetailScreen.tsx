@@ -182,7 +182,7 @@ export const TransformationDetailScreen = () => {
             {/* CTA */}
             <div className="text-center">
               <Button
-                onClick={() => pushScene('transformationCapabilities')}
+                onClick={() => pushScene('transformationProcess')}
                 size="lg"
                 className={cn(
                   "bg-gradient-to-r from-purple-600 to-indigo-600",

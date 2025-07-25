@@ -69,7 +69,7 @@ export const SCENES: Record<string, Scene> = {
       "Transformation Command - where established ventures accelerate beyond conventional limits. Transform your velocity with AI-powered innovation.",
     backgroundClass:
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
-    nextScene: "transformationCapabilities",
+    nextScene: "transformationProcess",
   },
 
   // Station Tour
@@ -257,55 +257,39 @@ export const SCENES: Record<string, Scene> = {
 
   transformationProcess: {
     id: "transformationProcess",
-    type: "result",
-    title: "Transformation Process",
+    type: "detail",
+    title: "The Transformation Process",
     description:
-      "Ready to accelerate your team with AI-powered transformation.",
+      "See how we accelerate your team with AI-powered transformation.",
     backgroundClass:
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
+    nextScene: "transformationInvestment",
   },
 
-  transformationCapabilities: {
-    id: "transformationCapabilities",
+  transformationInvestment: {
+    id: "transformationInvestment",
     type: "detail",
-    title: "Advanced Capabilities",
-    description: "Explore our enterprise-grade acceleration services",
+    title: "Investment Overview",
+    description: "Understanding the investment in your team's acceleration",
     backgroundClass:
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
+    nextScene: "transformationAlignment",
   },
 
-  transformationEngagement: {
-    id: "transformationEngagement",
+  transformationAlignment: {
+    id: "transformationAlignment",
     type: "choice",
-    title: "Engagement Model",
-    description: "Choose how we can best accelerate your journey",
+    title: "Schedule Alignment Call",
+    description: "Let's discuss how we can accelerate your team's velocity",
     backgroundClass:
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
   },
 
-  transformationFeatures: {
-    id: "transformationFeatures",
-    type: "detail",
-    title: "AI-Powered Features",
-    description: "See how AI transforms your development velocity",
-    backgroundClass:
-      "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
-  },
-
-  transformationPartnership: {
-    id: "transformationPartnership",
+  transformationAlternatives: {
+    id: "transformationAlternatives",
     type: "choice",
-    title: "Partnership Options",
-    description: "Select the partnership model that aligns with your goals",
-    backgroundClass:
-      "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
-  },
-
-  transformationContact: {
-    id: "transformationContact",
-    type: "choice",
-    title: "Connect with Command",
-    description: "Ready to explore the possibilities?",
+    title: "Alternative Paths",
+    description: "Let's find the right solution for your current stage",
     backgroundClass:
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
   },

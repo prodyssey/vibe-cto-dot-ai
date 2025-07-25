@@ -22,13 +22,12 @@ import { IgnitionPaymentInfoScreen } from "./scenes/ignition/IgnitionPaymentInfo
 import { IgnitionProcessScreen } from "./scenes/ignition/IgnitionProcessScreen";
 import { IgnitionQualificationScreen } from "./scenes/ignition/IgnitionQualificationScreen";
 import { IgnitionRateReductionScreen } from "./scenes/ignition/IgnitionRateReductionScreen";
-import { TransformationCapabilitiesScreen } from "./scenes/transformation/TransformationCapabilitiesScreen";
-import { TransformationContactScreen } from "./scenes/transformation/TransformationContactScreen";
+import { TransformationAlignmentScreen } from "./scenes/transformation/TransformationAlignmentScreen";
+import { TransformationAlternativesScreen } from "./scenes/transformation/TransformationAlternativesScreen";
 import { TransformationDetailScreen } from "./scenes/transformation/TransformationDetailScreen";
-import { TransformationEngagementScreen } from "./scenes/transformation/TransformationEngagementScreen";
-import { TransformationFeaturesScreen } from "./scenes/transformation/TransformationFeaturesScreen";
 import { TransformationFinalScreen } from "./scenes/transformation/TransformationFinalScreen";
-import { TransformationPartnershipScreen } from "./scenes/transformation/TransformationPartnershipScreen";
+import { TransformationInvestmentScreen } from "./scenes/transformation/TransformationInvestmentScreen";
+import { TransformationProcessScreen } from "./scenes/transformation/TransformationProcessScreen";
 import { LaunchControlAlternativesScreen } from "./scenes/launchcontrol/LaunchControlAlternativesScreen";
 import { LaunchControlApplicationScreen } from "./scenes/launchcontrol/LaunchControlApplicationScreen";
 import { LaunchControlBudgetScreen } from "./scenes/launchcontrol/LaunchControlBudgetScreen";
@@ -75,12 +74,18 @@ export const AdventureGame = () => {
     // Handle scene migrations for renamed scenes
     const sceneMapping: Record<string, string> = {
       'interstellarDetail': 'transformationDetail',
-      'interstellarCapabilities': 'transformationCapabilities',
-      'interstellarEngagement': 'transformationEngagement',
-      'interstellarFeatures': 'transformationFeatures',
-      'interstellarPartnership': 'transformationPartnership',
-      'interstellarContact': 'transformationContact',
+      'interstellarCapabilities': 'transformationProcess',
+      'interstellarEngagement': 'transformationProcess',
+      'interstellarFeatures': 'transformationProcess',
+      'interstellarPartnership': 'transformationAlignment',
+      'interstellarContact': 'transformationAlignment',
       'interstellarFinal': 'transformationFinal',
+      'interstellarProcess': 'transformationProcess',
+      'transformationCapabilities': 'transformationProcess',
+      'transformationEngagement': 'transformationProcess',
+      'transformationFeatures': 'transformationProcess',
+      'transformationPartnership': 'transformationAlignment',
+      'transformationContact': 'transformationAlignment',
     };
     
     // Check if we need to migrate the scene
@@ -391,38 +396,31 @@ export const AdventureGame = () => {
       </SceneTransition>
     );
   }
-  if (currentSceneId === "transformationCapabilities") {
+  if (currentSceneId === "transformationProcess") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <TransformationCapabilitiesScreen />
+        <TransformationProcessScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === "transformationEngagement") {
+  if (currentSceneId === "transformationInvestment") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <TransformationEngagementScreen />
+        <TransformationInvestmentScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === "transformationFeatures") {
+  if (currentSceneId === "transformationAlignment") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <TransformationFeaturesScreen />
+        <TransformationAlignmentScreen />
       </SceneTransition>
     );
   }
-  if (currentSceneId === "transformationPartnership") {
+  if (currentSceneId === "transformationAlternatives") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="fade">
-        <TransformationPartnershipScreen />
-      </SceneTransition>
-    );
-  }
-  if (currentSceneId === "transformationContact") {
-    return (
-      <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <TransformationContactScreen />
+        <TransformationAlternativesScreen />
       </SceneTransition>
     );
   }
