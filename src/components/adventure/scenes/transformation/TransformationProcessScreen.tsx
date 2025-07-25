@@ -23,7 +23,8 @@ const PROCESS_SCENE: SceneType = {
   type: "detail",
   title: "The Transformation Process",
   description: "See how we accelerate your team with AI-powered innovation",
-  backgroundClass: "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
+  backgroundClass:
+    "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
 };
 
 const PROCESS_PHASES = [
@@ -32,7 +33,7 @@ const PROCESS_PHASES = [
     title: "Team Assessment & Discovery",
     icon: <Brain className="w-6 h-6" />,
     description: "Deep dive into your team's current velocity and bottlenecks",
-    duration: "Week 1",
+    duration: "Weeks 1-2",
     activities: [
       "Current development workflow analysis",
       "Team capability assessment",
@@ -44,12 +45,13 @@ const PROCESS_PHASES = [
     id: "implementation",
     title: "AI Agent Implementation",
     icon: <Zap className="w-6 h-6" />,
-    description: "Deploy custom AI agents tailored to your tech stack",
-    duration: "Weeks 2-3",
+    description:
+      "Targeted initial deployment of AI agent workflows tailored to your organization and stack",
+    duration: "Weeks 3-4",
     activities: [
       "Custom AI agent configuration",
       "Integration with existing tools",
-      "Team training workshops",
+      "Targeted team training",
       "Pilot project execution",
     ],
   },
@@ -57,13 +59,14 @@ const PROCESS_PHASES = [
     id: "acceleration",
     title: "Velocity Acceleration",
     icon: <TrendingUp className="w-6 h-6" />,
-    description: "Scale AI adoption across your entire development process",
-    duration: "Week 4+",
+    description: "Scale AI adoption across your entire product development org",
+    duration: "Weeks 4-12+",
     activities: [
       "Process optimization",
       "Performance monitoring",
-      "Continuous improvement",
+      "Team training expansion",
       "Ongoing support & refinement",
+      "Optional post engagement support + tooling",
     ],
   },
 ];
@@ -71,12 +74,15 @@ const PROCESS_PHASES = [
 export const TransformationProcessScreen = () => {
   const [activePhase, setActivePhase] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [viewedPhases, setViewedPhases] = useState<Set<number>>(new Set([0])); // Start with first phase viewed
   const { pushScene } = useBrowserNavigation();
 
   const handlePhaseClick = (index: number) => {
     if (!isAnimating) {
       setIsAnimating(true);
       setActivePhase(index);
+      // Mark phase as viewed
+      setViewedPhases(prev => new Set([...prev, index]));
       setTimeout(() => setIsAnimating(false), 300);
     }
   };
@@ -129,7 +135,9 @@ export const TransformationProcessScreen = () => {
                 <div
                   className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-500"
                   style={{
-                    width: `${((activePhase + 1) / PROCESS_PHASES.length) * 100}%`,
+                    width: `${
+                      ((activePhase + 1) / PROCESS_PHASES.length) * 100
+                    }%`,
                   }}
                 />
               </div>
@@ -147,14 +155,22 @@ export const TransformationProcessScreen = () => {
                   >
                     <div
                       className={cn(
-                        "w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300",
+                        "w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 relative",
                         index === activePhase
                           ? "bg-gradient-to-r from-purple-600 to-indigo-600 scale-110"
-                          : index < activePhase
+                          : viewedPhases.has(index)
                           ? "bg-purple-700"
                           : "bg-gray-700"
                       )}
                     >
+                      {/* Checkmark for viewed phases */}
+                      {viewedPhases.has(index) && index !== activePhase && (
+                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                      )}
                       {phase.icon}
                     </div>
                     <span className="text-sm text-white mt-2 font-medium">
@@ -174,7 +190,9 @@ export const TransformationProcessScreen = () => {
             >
               <h3 className="text-2xl font-bold text-white mb-4 flex items-center">
                 {PROCESS_PHASES[activePhase].icon}
-                <span className="ml-3">{PROCESS_PHASES[activePhase].title}</span>
+                <span className="ml-3">
+                  {PROCESS_PHASES[activePhase].title}
+                </span>
               </h3>
 
               <p className="text-gray-300 mb-6 text-lg">
@@ -182,7 +200,9 @@ export const TransformationProcessScreen = () => {
               </p>
 
               <div className="space-y-3">
-                <h4 className="font-semibold text-purple-300">Key Activities:</h4>
+                <h4 className="font-semibold text-purple-300">
+                  Key Activities:
+                </h4>
                 {PROCESS_PHASES[activePhase].activities.map((activity, idx) => (
                   <div
                     key={idx}
@@ -196,14 +216,14 @@ export const TransformationProcessScreen = () => {
             </div>
 
             {/* Expected Outcomes */}
-            <div className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-6">
+            {/* <div className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-6">
               <h3 className="text-xl font-bold text-white mb-4 flex items-center">
                 <TrendingUp className="w-6 h-6 mr-2 text-purple-400" />
                 Expected Outcomes
               </h3>
               <div className="grid md:grid-cols-3 gap-4 text-center">
                 <div>
-                  <div className="text-3xl font-bold text-purple-300">10x</div>
+                  <div className="text-3xl font-bold text-purple-300">3x</div>
                   <p className="text-gray-400">Feature Velocity</p>
                 </div>
                 <div>
@@ -215,7 +235,7 @@ export const TransformationProcessScreen = () => {
                   <p className="text-gray-400">Developer Productivity</p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Phase Navigation */}
             <div className="flex justify-between items-center">
@@ -240,6 +260,8 @@ export const TransformationProcessScreen = () => {
                       "w-2 h-2 rounded-full transition-all duration-300",
                       index === activePhase
                         ? "w-8 bg-purple-500"
+                        : viewedPhases.has(index)
+                        ? "bg-purple-400"
                         : "bg-gray-600"
                     )}
                   />
@@ -261,15 +283,22 @@ export const TransformationProcessScreen = () => {
               </Button>
             </div>
 
-            {/* Continue Button */}
+            {/* Continue Button - Only show after all phases viewed */}
             <div className="text-center">
-              <AnimatedButton
-                onClick={handleContinue}
-                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
-              >
-                Continue to Investment Details
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </AnimatedButton>
+              {viewedPhases.size === PROCESS_PHASES.length ? (
+                <AnimatedButton
+                  onClick={handleContinue}
+                  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+                >
+                  Continue to Investment Details
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </AnimatedButton>
+              ) : (
+                <div className="text-gray-400 text-sm">
+                  <p>Explore all {PROCESS_PHASES.length} phases to continue</p>
+                  <p className="text-xs mt-1">({viewedPhases.size} of {PROCESS_PHASES.length} viewed)</p>
+                </div>
+              )}
             </div>
           </div>
 
