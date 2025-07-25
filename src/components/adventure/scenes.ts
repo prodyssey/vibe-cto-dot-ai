@@ -273,7 +273,7 @@ export const SCENES: Record<string, Scene> = {
     description: "Understanding the investment in your team's acceleration",
     backgroundClass:
       "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
-    nextScene: "transformationAlignment",
+    nextScene: "transformationFinal",
   },
 
   transformationAlignment: {

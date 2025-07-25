@@ -4,6 +4,7 @@ import {
   Clock,
   Users,
   Zap,
+  Sparkles,
 } from "lucide-react";
 
 import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
@@ -27,7 +28,11 @@ export const TransformationInvestmentScreen = () => {
   const { pushScene } = useBrowserNavigation();
 
   const handleContinue = () => {
-    pushScene("transformationAlignment");
+    pushScene("transformationFinal");
+  };
+
+  const handleViewAlternatives = () => {
+    pushScene("transformationAlternatives");
   };
 
   return (
@@ -155,19 +160,42 @@ export const TransformationInvestmentScreen = () => {
             {/* Cost of Delay Calculator */}
             <CostOfDelayCalculator />
 
-            {/* CTA */}
-            <div className="text-center">
-              <AnimatedButton
-                onClick={handleContinue}
-                size="lg"
-                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
-              >
-                Schedule Alignment Call
-                <Zap className="ml-2 w-5 h-5" />
-              </AnimatedButton>
-              <p className="text-sm text-gray-400 mt-4">
-                Let's discuss how AI can transform your team's productivity
-              </p>
+            {/* CTAs */}
+            <div className="text-center space-y-4">
+              <div>
+                <AnimatedButton
+                  onClick={handleContinue}
+                  size="lg"
+                  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+                >
+                  Schedule Alignment Call
+                  <Zap className="ml-2 w-5 h-5" />
+                </AnimatedButton>
+                <p className="text-sm text-gray-400 mt-3">
+                  Let's discuss how AI can transform your team's productivity
+                </p>
+              </div>
+
+              <div className="inline-flex items-center gap-2 text-sm text-gray-500">
+                <div className="h-px w-16 bg-gray-700"></div>
+                <span>or</span>
+                <div className="h-px w-16 bg-gray-700"></div>
+              </div>
+
+              <div>
+                <AnimatedButton
+                  onClick={handleViewAlternatives}
+                  variant="ghost"
+                  size="md"
+                  className="text-purple-300 hover:text-purple-200 hover:bg-purple-900/20 border border-purple-500/30 hover:border-purple-500/50"
+                >
+                  Explore Self-Service Alternatives
+                  <Sparkles className="ml-2 w-4 h-4" />
+                </AnimatedButton>
+                <p className="text-xs text-gray-500 mt-2">
+                  AI tools, learning resources, and community options
+                </p>
+              </div>
             </div>
           </div>
 
