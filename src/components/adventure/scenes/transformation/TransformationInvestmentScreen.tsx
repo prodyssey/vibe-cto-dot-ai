@@ -1,7 +1,12 @@
-import { DollarSign, CheckCircle, Clock, Users, Zap } from "lucide-react";
+import {
+  DollarSign,
+  CheckCircle,
+  Clock,
+  Users,
+  Zap,
+} from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
 
 import { AnimatedButton } from "../../components/AnimatedButton";
 import { useBrowserNavigation } from "../../hooks";
@@ -14,7 +19,8 @@ const INVESTMENT_SCENE: SceneType = {
   type: "detail",
   title: "Investment Overview",
   description: "Understanding the investment in your team's acceleration",
-  backgroundClass: "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
+  backgroundClass:
+    "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
 };
 
 export const TransformationInvestmentScreen = () => {
@@ -29,14 +35,14 @@ export const TransformationInvestmentScreen = () => {
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900">
         {/* Grid Pattern */}
-        <div 
+        <div
           className="absolute inset-0 opacity-10"
           style={{
             backgroundImage: `
               linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px),
               linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)
             `,
-            backgroundSize: '50px 50px',
+            backgroundSize: "50px 50px",
           }}
         />
       </div>
@@ -94,15 +100,15 @@ export const TransformationInvestmentScreen = () => {
                     </li>
                     <li className="flex items-start">
                       <Zap className="w-5 h-5 text-purple-400 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>Advanced agent development</span>
+                      <span>Advanced measurement</span>
                     </li>
                     <li className="flex items-start">
                       <Zap className="w-5 h-5 text-purple-400 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>Strategic technical leadership</span>
+                      <span>Strategic technical leadership support</span>
                     </li>
                     <li className="flex items-start">
                       <Zap className="w-5 h-5 text-purple-400 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>Team scaling support</span>
+                      <span>Team adoption support and coaching</span>
                     </li>
                   </ul>
                 </div>
@@ -117,21 +123,28 @@ export const TransformationInvestmentScreen = () => {
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="text-center">
                   <Clock className="w-10 h-10 text-purple-400 mx-auto mb-2" />
-                  <h4 className="font-semibold text-white mb-1">Time Savings</h4>
+                  <h4 className="font-semibold text-white mb-1">
+                    Reduced Cost of Delay
+                  </h4>
                   <p className="text-sm text-gray-400">
-                    Ship features 10x faster with AI-powered development
+                    Ship features to your customers faster with AI-powered
+                    development
                   </p>
                 </div>
                 <div className="text-center">
                   <Users className="w-10 h-10 text-purple-400 mx-auto mb-2" />
-                  <h4 className="font-semibold text-white mb-1">Team Leverage</h4>
+                  <h4 className="font-semibold text-white mb-1">
+                    Team Leverage
+                  </h4>
                   <p className="text-sm text-gray-400">
-                    Multiply your team's output without hiring
+                    Multiply your team's output
                   </p>
                 </div>
                 <div className="text-center">
                   <Zap className="w-10 h-10 text-purple-400 mx-auto mb-2" />
-                  <h4 className="font-semibold text-white mb-1">Competitive Edge</h4>
+                  <h4 className="font-semibold text-white mb-1">
+                    Competitive Edge
+                  </h4>
                   <p className="text-sm text-gray-400">
                     Stay ahead with cutting-edge AI integration
                   </p>
@@ -139,18 +152,8 @@ export const TransformationInvestmentScreen = () => {
               </div>
             </div>
 
-            {/* ROI Calculator Teaser */}
-            <div className="bg-gradient-to-r from-purple-600/20 to-indigo-600/20 backdrop-blur-sm border border-purple-500/30 rounded-lg p-6 text-center">
-              <h3 className="text-xl font-bold text-white mb-3">
-                Typical ROI: 300%+ in First 6 Months
-              </h3>
-              <p className="text-gray-300 mb-4">
-                Based on increased velocity, reduced manual work, and accelerated time-to-market
-              </p>
-              <p className="text-sm text-purple-300">
-                We'll calculate your specific ROI during our alignment call
-              </p>
-            </div>
+            {/* Cost of Delay Calculator */}
+            <CostOfDelayCalculator />
 
             {/* CTA */}
             <div className="text-center">
