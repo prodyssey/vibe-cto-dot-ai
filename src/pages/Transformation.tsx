@@ -12,7 +12,7 @@ import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const Interstellar = () => {
+const Transformation = () => {
   const features = [
     {
       icon: Cpu,
@@ -63,7 +63,7 @@ const Interstellar = () => {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              Interstellar
+              Transformation
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
@@ -146,7 +146,7 @@ const Interstellar = () => {
                 Transform Your Development Process
               </h2>
               <p className="text-xl text-gray-300">
-                Real results from teams that have gone Interstellar.
+                Real results from teams that have gone through our transformation.
               </p>
             </div>
 
@@ -297,4 +297,4 @@ const Interstellar = () => {
   );
 };
 
-export default Interstellar;
+export default Transformation;

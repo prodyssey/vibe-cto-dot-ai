@@ -1,4 +1,3 @@
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -6,11 +5,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-
 import Adventure from "./pages/Adventure";
 import Ignition from "./pages/Ignition";
 import Index from "./pages/Index";
-import Interstellar from "./pages/Interstellar";
+import Transformation from "./pages/Transformation";
 import LaunchControl from "./pages/LaunchControl";
 import NotFound from "./pages/NotFound";
 import ResourcePost from "./pages/ResourcePost";
@@ -29,7 +27,7 @@ const App = () => (
           <Route path="/adventure" element={<Adventure />} />
           <Route path="/ignition" element={<Ignition />} />
           <Route path="/launch-control" element={<LaunchControl />} />
-          <Route path="/interstellar" element={<Interstellar />} />
+          <Route path="/transformation" element={<Transformation />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/resources/:slug" element={<ResourcePost />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

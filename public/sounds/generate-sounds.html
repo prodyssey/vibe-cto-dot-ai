@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Game Sound Generator</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .sound-card {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background: #5a6578;
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        .generate-btn {
+            background: #48bb78;
+        }
+        .generate-btn:hover {
+            background: #58cb88;
+        }
+        h1 {
+            color: #a78bfa;
+        }
+        h2 {
+            color: #60a5fa;
+            margin-top: 0;
+        }
+        .description {
+            color: #a0a0a0;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        code {
+            background: #374151;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 Adventure Game Sound Generator</h1>
+    <p>Generate basic sounds for testing. For production, use properly licensed sounds from the sources listed in SOUND_SOURCES.md</p>
+
+    <div class="sound-card">
+        <h2>UI Hover Sound</h2>
+        <p class="description">Soft, subtle sound for button hovers</p>
+        <button onclick="playSound('hover')">▶️ Play</button>
+        <button class="generate-btn" onclick="downloadSound('hover')">💾 Download as ui-hover.wav</button>
+    </div>
+
+    <div class="sound-card">
+        <h2>UI Click Sound</h2>
+        <p class="description">Satisfying click for button presses</p>
+        <button onclick="playSound('click')">▶️ Play</button>
+        <button class="generate-btn" onclick="downloadSound('click')">💾 Download as ui-click.wav</button>
+    </div>
+
+    <div class="sound-card">
+        <h2>Whoosh Transition</h2>
+        <p class="description">Scene transition sound effect</p>
+        <button onclick="playSound('whoosh')">▶️ Play</button>
+        <button class="generate-btn" onclick="downloadSound('whoosh')">💾 Download as whoosh.wav</button>
+    </div>
+
+    <div class="sound-card">
+        <h2>Portal Activation</h2>
+        <p class="description">Magical/sci-fi portal selection sound</p>
+        <button onclick="playSound('portal')">▶️ Play</button>
+        <button class="generate-btn" onclick="downloadSound('portal')">💾 Download as portal-activate.wav</button>
+    </div>
+
+    <div class="sound-card">
+        <h2>Success Chime</h2>
+        <p class="description">Positive feedback sound</p>
+        <button onclick="playSound('success')">▶️ Play</button>
+        <button class="generate-btn" onclick="downloadSound('success')">💾 Download as success-chime.wav</button>
+    </div>
+
+    <div class="sound-card">
+        <h2>Error Buzz</h2>
+        <p class="description">Error or invalid action feedback</p>
+        <button onclick="playSound('error')">▶️ Play</button>
+        <button class="generate-btn" onclick="downloadSound('error')">💾 Download as error-buzz.wav</button>
+    </div>
+
+    <div class="sound-card">
+        <h2>Typewriter Key</h2>
+        <p class="description">Single keystroke sound</p>
+        <button onclick="playSound('typewriter')">▶️ Play</button>
+        <button class="generate-btn" onclick="downloadSound('typewriter')">💾 Download as typewriter-key.wav</button>
+    </div>
+
+    <div class="sound-card">
+        <h2>Space Ambience</h2>
+        <p class="description">Background atmosphere (plays for 3 seconds preview)</p>
+        <button onclick="playSound('ambience')">▶️ Play Preview</button>
+        <button class="generate-btn" onclick="downloadSound('ambience')">💾 Download as space-ambience.wav</button>
+    </div>
+
+    <script>
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Sound generation functions
+        const sounds = {
+            hover: () => {
+                const duration = 0.05;
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.frequency.setValueAtTime(800, audioContext.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + duration);
+                
+                gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.start();
+                osc.stop(audioContext.currentTime + duration);
+                
+                return duration;
+            },
+            
+            click: () => {
+                const duration = 0.1;
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(200, audioContext.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + duration);
+                
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(1000, audioContext.currentTime);
+                
+                gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.start();
+                osc.stop(audioContext.currentTime + duration);
+                
+                return duration;
+            },
+            
+            whoosh: () => {
+                const duration = 0.5;
+                const bufferSize = audioContext.sampleRate * duration;
+                const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+                const data = buffer.getChannelData(0);
+                
+                // Generate noise
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                
+                const source = audioContext.createBufferSource();
+                const filter = audioContext.createBiquadFilter();
+                const gain = audioContext.createGain();
+                
+                source.buffer = buffer;
+                
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(100, audioContext.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(2000, audioContext.currentTime + duration * 0.5);
+                filter.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + duration);
+                filter.Q.value = 10;
+                
+                gain.gain.setValueAtTime(0, audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + duration * 0.1);
+                gain.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
+                
+                source.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                source.start();
+                
+                return duration;
+            },
+            
+            portal: () => {
+                const duration = 1.5;
+                const osc1 = audioContext.createOscillator();
+                const osc2 = audioContext.createOscillator();
+                const gain1 = audioContext.createGain();
+                const gain2 = audioContext.createGain();
+                const reverb = audioContext.createConvolver();
+                
+                // Create simple reverb
+                const reverbLength = 2;
+                const reverbBuffer = audioContext.createBuffer(2, audioContext.sampleRate * reverbLength, audioContext.sampleRate);
+                for (let channel = 0; channel < 2; channel++) {
+                    const channelData = reverbBuffer.getChannelData(channel);
+                    for (let i = 0; i < channelData.length; i++) {
+                        channelData[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / channelData.length, 2);
+                    }
+                }
+                reverb.buffer = reverbBuffer;
+                
+                osc1.frequency.setValueAtTime(220, audioContext.currentTime);
+                osc1.frequency.exponentialRampToValueAtTime(440, audioContext.currentTime + duration);
+                
+                osc2.frequency.setValueAtTime(277, audioContext.currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(554, audioContext.currentTime + duration);
+                
+                gain1.gain.setValueAtTime(0, audioContext.currentTime);
+                gain1.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.2);
+                gain1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                gain2.gain.setValueAtTime(0, audioContext.currentTime);
+                gain2.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 0.3);
+                gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                osc1.connect(gain1);
+                osc2.connect(gain2);
+                gain1.connect(reverb);
+                gain2.connect(reverb);
+                reverb.connect(audioContext.destination);
+                
+                osc1.start();
+                osc2.start();
+                osc1.stop(audioContext.currentTime + duration);
+                osc2.stop(audioContext.currentTime + duration);
+                
+                return duration;
+            },
+            
+            success: () => {
+                const duration = 0.5;
+                const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+                
+                notes.forEach((freq, index) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    
+                    osc.frequency.value = freq;
+                    osc.type = 'sine';
+                    
+                    const startTime = audioContext.currentTime + index * 0.1;
+                    gain.gain.setValueAtTime(0, startTime);
+                    gain.gain.linearRampToValueAtTime(0.2, startTime + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.3);
+                });
+                
+                return duration;
+            },
+            
+            error: () => {
+                const duration = 0.3;
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(100, audioContext.currentTime);
+                osc.frequency.linearRampToValueAtTime(50, audioContext.currentTime + duration);
+                
+                gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.start();
+                osc.stop(audioContext.currentTime + duration);
+                
+                return duration;
+            },
+            
+            typewriter: () => {
+                const duration = 0.02;
+                const bufferSize = audioContext.sampleRate * duration;
+                const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+                const data = buffer.getChannelData(0);
+                
+                // Short click sound
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / bufferSize * 10);
+                }
+                
+                const source = audioContext.createBufferSource();
+                const filter = audioContext.createBiquadFilter();
+                const gain = audioContext.createGain();
+                
+                source.buffer = buffer;
+                
+                filter.type = 'highpass';
+                filter.frequency.value = 2000;
+                
+                gain.gain.value = 0.5;
+                
+                source.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                source.start();
+                
+                return duration;
+            },
+            
+            ambience: () => {
+                const duration = 3; // Preview duration
+                const bufferSize = audioContext.sampleRate * duration;
+                const buffer = audioContext.createBuffer(2, bufferSize, audioContext.sampleRate);
+                
+                // Generate low-frequency noise for both channels
+                for (let channel = 0; channel < 2; channel++) {
+                    const data = buffer.getChannelData(channel);
+                    let phase = 0;
+                    for (let i = 0; i < bufferSize; i++) {
+                        // Mix of low-frequency noise and subtle oscillation
+                        data[i] = (Math.random() * 2 - 1) * 0.05 + 
+                                 Math.sin(phase) * 0.02;
+                        phase += (50 + Math.random() * 10) / audioContext.sampleRate * 2 * Math.PI;
+                    }
+                }
+                
+                const source = audioContext.createBufferSource();
+                const filter = audioContext.createBiquadFilter();
+                const gain = audioContext.createGain();
+                
+                source.buffer = buffer;
+                source.loop = true;
+                
+                filter.type = 'lowpass';
+                filter.frequency.value = 200;
+                
+                gain.gain.value = 0.3;
+                
+                source.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                source.start();
+                source.stop(audioContext.currentTime + duration);
+                
+                return duration;
+            }
+        };
+
+        function playSound(type) {
+            // Resume audio context on user interaction
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            sounds[type]();
+        }
+
+        // Generate and download WAV file
+        function downloadSound(type) {
+            const offlineContext = new OfflineAudioContext(1, 44100 * 2, 44100);
+            
+            // Copy the sound generation to offline context
+            const soundFunction = sounds[type].toString();
+            const modifiedFunction = soundFunction.replace(/audioContext/g, 'offlineContext');
+            const offlineSound = new Function('offlineContext', `return (${modifiedFunction})()`);
+            
+            offlineSound(offlineContext);
+            
+            offlineContext.startRendering().then(buffer => {
+                const wav = audioBufferToWav(buffer);
+                const blob = new Blob([wav], { type: 'audio/wav' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = getFileName(type);
+                a.click();
+                
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        function getFileName(type) {
+            const fileNames = {
+                hover: 'ui-hover.wav',
+                click: 'ui-click.wav',
+                whoosh: 'whoosh.wav',
+                portal: 'portal-activate.wav',
+                success: 'success-chime.wav',
+                error: 'error-buzz.wav',
+                typewriter: 'typewriter-key.wav',
+                ambience: 'space-ambience.wav'
+            };
+            return fileNames[type];
+        }
+
+        // Convert AudioBuffer to WAV
+        function audioBufferToWav(buffer) {
+            const length = buffer.length * buffer.numberOfChannels * 2 + 44;
+            const arrayBuffer = new ArrayBuffer(length);
+            const view = new DataView(arrayBuffer);
+            const channels = [];
+            let offset = 0;
+            let pos = 0;
+
+            // Write WAVE header
+            setUint32(0x46464952); // "RIFF"
+            setUint32(length - 8); // file length - 8
+            setUint32(0x45564157); // "WAVE"
+            setUint32(0x20746d66); // "fmt " chunk
+            setUint32(16); // length = 16
+            setUint16(1); // PCM
+            setUint16(buffer.numberOfChannels);
+            setUint32(buffer.sampleRate);
+            setUint32(buffer.sampleRate * 2 * buffer.numberOfChannels); // avg. bytes/sec
+            setUint16(buffer.numberOfChannels * 2); // block-align
+            setUint16(16); // 16-bit
+            setUint32(0x61746164); // "data" - chunk
+            setUint32(length - pos - 4); // chunk length
+
+            // Write interleaved data
+            for (let i = 0; i < buffer.numberOfChannels; i++) {
+                channels.push(buffer.getChannelData(i));
+            }
+
+            while (pos < length) {
+                for (let i = 0; i < buffer.numberOfChannels; i++) {
+                    const sample = Math.max(-1, Math.min(1, channels[i][offset]));
+                    view.setInt16(pos, sample * 0x7FFF, true);
+                    pos += 2;
+                }
+                offset++;
+            }
+
+            return arrayBuffer;
+
+            function setUint16(data) {
+                view.setUint16(pos, data, true);
+                pos += 2;
+            }
+
+            function setUint32(data) {
+                view.setUint32(pos, data, true);
+                pos += 4;
+            }
+        }
+    </script>
+</body>
+</html>

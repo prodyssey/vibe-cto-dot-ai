@@ -117,7 +117,7 @@ export const ProblemPromise = () => {
             </CardContent>
           </Card>
 
-          {/* Interstellar Card */}
+          {/* Transformation Card */}
           <Card className="relative group bg-gray-900/80 backdrop-blur-sm border-purple-500/30 hover:border-purple-400/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
@@ -151,10 +151,10 @@ export const ProblemPromise = () => {
               </ul>
 
               <Button
-                onClick={() => handleNavigation("/interstellar")}
+                onClick={() => handleNavigation("/transformation")}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 text-base"
               >
-                Explore Interstellar
+                Explore Transformation
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </CardContent>

@@ -11,6 +11,7 @@ interface EmailOptInProps {
   description?: string;
   buttonText?: string;
   className?: string;
+  onSuccess?: () => void;
 }
 
 export const EmailOptIn: React.FC<EmailOptInProps> = ({
@@ -19,6 +20,7 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
   description = "Let's ride this wave together.",
   buttonText = "Subscribe",
   className,
+  onSuccess,
 }) => {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const formRef = useRef<HTMLFormElement>(null);
@@ -43,6 +45,9 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
       if (response.ok) {
         setStatus("success");
         form.reset();
+        if (onSuccess) {
+          onSuccess();
+        }
         setTimeout(() => setStatus("idle"), 5000);
       } else {
         setStatus("error");
