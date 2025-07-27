@@ -1,13 +1,13 @@
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, ReactNode } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import { useReducedMotion } from '../hooks';
+import { useReducedMotion } from "../hooks";
 
 interface SceneTransitionProps {
   children: ReactNode;
   sceneId: string;
-  transitionType?: 'fade' | 'slide' | 'zoom' | 'portal';
+  transitionType?: "fade" | "slide" | "zoom" | "portal";
   duration?: number;
   className?: string;
 }
@@ -15,7 +15,7 @@ interface SceneTransitionProps {
 export const SceneTransition = ({
   children,
   sceneId,
-  transitionType = 'fade',
+  transitionType = "fade",
   duration = 500,
   className,
 }: SceneTransitionProps) => {
@@ -24,30 +24,32 @@ export const SceneTransition = ({
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    let exitTimer: NodeJS.Timeout;
+    let enterTimer: NodeJS.Timeout;
+
     if (sceneId !== currentSceneId) {
       setIsTransitioning(true);
-      
+
       // Wait for exit animation
-      const exitTimer = setTimeout(() => {
+      exitTimer = setTimeout(() => {
         setCurrentSceneId(sceneId);
-        
+
         // Trigger enter animation
-        const enterTimer = setTimeout(() => {
+        enterTimer = setTimeout(() => {
           setIsTransitioning(false);
         }, 50);
-        
-        return () => clearTimeout(enterTimer);
       }, duration);
-      
-      return () => clearTimeout(exitTimer);
     } else {
       // Initial mount
-      const timer = setTimeout(() => {
+      exitTimer = setTimeout(() => {
         setIsTransitioning(false);
       }, 100);
-      
-      return () => clearTimeout(timer);
     }
+
+    return () => {
+      clearTimeout(exitTimer);
+      clearTimeout(enterTimer);
+    };
   }, [sceneId, currentSceneId, duration]);
 
   // Skip animations if user prefers reduced motion
@@ -56,45 +58,49 @@ export const SceneTransition = ({
   }
 
   const getTransitionClasses = () => {
-    const baseClasses = 'transition-all ease-in-out';
+    const baseClasses = "transition-all ease-in-out";
     const durationClass = `duration-${duration}`;
 
     switch (transitionType) {
-      case 'slide':
+      case "slide":
         return cn(
           baseClasses,
           durationClass,
-          isTransitioning ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'
+          isTransitioning
+            ? "translate-x-full opacity-0"
+            : "translate-x-0 opacity-100"
         );
-      
-      case 'zoom':
+
+      case "zoom":
         return cn(
           baseClasses,
           durationClass,
-          isTransitioning ? 'scale-110 opacity-0' : 'scale-100 opacity-100'
+          isTransitioning ? "scale-110 opacity-0" : "scale-100 opacity-100"
         );
-      
-      case 'portal':
+
+      case "portal":
         return cn(
           baseClasses,
           durationClass,
-          isTransitioning ? 'scale-0 rotate-180 opacity-0' : 'scale-100 rotate-0 opacity-100'
+          isTransitioning
+            ? "scale-0 rotate-180 opacity-0"
+            : "scale-100 rotate-0 opacity-100"
         );
-      
-      case 'fade':
+
+      case "fade":
       default:
         return cn(
           baseClasses,
           durationClass,
-          isTransitioning ? 'opacity-0' : 'opacity-100'
+          isTransitioning ? "opacity-0" : "opacity-100"
         );
     }
   };
 
   return (
-    <div className={cn(getTransitionClasses(), 'relative', className)}>
+    <div className={cn(getTransitionClasses(), "relative", className)}>
       {/* Background overlay during transitions */}
-      {isTransitioning && transitionType !== 'fade' && (
+      {isTransitioning && transitionType !== "fade" && (
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 -z-10" />
       )}
       {children}
