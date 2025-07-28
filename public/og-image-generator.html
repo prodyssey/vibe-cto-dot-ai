@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeCTO.ai OG Image</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 25%, #7c3aed 50%, #1e1b4b 75%, #0f172a 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1000px;
+            padding: 0 80px;
+            z-index: 10;
+        }
+        
+        .left-content {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .logo-text {
+            font-size: 72px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo-ai {
+            background: linear-gradient(90deg, #60a5fa 0%, #a78bfa 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .tagline {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .tagline-gradient {
+            background: linear-gradient(90deg, #60a5fa 0%, #a78bfa 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .description {
+            font-size: 24px;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.5;
+            font-weight: 400;
+        }
+        
+        .avatar-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .avatar {
+            width: 380px;
+            height: 380px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.5));
+        }
+        
+        .avatar-glow {
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+            filter: blur(40px);
+            z-index: -1;
+        }
+        
+        /* Decorative orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+        
+        .orb1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+            top: -300px;
+            left: -300px;
+        }
+        
+        .orb2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+            bottom: -250px;
+            right: -100px;
+        }
+        
+        .orb3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #ec4899 0%, transparent 70%);
+            top: 50px;
+            right: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    
+    <div class="container">
+        <div class="left-content">
+            <div class="logo-container">
+                <!-- Inline SVG Logo -->
+                <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="#0f172a" opacity="0.8"/>
+                    <path d="M 30 30 L 20 30 L 20 50 L 20 70 L 30 70" stroke="url(#logo-gradient)" stroke-width="4" stroke-linecap="round" fill="none"/>
+                    <path d="M 35 50 Q 42.5 40, 50 50 T 65 50" stroke="url(#logo-gradient)" stroke-width="4" stroke-linecap="round" fill="none"/>
+                    <path d="M 70 30 L 80 30 L 80 50 L 80 70 L 70 70" stroke="url(#logo-gradient)" stroke-width="4" stroke-linecap="round" fill="none"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#3B82F6"/>
+                            <stop offset="50%" stop-color="#8B5CF6"/>
+                            <stop offset="100%" stop-color="#EC4899"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="logo-text">
+                    VibeCTO<span class="logo-ai">.ai</span>
+                </div>
+            </div>
+            
+            <div class="tagline">
+                From vibes to <span class="tagline-gradient">products</span>
+            </div>
+            
+            <div class="description">
+                Elite AI-powered development guidance.<br>
+                Transform your ideas into real, secure,<br>
+                scalable products.
+            </div>
+        </div>
+        
+        <div class="avatar-container">
+            <div class="avatar-glow"></div>
+            <img 
+                src="/lovable-uploads/8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png" 
+                alt="VibeCTO Avatar" 
+                class="avatar"
+            />
+        </div>
+    </div>
+</body>
+</html>
