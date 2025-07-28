@@ -11,6 +11,7 @@ import {
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
 
 const Transformation = () => {
   const features = [
@@ -138,8 +139,49 @@ const Transformation = () => {
           </div>
         </section>
 
+        {/* Cost of Delay Calculator Section */}
+        <section className="py-20 px-6 bg-black/20">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Calculate Your Transformation Impact
+              </h2>
+              <p className="text-lg text-gray-300">
+                See the financial impact of accelerating your development
+                timeline
+              </p>
+            </div>
+
+            <CostOfDelayCalculator
+              showByDefault={true}
+              defaultTimeReduction={15}
+              initialInitiatives={[
+                {
+                  id: "1",
+                  name: "AI-Powered Feature Development",
+                  monthlyValue: 100000,
+                  currentTimeMonths: 9,
+                },
+                {
+                  id: "2",
+                  name: "New Product Line Launch",
+                  monthlyValue: 300000,
+                  currentTimeMonths: 6,
+                },
+                {
+                  id: "3",
+                  name: "Platform Modernization",
+                  monthlyValue: 200000,
+                  currentTimeMonths: 12,
+                },
+              ]}
+            />
+          </div>
+        </section>
+
         {/* Benefits Section */}
-        <section className="py-20 px-6">
+
+        {/* <section className="py-20 px-6">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -151,25 +193,6 @@ const Transformation = () => {
               </p>
             </div>
 
-            {/* <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <Card className="bg-gradient-to-br from-purple-600/10 to-blue-600/10 backdrop-blur-sm border-white/20">
-                <CardContent className="p-8 text-center">
-                  <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 mb-2">
-                    75%
-                  </div>
-                  <p className="text-white text-lg">Faster Feature Delivery</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-br from-purple-600/10 to-blue-600/10 backdrop-blur-sm border-white/20">
-                <CardContent className="p-8 text-center">
-                  <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 mb-2">
-                    3x
-                  </div>
-                  <p className="text-white text-lg">Developer Productivity</p>
-                </CardContent>
-              </Card>
-            </div> */}
 
             <div className="space-y-4">
               {benefits.map((benefit, index) => (
@@ -183,7 +206,7 @@ const Transformation = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Process Section */}
         <section className="py-20 px-6 bg-black/20">
