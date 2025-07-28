@@ -140,7 +140,7 @@ export const LaunchControlQualificationForm = ({
 
       // Only high budget goes straight to SavvyCal
       if (formData.budget === "ready-high") {
-        const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
+        const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
           formData.email
         )}&display_name=${encodeURIComponent(formData.name)}`;
 
@@ -186,7 +186,7 @@ export const LaunchControlQualificationForm = ({
   if (currentStep === "success") {
     const savvycalUrl =
       formData.budget === "ready-high"
-        ? `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
+        ? `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
             formData.email
           )}&display_name=${encodeURIComponent(formData.name)}`
         : "";
