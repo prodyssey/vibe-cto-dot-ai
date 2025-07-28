@@ -29,20 +29,35 @@ function getLastModified(filePath) {
   }
 }
 
-// Get all markdown files from the resources directory
+// Get all markdown files from the posts directory
 function getResourcePosts() {
-  const resourcesDir = path.join(__dirname, '..', 'src', 'content', 'resources');
+  const postsDir = path.join(__dirname, '..', 'src', 'content', 'posts');
   const resourcePosts = [];
   
   try {
-    if (fs.existsSync(resourcesDir)) {
-      const files = fs.readdirSync(resourcesDir);
+    if (fs.existsSync(postsDir)) {
+      const files = fs.readdirSync(postsDir);
       files.forEach(file => {
-        if (file.endsWith('.md') || file.endsWith('.mdx')) {
-          const slug = file.replace(/\.(md|mdx)$/, '');
+        if (file.endsWith('.md') || file.endsWith('.mdx') || file.endsWith('.tsx')) {
+          // Read the file to check if it's hidden
+          const filePath = path.join(postsDir, file);
+          const fileContent = fs.readFileSync(filePath, 'utf8');
+          
+          // Check if it's a draft or hidden
+          if (file.includes('draft') || fileContent.includes('hidden: true')) {
+            console.log(`  Skipping draft/hidden: ${file}`);
+            return;
+          }
+          
+          const slug = file
+            .replace(/\.(md|mdx|tsx)$/, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+            
           resourcePosts.push({
             url: `/resources/${slug}`,
-            file: path.join(resourcesDir, file),
+            file: filePath,
             priority: '0.6',
             changefreq: 'monthly'
           });
@@ -50,7 +65,7 @@ function getResourcePosts() {
       });
     }
   } catch (error) {
-    console.log('No resource posts found');
+    console.log('Error reading posts:', error.message);
   }
   
   return resourcePosts;
