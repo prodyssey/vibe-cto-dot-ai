@@ -31,7 +31,9 @@ export const Navigation = () => {
             className="flex items-center space-x-3 text-xl sm:text-2xl font-bold text-white"
           >
             <Logo size="md" />
-            <span>VibeCTO.ai</span>
+            <span>
+              VibeCTO<span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">.ai</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -83,7 +85,9 @@ export const Navigation = () => {
                   className="flex items-center space-x-3 text-xl font-bold text-white"
                 >
                   <Logo size="md" />
-                  <span>VibeCTO.ai</span>
+                  <span>
+                    VibeCTO<span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">.ai</span>
+                  </span>
                 </Link>
                 <Button
                   variant="ghost"

@@ -13,6 +13,7 @@ import { useState } from "react";
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { IgnitionQualificationForm } from "@/components/IgnitionQualificationForm";
 import { Navigation } from "@/components/Navigation";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -61,8 +62,30 @@ const Ignition = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <Navigation />
+    <>
+      <SEO
+        title="Ignition - Validate Your Idea Fast | VibeCTO.ai"
+        description="0 to 1 idea validation framework from an expert builder. Get real market validation and a working MVP in weeks, not months. Transform your vision into reality."
+        canonicalUrl="https://vibecto.ai/ignition"
+        keywords="MVP development, idea validation, startup validation, rapid prototyping, product validation, lean startup"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "Ignition - Idea Validation Program",
+          "description": "Expert-guided idea validation and MVP development program",
+          "brand": {
+            "@type": "Brand",
+            "name": "VibeCTO.ai"
+          },
+          "offers": {
+            "@type": "Offer",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          }
+        }}
+      />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <Navigation />
 
       <div className="pt-20">
         {/* Hero Section */}
@@ -247,6 +270,7 @@ const Ignition = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </>
   );
 };
 
