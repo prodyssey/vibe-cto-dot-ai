@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,16 +16,32 @@ const routes = [
   { url: '/resources', file: 'src/pages/Resources.tsx', priority: '0.8', changefreq: 'weekly' },
 ];
 
-// Get the last modified date of a file
+// Get the last modified date of a file from Git
 function getLastModified(filePath) {
   try {
+    const relativePath = path.isAbsolute(filePath) 
+      ? path.relative(path.join(__dirname, '..'), filePath)
+      : filePath;
+    
+    // Get the last commit date for this file
+    const gitDate = execSync(
+      `git log -1 --format=%cd --date=short "${relativePath}"`,
+      { cwd: path.join(__dirname, '..'), encoding: 'utf8' }
+    ).trim();
+    
+    // If git returns a date, use it; otherwise fallback to file system date
+    if (gitDate && gitDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return gitDate;
+    }
+    
+    // Fallback to file system date
     const fullPath = path.isAbsolute(filePath) 
       ? filePath 
       : path.join(__dirname, '..', filePath);
     const stats = fs.statSync(fullPath);
     return stats.mtime.toISOString().split('T')[0];
   } catch (error) {
-    console.warn(`Warning: Could not get modified date for ${filePath}, using current date`);
+    console.warn(`Warning: Could not get git date for ${filePath}, using current date`);
     return new Date().toISOString().split('T')[0];
   }
 }
@@ -98,13 +115,14 @@ ${sitemapUrls}
   console.log('✅ Sitemap generated successfully at public/sitemap.xml');
   
   // Log the routes and their last modified dates
-  console.log('\n📅 Route modification dates:');
+  console.log('\n📅 Route modification dates (from Git commits):');
   allRoutes.forEach(route => {
     const lastmod = getLastModified(route.file);
     console.log(`  ${route.url.padEnd(30)} - ${lastmod}`);
   });
   
   console.log(`\n📊 Total URLs in sitemap: ${allRoutes.length}`);
+  console.log('\n💡 Tip: Dates are based on the last Git commit for each file');
 }
 
 // Run the generator
