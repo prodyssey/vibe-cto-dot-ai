@@ -16,36 +16,35 @@ const Transformation = () => {
   const features = [
     {
       icon: Cpu,
-      title: "AI Agent Integration",
+      title: "AI Enhancement",
       description:
-        "Deploy specialized AI agents across your development workflow",
+        "Augment your team with AI agents tailored to your organization and stack",
     },
     {
       icon: BarChart3,
-      title: "Incredible Velocity",
+      title: "Compounded Velocity",
       description:
-        "Ship features faster while maintaining code quality and standards",
+        "Multiply your development capacity with targeted AI workflows",
     },
     {
       icon: Shield,
-      title: "Enterprise Ready",
-      description:
-        "Secure, scalable solutions that integrate with your existing infrastructure",
+      title: "Comprehensive Measurement",
+      description: "Uncover bottlenecks and optimize for customer value",
     },
     {
       icon: Users,
-      title: "Team Transformation",
+      title: "Team Assessment & Discovery",
       description:
-        "Upskill your entire team with cutting-edge AI development practices",
+        "Deep dive into your team's current velocity and bottlenecks",
     },
   ];
 
   const benefits = [
-    "Reduce development cycles from months to weeks",
-    "Automate repetitive tasks and improve code reviews",
-    "Infuse quality in every change",
-    "Accelerate onboarding of new developers",
-    "Scale your product development capacity",
+    "3x Feature Velocity through AI-powered development",
+    "75% Less Manual Work with intelligent automation",
+    "10x Faster Innovation Cycles with continuous optimization",
+    "50% Cost Reduction through efficiency gains",
+    "Infinite Scaling Potential with elastic infrastructure",
   ];
 
   return (
@@ -67,9 +66,10 @@ const Transformation = () => {
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Take your team to light speed. Transform your product development
-              with AI agents that amplify your team's capabilities and
-              accelerate delivery.
+              Step into the Metamorphosis Chamber where teams undergo radical
+              transformation. Emerge with AI-augmented capabilities that
+              multiply your development velocity and unlock new dimensions of
+              possibility.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -103,7 +103,7 @@ const Transformation = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Enterprise-Grade AI Development
+                Your Evolution Awaits
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
                 Leverage battle-tested strategies to integrate AI agents into
@@ -190,11 +190,10 @@ const Transformation = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Our Proven Process
+                The Transformation Process
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                We work with your team to implement AI agents seamlessly into
-                your workflow.
+                See how we accelerate your team with AI-powered innovation.
               </p>
             </div>
 
@@ -205,13 +204,15 @@ const Transformation = () => {
                     <span className="text-white font-bold text-xl">1</span>
                   </div>
                   <CardTitle className="text-white text-xl">
-                    Discovery & Assessment
+                    Team Assessment & Discovery
                   </CardTitle>
+                  <p className="text-sm text-purple-400 mt-1">Weeks 1-2</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300">
-                    We analyze your current development processes and identify
-                    high-impact opportunities for AI integration.
+                    Deep dive into your team's current velocity and bottlenecks.
+                    Current development workflow analysis and AI readiness
+                    evaluation.
                   </p>
                 </CardContent>
               </Card>
@@ -222,13 +223,15 @@ const Transformation = () => {
                     <span className="text-white font-bold text-xl">2</span>
                   </div>
                   <CardTitle className="text-white text-xl">
-                    Implementation & Training
+                    AI Agent Implementation
                   </CardTitle>
+                  <p className="text-sm text-purple-400 mt-1">Weeks 3-4</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300">
-                    Deploy custom AI agents tailored to your tech stack while
-                    training your team on best practices.
+                    Targeted initial deployment of AI agent workflows tailored
+                    to your organization and stack. Custom configuration with
+                    pilot project execution.
                   </p>
                 </CardContent>
               </Card>
@@ -241,11 +244,12 @@ const Transformation = () => {
                   <CardTitle className="text-white text-xl">
                     Scale & Optimize
                   </CardTitle>
+                  <p className="text-sm text-purple-400 mt-1">Weeks 4-12+</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300">
-                    Continuously improve and expand AI agent capabilities based
-                    on real-world results and feedback.
+                    Scale AI adoption across your entire product development
+                    org. Process optimization with ongoing support & refinement.
                   </p>
                 </CardContent>
               </Card>
