@@ -35,7 +35,7 @@ type FormStep =
   | "success"
   | "alternatives";
 
-interface IgnitionQualificationFormProps {
+interface LaunchControlQualificationFormProps {
   onSuccess?: () => void;
   className?: string;
 }
@@ -53,35 +53,34 @@ interface FormData {
 const BUDGET_OPTIONS = [
   {
     value: "ready-high",
-    label: "$15K - $50K+",
-    amount: "Ready to invest",
-    description:
-      "I understand the investment and I'm ready to transform my idea",
+    label: "$40K - $75K+",
+    amount: "Ready to invest in production excellence",
+    description: "I understand the investment needed for scaling success",
   },
   {
     value: "ready-mid",
-    label: "$5K - $15K",
-    amount: "Limited budget available",
-    description: "I've got a budget, but it's limited",
+    label: "$15K - $40K",
+    amount: "I can invest, but not a lot yet",
+    description: "Limited budget but serious about growth",
   },
   {
     value: "ready-low",
-    label: "$1 - $4,999",
-    amount: "Not ready yet",
+    label: "$1 - $14,999",
+    amount: "I can't really invest yet",
     description: "Let's explore alternative options",
   },
   {
     value: "not-ready",
     label: "Just my time",
     amount: "No budget available",
-    description: "But I'd like to learn more about vibe coding on my own",
+    description: "But I'd like to learn more about scaling",
   },
 ];
 
-export const IgnitionQualificationForm = ({
+export const LaunchControlQualificationForm = ({
   onSuccess,
   className,
-}: IgnitionQualificationFormProps) => {
+}: LaunchControlQualificationFormProps) => {
   const [currentStep, setCurrentStep] = useState<FormStep>("budget");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showBackupButton, setShowBackupButton] = useState(false);
@@ -99,15 +98,15 @@ export const IgnitionQualificationForm = ({
 
     // Handle different budget levels
     if (value === "ready-high") {
-      // $15K+ goes straight to contact info then SavvyCal
+      // $40K+ goes straight to contact info then SavvyCal
       setFormData({ ...formData, budget: value, needsRateReduction: false });
       setCurrentStep("contact");
     } else if (value === "ready-mid") {
-      // $5K-$15K shows rate reduction option
+      // $15K-$40K shows rate reduction option
       setFormData({ ...formData, budget: value, needsRateReduction: true });
       setCurrentStep("rate-reduction");
     } else {
-      // Under $5K or no budget - redirect to email signup
+      // Under $15K or no budget - redirect to email signup
       setCurrentStep("alternatives");
     }
   };
@@ -121,15 +120,17 @@ export const IgnitionQualificationForm = ({
 
     try {
       // Try to save qualification data to Supabase
-      const { error } = await supabase.from("ignition_qualifications").insert({
-        budget: formData.budget,
-        needs_rate_reduction: formData.needsRateReduction,
-        rate_reduction_reason: formData.rateReductionReason,
-        name: formData.name,
-        email: formData.email,
-        preferred_contact: formData.preferredContact,
-        phone: formData.phone,
-      });
+      const { error } = await supabase
+        .from("launch_control_qualifications")
+        .insert({
+          budget: formData.budget,
+          needs_rate_reduction: formData.needsRateReduction,
+          rate_reduction_reason: formData.rateReductionReason,
+          name: formData.name,
+          email: formData.email,
+          preferred_contact: formData.preferredContact,
+          phone: formData.phone,
+        });
 
       if (error) {
         throw error;
@@ -139,7 +140,7 @@ export const IgnitionQualificationForm = ({
 
       // Only high budget goes straight to SavvyCal
       if (formData.budget === "ready-high") {
-        const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
+        const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
           formData.email
         )}&display_name=${encodeURIComponent(formData.name)}`;
 
@@ -185,7 +186,7 @@ export const IgnitionQualificationForm = ({
   if (currentStep === "success") {
     const savvycalUrl =
       formData.budget === "ready-high"
-        ? `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
+        ? `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
             formData.email
           )}&display_name=${encodeURIComponent(formData.name)}`
         : "";
@@ -198,20 +199,20 @@ export const IgnitionQualificationForm = ({
             <h3 className="text-xl font-semibold text-white">
               {formData.needsRateReduction
                 ? "Application Submitted!"
-                : "Success!"}
+                : "Mission Briefing Scheduled!"}
             </h3>
             <p className="text-gray-300">
               {formData.needsRateReduction
                 ? "We'll review your rate reduction application and contact you within 1-2 business days."
                 : showBackupButton
                 ? "Your information has been saved. Click the button below to schedule your call."
-                : "Redirecting you to schedule your alignment call..."}
+                : "Redirecting you to schedule your mission assessment call..."}
             </p>
 
             {showBackupButton && formData.budget === "ready-high" && (
               <Button
                 onClick={() => window.open(savvycalUrl, "_blank")}
-                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
               >
                 Schedule Your Call
                 <ArrowRight className="ml-2 w-4 h-4" />
@@ -227,18 +228,19 @@ export const IgnitionQualificationForm = ({
     <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
       <CardHeader>
         <CardTitle className="text-white">
-          {currentStep === "budget" && "Let's Check Your Readiness"}
-          {currentStep === "rate-reduction" && "Rate Reduction Application"}
-          {currentStep === "contact" && "Contact Information"}
-          {currentStep === "alternatives" && "Alternative Options"}
+          {currentStep === "budget" && "Mission Readiness Check"}
+          {currentStep === "rate-reduction" && "Special Mission Application"}
+          {currentStep === "contact" && "Mission Contact Information"}
+          {currentStep === "alternatives" && "Alternative Flight Paths"}
         </CardTitle>
         <CardDescription className="text-gray-400">
-          {currentStep === "budget" && "What's your budget for this project?"}
+          {currentStep === "budget" &&
+            "What's your budget for this scaling mission?"}
           {currentStep === "rate-reduction" &&
-            "Tell us why you'd be a great fit for a reduced rate"}
-          {currentStep === "contact" && "How can we reach you?"}
+            "Tell us why you'd be a great fit for our reduced rate program"}
+          {currentStep === "contact" && "How can mission control reach you?"}
           {currentStep === "alternatives" &&
-            "Let's find the right path for you"}
+            "Let's find the right trajectory for your journey"}
         </CardDescription>
       </CardHeader>
 
@@ -255,17 +257,17 @@ export const IgnitionQualificationForm = ({
                 className={cn(
                   "flex items-start space-x-3 p-4 rounded-lg border cursor-pointer transition-all",
                   formData.budget === option.value
-                    ? "border-orange-500 bg-orange-500/10"
+                    ? "border-cyan-500 bg-cyan-500/10"
                     : "border-gray-700 hover:border-gray-600"
                 )}
               >
                 <RadioGroupItem
                   value={option.value}
-                  className="mt-1 text-orange-500"
+                  className="mt-1 text-cyan-500"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <DollarSign className="w-4 h-4 text-orange-400" />
+                    <DollarSign className="w-4 h-4 text-cyan-400" />
                     <span className="font-semibold text-white">
                       {option.label}
                     </span>
@@ -286,12 +288,11 @@ export const IgnitionQualificationForm = ({
           <div className="space-y-4">
             <div>
               <Label htmlFor="reason" className="text-white mb-2">
-                What is special about your project that we should consider for a
-                possible reduced rate?
+                Why should we consider you for our special mission rate?
               </Label>
               <Textarea
                 id="reason"
-                placeholder="Tell us about your situation, your idea's potential impact, or why you'd be an ideal candidate for a reduced rate..."
+                placeholder="Tell us about your current traction, potential impact, or why you'd be an ideal candidate for a reduced rate..."
                 className="min-h-[120px] bg-gray-800 border-gray-700 text-white placeholder-gray-500"
                 value={formData.rateReductionReason || ""}
                 onChange={(e) =>
@@ -302,8 +303,8 @@ export const IgnitionQualificationForm = ({
                 }
               />
               <p className="text-xs text-gray-500 mt-2">
-                We review applications based on potential impact, founder
-                background, commitment, and available capacity.
+                We review applications based on product traction, team
+                commitment, and available mission capacity.
               </p>
             </div>
 
@@ -318,7 +319,7 @@ export const IgnitionQualificationForm = ({
               </Button>
               <Button
                 onClick={handleRateReductionSubmit}
-                className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+                className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
               >
                 Continue
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -382,7 +383,7 @@ export const IgnitionQualificationForm = ({
                 {(formData.preferredContact === "phone" ||
                   formData.preferredContact === "text") &&
                   !formData.phone && (
-                    <p className="text-xs text-orange-400 mt-1">
+                    <p className="text-xs text-cyan-400 mt-1">
                       Required for your selected contact method
                     </p>
                   )}
@@ -403,10 +404,10 @@ export const IgnitionQualificationForm = ({
                     <RadioGroupItem
                       value="email"
                       id="email-pref"
-                      className="border-gray-400 text-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
+                      className="border-gray-400 text-cyan-500 data-[state=checked]:border-cyan-500 data-[state=checked]:bg-cyan-500"
                     />
                     <span className="flex items-center gap-2 text-gray-300">
-                      <Mail className="w-4 h-4 text-orange-400" />
+                      <Mail className="w-4 h-4 text-cyan-400" />
                       Email
                     </span>
                   </label>
@@ -414,10 +415,10 @@ export const IgnitionQualificationForm = ({
                     <RadioGroupItem
                       value="phone"
                       id="phone-pref"
-                      className="border-gray-400 text-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
+                      className="border-gray-400 text-cyan-500 data-[state=checked]:border-cyan-500 data-[state=checked]:bg-cyan-500"
                     />
                     <span className="flex items-center gap-2 text-gray-300">
-                      <Phone className="w-4 h-4 text-orange-400" />
+                      <Phone className="w-4 h-4 text-cyan-400" />
                       Phone
                     </span>
                   </label>
@@ -425,10 +426,10 @@ export const IgnitionQualificationForm = ({
                     <RadioGroupItem
                       value="text"
                       id="text-pref"
-                      className="border-gray-400 text-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
+                      className="border-gray-400 text-cyan-500 data-[state=checked]:border-cyan-500 data-[state=checked]:bg-cyan-500"
                     />
                     <span className="flex items-center gap-2 text-gray-300">
-                      <MessageSquare className="w-4 h-4 text-orange-400" />
+                      <MessageSquare className="w-4 h-4 text-cyan-400" />
                       Text/SMS
                     </span>
                   </label>
@@ -436,7 +437,7 @@ export const IgnitionQualificationForm = ({
                     <RadioGroupItem
                       value="either"
                       id="either-pref"
-                      className="border-gray-400 text-orange-500 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
+                      className="border-gray-400 text-cyan-500 data-[state=checked]:border-cyan-500 data-[state=checked]:bg-cyan-500"
                     />
                     <span className="text-gray-300">Either is fine</span>
                   </label>
@@ -463,7 +464,7 @@ export const IgnitionQualificationForm = ({
                     formData.preferredContact === "text") &&
                     !formData.phone)
                 }
-                className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+                className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
               >
                 {isSubmitting ? (
                   <>
@@ -486,18 +487,18 @@ export const IgnitionQualificationForm = ({
         {currentStep === "alternatives" && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <div className="inline-flex p-3 rounded-full bg-orange-500/20 mb-4">
-                <Info className="w-8 h-8 text-orange-400" />
+              <div className="inline-flex p-3 rounded-full bg-cyan-500/20 mb-4">
+                <Info className="w-8 h-8 text-cyan-400" />
               </div>
 
               <h3 className="text-lg font-semibold text-white mb-2">
-                Let&apos;s Start with Learning
+                Prepare for Your Mission
               </h3>
 
               <p className="text-gray-300">
-                While Ignition requires a minimum investment, you can still
-                learn about vibe coding and building products through our
-                resources and community.
+                While Launch Control requires significant investment, you can
+                still learn about scaling and prepare for when you&apos;re ready
+                to achieve escape velocity.
               </p>
             </div>
 
@@ -505,30 +506,30 @@ export const IgnitionQualificationForm = ({
               <h4 className="font-semibold text-white">Get Started with:</h4>
               <ul className="space-y-2 text-gray-300">
                 <li className="flex items-start">
-                  <span className="text-orange-400 mr-2">•</span>
-                  Free resources and guides on vibe coding
+                  <span className="text-cyan-400 mr-2">•</span>
+                  Scaling best practices and architecture guides
                 </li>
                 <li className="flex items-start">
-                  <span className="text-orange-400 mr-2">•</span>
-                  Community updates and case studies
+                  <span className="text-cyan-400 mr-2">•</span>
+                  Production readiness checklists
                 </li>
                 <li className="flex items-start">
-                  <span className="text-orange-400 mr-2">•</span>
-                  Early access to new tools and techniques
+                  <span className="text-cyan-400 mr-2">•</span>
+                  Team building and hiring resources
                 </li>
                 <li className="flex items-start">
-                  <span className="text-orange-400 mr-2">•</span>
-                  Special offers when you&apos;re ready to invest
+                  <span className="text-cyan-400 mr-2">•</span>
+                  Early access to scaling tools and frameworks
                 </li>
               </ul>
             </div>
 
             <EmailOptIn
               variant="minimal"
-              title="Join the Vibe Coding Community"
-              description="Get free resources and learn to build faster"
+              title="Join the Mission Briefing List"
+              description="Get scaling insights and be first to know when spots open up"
               buttonText="Sign Me Up"
-              className="border-orange-500/30"
+              className="border-cyan-500/30"
             />
 
             <Button

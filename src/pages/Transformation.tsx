@@ -78,7 +78,7 @@ const Transformation = () => {
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
                 onClick={() =>
                   window.open(
-                    "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
+                    "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
                     "_blank"
                   )
                 }
@@ -146,7 +146,8 @@ const Transformation = () => {
                 Transform Your Development Process
               </h2>
               <p className="text-xl text-gray-300">
-                Real results from teams that have gone through our transformation.
+                Real results from teams that have gone through our
+                transformation.
               </p>
             </div>
 
@@ -270,7 +271,7 @@ const Transformation = () => {
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
                 onClick={() =>
                   window.open(
-                    "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
+                    "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
                     "_blank"
                   )
                 }
