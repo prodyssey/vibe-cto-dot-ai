@@ -12,5 +12,5 @@ Crawl-delay: 1
 
 # Disallow crawling of assets that don't need indexing
 Disallow: /assets/fonts/
-Disallow: *.js$
-Disallow: *.css$
+Disallow: /*.js
+Disallow: /*.css
