@@ -6,37 +6,47 @@ import {
   Rocket,
   Calendar,
 } from "lucide-react";
+import { useState } from "react";
 
 import { EmailOptIn } from "@/components/EmailOptIn";
+import { LaunchControlQualificationForm } from "@/components/LaunchControlQualificationForm";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const LaunchControl = () => {
+  const [showQualificationForm, setShowQualificationForm] = useState(false);
   const services = [
     {
       icon: Shield,
-      title: "Production Confidence",
+      title: "Performance Optimization",
       description:
-        "Build rock-solid systems that won't break under pressure or expose security vulnerabilities",
+        "Avoid scaling bottlenecks and ensure your system can handle growth without breaking",
     },
     {
       icon: Code2,
-      title: "Architecture Review",
+      title: "Product Development Lifecycle",
       description:
-        "Ensure your codebase is maintainable, scalable, and follows industry best practices",
+        "Incorporate Augmented Product Engineers into your team and workflow for maximum velocity",
     },
     {
       icon: GitBranch,
-      title: "Development Workflow",
+      title: "Navigate Traction",
       description:
-        "Set up proper version control, CI/CD, and collaboration tools for sustainable growth",
+        "Get guidance from someone who's been there on scaling from prototype to production",
     },
     {
       icon: Layers,
-      title: "Technical Foundation",
+      title: "Team Integration",
       description:
-        "Establish patterns and conventions that enable efficient development as your product evolves",
+        "Seamlessly blend your vision with production-ready engineering excellence",
     },
   ];
 
@@ -76,25 +86,19 @@ const LaunchControl = () => {
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Transform your vibe coding projects into production-ready systems.
-              Get expert guidance on architecture, security, and development
-              workflows that ensure your product can scale without breaking or
-              exposing vulnerabilities.
+              Your product has achieved liftoff. Now it's time to reach escape velocity. 
+              Launch Control provides the technical infrastructure, product development readiness, 
+              and strategic guidance to scale your successful prototype into a market-capturing product.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
-                onClick={() =>
-                  window.open(
-                    "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
-                    "_blank"
-                  )
-                }
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+                onClick={() => setShowQualificationForm(true)}
               >
-                Book Strategy Call
-                <Calendar className="ml-2 w-5 h-5" />
+                Begin Mission Assessment
+                <Rocket className="ml-2 w-5 h-5" />
               </Button>
             </div>
           </div>
@@ -180,70 +184,56 @@ const LaunchControl = () => {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                How It Works
+                Mission Phases
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                We'll guide you through every step to ensure your project is
-                production-ready.
+                Your journey from prototype to production powerhouse follows a proven 
+                flight path designed for sustainable scaling.
               </p>
             </div>
 
             <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold">
                   1
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-2">
-                    Initial Architecture Review
+                    Mission Assessment (Weeks 1-2)
                   </h3>
                   <p className="text-gray-300">
-                    We'll analyze your current codebase and identify potential
-                    issues before they become problems.
+                    Deep dive into your current architecture, performance bottlenecks, 
+                    security vulnerabilities, and scaling requirements.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold">
                   2
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-2">
-                    Security & Performance Audit
+                    Flight Plan Execution (Weeks 2-12)
                   </h3>
                   <p className="text-gray-300">
-                    Comprehensive review to ensure your application is secure
-                    and performs well under load.
+                    Implement the optimal architecture and development strategy for 
+                    your growth trajectory with CI/CD, monitoring, and team augmentation.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold">
                   3
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-2">
-                    Development Workflow Setup
+                    Orbital Operations (Ongoing - Optional)
                   </h3>
                   <p className="text-gray-300">
-                    Implement proper CI/CD, testing, and collaboration tools for
-                    sustainable growth.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
-                  4
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    Ongoing Support & Guidance
-                  </h3>
-                  <p className="text-gray-300">
-                    Continue working with us as your product grows and evolves.
+                    Fractional CTO/CPO leadership, technical hiring, product strategy, 
+                    and limited emergency support to maintain peak performance.
                   </p>
                 </div>
               </div>
@@ -277,16 +267,11 @@ const LaunchControl = () => {
 
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
-                onClick={() =>
-                  window.open(
-                    "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
-                    "_blank"
-                  )
-                }
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
+                onClick={() => setShowQualificationForm(true)}
               >
-                Schedule Free Consultation
-                <Calendar className="ml-3 w-6 h-6" />
+                Start Mission Planning
+                <Rocket className="ml-3 w-6 h-6" />
               </Button>
 
               <div className="flex items-center justify-center space-x-6 mt-6 text-sm text-gray-400">
@@ -300,6 +285,27 @@ const LaunchControl = () => {
           </div>
         </section>
       </div>
+
+      {/* Qualification Form Dialog */}
+      <Dialog open={showQualificationForm} onOpenChange={setShowQualificationForm}>
+        <DialogContent className="max-w-2xl bg-gray-900 border-gray-700">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-white">
+              Launch Control Mission Assessment
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Let&apos;s ensure your product is ready for the scaling mission ahead.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <LaunchControlQualificationForm
+            onSuccess={() => {
+              // Keep dialog open to show success state
+              // It will handle the redirect automatically
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -28,18 +28,18 @@ export const Paths = () => {
       icon: Rocket,
       title: "Launch Control",
       subtitle:
-        "For solo founders and non technical folks on the verge of launching",
+        "Mission Command - where successful prototypes achieve escape velocity",
       description:
-        "Get fractional CTO support to take your product from prototype to production.",
+        "Your product has achieved liftoff. Get the technical infrastructure and strategic guidance to scale into a market-capturing product.",
       features: [
-        "1-on-1 coaching",
-        "Production deployment",
-        "Security & scaling",
-        "Growth strategies",
+        "6-12+ week transformation",
+        "Performance optimization",
+        "Team augmentation",
+        "Fractional CTO/CPO support",
       ],
-      cta: "Book Discovery Call",
+      cta: "Explore Mission Parameters",
       link: "/launch-control",
-      color: "from-blue-600 to-purple-600",
+      color: "from-blue-600 to-cyan-600",
     },
     {
       icon: Sparkles,
