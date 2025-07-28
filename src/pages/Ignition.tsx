@@ -8,13 +8,23 @@ import {
   Users,
   Target,
 } from "lucide-react";
+import { useState } from "react";
 
 import { EmailOptIn } from "@/components/EmailOptIn";
+import { IgnitionQualificationForm } from "@/components/IgnitionQualificationForm";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const Ignition = () => {
+  const [showQualificationForm, setShowQualificationForm] = useState(false);
   const features = [
     {
       icon: Zap,
@@ -75,19 +85,14 @@ const Ignition = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="https://savvycal.com/craigsturgis/vibecto-clarity-call"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+                onClick={() => setShowQualificationForm(true)}
               >
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
-                >
-                  Let's Build Your Idea
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </a>
+                Let&apos;s Build Your Idea
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
 
               {/* <Button
                 variant="outline"
@@ -200,12 +205,7 @@ const Ignition = () => {
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
-                onClick={() =>
-                  window.open(
-                    "https://savvycal.com/craigsturgis/vibecto-clarity-call",
-                    "_blank"
-                  )
-                }
+                onClick={() => setShowQualificationForm(true)}
               >
                 Schedule Alignment Call
                 <Rocket className="ml-3 w-6 h-6" />
@@ -225,6 +225,27 @@ const Ignition = () => {
           </div>
         </section>
       </div>
+
+      {/* Qualification Form Dialog */}
+      <Dialog open={showQualificationForm} onOpenChange={setShowQualificationForm}>
+        <DialogContent className="max-w-2xl bg-gray-900 border-gray-700">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-white">
+              Start Your Ignition Journey
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Let&apos;s make sure Ignition is the right fit for your needs and timeline.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <IgnitionQualificationForm
+            onSuccess={() => {
+              // Keep dialog open to show success state
+              // It will handle the redirect automatically
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
