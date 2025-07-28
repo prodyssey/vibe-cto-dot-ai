@@ -73,7 +73,7 @@ export const TransformationFinalScreen = () => {
     setShowEmailForm(false);
 
     // Open SavvyCal in new tab
-    const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-interstellar-alignment-call?email=${encodeURIComponent(
+    const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-transformation-alignment-call?email=${encodeURIComponent(
       email
     )}&display_name=${encodeURIComponent(name)}`;
 
