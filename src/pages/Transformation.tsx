@@ -92,20 +92,20 @@ const Transformation = () => {
                 and accelerate delivery.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
-                  onClick={() =>
-                    window.open(
-                      "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
-                      "_blank"
-                    )
-                  }
-                >
-                  Schedule Strategy Call
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+                onClick={() =>
+                  window.open(
+                    "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
+                    "_blank"
+                  )
+                }
+              >
+                Schedule Strategy Call
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
 
                 {/* <Button 
                 variant="outline" 
@@ -291,7 +291,7 @@ const Transformation = () => {
                   className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
                   onClick={() =>
                     window.open(
-                      "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
+                      "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
                       "_blank"
                     )
                   }

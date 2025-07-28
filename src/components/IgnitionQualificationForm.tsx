@@ -84,6 +84,7 @@ export const IgnitionQualificationForm = ({
 }: IgnitionQualificationFormProps) => {
   const [currentStep, setCurrentStep] = useState<FormStep>("budget");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showBackupButton, setShowBackupButton] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     budget: "",
     needsRateReduction: false,
@@ -143,7 +144,16 @@ export const IgnitionQualificationForm = ({
         )}&display_name=${encodeURIComponent(formData.name)}`;
 
         setTimeout(() => {
-          window.open(savvycalUrl, "_blank");
+          const newWindow = window.open(savvycalUrl, "_blank");
+
+          // Check if popup was blocked
+          if (
+            !newWindow ||
+            newWindow.closed ||
+            typeof newWindow.closed === "undefined"
+          ) {
+            setShowBackupButton(true);
+          }
         }, 1500);
       }
 
@@ -173,6 +183,13 @@ export const IgnitionQualificationForm = ({
   };
 
   if (currentStep === "success") {
+    const savvycalUrl =
+      formData.budget === "ready-high"
+        ? `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
+            formData.email
+          )}&display_name=${encodeURIComponent(formData.name)}`
+        : "";
+
     return (
       <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
         <CardContent className="pt-6">
@@ -186,8 +203,20 @@ export const IgnitionQualificationForm = ({
             <p className="text-gray-300">
               {formData.needsRateReduction
                 ? "We'll review your rate reduction application and contact you within 1-2 business days."
+                : showBackupButton
+                ? "Your information has been saved. Click the button below to schedule your call."
                 : "Redirecting you to schedule your alignment call..."}
             </p>
+
+            {showBackupButton && formData.budget === "ready-high" && (
+              <Button
+                onClick={() => window.open(savvycalUrl, "_blank")}
+                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+              >
+                Schedule Your Call
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -257,7 +286,8 @@ export const IgnitionQualificationForm = ({
           <div className="space-y-4">
             <div>
               <Label htmlFor="reason" className="text-white mb-2">
-                Why should we consider you for a reduced rate?
+                What is special about your project that we should consider for a
+                possible reduced rate?
               </Label>
               <Textarea
                 id="reason"
@@ -273,7 +303,7 @@ export const IgnitionQualificationForm = ({
               />
               <p className="text-xs text-gray-500 mt-2">
                 We review applications based on potential impact, founder
-                commitment, and available capacity.
+                background, commitment, and available capacity.
               </p>
             </div>
 

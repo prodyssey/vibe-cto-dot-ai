@@ -135,19 +135,17 @@ export const IgnitionWaitlistForm = ({
             value={formData.phone}
             onChange={(e) => {
               const value = e.target.value;
-              setFormData({ ...formData, phone: value });
               // Reset to email if phone is cleared and phone/text was selected
-              if (
+              const shouldResetContactMethod =
                 !value &&
                 (formData.contactMethod === "phone" ||
-                  formData.contactMethod === "text")
-              ) {
-                setFormData({
-                  ...formData,
-                  phone: value,
-                  contactMethod: "email",
-                });
-              }
+                  formData.contactMethod === "text");
+
+              setFormData({
+                ...formData,
+                phone: value,
+                ...(shouldResetContactMethod && { contactMethod: "email" }),
+              });
             }}
             className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-500"
           />
@@ -256,14 +254,16 @@ export const IgnitionWaitlistForm = ({
             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
             Submitting...
           </>
+        ) : isWaitlistActive ? (
+          "Join the Forge Waitlist"
         ) : (
-          isWaitlistActive ? "Join the Forge Waitlist" : "Submit Contact Info"
+          "Submit Contact Info"
         )}
       </AnimatedButton>
 
       <p className="text-xs text-gray-400 text-center">
-        {isWaitlistActive 
-          ? "We'll reach out within 2 business days when a spot opens up" 
+        {isWaitlistActive
+          ? "We'll reach out within 2 business days when a spot opens up"
           : "We'll reach out within 2 business days to schedule your discovery call"}
       </p>
     </form>
