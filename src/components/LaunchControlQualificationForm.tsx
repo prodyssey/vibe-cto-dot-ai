@@ -83,6 +83,7 @@ export const LaunchControlQualificationForm = ({
 }: LaunchControlQualificationFormProps) => {
   const [currentStep, setCurrentStep] = useState<FormStep>("budget");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showBackupButton, setShowBackupButton] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     budget: "",
     needsRateReduction: false,
@@ -94,7 +95,7 @@ export const LaunchControlQualificationForm = ({
 
   const handleBudgetSelect = (value: string) => {
     setFormData({ ...formData, budget: value });
-    
+
     // Handle different budget levels
     if (value === "ready-high") {
       // $40K+ goes straight to contact info then SavvyCal
@@ -119,30 +120,41 @@ export const LaunchControlQualificationForm = ({
 
     try {
       // Try to save qualification data to Supabase
-      const { error } = await supabase.from("launch_control_qualifications").insert({
-        budget: formData.budget,
-        needs_rate_reduction: formData.needsRateReduction,
-        rate_reduction_reason: formData.rateReductionReason,
-        name: formData.name,
-        email: formData.email,
-        preferred_contact: formData.preferredContact,
-        phone: formData.phone,
-      });
+      const { error } = await supabase
+        .from("launch_control_qualifications")
+        .insert({
+          budget: formData.budget,
+          needs_rate_reduction: formData.needsRateReduction,
+          rate_reduction_reason: formData.rateReductionReason,
+          name: formData.name,
+          email: formData.email,
+          preferred_contact: formData.preferredContact,
+          phone: formData.phone,
+        });
 
       if (error) {
         throw error;
       }
 
       setCurrentStep("success");
-      
+
       // Only high budget goes straight to SavvyCal
       if (formData.budget === "ready-high") {
-        const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-launch-control-assessment?email=${encodeURIComponent(
+        const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
           formData.email
         )}&display_name=${encodeURIComponent(formData.name)}`;
-        
+
         setTimeout(() => {
-          window.open(savvycalUrl, "_blank");
+          const newWindow = window.open(savvycalUrl, "_blank");
+
+          // Check if popup was blocked
+          if (
+            !newWindow ||
+            newWindow.closed ||
+            typeof newWindow.closed === "undefined"
+          ) {
+            setShowBackupButton(true);
+          }
         }, 1500);
       }
 
@@ -172,6 +184,13 @@ export const LaunchControlQualificationForm = ({
   };
 
   if (currentStep === "success") {
+    const savvycalUrl =
+      formData.budget === "ready-high"
+        ? `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
+            formData.email
+          )}&display_name=${encodeURIComponent(formData.name)}`
+        : "";
+
     return (
       <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
         <CardContent className="pt-6">
@@ -185,8 +204,20 @@ export const LaunchControlQualificationForm = ({
             <p className="text-gray-300">
               {formData.needsRateReduction
                 ? "We'll review your rate reduction application and contact you within 1-2 business days."
+                : showBackupButton
+                ? "Your information has been saved. Click the button below to schedule your call."
                 : "Redirecting you to schedule your mission assessment call..."}
             </p>
+
+            {showBackupButton && formData.budget === "ready-high" && (
+              <Button
+                onClick={() => window.open(savvycalUrl, "_blank")}
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+              >
+                Schedule Your Call
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -203,7 +234,8 @@ export const LaunchControlQualificationForm = ({
           {currentStep === "alternatives" && "Alternative Flight Paths"}
         </CardTitle>
         <CardDescription className="text-gray-400">
-          {currentStep === "budget" && "What's your budget for this scaling mission?"}
+          {currentStep === "budget" &&
+            "What's your budget for this scaling mission?"}
           {currentStep === "rate-reduction" &&
             "Tell us why you'd be a great fit for our reduced rate program"}
           {currentStep === "contact" && "How can mission control reach you?"}
@@ -271,8 +303,8 @@ export const LaunchControlQualificationForm = ({
                 }
               />
               <p className="text-xs text-gray-500 mt-2">
-                We review applications based on product traction, team commitment, 
-                and available mission capacity.
+                We review applications based on product traction, team
+                commitment, and available mission capacity.
               </p>
             </div>
 
@@ -458,14 +490,15 @@ export const LaunchControlQualificationForm = ({
               <div className="inline-flex p-3 rounded-full bg-cyan-500/20 mb-4">
                 <Info className="w-8 h-8 text-cyan-400" />
               </div>
-              
+
               <h3 className="text-lg font-semibold text-white mb-2">
                 Prepare for Your Mission
               </h3>
-              
+
               <p className="text-gray-300">
-                While Launch Control requires significant investment, you can still learn 
-                about scaling and prepare for when you&apos;re ready to achieve escape velocity.
+                While Launch Control requires significant investment, you can
+                still learn about scaling and prepare for when you&apos;re ready
+                to achieve escape velocity.
               </p>
             </div>
 
