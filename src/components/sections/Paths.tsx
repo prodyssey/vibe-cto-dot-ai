@@ -12,12 +12,12 @@ export const Paths = () => {
       subtitle:
         "For founders with ideas who want to test them quickly and intelligently",
       description:
-        "I'll use 20 years of product experience and cutting-edge vibe coding tools to turn your idea into a testable MVP in hours, plus guide you on validation.",
+        "Compress months of wandering into weeks of clarity. Get a working MVP + validation framework from an expert 0 to 1 builder in just 2-4 weeks.",
       features: [
-        "Product discovery session",
-        "Rapid MVP building",
-        "Customer validation strategy",
-        "Iteration framework",
+        "2-4 hour intensive discovery",
+        "Rapid MVP development",
+        "Tech stack selection",
+        "Assumption testing & iteration",
       ],
       cta: "Build My Idea",
       link: "https://savvycal.com/craigsturgis/vibecto-clarity-call",

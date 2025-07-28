@@ -17,37 +17,37 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const Ignition = () => {
   const features = [
     {
-      icon: Target,
-      title: "Product Discovery",
+      icon: Zap,
+      title: "Rapid MVP Development",
       description:
-        "We'll dig deep into your idea, understand the market, and identify the core value proposition",
+        "Transform insights into a working MVP through rapid design and development in 2-4 weeks",
     },
     {
       icon: Code,
-      title: "Rapid MVP Building",
+      title: "Tech Stack Selection",
       description:
-        "Using vibe coding tools, I'll build you something real and testable in just a few hours",
+        "Expert guidance on choosing the right technologies and architecture for your MVP",
+    },
+    {
+      icon: Target,
+      title: "Assumption Testing",
+      description:
+        "Validate your core assumptions with real users and refine based on feedback",
     },
     {
       icon: Users,
-      title: "Customer Development Guidance",
+      title: "Iterative Refinement",
       description:
-        "Learn how to validate your concept with real users and gather meaningful feedback",
-    },
-    {
-      icon: Zap,
-      title: "Iteration Framework",
-      description:
-        "Get the tools and knowledge to continue building and improving on your own",
+        "Weekly office hours and ongoing support to help you iterate and grow",
     },
   ];
 
   const steps = [
-    "Discovery Call: We'll explore your idea, target market, and key assumptions",
-    "Rapid Prototyping: I'll build a testable MVP using cutting-edge vibe coding tools",
-    "Validation Strategy: Learn how to test your concept with real potential customers",
-    "Iteration Guidance: Get the framework to continue building and improving",
-    "Next Steps Planning: Decide if your idea has traction worth pursuing further",
+    "Discovery & Validation (2-4 hours): Deep dive into your vision, market, and assumptions",
+    "Design & Build (2-4 weeks): Transform insights into a working MVP with twice weekly updates",
+    "Test & Iterate (1-2 months): Weekly office hours, ICP testing advice, and growth strategy",
+    "Deliverable: An MVP you can continue to vibe code with",
+    "Availability: Extremely limited - expert 0 to 1 builder support",
   ];
 
   return (
@@ -69,9 +69,9 @@ const Ignition = () => {
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Turn your idea into reality. I'll use 20 years of zero-to-one
-              product experience and cutting-edge vibe coding tools to build you
-              something testable in hours, not months.
+              Where raw ideas transform into testable prototypes. Compress
+              months of wandering into weeks of clarity with a working MVP +
+              validation framework from an expert 0 to 1 builder.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -108,8 +108,8 @@ const Ignition = () => {
                 How It Works
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                From idea to testable product in just a few hours of focused
-                work.
+                Your 2-4 week intensive jumpstart to transform ideas into
+                testable reality.
               </p>
             </div>
 
@@ -193,8 +193,8 @@ const Ignition = () => {
               </h2>
 
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Stop wondering if your idea could work. Let's build something
-                real and find out together.
+                Compress months of wandering into weeks of clarity. Transform
+                your raw idea into a validated venture with expert guidance.
               </p>
 
               <Button
@@ -207,19 +207,19 @@ const Ignition = () => {
                   )
                 }
               >
-                Book Discovery Call
+                Schedule Alignment Call
                 <Rocket className="ml-3 w-6 h-6" />
               </Button>
 
               <div className="flex items-center justify-center space-x-6 mt-6 text-sm text-gray-400">
                 <div className="flex items-center space-x-2">
                   <Clock className="w-4 h-4" />
-                  <span>Hands-on building</span>
+                  <span>2-4 week intensive jumpstart</span>
                 </div>
                 <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                <span>Real MVP delivered</span>
+                <span>Working testable prototype delivered</span>
                 <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                <span>Validation guidance included</span>
+                <span>Expert 0 to 1 builder</span>
               </div>
             </div>
           </div>
