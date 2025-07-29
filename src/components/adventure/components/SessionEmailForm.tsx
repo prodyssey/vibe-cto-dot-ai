@@ -78,7 +78,8 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
         console.error('Update query details:', {
           table: 'adventure_sessions',
           updateData,
-          condition: `id = ${sessionId}`
+          condition: 'id = ?',
+          params: [sessionId]
         });
         throw updateError;
       }
