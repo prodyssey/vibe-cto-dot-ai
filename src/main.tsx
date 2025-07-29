@@ -12,4 +12,18 @@ globalThis.Buffer = Buffer
 // Update favicon on app load
 updateFavicon();
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Remove initial loader when React mounts
+const removeLoader = () => {
+  const loader = document.getElementById('initial-loader');
+  if (loader) {
+    loader.style.opacity = '0';
+    loader.style.transition = 'opacity 0.3s ease-out';
+    setTimeout(() => loader.remove(), 300);
+  }
+};
+
+const root = document.getElementById("root")!;
+createRoot(root).render(<App />);
+
+// Remove loader after React renders
+setTimeout(removeLoader, 100);
