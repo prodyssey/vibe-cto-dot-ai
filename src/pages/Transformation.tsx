@@ -86,7 +86,6 @@ const Transformation = () => {
                 Transformation
               </h1>
 
-
               <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
                 Step into the Metamorphosis Chamber where teams undergo radical
                 transformation. Emerge with AI-augmented capabilities that
@@ -94,20 +93,20 @@ const Transformation = () => {
                 possibility.
               </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
-                onClick={() =>
-                  window.open(
-                    "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
-                    "_blank"
-                  )
-                }
-              >
-                Schedule Strategy Call
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+                  onClick={() =>
+                    window.open(
+                      "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
+                      "_blank"
+                    )
+                  }
+                >
+                  Schedule Strategy Call
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
 
                 {/* <Button 
                 variant="outline" 
@@ -119,7 +118,6 @@ const Transformation = () => {
               </div>
             </div>
           </section>
-
 
           {/* Features Section */}
           <section className="py-20 px-6 bg-black/20">
@@ -160,7 +158,6 @@ const Transformation = () => {
               </div>
             </div>
           </section>
-
 
           {/* Cost of Delay Calculator Section */}
           <section className="py-20 px-6 bg-black/20">
@@ -257,9 +254,9 @@ const Transformation = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-300">
-                      Deep dive into your team's current velocity and bottlenecks.
-                      Current development workflow analysis and AI readiness
-                      evaluation.
+                      Deep dive into your team's current velocity and
+                      bottlenecks. Current development workflow analysis and AI
+                      readiness evaluation.
                     </p>
                   </CardContent>
                 </Card>
@@ -296,10 +293,12 @@ const Transformation = () => {
                   <CardContent>
                     <p className="text-gray-300">
                       Scale AI adoption across your entire product development
-                      org. Process optimization with ongoing support & refinement.
+                      org. Process optimization with ongoing support &
+                      refinement.
                     </p>
                   </CardContent>
                 </Card>
+              </div>
             </div>
           </section>
 
