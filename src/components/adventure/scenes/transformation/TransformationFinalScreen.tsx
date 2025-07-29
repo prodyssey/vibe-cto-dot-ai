@@ -74,15 +74,19 @@ export const TransformationFinalScreen = () => {
     setShowEmailForm(false);
 
     // Open SavvyCal in new tab
-    const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-transformation-alignment-call?email=${encodeURIComponent(
+    const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-transformation-alignment?email=${encodeURIComponent(
       email
     )}&display_name=${encodeURIComponent(name)}`;
 
     // Track conversion
-    trackSavvyCalClick('transformation_adventure_final', 'transformation_alignment', {
-      email: email,
-      player_name: name
-    });
+    trackSavvyCalClick(
+      "transformation_adventure_final",
+      "transformation_alignment",
+      {
+        email: email,
+        player_name: name,
+      }
+    );
 
     // Try to open in new tab
     const newWindow = window.open(savvycalUrl, "_blank");
