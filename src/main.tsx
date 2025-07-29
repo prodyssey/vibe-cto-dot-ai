@@ -12,4 +12,18 @@ globalThis.Buffer = Buffer
 // Update favicon on app load
 updateFavicon();
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Function to remove the initial loader with fade effect
+const removeLoader = () => {
+  const loader = document.getElementById('initial-loader');
+  if (loader) {
+    loader.style.opacity = '0';
+    loader.style.transition = 'opacity 0.3s ease-out';
+    setTimeout(() => loader.remove(), 300);
+  }
+};
+
+// Make removeLoader available globally so React components can call it
+(window as any).removeInitialLoader = removeLoader;
+
+const root = document.getElementById("root")!;
+createRoot(root).render(<App />);

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
@@ -17,7 +18,18 @@ import Resources from "./pages/Resources";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  useEffect(() => {
+    // Remove the initial loader after React has rendered
+    // Use requestAnimationFrame to ensure the DOM has been painted
+    requestAnimationFrame(() => {
+      if ((window as any).removeInitialLoader) {
+        (window as any).removeInitialLoader();
+      }
+    });
+  }, []);
+
+  return (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -39,6 +51,7 @@ const App = () => (
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>
-);
+  );
+};
 
 export default App;
