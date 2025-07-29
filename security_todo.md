@@ -15,9 +15,13 @@
   - [x] Created `ga4_config.py` for secure credential management
   - [x] Created `run-ga4-setup-secure.sh` wrapper script
   - [x] Updated documentation with security best practices
-- [ ] **Verify Supabase RLS policies**
-  - [ ] Audit Row Level Security in Supabase dashboard
-  - [ ] Consider moving keys to environment variables
+- [x] **Verify Supabase RLS policies**
+  - [x] Audit Row Level Security in Supabase dashboard - ✅ Created comprehensive audit
+  - [x] Document all tables and access patterns
+  - [x] Create RLS policy recommendations
+  - [x] **ACTION REQUIRED**: Implement RLS policies in Supabase dashboard - ✅ Applied via CLI!
+  - [ ] Update client code to pass session headers (optional - current policies work with existing code)
+  - [ ] Consider moving keys to environment variables (low priority - anon key is public by design)
 
 ## 🟠 HIGH Severity
 

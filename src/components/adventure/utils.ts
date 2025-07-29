@@ -148,7 +148,22 @@ export const loadGameProgress = async (
   try {
     const { data, error } = await supabase
       .from("adventure_sessions")
-      .select("*")
+      .select(`
+        id,
+        player_name,
+        is_generated_name,
+        current_scene_id,
+        visited_scenes,
+        choices,
+        path_scores,
+        final_path,
+        discovered_paths,
+        unlocked_content,
+        preferences,
+        completion_status,
+        created_at,
+        updated_at
+      `)
       .eq("id", sessionId)
       .single();
 
