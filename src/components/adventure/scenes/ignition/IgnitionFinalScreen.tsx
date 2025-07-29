@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 import { AnimatedButton } from "../../components/AnimatedButton";
 import { IgnitionWaitlistForm } from "../../components/IgnitionWaitlistForm";
@@ -133,7 +134,7 @@ export const IgnitionFinalScreen = () => {
   };
 
   const handleEmailSubmit = async (email: string, name: string) => {
-    console.log("handleEmailSubmit called with:", { email, name });
+    logger.debug("handleEmailSubmit called");
 
     // Store the submitted values
     setUserEmail(email);
@@ -157,16 +158,14 @@ export const IgnitionFinalScreen = () => {
 
     // Safari and other browsers may block this, so we'll show a message with a button
     if (!newWindow || newWindow.closed) {
-      console.warn(
-        "Popup was blocked. User will need to click the link manually."
-      );
+      logger.warn("Popup was blocked. User will need to click the link manually.");
     }
 
     // Mark game as completed
     try {
       await completeGame("explore_service");
     } catch (error) {
-      console.error("Error completing game:", error);
+      logger.error("Error completing game:", error);
     }
   };
 

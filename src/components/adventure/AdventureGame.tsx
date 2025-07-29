@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 import { SceneTransition } from "./animations";
 import { Choice } from "./Choice";
@@ -90,14 +91,14 @@ export const AdventureGame = () => {
     
     // Check if we need to migrate the scene
     if (sceneMapping[currentSceneId]) {
-      console.log('Migrating scene:', currentSceneId, 'to', sceneMapping[currentSceneId]);
+      logger.debug('Migrating scene to', sceneMapping[currentSceneId]);
       navigateToScene(sceneMapping[currentSceneId]);
       return;
     }
     
     // Check if current scene exists
     if (!currentScene && currentSceneId) {
-      console.log('Invalid scene detected:', currentSceneId, '- resetting to entry');
+      logger.warn('Invalid scene detected - resetting to entry');
       // Reset to entry scene if current scene doesn't exist
       navigateToScene('entry');
       return;
@@ -116,9 +117,10 @@ export const AdventureGame = () => {
 
   // Debug logging
   useEffect(() => {
-    console.log('AdventureGame - currentSceneId:', currentSceneId);
-    console.log('AdventureGame - currentScene:', currentScene);
-    console.log('AdventureGame - sessionId:', sessionId);
+    logger.debug('AdventureGame state:', { 
+      hasCurrentScene: !!currentScene,
+      hasSessionId: !!sessionId 
+    });
   }, [currentSceneId, currentScene, sessionId]);
 
   const handleChoice = async (choice: {
@@ -202,7 +204,7 @@ export const AdventureGame = () => {
 
   // Handle different scene types
   if (!currentScene) {
-    console.error('No scene found for id:', currentSceneId);
+    logger.error('No scene found for id:', currentSceneId);
     return (
       <div className="min-h-screen flex items-center justify-center p-6">
         <div className="text-white text-center">

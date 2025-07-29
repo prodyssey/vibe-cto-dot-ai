@@ -51,9 +51,17 @@
 
 ## 🟡 MEDIUM Severity
 
-- [ ] **Remove sensitive data from console logs**
-  - [ ] Search and remove all console.log statements
-  - [ ] Implement proper logging library if needed
+- [x] **Remove sensitive data from console logs**
+  - [x] Created secure logging utility `/src/lib/logger.ts` with data sanitization
+  - [x] Updated critical files to use secure logger:
+    - [x] `/src/components/adventure/components/SessionEmailForm.tsx` - Removed email/name logging
+    - [x] `/src/components/adventure/scenes/ignition/IgnitionFinalScreen.tsx` - Sanitized logs
+    - [x] `/src/components/adventure/AdventureGame.tsx` - Removed session ID logging
+    - [x] `/src/components/adventure/utils.ts` - Updated error logging
+    - [x] `/src/components/adventure/scenes/launchcontrol/LaunchControlApplicationScreen.tsx` - Sanitized logs
+  - [x] Logger automatically redacts sensitive fields (email, name, session, etc.)
+  - [x] Console logs only work in development mode
+  - [x] Emails are partially masked when logged
 - [ ] **Add security headers to Netlify**
   - [ ] Update `/netlify.toml` with security headers
   - [ ] X-Content-Type-Options

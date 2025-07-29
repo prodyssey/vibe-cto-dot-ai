@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 import { useGameStore } from "./gameStore";
 import type { GameProgress, ServicePath } from "./types";
@@ -53,7 +54,7 @@ export const saveGameProgress = async (
       throw error;
     }
   } catch (error) {
-    console.error("Error saving game progress:", error);
+    logger.error("Error saving game progress:", error);
   }
 };
 
@@ -74,7 +75,7 @@ export const saveSceneVisit = async (
       throw error;
     }
   } catch (error) {
-    console.error("Error saving scene visit:", error);
+    logger.error("Error saving scene visit:", error);
   }
 };
 
@@ -97,7 +98,7 @@ export const saveChoice = async (
       throw error;
     }
   } catch (error) {
-    console.error("Error saving choice:", error);
+    logger.error("Error saving choice:", error);
   }
 };
 
@@ -187,7 +188,7 @@ export const loadGameProgress = async (
       preferences: data.preferences,
     };
   } catch (error) {
-    console.error("Error loading game progress:", error);
+    logger.error("Error loading game progress:", error);
     return null;
   }
 };
@@ -203,6 +204,6 @@ export const clearGameProgress = async (sessionId: string): Promise<void> => {
       throw error;
     }
   } catch (error) {
-    console.error("Error clearing game progress:", error);
+    logger.error("Error clearing game progress:", error);
   }
 };

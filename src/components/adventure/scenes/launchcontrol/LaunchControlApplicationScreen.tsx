@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { trackSavvyCalClick } from "@/lib/analytics";
+import { logger } from "@/lib/logger";
 
 import { useGameStore } from "../../gameStore";
 import { useBrowserNavigation } from "../../hooks";
@@ -54,7 +55,7 @@ export const LaunchControlApplicationScreen = () => {
   }, [needsReview, isWaitlistActive]);
 
   const handleEmailSubmit = async (email: string, name: string) => {
-    console.log("handleEmailSubmit called with:", { email, name });
+    logger.debug("handleEmailSubmit called");
 
     // Store the submitted values
     setUserEmail(email);
@@ -91,7 +92,7 @@ export const LaunchControlApplicationScreen = () => {
     try {
       await completeGame("explore_service");
     } catch (error) {
-      console.error("Error completing game:", error);
+      logger.error("Error completing game:", error);
     }
   };
 
