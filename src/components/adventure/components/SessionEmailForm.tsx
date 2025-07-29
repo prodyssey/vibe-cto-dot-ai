@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { trackFormSubmission } from '@/lib/analytics';
+import { sessionEmailFormSchema, validateForm } from '@/lib/validation';
 
 import { AnimatedButton } from './AnimatedButton';
 
@@ -32,6 +33,15 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
 
     if (!sessionId) {
       setError('No session ID found. Please restart the game.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Validate form data
+    const validation = validateForm(sessionEmailFormSchema, { email, name });
+    if (!validation.success) {
+      const firstError = Object.values(validation.errors)[0];
+      setError(firstError);
       setIsSubmitting(false);
       return;
     }

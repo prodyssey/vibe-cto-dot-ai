@@ -30,11 +30,15 @@
   - [x] Use parameterized queries - ✅ Fixed console.log to use parameterized format
   - [x] Verified no raw SQL queries in codebase
   - [x] All database access uses Supabase client with built-in parameterization
-- [ ] **Add input validation to forms**
-  - [ ] `/src/components/adventure/components/SessionEmailForm.tsx`
-  - [ ] `/src/components/EmailOptIn.tsx`
-  - [ ] `/src/components/adventure/scenes/PlayerSetupScreen.tsx`
-  - [ ] Implement Zod schemas for validation
+- [x] **Add input validation to forms**
+  - [x] Created centralized validation schemas in `/src/lib/validation.ts`
+  - [x] `/src/components/adventure/components/SessionEmailForm.tsx` - ✅ Added email and name validation
+  - [x] `/src/components/EmailOptIn.tsx` - ✅ Added email validation
+  - [x] `/src/components/adventure/scenes/PlayerSetupScreen.tsx` - ✅ Added player name validation
+  - [x] `/src/components/adventure/components/IgnitionWaitlistForm.tsx` - ✅ Added form validation
+  - [x] `/src/components/adventure/scenes/launchcontrol/LaunchControlWaitlistForm.tsx` - ✅ Enhanced existing validation
+  - [x] `/src/components/IgnitionQualificationForm.tsx` - ✅ Added comprehensive validation
+  - [x] Implement Zod schemas for validation - ✅ Using Zod with sanitization
 - [ ] **Configure CORS properly**
   - [ ] Update `/vite.config.ts` with proper CORS headers
   - [ ] Restrict allowed origins

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
+import { playerSetupFormSchema, validateForm } from '@/lib/validation';
 
 import { AnimatedButton } from '../components/AnimatedButton';
 import { useGameStore } from '../gameStore';
@@ -24,6 +25,7 @@ const PLAYER_SETUP_SCENE: SceneType = {
 
 export const PlayerSetupScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const {
     playerName,
     isGeneratedName,
@@ -39,7 +41,12 @@ export const PlayerSetupScreen = () => {
   };
 
   const startGame = async () => {
-    if (!playerName.trim()) {
+    setError(null);
+    
+    // Validate player name
+    const validation = validateForm(playerSetupFormSchema, { playerName });
+    if (!validation.success) {
+      setError(validation.errors.playerName || 'Invalid name');
       return;
     }
 
@@ -142,6 +149,9 @@ export const PlayerSetupScreen = () => {
                     <Sparkles className="w-3 h-3 inline mr-1" />
                     GENERATED RETRO CALLSIGN ACCEPTED
                   </p>
+                )}
+                {error && (
+                  <p className="text-red-400 text-sm font-mono mt-2">{'>'} ERROR: {error}</p>
                 )}
               </div>
 

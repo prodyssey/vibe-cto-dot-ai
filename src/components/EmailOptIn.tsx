@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { emailOptInFormSchema, validateForm } from "@/lib/validation";
 
 interface EmailOptInProps {
   variant?: "default" | "minimal";
@@ -23,15 +24,26 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
   onSuccess,
 }) => {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const formId = import.meta.env.VITE_CONVERTKIT_FORM_ID || "8281105";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
+    setError(null);
 
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
+    const email = formData.get('email_address') as string;
+
+    // Validate email
+    const validation = validateForm(emailOptInFormSchema, { email });
+    if (!validation.success) {
+      setError(validation.errors.email || 'Invalid email');
+      setStatus("error");
+      return;
+    }
 
     try {
       const response = await fetch(form.action, {
@@ -152,6 +164,9 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
             buttonText
           )}
         </Button>
+        {error && status === "error" && (
+          <p className="text-red-500 text-sm mt-2">{error}</p>
+        )}
       </form>
     </div>
   );

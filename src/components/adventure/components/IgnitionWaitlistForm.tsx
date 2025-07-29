@@ -8,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { trackFormSubmission } from "@/lib/analytics";
+import { waitlistFormSchema, validateForm } from "@/lib/validation";
 
 import { AnimatedButton } from "./AnimatedButton";
 
@@ -42,6 +43,22 @@ export const IgnitionWaitlistForm = ({
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
+
+    // Validate form data
+    const validationData = {
+      name: formData.name || playerName,
+      email: formData.email,
+      preferredContact: formData.contactMethod === 'either' ? 'either' : formData.contactMethod,
+      phone: formData.phone || undefined,
+    };
+
+    const validation = validateForm(waitlistFormSchema, validationData);
+    if (!validation.success) {
+      const firstError = Object.values(validation.errors)[0];
+      setError(firstError);
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       // Determine preferred contact based on method

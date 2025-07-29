@@ -28,6 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { qualificationFormSchema, waitlistFormSchema, validateForm } from "@/lib/validation";
 
 type FormStep =
   | "budget"
@@ -118,6 +119,39 @@ export const IgnitionQualificationForm = ({
   };
 
   const handleContactSubmit = async () => {
+    // Validate qualification data
+    const qualValidation = validateForm(qualificationFormSchema, {
+      budget: formData.budget,
+      needsRateReduction: formData.needsRateReduction,
+      rateReductionReason: formData.rateReductionReason,
+    });
+
+    if (!qualValidation.success) {
+      toast({
+        title: "Validation Error",
+        description: Object.values(qualValidation.errors)[0],
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate contact data
+    const contactValidation = validateForm(waitlistFormSchema, {
+      name: formData.name,
+      email: formData.email,
+      preferredContact: formData.preferredContact,
+      phone: formData.phone,
+    });
+
+    if (!contactValidation.success) {
+      toast({
+        title: "Validation Error",
+        description: Object.values(contactValidation.errors)[0],
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
