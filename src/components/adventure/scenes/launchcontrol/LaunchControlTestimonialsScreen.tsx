@@ -1,73 +1,76 @@
-import { 
-  Quote, 
-  Star, 
-  TrendingUp, 
+import {
+  Quote,
+  Star,
+  TrendingUp,
   Users,
   Zap,
   ArrowRight,
   ChevronLeft,
-  ChevronRight
-} from 'lucide-react';
-import { useState } from 'react';
+  ChevronRight,
+} from "lucide-react";
+import { useState } from "react";
 
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-import { useBrowserNavigation } from '../../hooks';
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
-import type { Scene as SceneType } from '../../types';
+import { useBrowserNavigation } from "../../hooks";
+import { Scene } from "../../Scene";
+import { SceneNavigation } from "../../SceneNavigation";
+import type { Scene as SceneType } from "../../types";
 
 const TESTIMONIALS_SCENE: SceneType = {
-  id: 'launchControlTestimonials',
-  type: 'detail',
-  title: 'Mission Success Stories',
-  description: 'Real results from real founders',
-  backgroundClass: 'bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900',
+  id: "launchControlTestimonials",
+  type: "detail",
+  title: "Mission Success Stories",
+  description: "Real results from real founders",
+  backgroundClass: "bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900",
 };
 
 const SUCCESS_STORIES = [
   {
-    id: 'fintech',
-    company: 'PayFlow',
-    industry: 'FinTech',
-    founder: 'Sarah Chen',
-    role: 'CTO & Co-founder',
-    quote: 'Launch Control transformed our prototype into a platform handling 1M+ transactions daily. Their team integrated seamlessly with ours and delivered beyond expectations.',
+    id: "fintech",
+    company: "PayFlow",
+    industry: "FinTech",
+    founder: "Sarah Chen",
+    role: "CTO & Co-founder",
+    quote:
+      "Launch Control transformed our prototype into a platform handling 1M+ transactions daily. Their team integrated seamlessly with ours and delivered beyond expectations.",
     metrics: [
-      { label: 'Response Time', value: '50ms → 12ms' },
-      { label: 'Throughput', value: '100x increase' },
-      { label: 'Uptime', value: '99.99%' },
+      { label: "Response Time", value: "50ms → 12ms" },
+      { label: "Throughput", value: "100x increase" },
+      { label: "Uptime", value: "99.99%" },
     ],
-    color: 'from-green-600 to-emerald-600',
+    color: "from-green-600 to-emerald-600",
   },
   {
-    id: 'healthtech',
-    company: 'MediTrack',
-    industry: 'HealthTech',
-    founder: 'Dr. James Wilson',
-    role: 'Founder & CEO',
-    quote: 'The expertise they brought in HIPAA compliance and healthcare integrations was invaluable. We scaled from 100 to 10,000 clinics in 6 months.',
+    id: "healthtech",
+    company: "MediTrack",
+    industry: "HealthTech",
+    founder: "Dr. James Wilson",
+    role: "Founder & CEO",
+    quote:
+      "The expertise they brought in HIPAA compliance and healthcare integrations was invaluable. We scaled from 100 to 10,000 clinics in 6 months.",
     metrics: [
-      { label: 'Clinics Onboarded', value: '100 → 10,000' },
-      { label: 'API Reliability', value: '99.95%' },
-      { label: 'Compliance', value: 'HIPAA Certified' },
+      { label: "Clinics Onboarded", value: "100 → 10,000" },
+      { label: "API Reliability", value: "99.95%" },
+      { label: "Compliance", value: "HIPAA Certified" },
     ],
-    color: 'from-blue-600 to-cyan-600',
+    color: "from-blue-600 to-cyan-600",
   },
   {
-    id: 'ecommerce',
-    company: 'ShopStream',
-    industry: 'E-commerce',
-    founder: 'Maria Rodriguez',
-    role: 'Technical Co-founder',
-    quote: 'During Black Friday, our platform handled 10x normal traffic without a hiccup. The performance optimizations they implemented saved us millions.',
+    id: "ecommerce",
+    company: "ShopStream",
+    industry: "E-commerce",
+    founder: "Maria Rodriguez",
+    role: "Technical Co-founder",
+    quote:
+      "During Black Friday, our platform handled 10x normal traffic without a hiccup. The performance optimizations they implemented saved us millions.",
     metrics: [
-      { label: 'Peak Traffic', value: '1M concurrent users' },
-      { label: 'Page Load', value: '3s → 0.8s' },
-      { label: 'Revenue Impact', value: '+40%' },
+      { label: "Peak Traffic", value: "1M concurrent users" },
+      { label: "Page Load", value: "3s → 0.8s" },
+      { label: "Revenue Impact", value: "+40%" },
     ],
-    color: 'from-purple-600 to-pink-600',
+    color: "from-purple-600 to-pink-600",
   },
 ];
 
@@ -80,7 +83,9 @@ export const LaunchControlTestimonialsScreen = () => {
   };
 
   const prevStory = () => {
-    setActiveStory((prev) => (prev - 1 + SUCCESS_STORIES.length) % SUCCESS_STORIES.length);
+    setActiveStory(
+      (prev) => (prev - 1 + SUCCESS_STORIES.length) % SUCCESS_STORIES.length
+    );
   };
 
   const currentStory = SUCCESS_STORIES[activeStory];
@@ -148,14 +153,18 @@ export const LaunchControlTestimonialsScreen = () => {
             <div className="animate-fadeIn" key={currentStory.id}>
               {/* Company Header */}
               <div className="text-center mb-8">
-                <div className={cn(
-                  "inline-flex px-4 py-2 rounded-full text-white text-sm font-medium mb-4",
-                  "bg-gradient-to-r",
-                  currentStory.color
-                )}>
+                <div
+                  className={cn(
+                    "inline-flex px-4 py-2 rounded-full text-white text-sm font-medium mb-4",
+                    "bg-gradient-to-r",
+                    currentStory.color
+                  )}
+                >
                   {currentStory.industry}
                 </div>
-                <h2 className="text-4xl font-bold text-white mb-2">{currentStory.company}</h2>
+                <h2 className="text-4xl font-bold text-white mb-2">
+                  {currentStory.company}
+                </h2>
                 <p className="text-gray-400">
                   {currentStory.founder} • {currentStory.role}
                 </p>
@@ -170,10 +179,15 @@ export const LaunchControlTestimonialsScreen = () => {
                 <div className="flex items-center">
                   <div className="flex space-x-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                      <Star
+                        key={i}
+                        className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                      />
                     ))}
                   </div>
-                  <span className="ml-3 text-gray-400">5.0 Client Satisfaction</span>
+                  <span className="ml-3 text-gray-400">
+                    5.0 Client Satisfaction
+                  </span>
                 </div>
               </div>
 
@@ -186,15 +200,19 @@ export const LaunchControlTestimonialsScreen = () => {
                     style={{ animationDelay: `${idx * 0.1}s` }}
                   >
                     <Zap className="w-6 h-6 text-cyan-400 mx-auto mb-3" />
-                    <div className="text-sm text-gray-400 mb-1">{metric.label}</div>
-                    <div className="text-xl font-bold text-white">{metric.value}</div>
+                    <div className="text-sm text-gray-400 mb-1">
+                      {metric.label}
+                    </div>
+                    <div className="text-xl font-bold text-white">
+                      {metric.value}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Trust Indicators */}
-            <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-500/30 rounded-lg p-6">
+            {/* <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-500/30 rounded-lg p-6">
               <div className="flex items-center justify-between flex-wrap gap-4">
                 <div className="flex items-center">
                   <Users className="w-6 h-6 text-blue-400 mr-2" />
@@ -209,12 +227,12 @@ export const LaunchControlTestimonialsScreen = () => {
                   <span className="text-gray-300">4.9/5 Client Rating</span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* CTA */}
             <div className="text-center">
               <Button
-                onClick={() => pushScene('launchControlApplication')}
+                onClick={() => pushScene("launchControlApplication")}
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
               >

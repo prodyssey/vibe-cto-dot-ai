@@ -1,101 +1,102 @@
-import { 
-  Shield, 
-  Gauge, 
-  GitBranch, 
+import {
+  Shield,
+  Gauge,
+  GitBranch,
   HeadphonesIcon,
   Award,
   Infinity,
   ArrowRight,
-  CheckCircle
-} from 'lucide-react';
+  CheckCircle,
+} from "lucide-react";
 
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-import { useBrowserNavigation } from '../../hooks';
-import { Scene } from '../../Scene';
-import { SceneNavigation } from '../../SceneNavigation';
-import type { Scene as SceneType } from '../../types';
+import { useBrowserNavigation } from "../../hooks";
+import { Scene } from "../../Scene";
+import { SceneNavigation } from "../../SceneNavigation";
+import type { Scene as SceneType } from "../../types";
 
 const FEATURES_SCENE: SceneType = {
-  id: 'transformationFeatures',
-  type: 'detail',
-  title: 'Enterprise Excellence',
-  description: 'Features designed for organizations that never compromise',
-  backgroundClass: 'bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900',
+  id: "transformationFeatures",
+  type: "detail",
+  title: "Enterprise Excellence",
+  description: "Features designed for organizations that never compromise",
+  backgroundClass:
+    "bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900",
 };
 
 const ENTERPRISE_FEATURES = [
   {
-    id: 'security',
+    id: "security",
     icon: <Shield className="w-8 h-8" />,
-    title: 'Quantum-Grade Security',
-    description: 'Post-quantum cryptography and zero-trust architecture',
+    title: "Quantum-Grade Security",
+    description: "Post-quantum cryptography and zero-trust architecture",
     details: [
-      'Quantum-resistant encryption algorithms',
-      'Continuous security posture assessment',
-      'Automated threat response',
-      'Compliance automation (SOC2, ISO27001, GDPR)',
+      "Quantum-resistant encryption algorithms",
+      "Continuous security posture assessment",
+      "Automated threat response",
+      "Compliance automation (SOC2, ISO27001, GDPR)",
     ],
   },
   {
-    id: 'performance',
+    id: "performance",
     icon: <Gauge className="w-8 h-8" />,
-    title: 'Hyperscale Performance',
-    description: 'Infrastructure that grows with your ambitions',
+    title: "Hyperscale Performance",
+    description: "Infrastructure that grows with your ambitions",
     details: [
-      'Sub-millisecond response times',
-      'Automatic global load balancing',
-      'Predictive capacity planning',
-      'Real-time performance optimization',
+      "Sub-millisecond response times",
+      "Automatic global load balancing",
+      "Predictive capacity planning",
+      "Real-time performance optimization",
     ],
   },
   {
-    id: 'integration',
+    id: "integration",
     icon: <GitBranch className="w-8 h-8" />,
-    title: 'Seamless Integration',
-    description: 'Connect everything, disrupt nothing',
+    title: "Seamless Integration",
+    description: "Connect everything, disrupt nothing",
     details: [
-      'API-first architecture',
-      'Legacy system modernization',
-      'Real-time data synchronization',
-      'Multi-cloud orchestration',
+      "API-first architecture",
+      "Legacy system modernization",
+      "Real-time data synchronization",
+      "Multi-cloud orchestration",
     ],
   },
   {
-    id: 'support',
+    id: "support",
     icon: <HeadphonesIcon className="w-8 h-8" />,
-    title: 'White-Glove Support',
-    description: '24/7 access to senior engineers',
+    title: "White-Glove Support",
+    description: "24/7 access to senior engineers",
     details: [
-      'Dedicated success team',
-      'Priority incident response',
-      'Proactive optimization',
-      'Executive briefings',
+      "Dedicated success team",
+      "Priority incident response",
+      "Proactive optimization",
+      "Executive briefings",
     ],
   },
   {
-    id: 'innovation',
+    id: "innovation",
     icon: <Award className="w-8 h-8" />,
-    title: 'Innovation Guarantee',
-    description: 'Stay ahead of disruption',
+    title: "Innovation Guarantee",
+    description: "Stay ahead of disruption",
     details: [
-      'Quarterly technology reviews',
-      'Early access to breakthroughs',
-      'Custom R&D projects',
-      'Patent co-development',
+      "Quarterly technology reviews",
+      "Early access to breakthroughs",
+      "Custom R&D projects",
+      "Patent co-development",
     ],
   },
   {
-    id: 'scale',
+    id: "scale",
     icon: <Infinity className="w-8 h-8" />,
-    title: 'Infinite Scale',
-    description: 'No limits, only possibilities',
+    title: "Infinite Scale",
+    description: "No limits, only possibilities",
     details: [
-      'Elastic infrastructure',
-      'Global edge network',
-      'Automated scaling policies',
-      'Cost optimization AI',
+      "Elastic infrastructure",
+      "Global edge network",
+      "Automated scaling policies",
+      "Cost optimization AI",
     ],
   },
 ];
@@ -110,21 +111,28 @@ export const TransformationFeaturesScreen = () => {
         {/* Feature Network Visualization */}
         <svg className="absolute inset-0 w-full h-full opacity-10">
           <defs>
-            <pattern id="dots" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+            <pattern
+              id="dots"
+              x="0"
+              y="0"
+              width="50"
+              height="50"
+              patternUnits="userSpaceOnUse"
+            >
               <circle cx="25" cy="25" r="2" fill="#8b5cf6" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#dots)" />
-          
+
           {/* Connect the dots with animated lines */}
           {[...Array(6)].map((_, i) => {
-            const angle = (i * 60) * Math.PI / 180;
+            const angle = (i * 60 * Math.PI) / 180;
             const x1 = 50 + 30 * Math.cos(angle);
             const y1 = 50 + 30 * Math.sin(angle);
-            const nextAngle = ((i + 1) * 60) * Math.PI / 180;
+            const nextAngle = ((i + 1) * 60 * Math.PI) / 180;
             const x2 = 50 + 30 * Math.cos(nextAngle);
             const y2 = 50 + 30 * Math.sin(nextAngle);
-            
+
             return (
               <line
                 key={i}
@@ -150,8 +158,9 @@ export const TransformationFeaturesScreen = () => {
             {/* Introduction */}
             <div className="text-center mb-8">
               <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                Every feature is engineered for enterprises that operate at the edge of possibility. 
-                Our platform provides the foundation for continuous innovation and unstoppable growth.
+                Every feature is engineered for enterprises that operate at the
+                edge of possibility. Our platform provides the foundation for
+                continuous innovation and unstoppable growth.
               </p>
             </div>
 
@@ -168,15 +177,22 @@ export const TransformationFeaturesScreen = () => {
                     <div className="inline-flex p-3 rounded-lg bg-gradient-to-br from-purple-500/20 to-indigo-500/20 text-purple-400 mb-4 group-hover:scale-110 transition-transform">
                       {feature.icon}
                     </div>
-                    
+
                     {/* Content */}
-                    <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
-                    <p className="text-sm text-gray-400 mb-4">{feature.description}</p>
-                    
+                    <h3 className="text-lg font-bold text-white mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-gray-400 mb-4">
+                      {feature.description}
+                    </p>
+
                     {/* Details */}
                     <ul className="space-y-2">
                       {feature.details.map((detail, detailIdx) => (
-                        <li key={detailIdx} className="flex items-start text-sm">
+                        <li
+                          key={detailIdx}
+                          className="flex items-start text-sm"
+                        >
                           <CheckCircle className="w-4 h-4 text-purple-400 mr-2 mt-0.5 flex-shrink-0" />
                           <span className="text-gray-300">{detail}</span>
                         </li>
@@ -188,7 +204,7 @@ export const TransformationFeaturesScreen = () => {
             </div>
 
             {/* Partnership Benefits */}
-            <div className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8">
+            {/* <div className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8">
               <h3 className="text-2xl font-bold text-white mb-6 text-center">The Transformation Advantage</h3>
               
               <div className="grid md:grid-cols-3 gap-6 text-center">
@@ -205,12 +221,12 @@ export const TransformationFeaturesScreen = () => {
                   <p className="text-gray-300">Scaling Potential</p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* CTA */}
             <div className="text-center">
               <Button
-                onClick={() => pushScene('transformationPartnership')}
+                onClick={() => pushScene("transformationPartnership")}
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
               >

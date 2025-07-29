@@ -200,7 +200,7 @@ export const TransformationFinalScreen = () => {
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
                 You've taken the first step toward transforming your team's
                 velocity with AI-powered development. Let's accelerate your path
-                to 10x productivity.
+                to greater productivity.
               </p>
             </div>
 
