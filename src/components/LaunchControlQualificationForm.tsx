@@ -26,6 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 type FormStep =
@@ -145,6 +146,10 @@ export const LaunchControlQualificationForm = ({
         )}&display_name=${encodeURIComponent(formData.name)}`;
 
         setTimeout(() => {
+          trackSavvyCalClick('launch_control_qualification_form', 'launch_control_alignment', {
+            budget: formData.budget,
+            email: formData.email
+          });
           const newWindow = window.open(savvycalUrl, "_blank");
 
           // Check if popup was blocked
@@ -211,7 +216,13 @@ export const LaunchControlQualificationForm = ({
 
             {showBackupButton && formData.budget === "ready-high" && (
               <Button
-                onClick={() => window.open(savvycalUrl, "_blank")}
+                onClick={() => {
+                  trackSavvyCalClick('launch_control_qualification_form_backup', 'launch_control_alignment', {
+                    budget: formData.budget,
+                    email: formData.email
+                  });
+                  window.open(savvycalUrl, "_blank");
+                }}
                 className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
               >
                 Schedule Your Call

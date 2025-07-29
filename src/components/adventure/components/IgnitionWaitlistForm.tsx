@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { trackFormSubmission } from "@/lib/analytics";
 
 import { AnimatedButton } from "./AnimatedButton";
 
@@ -74,6 +75,13 @@ export const IgnitionWaitlistForm = ({
       if (dbError) {
         throw dbError;
       }
+
+      // Track form submission
+      trackFormSubmission('ignition_waitlist_form', {
+        source: 'adventure_game',
+        contact_method: formData.contactMethod,
+        is_waitlist: isWaitlistActive
+      });
 
       onSuccess();
     } catch (err) {

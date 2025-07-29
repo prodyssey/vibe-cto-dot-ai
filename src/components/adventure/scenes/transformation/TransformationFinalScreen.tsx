@@ -12,6 +12,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 import { useGameStore } from "../../gameStore";
@@ -76,6 +77,12 @@ export const TransformationFinalScreen = () => {
     const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-transformation-alignment-call?email=${encodeURIComponent(
       email
     )}&display_name=${encodeURIComponent(name)}`;
+
+    // Track conversion
+    trackSavvyCalClick('transformation_adventure_final', 'transformation_alignment', {
+      email: email,
+      player_name: name
+    });
 
     // Try to open in new tab
     const newWindow = window.open(savvycalUrl, "_blank");

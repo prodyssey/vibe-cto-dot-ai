@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmailOptIn } from "@/components/EmailOptIn";
+import { trackSavvyCalClick } from "@/lib/analytics";
 
 import { useGameStore } from "../../gameStore";
 import { useBrowserNavigation } from "../../hooks";
@@ -56,11 +57,13 @@ const ALTERNATIVE_OPTIONS = [
       "90-day follow-up support",
     ],
     isNewsletter: false,
-    action: () =>
+    action: () => {
+      trackSavvyCalClick('transformation_alternatives_workshop', '30_minute_call');
       window.open(
         "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
         "_blank"
-      ),
+      );
+    },
     color: "from-purple-600 to-pink-600",
   },
   {
@@ -75,11 +78,13 @@ const ALTERNATIVE_OPTIONS = [
       "Scale up when ready",
     ],
     isNewsletter: false,
-    action: () =>
+    action: () => {
+      trackSavvyCalClick('transformation_alternatives_pilot', '30_minute_call');
       window.open(
         "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
         "_blank"
-      ),
+      );
+    },
     color: "from-green-600 to-emerald-600",
   },
 ];

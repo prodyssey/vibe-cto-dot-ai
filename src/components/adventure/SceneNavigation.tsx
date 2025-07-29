@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { trackEvent } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 import { useGameStore } from './gameStore';
@@ -32,6 +33,7 @@ export const SceneNavigation = ({
   const handleBack = () => {
     playButtonClick();
     playSceneTransition();
+    trackEvent('adventure_navigation', 'navigation', 'back_button');
     // Handle special back navigation cases
     if (currentSceneId === 'stationTour') {
       pushScene('destinationSelection');
@@ -43,6 +45,7 @@ export const SceneNavigation = ({
   const handleReset = () => {
     if (window.confirm('Are you sure you want to start over?')) {
       playButtonClick();
+      trackEvent('adventure_navigation', 'navigation', 'reset_game');
       resetGame();
       pushScene('entry');
     }
@@ -51,6 +54,7 @@ export const SceneNavigation = ({
   const handleNext = () => {
     playButtonClick();
     playSceneTransition();
+    trackEvent('adventure_navigation', 'navigation', `continue_${nextLabel.toLowerCase()}`);
     onNext?.();
   };
 

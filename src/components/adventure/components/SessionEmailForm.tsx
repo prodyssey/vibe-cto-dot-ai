@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
+import { trackFormSubmission } from '@/lib/analytics';
 
 import { AnimatedButton } from './AnimatedButton';
 
@@ -83,6 +84,12 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
       }
 
       console.log('Update successful:', data);
+
+      // Track form submission
+      trackFormSubmission('session_email_form', {
+        session_id: sessionId,
+        has_custom_name: isGeneratedName && !!name
+      });
 
       // Call success callback with email and name
       onSuccess(email, name || playerName);

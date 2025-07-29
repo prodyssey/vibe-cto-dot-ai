@@ -10,6 +10,7 @@ import {
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { trackFormSubmission } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 import { useGameStore } from '../../gameStore';
@@ -93,6 +94,15 @@ export const TransformationContactScreen = () => {
   };
 
   const handleSubmit = async () => {
+    // Track form submission
+    trackFormSubmission('transformation_consultation_form', {
+      source: 'adventure_game',
+      company_type: answers.company,
+      challenge: answers.challenge,
+      timeline: answers.timeline,
+      budget: answers.budget
+    });
+    
     // Save consultation
     makeChoice(CONTACT_SCENE.id, 'consultation-complete');
     await saveChoice(

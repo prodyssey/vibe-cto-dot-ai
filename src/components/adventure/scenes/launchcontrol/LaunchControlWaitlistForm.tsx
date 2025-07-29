@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { supabase } from '@/integrations/supabase/client';
+import { trackFormSubmission } from '@/lib/analytics';
 
 import { useGameStore } from '../../gameStore';
 
@@ -59,6 +60,15 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
       });
 
       if (error) throw error;
+
+      // Track form submission
+      trackFormSubmission('launch_control_waitlist_form', {
+        source: 'adventure_game',
+        preferred_contact: validatedData.preferredContact,
+        has_company: !!validatedData.companyName,
+        has_scale_info: !!validatedData.currentScale,
+        is_waitlist: isWaitlist
+      });
 
       onSuccess();
     } catch (error) {
