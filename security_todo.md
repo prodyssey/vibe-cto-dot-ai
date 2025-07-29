@@ -8,9 +8,13 @@
   - [x] Delete `/scripts/token.json`
   - [x] Add `*.json` to `.gitignore` in scripts directory
   - [x] Clean git history to remove these files completely - ✅ Files were never committed!
-- [ ] **Implement proper secret management for Google Analytics**
-  - [ ] Use environment variables for credentials
-  - [ ] Update scripts to read from env vars
+- [x] **Implement proper secret management for Google Analytics**
+  - [x] Use environment variables for credentials
+  - [x] Update scripts to read from env vars
+  - [x] Created `setup-ga4-secure.py` with env var support
+  - [x] Created `ga4_config.py` for secure credential management
+  - [x] Created `run-ga4-setup-secure.sh` wrapper script
+  - [x] Updated documentation with security best practices
 - [ ] **Verify Supabase RLS policies**
   - [ ] Audit Row Level Security in Supabase dashboard
   - [ ] Consider moving keys to environment variables
