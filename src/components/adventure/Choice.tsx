@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
+import { trackAdventureChoice } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
+import { useGameStore } from './gameStore';
 import { useMobile } from './hooks';
 import { useSound } from './sound';
 import type { Choice as ChoiceType } from './types';
@@ -14,9 +16,13 @@ interface ChoiceProps {
 export const Choice = ({ choice, onClick, className }: ChoiceProps) => {
   const { isMobile, isTouch } = useMobile();
   const { playButtonClick, playButtonHover } = useSound();
+  const { currentSceneId } = useGameStore();
 
   const handleClick = () => {
     playButtonClick();
+    trackAdventureChoice(currentSceneId, choice.text, {
+      next_scene: choice.nextScene
+    });
     onClick();
   };
 

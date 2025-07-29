@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { trackPageView } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 import { useMobile } from './hooks';
@@ -14,6 +15,10 @@ interface SceneProps {
 
 export const Scene = ({ scene, children, className }: SceneProps) => {
   const { isMobile, isSmallScreen } = useMobile();
+
+  useEffect(() => {
+    trackPageView(`Adventure: ${scene.title}`, `/adventure/${scene.id}`);
+  }, [scene.id, scene.title]);
 
   return (
     <div className={cn(

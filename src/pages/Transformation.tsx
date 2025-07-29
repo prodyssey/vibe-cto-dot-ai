@@ -8,13 +8,27 @@ import {
   Clock,
 } from "lucide-react";
 
+import { useEffect, useRef } from "react";
+
 import { Navigation } from "@/components/Navigation";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { addSavvyCalTracking } from "@/lib/analytics";
 import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
 
 const Transformation = () => {
+  const heroLinkRef = useRef<HTMLAnchorElement>(null);
+  const bottomLinkRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (heroLinkRef.current) {
+      addSavvyCalTracking(heroLinkRef.current, 'transformation_hero_cta', 'transformation_alignment');
+    }
+    if (bottomLinkRef.current) {
+      addSavvyCalTracking(bottomLinkRef.current, 'transformation_bottom_cta', 'transformation_alignment');
+    }
+  }, []);
   const features = [
     {
       icon: Cpu,
@@ -94,19 +108,20 @@ const Transformation = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
-                  onClick={() =>
-                    window.open(
-                      "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
-                      "_blank"
-                    )
-                  }
+                <a
+                  ref={heroLinkRef}
+                  href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Schedule Strategy Call
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+                  >
+                    Schedule Strategy Call
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </a>
 
                 {/* <Button 
                 variant="outline" 
@@ -315,19 +330,20 @@ const Transformation = () => {
                   development with AI agents.
                 </p>
 
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
-                  onClick={() =>
-                    window.open(
-                      "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
-                      "_blank"
-                    )
-                  }
+                <a
+                  ref={bottomLinkRef}
+                  href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Schedule Your Strategy Call
-                  <Sparkles className="ml-3 w-6 h-6" />
-                </Button>
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
+                  >
+                    Schedule Your Strategy Call
+                    <Sparkles className="ml-3 w-6 h-6" />
+                  </Button>
+                </a>
 
                 <div className="flex items-center justify-center space-x-6 mt-6 text-sm text-gray-400">
                   <div className="flex items-center space-x-2">

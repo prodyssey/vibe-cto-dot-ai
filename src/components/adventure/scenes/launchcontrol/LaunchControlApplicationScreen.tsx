@@ -2,6 +2,7 @@ import { Rocket, CheckCircle, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
+import { trackSavvyCalClick } from "@/lib/analytics";
 
 import { useGameStore } from "../../gameStore";
 import { useBrowserNavigation } from "../../hooks";
@@ -68,6 +69,13 @@ export const LaunchControlApplicationScreen = () => {
     const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
       email
     )}&display_name=${encodeURIComponent(name)}`;
+
+    // Track conversion
+    trackSavvyCalClick('launch_control_adventure_application', 'launch_control_alignment', {
+      email: email,
+      player_name: name,
+      needs_review: needsReview
+    });
 
     // Try to open in new tab
     const newWindow = window.open(savvycalUrl, "_blank");
@@ -156,6 +164,10 @@ export const LaunchControlApplicationScreen = () => {
                     const url = `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
                       userEmail
                     )}&display_name=${encodeURIComponent(userName)}`;
+                    trackSavvyCalClick('launch_control_adventure_backup_button', 'launch_control_alignment', {
+                      email: userEmail,
+                      player_name: userName
+                    });
                     window.open(url, "_blank", "noopener,noreferrer");
                   }}
                   size="lg"

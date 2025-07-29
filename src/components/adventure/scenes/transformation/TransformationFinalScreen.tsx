@@ -12,6 +12,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 import { useGameStore } from "../../gameStore";
@@ -73,9 +74,19 @@ export const TransformationFinalScreen = () => {
     setShowEmailForm(false);
 
     // Open SavvyCal in new tab
-    const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-transformation-alignment-call?email=${encodeURIComponent(
+    const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-transformation-alignment?email=${encodeURIComponent(
       email
     )}&display_name=${encodeURIComponent(name)}`;
+
+    // Track conversion
+    trackSavvyCalClick(
+      "transformation_adventure_final",
+      "transformation_alignment",
+      {
+        email: email,
+        player_name: name,
+      }
+    );
 
     // Try to open in new tab
     const newWindow = window.open(savvycalUrl, "_blank");
@@ -189,7 +200,7 @@ export const TransformationFinalScreen = () => {
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
                 You've taken the first step toward transforming your team's
                 velocity with AI-powered development. Let's accelerate your path
-                to 10x productivity.
+                to greater productivity.
               </p>
             </div>
 

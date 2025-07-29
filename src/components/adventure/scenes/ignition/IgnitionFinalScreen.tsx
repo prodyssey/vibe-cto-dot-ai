@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 import { AnimatedButton } from "../../components/AnimatedButton";
@@ -144,6 +145,12 @@ export const IgnitionFinalScreen = () => {
     const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
       email
     )}&display_name=${encodeURIComponent(name)}`;
+
+    // Track conversion
+    trackSavvyCalClick('ignition_adventure_final', 'ignition_alignment', {
+      email: email,
+      player_name: name
+    });
 
     // Try to open in new tab
     const newWindow = window.open(savvycalUrl, "_blank");
@@ -306,6 +313,10 @@ export const IgnitionFinalScreen = () => {
                       const url = `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
                         userEmail
                       )}&display_name=${encodeURIComponent(userName)}`;
+                      trackSavvyCalClick('ignition_adventure_backup_button', 'ignition_alignment', {
+                        email: userEmail,
+                        player_name: userName
+                      });
                       window.open(url, "_blank", "noopener,noreferrer");
                     }}
                     size="lg"

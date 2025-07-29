@@ -2,6 +2,7 @@ import { Calendar, Clock, Video, ArrowRight, CheckCircle } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 import { useGameStore } from "../../gameStore";
@@ -72,6 +73,9 @@ export const TransformationAlignmentScreen = () => {
 
     // Handle action
     if (option.action === "external" && option.url) {
+      trackSavvyCalClick('transformation_alignment_screen', '30_minute_call', {
+        option_id: option.id
+      });
       window.open(option.url, "_blank");
       // Still navigate to final scene after opening external link
       setTimeout(() => {

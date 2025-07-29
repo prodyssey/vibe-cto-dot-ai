@@ -1,8 +1,17 @@
 import { Calendar, ArrowRight, Clock } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
+import { addSavvyCalTracking } from "@/lib/analytics";
 
 export const FinalCTA = () => {
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (linkRef.current) {
+      addSavvyCalTracking(linkRef.current, 'final_cta_section', 'clarity_call');
+    }
+  }, []);
   return (
     <section className="py-20 px-6">
       <div className="max-w-4xl mx-auto text-center">
@@ -25,6 +34,7 @@ export const FinalCTA = () => {
 
           <div className="space-y-8">
             <a
+              ref={linkRef}
               href="https://savvycal.com/craigsturgis/vibecto-clarity-call"
               target="_blank"
               rel="noopener noreferrer"

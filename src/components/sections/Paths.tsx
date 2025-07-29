@@ -1,10 +1,21 @@
 import { Zap, Rocket, Sparkles, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { addSavvyCalTracking } from "@/lib/analytics";
 
 export const Paths = () => {
+  const ignitionLinkRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (ignitionLinkRef.current) {
+      addSavvyCalTracking(ignitionLinkRef.current, 'paths_section', 'clarity_call', {
+        path: 'ignition'
+      });
+    }
+  }, []);
   const paths = [
     {
       icon: Zap,
@@ -117,6 +128,7 @@ export const Paths = () => {
 
                 {path.isExternal ? (
                   <a
+                    ref={path.title === 'Ignition' ? ignitionLinkRef : undefined}
                     href={path.link}
                     target="_blank"
                     rel="noopener noreferrer"
