@@ -1,9 +1,4 @@
-import {
-  Calculator,
-  Plus,
-  Trash2,
-  Info,
-} from "lucide-react";
+import { Calculator, Plus, Trash2, Info } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -49,7 +44,8 @@ export const CostOfDelayCalculator = ({
   const [newInitiativeName, setNewInitiativeName] = useState("");
   const [newInitiativeValue, setNewInitiativeValue] = useState("");
   const [newInitiativeTime, setNewInitiativeTime] = useState("");
-  const [initiatives, setInitiatives] = useState<Initiative[]>(initialInitiatives);
+  const [initiatives, setInitiatives] =
+    useState<Initiative[]>(initialInitiatives);
 
   const addInitiative = () => {
     if (newInitiativeName && newInitiativeValue && newInitiativeTime) {
@@ -94,11 +90,18 @@ export const CostOfDelayCalculator = ({
   const totalCostOfDelay = calculateCostOfDelay();
 
   return (
-    <div className={cn("bg-gradient-to-r from-purple-600/20 to-indigo-600/20 backdrop-blur-sm border border-purple-500/30 rounded-lg p-4 sm:p-6", className)}>
+    <div
+      className={cn(
+        "bg-gradient-to-r from-purple-600/20 to-indigo-600/20 backdrop-blur-sm border border-purple-500/30 rounded-lg p-4 sm:p-6",
+        className
+      )}
+    >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
         <h3 className="text-lg sm:text-xl font-bold text-white flex items-center">
           <Calculator className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-purple-400" />
-          <span className="hidden sm:inline">Cost of Delay Impact Calculator</span>
+          <span className="hidden sm:inline">
+            Cost of Delay Impact Calculator
+          </span>
           <span className="sm:hidden">Impact Calculator</span>
         </h3>
         <Button
@@ -113,8 +116,8 @@ export const CostOfDelayCalculator = ({
 
       {!showCalculator ? (
         <p className="text-gray-300">
-          Calculate the financial impact of accelerating your
-          development timeline with AI transformation.
+          Calculate the financial impact of accelerating your development
+          timeline with AI transformation.
         </p>
       ) : (
         <div className="space-y-4">
@@ -143,7 +146,7 @@ export const CostOfDelayCalculator = ({
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>10%+</span>
-              <span>Conservative</span>
+              <span>Moderate</span>
               <span>Aggressive</span>
               <span>60%+</span>
             </div>
@@ -259,9 +262,7 @@ export const CostOfDelayCalculator = ({
                     type="number"
                     placeholder="Monthly value ($)"
                     value={newInitiativeValue}
-                    onChange={(e) =>
-                      setNewInitiativeValue(e.target.value)
-                    }
+                    onChange={(e) => setNewInitiativeValue(e.target.value)}
                     className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
                   />
                 </div>
@@ -270,9 +271,7 @@ export const CostOfDelayCalculator = ({
                     type="number"
                     placeholder="Time (months)"
                     value={newInitiativeTime}
-                    onChange={(e) =>
-                      setNewInitiativeTime(e.target.value)
-                    }
+                    onChange={(e) => setNewInitiativeTime(e.target.value)}
                     className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
                   />
                 </div>
@@ -301,9 +300,7 @@ export const CostOfDelayCalculator = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() =>
-                    setShowMathBreakdown(!showMathBreakdown)
-                  }
+                  onClick={() => setShowMathBreakdown(!showMathBreakdown)}
                   className="absolute top-2 right-2 text-purple-300 hover:text-purple-200 p-1"
                   title="Show calculation details"
                 >
@@ -316,8 +313,7 @@ export const CostOfDelayCalculator = ({
                   ${Math.round(totalCostOfDelay).toLocaleString()}
                 </p>
                 <p className="text-xs text-purple-300 mt-2 px-4">
-                  By delivering {timeReduction}% faster across all
-                  initiatives
+                  By delivering {timeReduction}% faster across all initiatives
                 </p>
               </div>
 
@@ -340,8 +336,7 @@ export const CostOfDelayCalculator = ({
                       )
                       .map((init) => {
                         const timeSaved =
-                          init.currentTimeMonths *
-                          (timeReduction / 100);
+                          init.currentTimeMonths * (timeReduction / 100);
                         const value = init.monthlyValue * timeSaved;
                         return (
                           <div
@@ -353,24 +348,22 @@ export const CostOfDelayCalculator = ({
                             </p>
                             <p className="text-xs mt-1">
                               ${init.monthlyValue.toLocaleString()}
-                              /mo × {init.currentTimeMonths}mo ×{" "}
-                              {timeReduction}%
+                              /mo × {init.currentTimeMonths}mo × {timeReduction}
+                              %
                             </p>
                             <p className="text-xs">
                               = ${init.monthlyValue.toLocaleString()} ×{" "}
                               {timeSaved.toFixed(1)}mo saved
                             </p>
                             <p className="text-xs font-semibold text-purple-300">
-                              = ${Math.round(value).toLocaleString()}{" "}
-                              captured
+                              = ${Math.round(value).toLocaleString()} captured
                             </p>
                           </div>
                         );
                       })}
                     <div className="border-t border-gray-700 pt-2 mt-3">
                       <p className="font-semibold text-white">
-                        Total: $
-                        {Math.round(totalCostOfDelay).toLocaleString()}
+                        Total: ${Math.round(totalCostOfDelay).toLocaleString()}
                       </p>
                     </div>
                   </div>

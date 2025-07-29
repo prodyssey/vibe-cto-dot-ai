@@ -12,41 +12,41 @@ import { Navigation } from "@/components/Navigation";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
 
 const Transformation = () => {
   const features = [
     {
       icon: Cpu,
-      title: "AI Agent Integration",
+      title: "AI Enhancement",
       description:
-        "Deploy specialized AI agents across your development workflow",
+        "Augment your team with AI agents tailored to your organization and stack",
     },
     {
       icon: BarChart3,
-      title: "Incredible Velocity",
+      title: "Compounded Velocity",
       description:
-        "Ship features faster while maintaining code quality and standards",
+        "Multiply your development capacity with targeted AI workflows",
     },
     {
       icon: Shield,
-      title: "Enterprise Ready",
-      description:
-        "Secure, scalable solutions that integrate with your existing infrastructure",
+      title: "Comprehensive Measurement",
+      description: "Uncover bottlenecks and optimize for customer value",
     },
     {
       icon: Users,
-      title: "Team Transformation",
+      title: "Team Assessment & Discovery",
       description:
-        "Upskill your entire team with cutting-edge AI development practices",
+        "Deep dive into your team's current velocity and bottlenecks",
     },
   ];
 
   const benefits = [
-    "Reduce development cycles from months to weeks",
-    "Automate repetitive tasks and improve code reviews",
-    "Infuse quality in every change",
-    "Accelerate onboarding of new developers",
-    "Scale your product development capacity",
+    "3x Feature Velocity through AI-powered development",
+    "75% Less Manual Work with intelligent automation",
+    "10x Faster Innovation Cycles with continuous optimization",
+    "50% Cost Reduction through efficiency gains",
+    "Infinite Scaling Potential with elastic infrastructure",
   ];
 
   return (
@@ -87,25 +87,26 @@ const Transformation = () => {
               </h1>
 
               <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Take your team to light speed. Transform your product
-                development with AI agents that amplify your team's capabilities
-                and accelerate delivery.
+                Step into the Metamorphosis Chamber where teams undergo radical
+                transformation. Emerge with AI-augmented capabilities that
+                multiply your development velocity and unlock new dimensions of
+                possibility.
               </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
-                onClick={() =>
-                  window.open(
-                    "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
-                    "_blank"
-                  )
-                }
-              >
-                Schedule Strategy Call
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+                  onClick={() =>
+                    window.open(
+                      "https://savvycal.com/craigsturgis/vibecto-transformation-alignment",
+                      "_blank"
+                    )
+                  }
+                >
+                  Schedule Strategy Call
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
 
                 {/* <Button 
                 variant="outline" 
@@ -123,7 +124,7 @@ const Transformation = () => {
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                  Enterprise-Grade AI Development
+                  Your Evolution Awaits
                 </h2>
                 <p className="text-xl text-gray-300 max-w-3xl mx-auto">
                   Leverage battle-tested strategies to integrate AI agents into
@@ -158,8 +159,49 @@ const Transformation = () => {
             </div>
           </section>
 
+          {/* Cost of Delay Calculator Section */}
+          <section className="py-20 px-6 bg-black/20">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                  Calculate Your Transformation Impact
+                </h2>
+                <p className="text-lg text-gray-300">
+                  See the financial impact of accelerating your development
+                  timeline
+                </p>
+              </div>
+
+              <CostOfDelayCalculator
+                showByDefault={true}
+                defaultTimeReduction={15}
+                initialInitiatives={[
+                  {
+                    id: "1",
+                    name: "AI-Powered Feature Development",
+                    monthlyValue: 100000,
+                    currentTimeMonths: 9,
+                  },
+                  {
+                    id: "2",
+                    name: "New Product Line Launch",
+                    monthlyValue: 300000,
+                    currentTimeMonths: 6,
+                  },
+                  {
+                    id: "3",
+                    name: "Platform Modernization",
+                    monthlyValue: 200000,
+                    currentTimeMonths: 12,
+                  },
+                ]}
+              />
+            </div>
+          </section>
+
           {/* Benefits Section */}
-          <section className="py-20 px-6">
+
+          {/* <section className="py-20 px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-16">
                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -170,26 +212,6 @@ const Transformation = () => {
                   transformation.
                 </p>
               </div>
-
-              {/* <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <Card className="bg-gradient-to-br from-purple-600/10 to-blue-600/10 backdrop-blur-sm border-white/20">
-                <CardContent className="p-8 text-center">
-                  <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 mb-2">
-                    75%
-                  </div>
-                  <p className="text-white text-lg">Faster Feature Delivery</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-br from-purple-600/10 to-blue-600/10 backdrop-blur-sm border-white/20">
-                <CardContent className="p-8 text-center">
-                  <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 mb-2">
-                    3x
-                  </div>
-                  <p className="text-white text-lg">Developer Productivity</p>
-                </CardContent>
-              </Card>
-            </div> */}
 
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -203,18 +225,19 @@ const Transformation = () => {
                 ))}
               </div>
             </div>
-          </section>
+
+            </div>
+          </section> */}
 
           {/* Process Section */}
           <section className="py-20 px-6 bg-black/20">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                  Our Proven Process
+                  The Transformation Process
                 </h2>
                 <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                  We work with your team to implement AI agents seamlessly into
-                  your workflow.
+                  See how we accelerate your team with AI-powered innovation.
                 </p>
               </div>
 
@@ -225,13 +248,15 @@ const Transformation = () => {
                       <span className="text-white font-bold text-xl">1</span>
                     </div>
                     <CardTitle className="text-white text-xl">
-                      Discovery & Assessment
+                      Team Assessment & Discovery
                     </CardTitle>
+                    <p className="text-sm text-purple-400 mt-1">Weeks 1-2</p>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-300">
-                      We analyze your current development processes and identify
-                      high-impact opportunities for AI integration.
+                      Deep dive into your team's current velocity and
+                      bottlenecks. Current development workflow analysis and AI
+                      readiness evaluation.
                     </p>
                   </CardContent>
                 </Card>
@@ -242,13 +267,15 @@ const Transformation = () => {
                       <span className="text-white font-bold text-xl">2</span>
                     </div>
                     <CardTitle className="text-white text-xl">
-                      Implementation & Training
+                      AI Agent Implementation
                     </CardTitle>
+                    <p className="text-sm text-purple-400 mt-1">Weeks 3-4</p>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-300">
-                      Deploy custom AI agents tailored to your tech stack while
-                      training your team on best practices.
+                      Targeted initial deployment of AI agent workflows tailored
+                      to your organization and stack. Custom configuration with
+                      pilot project execution.
                     </p>
                   </CardContent>
                 </Card>
@@ -261,11 +288,13 @@ const Transformation = () => {
                     <CardTitle className="text-white text-xl">
                       Scale & Optimize
                     </CardTitle>
+                    <p className="text-sm text-purple-400 mt-1">Weeks 4-12+</p>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-300">
-                      Continuously improve and expand AI agent capabilities
-                      based on real-world results and feedback.
+                      Scale AI adoption across your entire product development
+                      org. Process optimization with ongoing support &
+                      refinement.
                     </p>
                   </CardContent>
                 </Card>
