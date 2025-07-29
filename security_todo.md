@@ -55,6 +55,7 @@
   - [x] Created secure logging utility `/src/lib/logger.ts` with data sanitization
   - [x] Updated critical files to use secure logger:
     - [x] `/src/components/adventure/components/SessionEmailForm.tsx` - Removed email/name logging
+    - [x] **HOTFIX**: Fixed additional console.error bypassing secure logger (lines 89-94)
     - [x] `/src/components/adventure/scenes/ignition/IgnitionFinalScreen.tsx` - Sanitized logs
     - [x] `/src/components/adventure/AdventureGame.tsx` - Removed session ID logging
     - [x] `/src/components/adventure/utils.ts` - Updated error logging

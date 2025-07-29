@@ -86,11 +86,11 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
 
       if (updateError) {
         logger.error('Supabase update error:', updateError.message);
-        console.error('Update query details:', {
+        logger.debug('Update query details:', {
           table: 'adventure_sessions',
-          updateData,
-          condition: 'id = ?',
-          params: [sessionId]
+          hasEmail: !!updateData.email,
+          hasPlayerName: !!updateData.player_name,
+          condition: 'id = ?'
         });
         throw updateError;
       }
