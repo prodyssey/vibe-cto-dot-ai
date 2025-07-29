@@ -103,15 +103,14 @@
   </head>
 
   <body>
-    <div id="root">
-      <!-- Loading indicator shown until React mounts -->
-      <div class="initial-loader" id="initial-loader">
-        <div class="loader-content">
-          <div class="loader-spinner"></div>
-          <div style="color: #8b5cf6; font-family: system-ui, -apple-system, sans-serif;">Loading VibeCTO.ai...</div>
-        </div>
+    <!-- Loading indicator shown until React mounts (outside #root to prevent React from removing it) -->
+    <div class="initial-loader" id="initial-loader">
+      <div class="loader-content">
+        <div class="loader-spinner"></div>
+        <div style="color: #8b5cf6; font-family: system-ui, -apple-system, sans-serif;">Loading VibeCTO.ai...</div>
       </div>
     </div>
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
