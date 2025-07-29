@@ -29,3 +29,10 @@ dist-ssr
 # Environment variables
 .env
 .env.local
+
+# Google Analytics OAuth files
+scripts/credentials.json
+scripts/token.json
+scripts/ga4-venv/
+scripts/*.pyc
+scripts/__pycache__/

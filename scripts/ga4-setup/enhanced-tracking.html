@@ -1,0 +1,36 @@
+
+<!-- Enhanced GA4 Configuration for VibeCTO.ai -->
+<!-- Add this after your existing GA4 script -->
+<script>
+  // Configure custom dimensions
+  gtag('config', 'G-SVTZMGDLMF', {
+    'custom_map': {
+      'dimension1': 'source',
+      'dimension2': 'destination',
+      'dimension3': 'budget',
+      'dimension4': 'scene',
+      'dimension5': 'choice',
+      'dimension6': 'next_scene',
+      'dimension7': 'player_name',
+      'dimension8': 'form_name',
+      'dimension9': 'contact_method',
+      'dimension10': 'has_company'
+    }
+  });
+
+  // Enhanced SavvyCal tracking
+  document.addEventListener('DOMContentLoaded', function() {
+    // Find all SavvyCal links
+    const savvyCalLinks = document.querySelectorAll('a[href*="savvycal.com"]');
+    
+    savvyCalLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        gtag('event', 'conversion_savvycal_booking_click', {
+          'source': window.location.pathname,
+          'destination': this.href,
+          'link_text': this.textContent
+        });
+      });
+    });
+  });
+</script>

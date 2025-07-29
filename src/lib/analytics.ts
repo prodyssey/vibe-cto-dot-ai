@@ -26,7 +26,7 @@ export const trackEvent = (
 export const trackFormSubmission = (formName: string, formData?: Record<string, any>) => {
   trackEvent('form_submit', 'engagement', formName);
   
-  if (formData) {
+  if (formData && typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'form_submit_details', {
       event_category: 'form_data',
       event_label: formName,
@@ -42,7 +42,7 @@ export const trackAdventureChoice = (
 ) => {
   trackEvent('adventure_choice', 'adventure_game', `${sceneName}: ${choice}`);
   
-  if (additionalData) {
+  if (additionalData && typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'adventure_progress', {
       event_category: 'adventure_game',
       scene: sceneName,

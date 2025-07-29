@@ -1,0 +1,195 @@
+{
+  "measurementId": "G-SVTZMGDLMF",
+  "enhancedMeasurement": {
+    "pageViews": true,
+    "scrolls": true,
+    "outboundClicks": true,
+    "siteSearch": true,
+    "videoEngagement": true,
+    "fileDownloads": true,
+    "formInteractions": true
+  },
+  "customEvents": [
+    {
+      "name": "conversion_savvycal_booking_click",
+      "description": "User clicked a SavvyCal booking link",
+      "parameters": [
+        "source",
+        "destination",
+        "budget",
+        "email"
+      ],
+      "markAsConversion": true
+    },
+    {
+      "name": "form_submit",
+      "description": "User submitted a form",
+      "parameters": [
+        "form_name",
+        "form_data"
+      ],
+      "markAsConversion": true
+    },
+    {
+      "name": "adventure_choice",
+      "description": "User made a choice in adventure game",
+      "parameters": [
+        "scene",
+        "choice",
+        "next_scene"
+      ],
+      "markAsConversion": false
+    },
+    {
+      "name": "adventure_navigation",
+      "description": "User navigated in adventure game",
+      "parameters": [
+        "navigation_type"
+      ],
+      "markAsConversion": false
+    }
+  ],
+  "customDimensions": [
+    {
+      "name": "source",
+      "scope": "event",
+      "description": "Event source location"
+    },
+    {
+      "name": "destination",
+      "scope": "event",
+      "description": "Destination URL or type"
+    },
+    {
+      "name": "budget",
+      "scope": "event",
+      "description": "Budget level selection"
+    },
+    {
+      "name": "scene",
+      "scope": "event",
+      "description": "Adventure game scene"
+    },
+    {
+      "name": "choice",
+      "scope": "event",
+      "description": "Adventure game choice"
+    },
+    {
+      "name": "next_scene",
+      "scope": "event",
+      "description": "Next adventure scene"
+    },
+    {
+      "name": "player_name",
+      "scope": "user",
+      "description": "Adventure player name"
+    },
+    {
+      "name": "form_name",
+      "scope": "event",
+      "description": "Name of submitted form"
+    },
+    {
+      "name": "contact_method",
+      "scope": "event",
+      "description": "Preferred contact method"
+    },
+    {
+      "name": "has_company",
+      "scope": "event",
+      "description": "User has company"
+    }
+  ],
+  "audiences": [
+    {
+      "name": "High Budget Leads",
+      "description": "Users who selected high budget options",
+      "conditions": [
+        {
+          "dimension": "budget",
+          "operator": "equals",
+          "value": "ready-high"
+        }
+      ]
+    },
+    {
+      "name": "SavvyCal Converters",
+      "description": "Users who clicked to book a call",
+      "conditions": [
+        {
+          "event": "conversion_savvycal_booking_click",
+          "operator": "exists"
+        }
+      ]
+    },
+    {
+      "name": "Adventure Completers",
+      "description": "Users who completed adventure games",
+      "conditions": [
+        {
+          "event": "adventure_choice",
+          "parameter": "scene",
+          "operator": "contains",
+          "value": "Final"
+        }
+      ]
+    },
+    {
+      "name": "Engaged Users",
+      "description": "Users who spent significant time exploring",
+      "conditions": [
+        {
+          "metric": "session_duration",
+          "operator": "greater_than",
+          "value": 300
+        }
+      ]
+    }
+  ],
+  "funnels": [
+    {
+      "name": "Adventure to Booking",
+      "steps": [
+        {
+          "name": "Start Adventure",
+          "event": "page_view",
+          "condition": {
+            "page_path": "/"
+          }
+        },
+        {
+          "name": "Enter Adventure",
+          "event": "adventure_choice",
+          "condition": {
+            "scene": "entry"
+          }
+        },
+        {
+          "name": "Qualify",
+          "event": "adventure_choice",
+          "condition": {
+            "scene": "qualification"
+          }
+        },
+        {
+          "name": "Book Call",
+          "event": "conversion_savvycal_booking_click"
+        }
+      ]
+    },
+    {
+      "name": "Direct Booking",
+      "steps": [
+        {
+          "name": "Visit Site",
+          "event": "page_view"
+        },
+        {
+          "name": "Click CTA",
+          "event": "conversion_savvycal_booking_click"
+        }
+      ]
+    }
+  ]
+}
