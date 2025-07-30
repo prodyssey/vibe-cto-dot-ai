@@ -12,9 +12,9 @@ export const Navigation = () => {
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },
+    { path: "/transformation", label: "Transformation", icon: Sparkles },
     { path: "/ignition", label: "Ignition", icon: Zap },
     { path: "/launch-control", label: "Launch Control", icon: Rocket },
-    { path: "/transformation", label: "Transformation", icon: Sparkles },
     { path: "/resources", label: "Resources", icon: BookOpen },
   ];
 
@@ -32,7 +32,10 @@ export const Navigation = () => {
           >
             <Logo size="md" />
             <span>
-              VibeCTO<span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">.ai</span>
+              VibeCTO
+              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                .ai
+              </span>
             </span>
           </Link>
 
@@ -86,7 +89,10 @@ export const Navigation = () => {
                 >
                   <Logo size="md" />
                   <span>
-                    VibeCTO<span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">.ai</span>
+                    VibeCTO
+                    <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                      .ai
+                    </span>
                   </span>
                 </Link>
                 <Button

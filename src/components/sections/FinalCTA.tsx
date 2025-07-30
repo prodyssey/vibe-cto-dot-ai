@@ -1,15 +1,17 @@
 import { Calendar, ArrowRight, Clock } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { addSavvyCalTracking } from "@/lib/analytics";
 
 export const FinalCTA = () => {
   const linkRef = useRef<HTMLAnchorElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (linkRef.current) {
-      addSavvyCalTracking(linkRef.current, 'final_cta_section', 'clarity_call');
+      addSavvyCalTracking(linkRef.current, "final_cta_section", "clarity_call");
     }
   }, []);
   return (
@@ -23,40 +25,33 @@ export const FinalCTA = () => {
           </div>
 
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Your ideas don't have to wait—let's make them real
+            The best ideas don&apos;t have to wait—let&apos;s make them real
           </h2>
 
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Stop wondering "what if" and start shipping. Book your free clarity
-            call today and get a custom action plan for your vibe coding
-            journey.
+            Stop wondering &quot;what if&quot; and start shipping. But first,
+            let's play a game...
           </p>
 
           <div className="space-y-8">
-            <a
-              ref={linkRef}
-              href="https://savvycal.com/craigsturgis/vibecto-clarity-call"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Button
+              onClick={() => navigate("/adventure")}
+              size="lg"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 md:px-12 py-4 md:py-6 text-lg md:text-xl font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
             >
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 md:px-12 py-4 md:py-6 text-lg md:text-xl font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
-              >
-                Book a Clarity Call
-                <ArrowRight className="ml-2 md:ml-3 w-5 md:w-6 h-5 md:h-6" />
-              </Button>
-            </a>
+              Enter the VibeCTO Station
+              <ArrowRight className="ml-2 md:ml-3 w-5 md:w-6 h-5 md:h-6" />
+            </Button>
 
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-gray-400 px-4">
               <div className="flex items-center space-x-2">
                 <Clock className="w-4 h-4" />
-                <span>15 minutes</span>
+                <span>5 minutes</span>
               </div>
               <div className="hidden sm:block w-1 h-1 bg-gray-400 rounded-full"></div>
               <span>No commitment required</span>
               <div className="hidden sm:block w-1 h-1 bg-gray-400 rounded-full"></div>
-              <span>Custom action plan included</span>
+              <span>See something I vibe coded</span>
             </div>
           </div>
         </div>

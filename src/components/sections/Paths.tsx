@@ -11,12 +11,34 @@ export const Paths = () => {
 
   useEffect(() => {
     if (ignitionLinkRef.current) {
-      addSavvyCalTracking(ignitionLinkRef.current, 'paths_section', 'clarity_call', {
-        path: 'ignition'
-      });
+      addSavvyCalTracking(
+        ignitionLinkRef.current,
+        "paths_section",
+        "clarity_call",
+        {
+          path: "ignition",
+        }
+      );
     }
   }, []);
   const paths = [
+    {
+      icon: Sparkles,
+      title: "Transformation",
+      subtitle:
+        "For established teams that want to build quality products much faster",
+      description:
+        "Transform your team's development velocity with enterprise-grade AI agent integration.",
+      features: [
+        "Team transformation",
+        "AI agent deployment",
+        "Sophisticated measurement",
+        "Enterprise support",
+      ],
+      cta: "Schedule Team Call",
+      link: "/transformation",
+      color: "from-purple-600 to-blue-600",
+    },
     {
       icon: Zap,
       title: "Ignition",
@@ -41,7 +63,7 @@ export const Paths = () => {
       subtitle:
         "Mission Command - where successful prototypes achieve escape velocity",
       description:
-        "Your product has achieved liftoff. Get the technical infrastructure and strategic guidance to scale into a market-capturing product.",
+        "Your vibe coded product has achieved liftoff. Get the technical infrastructure and strategic guidance to scale into a market-capturing product.",
       features: [
         "6-12+ week transformation",
         "Performance optimization",
@@ -51,23 +73,6 @@ export const Paths = () => {
       cta: "Explore Mission Parameters",
       link: "/launch-control",
       color: "from-blue-600 to-cyan-600",
-    },
-    {
-      icon: Sparkles,
-      title: "Transformation",
-      subtitle:
-        "For established teams that want to build quality products much faster",
-      description:
-        "Transform your team's development velocity with enterprise-grade AI agent integration.",
-      features: [
-        "Team transformation",
-        "AI agent deployment",
-        "Huge velocity gains",
-        "Enterprise support",
-      ],
-      cta: "Schedule Team Call",
-      link: "/transformation",
-      color: "from-purple-600 to-blue-600",
     },
   ];
 
@@ -79,8 +84,8 @@ export const Paths = () => {
             Choose Your Journey
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Whether you're just starting out, ready to launch, or leading a
-            team, there's a path designed for your success.
+            Whether you&apos;re leading a team, just starting out, or ready to
+            launch, there&apos;s a path designed for your success.
           </p>
         </div>
 
@@ -128,7 +133,9 @@ export const Paths = () => {
 
                 {path.isExternal ? (
                   <a
-                    ref={path.title === 'Ignition' ? ignitionLinkRef : undefined}
+                    ref={
+                      path.title === "Ignition" ? ignitionLinkRef : undefined
+                    }
                     href={path.link}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -156,7 +163,7 @@ export const Paths = () => {
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        {/* <div className="text-center mt-12">
           <p className="text-gray-400">
             Not sure which path is right for you?
             <Button
@@ -166,7 +173,7 @@ export const Paths = () => {
               Take a quick quiz
             </Button>
           </p>
-        </div>
+        </div> */}
       </div>
     </section>
   );

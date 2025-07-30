@@ -9,8 +9,7 @@ export const HowItWorks = () => {
       title: "Assess",
       description:
         "Quick diagnostic of your current setup, goals, and blockers",
-      details:
-        "15-minute call to understand where you are and where you want to go",
+      details: "Discovery to understand where you are and where you want to go",
     },
     {
       icon: Map,
@@ -23,9 +22,9 @@ export const HowItWorks = () => {
       icon: Rocket,
       title: "Ship",
       description:
-        "Custom delivery, fractional CTO support, or hands on coaching as you build",
+        "Hands on coaching and training, sophisticated measurement, and expert support as you build",
       details:
-        "Starter kits, check-ins, code reviews, support,and strategic guidance through launch and expansion",
+        "Solo or group sessions, regular check-ins, process optimization",
     },
   ];
 
@@ -37,8 +36,7 @@ export const HowItWorks = () => {
             How it works
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            A proven 3-step process to take you from idea to production, no
-            matter your starting point.
+            A proven 3-step process to take you further, faster.
           </p>
         </div>
 
