@@ -58,7 +58,10 @@ const ALTERNATIVE_OPTIONS = [
     ],
     isNewsletter: false,
     action: () => {
-      trackSavvyCalClick('transformation_alternatives_workshop', '30_minute_call');
+      trackSavvyCalClick(
+        "transformation_alternatives_workshop",
+        "30_minute_call"
+      );
       window.open(
         "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
         "_blank"
@@ -74,12 +77,12 @@ const ALTERNATIVE_OPTIONS = [
     features: [
       "Single feature AI integration",
       "Measurable results in 2 weeks",
-      "Risk-free evaluation",
+      "Low risk evaluation",
       "Scale up when ready",
     ],
     isNewsletter: false,
     action: () => {
-      trackSavvyCalClick('transformation_alternatives_pilot', '30_minute_call');
+      trackSavvyCalClick("transformation_alternatives_pilot", "30_minute_call");
       window.open(
         "https://savvycal.com/craigsturgis/vibecto-30-minute-call",
         "_blank"
