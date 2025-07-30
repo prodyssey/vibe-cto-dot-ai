@@ -13,15 +13,16 @@ const Index = () => {
   return (
     <>
       <SEO
-        title="VibeCTO.ai - From Vibes to Products | AI-Powered Development"
-        description="Transform your ideas into real, secure, scalable products with elite AI-powered development guidance. Join the AI revolution in software development."
+        title="VibeCTO.ai - From vibes to product | AI-Powered Development"
+        description="Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help."
         canonicalUrl="https://vibecto.ai/"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebSite",
-          "name": "VibeCTO.ai",
-          "description": "Elite AI-powered development guidance to transform ideas into products",
-          "url": "https://vibecto.ai/"
+          name: "VibeCTO.ai",
+          description:
+            "Elite AI-powered development guidance to transform ideas into products",
+          url: "https://vibecto.ai/",
         }}
       />
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">

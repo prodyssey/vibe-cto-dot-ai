@@ -7,7 +7,7 @@ export const SCENES: Record<string, Scene> = {
     type: "intro",
     title: "Space Station Arrival",
     description:
-      "Welcome to VibeCTO Station. Your vision is ready for phase transition. Which docking bay matches your current trajectory?",
+      "Welcome to VibeCTO Station. Your vision is ready acceleration. Which docking bay matches your current trajectory?",
     backgroundClass:
       "bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900",
     nextScene: "playerSetup",

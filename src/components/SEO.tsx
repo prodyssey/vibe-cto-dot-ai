@@ -15,8 +15,8 @@ interface SEOProps {
 }
 
 const SEO = ({
-  title = "VibeCTO.ai - From Vibes to Products",
-  description = "Elite vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development.",
+  title = "VibeCTO.ai - From vibes to product",
+  description = "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development.",
   keywords = "AI development, CTO services, software development, AI consulting, product development, startup technology, AI transformation",
   ogTitle,
   ogDescription,
@@ -30,19 +30,19 @@ const SEO = ({
   const structuredData = jsonLd || {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "VibeCTO.ai",
-    "description": description,
-    "url": "https://vibecto.ai",
-    "logo": "https://vibecto.ai/logo.png",
-    "contactPoint": {
+    name: "VibeCTO.ai",
+    description: description,
+    url: "https://vibecto.ai",
+    logo: "https://vibecto.ai/logo.png",
+    contactPoint: {
       "@type": "ContactPoint",
-      "email": "hello@vibecto.ai",
-      "contactType": "Customer Service"
+      email: "hello@vibecto.ai",
+      contactType: "Customer Service",
     },
-    "sameAs": [
+    sameAs: [
       "https://twitter.com/vibecto_ai",
-      "https://linkedin.com/company/vibecto-ai"
-    ]
+      "https://linkedin.com/company/vibecto-ai",
+    ],
   };
 
   return (
@@ -50,7 +50,7 @@ const SEO = ({
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
-      
+
       {/* Open Graph tags */}
       <meta property="og:title" content={ogTitle || title} />
       <meta property="og:description" content={ogDescription || description} />
@@ -58,17 +58,17 @@ const SEO = ({
       <meta property="og:image" content={ogImage} />
       <meta property="og:site_name" content="VibeCTO.ai" />
       {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
-      
+
       {/* Twitter Card tags */}
       <meta name="twitter:card" content={twitterCard} />
       <meta name="twitter:site" content={twitterSite} />
       <meta name="twitter:title" content={ogTitle || title} />
       <meta name="twitter:description" content={ogDescription || description} />
       <meta name="twitter:image" content={ogImage} />
-      
+
       {/* Canonical URL */}
       {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
-      
+
       {/* JSON-LD structured data */}
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
