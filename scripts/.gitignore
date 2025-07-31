@@ -1,0 +1,21 @@
+# Ignore all credential files
+credentials.json
+token.json
+*.credentials.json
+*.token.json
+
+# Ignore any JSON files that might contain secrets
+client_secret*.json
+oauth*.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environment
+ga4-venv/
+venv/
+env/

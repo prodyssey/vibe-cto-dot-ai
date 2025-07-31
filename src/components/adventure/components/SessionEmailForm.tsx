@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { trackFormSubmission } from '@/lib/analytics';
+import { sessionEmailFormSchema, validateForm } from '@/lib/validation';
+import { logger } from '@/lib/logger';
 
 import { AnimatedButton } from './AnimatedButton';
 
@@ -28,10 +30,19 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
     setError(null);
     setIsSubmitting(true);
 
-    console.log('Submitting email form for session:', sessionId);
+    logger.debug('Submitting email form');
 
     if (!sessionId) {
       setError('No session ID found. Please restart the game.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Validate form data
+    const validation = validateForm(sessionEmailFormSchema, { email, name });
+    if (!validation.success) {
+      const firstError = Object.values(validation.errors)[0];
+      setError(firstError);
       setIsSubmitting(false);
       return;
     }
@@ -45,16 +56,16 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
         .single();
 
       if (fetchError) {
-        console.error('Error fetching session:', fetchError);
+        logger.error('Error fetching session');
         throw new Error(`Database error: ${fetchError.message}`);
       }
 
       if (!sessionData) {
-        console.error('Session not found:', sessionId);
+        logger.error('Session not found');
         throw new Error('Session not found. Please try restarting the game.');
       }
 
-      console.log('Found session:', sessionData);
+      // Session found, proceeding with update
 
       // Update the session with the email (and name if it was generated)
       const updateData: any = { email };
@@ -64,7 +75,7 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
         updateData.is_generated_name = false;
       }
 
-      console.log('Updating session with:', updateData);
+      logger.debug('Updating session');
 
       const { data, error: updateError } = await supabase
         .from('adventure_sessions')
@@ -74,16 +85,17 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
         .single();
 
       if (updateError) {
-        console.error('Supabase update error:', updateError);
-        console.error('Update query details:', {
+        logger.error('Supabase update error:', updateError.message);
+        logger.debug('Update query details:', {
           table: 'adventure_sessions',
-          updateData,
-          condition: `id = ${sessionId}`
+          hasEmail: !!updateData.email,
+          hasPlayerName: !!updateData.player_name,
+          condition: 'id = ?'
         });
         throw updateError;
       }
 
-      console.log('Update successful:', data);
+      logger.debug('Update successful');
 
       // Track form submission
       trackFormSubmission('session_email_form', {
@@ -94,13 +106,8 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
       // Call success callback with email and name
       onSuccess(email, name || playerName);
     } catch (err: any) {
-      console.error('Error saving email:', err);
+      logger.error('Error saving form data:', err.message);
       setError(`Failed to save: ${err.message || 'Please try again.'}`);
-      
-      // Log more details for debugging
-      console.error('Session ID:', sessionId);
-      console.error('Email:', email);
-      console.error('Name:', name);
     } finally {
       setIsSubmitting(false);
     }

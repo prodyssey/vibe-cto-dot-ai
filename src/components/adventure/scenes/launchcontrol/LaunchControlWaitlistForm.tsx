@@ -7,19 +7,19 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { supabase } from '@/integrations/supabase/client';
 import { trackFormSubmission } from '@/lib/analytics';
+import { launchControlWaitlistSchema, validateForm } from '@/lib/validation';
 
 import { useGameStore } from '../../gameStore';
 
-const waitlistSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
+// Extend the base schema with additional fields
+const extendedWaitlistSchema = launchControlWaitlistSchema.extend({
   phone: z.string().optional(),
-  preferredContact: z.enum(['email', 'phone', 'text', 'any']),
+  preferredContact: z.enum(['email', 'phone', 'text', 'any']).default('email'),
   companyName: z.string().optional(),
   currentScale: z.string().optional(),
 });
 
-type WaitlistData = z.infer<typeof waitlistSchema>;
+type WaitlistData = z.infer<typeof extendedWaitlistSchema>;
 
 interface LaunchControlWaitlistFormProps {
   onSuccess: () => void;
@@ -45,7 +45,7 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
     setIsSubmitting(true);
 
     try {
-      const validatedData = waitlistSchema.parse(formData);
+      const validatedData = extendedWaitlistSchema.parse(formData);
 
       // Save to database
       const { error } = await supabase.from('launch_control_waitlist').insert({

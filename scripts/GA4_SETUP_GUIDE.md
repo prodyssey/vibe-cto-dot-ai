@@ -22,9 +22,21 @@
    - Application type: "Desktop app"
    - Name: "GA4 Setup Script"
    - Download the JSON file
-   - Save it as `scripts/credentials.json`
+   - **🔒 SECURITY: See [GA4_SECURE_SETUP.md](./GA4_SECURE_SETUP.md) for secure credential management**
 
 ## Running the Setup
+
+### Secure Method (Recommended) 🔒
+
+1. **Use the secure setup script**:
+   ```bash
+   cd scripts
+   ./run-ga4-setup-secure.sh
+   ```
+
+2. **Follow the prompts** to set up environment variables
+
+### Legacy Method (Not Recommended)
 
 1. **Activate the virtual environment**:
    ```bash
