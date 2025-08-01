@@ -7,9 +7,8 @@ featured: true
 type: "markdown"
 tags: ["mindset", "learning", "growth"]
 author: "Craig Sturgis"
+headerImage: "/images/posts/step-up-to-the-plate.jpg"
 ---
-
-![Young baseball player ready to bat](/images/posts/step-up-to-the-plate.jpg)
 
 Most of us lose our patience for being a complete beginner.
 

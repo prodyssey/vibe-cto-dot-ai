@@ -158,6 +158,20 @@ export default function ResourcePost() {
             </Link>
           </div>
 
+          {/* Header Image */}
+          {post.metadata.headerImage && (
+            <Card className="bg-white/5 backdrop-blur-sm border-white/10 mb-8 overflow-hidden">
+              <div className="relative w-full" style={{ maxHeight: '400px' }}>
+                <img
+                  src={post.metadata.headerImage}
+                  alt={post.metadata.title}
+                  className="w-full h-auto object-cover"
+                  style={{ maxHeight: '400px' }}
+                />
+              </div>
+            </Card>
+          )}
+
           {/* Article Header */}
           <Card className="bg-white/5 backdrop-blur-sm border-white/10 mb-8">
             <CardContent className="p-8">
