@@ -27,22 +27,28 @@ export const Scene = ({ scene, children, className }: SceneProps) => {
       scene.backgroundClass
     )}>
       <Card className={cn(
-        'w-full bg-gray-900/80 backdrop-blur-sm border-purple-500/30',
+        'w-full bg-gray-900/90 backdrop-blur-md border-purple-500/40 shadow-2xl shadow-black/50',
         isSmallScreen ? 'max-w-full mx-2' : 'max-w-3xl',
         className
       )}>
         <CardHeader className="text-center">
-          <CardTitle className={cn(
-            'font-bold text-white mb-4',
-            isSmallScreen ? 'text-2xl' : 'text-3xl'
-          )}>
+          <CardTitle 
+            className={cn(
+              'font-bold text-white mb-4',
+              isSmallScreen ? 'text-2xl' : 'text-3xl'
+            )}
+            style={{ textShadow: '0 2px 6px rgba(0,0,0,0.9)' }}
+          >
             {scene.title}
           </CardTitle>
           {scene.description && (
-            <p className={cn(
-              'text-gray-300',
-              isSmallScreen ? 'text-base' : 'text-lg'
-            )}>
+            <p 
+              className={cn(
+                'text-gray-200 leading-relaxed',
+                isSmallScreen ? 'text-lg' : 'text-xl'
+              )}
+              style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
+            >
               {scene.description}
             </p>
           )}

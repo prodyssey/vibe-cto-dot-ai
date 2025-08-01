@@ -40,15 +40,15 @@ export const Choice = ({ choice, onClick, className }: ChoiceProps) => {
       className={cn(
         'w-full text-left h-auto',
         isMobile ? 'p-4 min-h-[44px]' : 'p-4',
-        'border-gray-600 text-white bg-gray-800/50',
-        !isTouch && 'hover:bg-gray-700/50 hover:border-purple-500/50',
-        isTouch && 'active:bg-gray-700/50 active:border-purple-500/50 active:scale-95',
+        'border-gray-600 text-white bg-gray-900/80 backdrop-blur-sm',
+        !isTouch && 'hover:bg-gray-800/90 hover:border-purple-500/70 hover:shadow-lg hover:shadow-purple-500/20',
+        isTouch && 'active:bg-gray-800/90 active:border-purple-500/70 active:scale-95',
         'transition-all duration-200',
         className
       )}
       onTouchStart={() => isTouch && undefined}
     >
-      <span className="block">{choice.text}</span>
+      <span className="block text-lg font-medium" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>{choice.text}</span>
     </Button>
   );
 };

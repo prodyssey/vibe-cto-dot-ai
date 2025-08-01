@@ -84,7 +84,7 @@ export const IgnitionPortal = ({ className, isActive = false, reducedMotion = fa
       
       {/* Center core */}
       <circle cx="100" cy="100" r="15" fill="#ff6b35" opacity="0.8" />
-      <circle cx="100" cy="100" r="10" fill="#fff" opacity="0.9" />
+      <circle cx="100" cy="100" r="10" fill="#fff" opacity="0.5" />
       
       {/* Energy particles */}
       {isActive && !reducedMotion && [...Array(8)].map((_, i) => {
@@ -98,6 +98,7 @@ export const IgnitionPortal = ({ className, isActive = false, reducedMotion = fa
             cy={y}
             r="3"
             fill="#ff6b35"
+            opacity="0.6"
             className="animate-ping"
             style={{ animationDelay: `${i * 0.1}s` }}
           />
@@ -185,7 +186,7 @@ export const LaunchControlPortal = ({ className, isActive = false, reducedMotion
       {/* Center core */}
       <circle cx="100" cy="100" r="20" fill="#3b82f6" opacity="0.8" />
       <circle cx="100" cy="100" r="15" fill="#06b6d4" opacity="0.9" />
-      <circle cx="100" cy="100" r="10" fill="#fff" opacity="0.9" />
+      <circle cx="100" cy="100" r="10" fill="#fff" opacity="0.5" />
       
       {/* Data streams */}
       {isActive && !reducedMotion && [...Array(6)].map((_, i) => {
@@ -234,11 +235,11 @@ export const TransformationPortal = ({ className, isActive = false, reducedMotio
         </filter>
 
         <pattern id="stars" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
-          <circle cx="5" cy="5" r="1" fill="white" opacity="0.8" />
-          <circle cx="25" cy="15" r="1" fill="white" opacity="0.6" />
-          <circle cx="40" cy="30" r="1" fill="white" opacity="0.9" />
-          <circle cx="15" cy="40" r="1" fill="white" opacity="0.7" />
-          <circle cx="35" cy="45" r="1" fill="white" opacity="0.5" />
+          <circle cx="5" cy="5" r="1" fill="white" opacity="0.5" />
+          <circle cx="25" cy="15" r="1" fill="white" opacity="0.4" />
+          <circle cx="40" cy="30" r="1" fill="white" opacity="0.6" />
+          <circle cx="15" cy="40" r="1" fill="white" opacity="0.5" />
+          <circle cx="35" cy="45" r="1" fill="white" opacity="0.3" />
         </pattern>
       </defs>
 
@@ -254,7 +255,7 @@ export const TransformationPortal = ({ className, isActive = false, reducedMotio
       />
       
       {/* Star field */}
-      <ellipse cx="100" cy="100" rx="85" ry="80" fill="url(#stars)" opacity="0.6" />
+      <ellipse cx="100" cy="100" rx="85" ry="80" fill="url(#stars)" opacity="0.5" />
       
       {/* Spiral arms */}
       {[0, 120, 240].map((rotation) => (
@@ -304,7 +305,7 @@ export const TransformationPortal = ({ className, isActive = false, reducedMotio
       <circle cx="100" cy="100" r="25" fill="#8b5cf6" opacity="0.6" />
       <circle cx="100" cy="100" r="20" fill="#a855f7" opacity="0.8" />
       <circle cx="100" cy="100" r="15" fill="#6366f1" opacity="0.9" />
-      <circle cx="100" cy="100" r="10" fill="#fff" opacity="0.9" />
+      <circle cx="100" cy="100" r="10" fill="#fff" opacity="0.5" />
       
       {/* Constellation points */}
       {isActive && !reducedMotion && [...Array(8)].map((_, i) => {
