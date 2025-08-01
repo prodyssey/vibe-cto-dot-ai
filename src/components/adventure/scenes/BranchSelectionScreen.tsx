@@ -211,7 +211,7 @@ export const BranchSelectionScreen = () => {
                 <div
                   className={cn(
                     "relative rounded-2xl overflow-hidden transition-all duration-500",
-                    "border-2 border-gray-700/50",
+                    "border-2 border-gray-700/50 bg-gray-900/50 backdrop-blur-sm",
                     isSmallScreen ? "h-64" : "h-80",
                     !isTouch && "hover:border-transparent hover:scale-105",
                     hoveredPortal === portal.id &&
@@ -250,8 +250,8 @@ export const BranchSelectionScreen = () => {
                     </div>
                   </div>
 
-                  {/* Portal Asset */}
-                  <div className="absolute inset-0">
+                  {/* Portal Asset - moved to back with lower z-index */}
+                  <div className="absolute inset-0 z-0">
                     {portal.id === "ignition-path" && (
                       <IgnitionPortal
                         isActive={hoveredPortal === portal.id}
@@ -272,8 +272,9 @@ export const BranchSelectionScreen = () => {
                     )}
                   </div>
 
+                  
                   {/* Portal Content */}
-                  <div className="relative h-full flex flex-col items-center justify-center p-6 text-center">
+                  <div className="relative h-full flex flex-col items-center justify-center p-6 text-center z-20">
                     {/* Icon (now smaller, for accent) */}
                     <div
                       className={cn(
@@ -284,21 +285,22 @@ export const BranchSelectionScreen = () => {
                       {portal.icon}
                     </div>
 
-                    {/* Title */}
-                    <h3
-                      className={cn(
-                        "text-2xl font-bold text-white mb-3",
-                        "group-hover:text-transparent group-hover:bg-clip-text",
-                        `group-hover:bg-gradient-to-r ${portal.color}`
-                      )}
-                    >
-                      {portal.title}
-                    </h3>
+                    {/* Title with compact dark backdrop */}
+                    <div className="bg-black/70 backdrop-blur-sm rounded-lg px-3 py-2 mb-2 max-w-[90%]">
+                      <h3
+                        className="text-2xl font-bold text-white"
+                        style={{ textShadow: '0 2px 4px rgba(0,0,0,0.9)' }}
+                      >
+                        {portal.title}
+                      </h3>
+                    </div>
 
-                    {/* Description */}
-                    <p className="text-sm text-gray-300 mb-4">
-                      {portal.description}
-                    </p>
+                    {/* Description with compact dark backdrop */}
+                    <div className="bg-black/70 backdrop-blur-sm rounded-lg px-3 py-2 mb-4 max-w-[90%]">
+                      <p className="text-base text-gray-100 font-medium" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                        {portal.description}
+                      </p>
+                    </div>
 
                     {/* Hover Details */}
                     <div
@@ -309,7 +311,7 @@ export const BranchSelectionScreen = () => {
                         "transition-all duration-300"
                       )}
                     >
-                      <p className="text-xs text-gray-200 bg-black/50 backdrop-blur-sm rounded-lg p-3">
+                      <p className="text-sm text-white bg-black/50 backdrop-blur-sm rounded-lg p-3 font-medium border border-white/10" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.9)' }}>
                         {portal.fullDescription}
                       </p>
                     </div>

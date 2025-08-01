@@ -133,6 +133,7 @@ export const EntryScreen = () => {
             "font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 animate-neon text-center",
             isSmallScreen ? "text-2xl" : "text-4xl"
           )}
+          style={{ textShadow: '0 0 20px rgba(168, 85, 247, 0.5)' }}
         >
           VIBECTO STATION
         </div>
@@ -143,7 +144,7 @@ export const EntryScreen = () => {
         <div className="w-full max-w-3xl p-6">
           <Card
             className={cn(
-              "w-full bg-gray-900/80 backdrop-blur-sm border-purple-500/30",
+              "w-full bg-gray-900/90 backdrop-blur-md border-purple-500/40 shadow-2xl shadow-black/50",
               "relative" // Ensure card has relative positioning
             )}
           >
@@ -153,6 +154,7 @@ export const EntryScreen = () => {
                   "font-bold text-white mb-4",
                   isSmallScreen ? "text-2xl" : "text-3xl"
                 )}
+                style={{ textShadow: '0 2px 6px rgba(0,0,0,0.9)' }}
               >
                 {ENTRY_SCENE.title}
               </CardTitle>
