@@ -12,6 +12,7 @@ export interface PostMetadata {
   author: string;
   slug: string;
   hidden?: boolean;
+  headerImage?: string;
 }
 
 export interface Post {
