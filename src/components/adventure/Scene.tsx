@@ -26,16 +26,20 @@ export const Scene = ({ scene, children, className }: SceneProps) => {
       isMobile ? 'p-4' : 'p-6',
       scene.backgroundClass
     )}>
-      <Card className={cn(
-        'w-full bg-gray-900/90 backdrop-blur-md border-purple-500/40 shadow-2xl shadow-black/50',
-        isSmallScreen ? 'max-w-full mx-2' : 'max-w-3xl',
-        className
+      {/* Fixed viewport container to prevent width changes */}
+      <div className={cn(
+        'w-full flex justify-center',
+        isSmallScreen ? 'min-w-[320px] max-w-full px-2' : 'min-w-[600px] max-w-3xl lg:max-w-5xl'
       )}>
+        <Card className={cn(
+          'w-full bg-gray-900/90 backdrop-blur-md border-purple-500/40 shadow-2xl shadow-black/50',
+          className
+        )}>
         <CardHeader className="text-center">
           <CardTitle 
             className={cn(
               'font-bold text-white mb-4',
-              isSmallScreen ? 'text-2xl' : 'text-3xl'
+              isSmallScreen ? 'text-2xl' : 'text-3xl lg:text-4xl'
             )}
             style={{ textShadow: '0 2px 6px rgba(0,0,0,0.9)' }}
           >
@@ -45,7 +49,7 @@ export const Scene = ({ scene, children, className }: SceneProps) => {
             <p 
               className={cn(
                 'text-gray-200 leading-relaxed',
-                isSmallScreen ? 'text-lg' : 'text-xl'
+                isSmallScreen ? 'text-lg' : 'text-xl lg:text-2xl'
               )}
               style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
             >
@@ -61,7 +65,8 @@ export const Scene = ({ scene, children, className }: SceneProps) => {
             {children}
           </CardContent>
         )}
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 };
