@@ -5,6 +5,17 @@
   text-align: center;
 }
 
+/* Adventure game viewport stability */
+body {
+  overflow-x: hidden;
+}
+
+.adventure-container {
+  width: 100vw;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

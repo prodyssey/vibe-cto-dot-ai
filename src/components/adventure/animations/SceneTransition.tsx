@@ -66,8 +66,9 @@ export const SceneTransition = ({
         return cn(
           baseClasses,
           durationClass,
+          "overflow-hidden", // Prevent horizontal overflow
           isTransitioning
-            ? "translate-x-full opacity-0"
+            ? "translate-x-8 opacity-0" // Reduced translation to prevent width expansion
             : "translate-x-0 opacity-100"
         );
 
@@ -98,12 +99,14 @@ export const SceneTransition = ({
   };
 
   return (
-    <div className={cn(getTransitionClasses(), "relative", className)}>
-      {/* Background overlay during transitions */}
-      {isTransitioning && transitionType !== "fade" && (
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 -z-10" />
-      )}
-      {children}
+    <div className={cn("w-full", className)}>
+      <div className={cn(getTransitionClasses(), "relative w-full")}>
+        {/* Background overlay during transitions */}
+        {isTransitioning && transitionType !== "fade" && (
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 -z-10" />
+        )}
+        {children}
+      </div>
     </div>
   );
 };
