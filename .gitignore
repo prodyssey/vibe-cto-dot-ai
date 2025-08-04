@@ -36,3 +36,7 @@ scripts/token.json
 scripts/ga4-venv/
 scripts/*.pyc
 scripts/__pycache__/
+
+# Test coverage reports
+coverage/
+*.lcov

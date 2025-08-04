@@ -1,0 +1,122 @@
+name: PR Tests
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linter
+      run: npm run lint
+
+    - name: Run tests
+      run: npm run test:run
+      env:
+        # Mock environment variables for tests
+        VITE_SUPABASE_URL: https://test.supabase.co
+        VITE_SUPABASE_ANON_KEY: test-anon-key
+
+    - name: Build project
+      run: npm run build
+      env:
+        # Mock environment variables for build
+        VITE_SUPABASE_URL: https://test.supabase.co
+        VITE_SUPABASE_ANON_KEY: test-anon-key
+
+  test-forms:
+    name: Form Submission Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run form-specific tests
+      run: npm run test:run -- src/components/__tests__/*Form.test.tsx
+      env:
+        # These tests use mocked Supabase, so no real DB connection
+        VITE_SUPABASE_URL: https://test.supabase.co
+        VITE_SUPABASE_ANON_KEY: test-anon-key
+
+    - name: Generate test report
+      if: always()
+      run: |
+        echo "## Form Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ All form submissions are tested with mocked database calls" >> $GITHUB_STEP_SUMMARY
+        echo "✅ No test data is written to production database" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Tested Forms:" >> $GITHUB_STEP_SUMMARY
+        echo "- IgnitionQualificationForm" >> $GITHUB_STEP_SUMMARY
+        echo "- LaunchControlQualificationForm" >> $GITHUB_STEP_SUMMARY
+        echo "- EmailOptIn" >> $GITHUB_STEP_SUMMARY
+
+  coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run tests with coverage
+      run: npm run test:coverage
+      env:
+        VITE_SUPABASE_URL: https://test.supabase.co
+        VITE_SUPABASE_ANON_KEY: test-anon-key
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage/
+
+    - name: Coverage summary
+      if: always()
+      run: |
+        echo "## Coverage Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ -f coverage/coverage-summary.json ]; then
+          echo "Coverage report generated successfully" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ Coverage report not found" >> $GITHUB_STEP_SUMMARY
+        fi

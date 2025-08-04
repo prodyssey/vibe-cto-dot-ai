@@ -50,7 +50,7 @@ export const emailOptInFormSchema = z.object({
 export const waitlistFormSchema = z.object({
   name: nameSchema,
   email: emailSchema,
-  preferredContact: z.enum(['email', 'text', 'either'], {
+  preferredContact: z.enum(['email', 'phone', 'text', 'either'], {
     errorMap: () => ({ message: 'Please select a contact preference' }),
   }),
   phone: z
@@ -64,7 +64,7 @@ export const waitlistFormSchema = z.object({
 
 // Qualification Form Schema
 export const qualificationFormSchema = z.object({
-  budget: z.enum(['ready-high', 'ready-low', 'exploring'], {
+  budget: z.enum(['ready-high', 'ready-mid', 'ready-low', 'not-ready'], {
     errorMap: () => ({ message: 'Please select a budget option' }),
   }),
   needsRateReduction: z.boolean(),
