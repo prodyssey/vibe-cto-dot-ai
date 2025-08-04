@@ -4,13 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmailOptIn } from "@/components/EmailOptIn";
-import {
-  Briefcase,
-  Code,
-  Lightbulb,
-  Users,
-  Gamepad2,
-} from "lucide-react";
+import { Briefcase, Code, Lightbulb, Users, Gamepad2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const About = () => {
@@ -19,8 +13,8 @@ const About = () => {
   return (
     <>
       <SEO
-        title="About - VibeCTO.ai | The Story Behind the Platform"
-        description="Learn about the mission behind VibeCTO.ai and how Craig Sturgis is helping developers transform ideas into reality with AI-powered guidance."
+        title="About - VibeCTO.ai | Behind the Vibes"
+        description="Learn about the mission behind VibeCTO.ai and how Craig Sturgis is helping builders transform ideas into reality faster with AI-powered guidance."
         canonicalUrl="https://vibecto.ai/about"
       />
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
