@@ -56,6 +56,20 @@ export default tseslint.config(
       ],
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-non-null-assertion": "warn",
+      "@typescript-eslint/no-unused-expressions": [
+        "error",
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+          allowTaggedTemplates: true,
+        },
+      ],
+      "@typescript-eslint/no-empty-function": [
+        "error",
+        {
+          allow: ["arrowFunctions", "functions", "methods"],
+        },
+      ],
       
       // Import Rules
       "import/order": [
