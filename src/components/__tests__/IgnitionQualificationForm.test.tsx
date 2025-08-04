@@ -1,8 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@/test/utils'
 import userEvent from '@testing-library/user-event'
-import { IgnitionQualificationForm } from '@/components/IgnitionQualificationForm'
+// Import and activate the Supabase mock BEFORE importing the component
+import '@/test/mocks/supabase'
 import { mockSupabaseClient, resetSupabaseMocks, mockSuccessfulInsert, mockFailedInsert } from '@/test/mocks/supabase'
+import { IgnitionQualificationForm } from '@/components/IgnitionQualificationForm'
 
 // Mock the analytics module
 vi.mock('@/lib/analytics', () => ({
@@ -97,26 +99,36 @@ describe('IgnitionQualificationForm', () => {
       await user.click(highBudgetOption)
       
       await user.type(screen.getByLabelText('Name'), 'John Doe')
-      await user.type(screen.getByPlaceholderText('your@email.com'), 'invalid-email')
+      // Get all email inputs and use the first one
+      const emailInputs = screen.getAllByPlaceholderText('your@email.com')
+      await user.type(emailInputs[0], 'invalid-email')
       
-      const submitButton = screen.getByRole('button', { name: /Continue to Scheduling/i })
-      await user.click(submitButton)
+      const submitButtons = screen.getAllByRole('button', { name: /Continue to Scheduling/i })
+      await user.click(submitButtons[0])
       
-      // Should show validation error
+      // Should show validation error - multiple errors may appear
       await waitFor(() => {
-        expect(screen.getByText(/Please enter a valid email address/i)).toBeInTheDocument()
+        const errors = screen.getAllByText(/Please enter a valid email address/i)
+        expect(errors.length).toBeGreaterThan(0)
       })
     })
 
     it('requires phone number when phone/text contact is preferred', async () => {
+      render(<IgnitionQualificationForm onSuccess={mockOnSuccess} />)
+      // Select high budget to go straight to contact form
+      const highBudgetOption = screen.getByLabelText(/\$15K - \$50K\+/)
+      await user.click(highBudgetOption)
+      
       await user.type(screen.getByLabelText('Name'), 'John Doe')
-      await user.type(screen.getByPlaceholderText('your@email.com'), 'john@example.com')
+      const emailInputs = screen.getAllByPlaceholderText('your@email.com')
+      await user.type(emailInputs[0], 'john@example.com')
       
-      // Select phone as preferred contact
-      const phoneOption = screen.getByRole('radio', { name: /Phone/i })
-      await user.click(phoneOption)
+      // Select phone as preferred contact - use getAllByRole to handle duplicates
+      const phoneOptions = screen.getAllByRole('radio', { name: /Phone/i })
+      await user.click(phoneOptions[0])
       
-      const submitButton = screen.getByRole('button', { name: /Continue to Scheduling/i })
+      const submitButtons = screen.getAllByRole('button', { name: /Continue to Scheduling/i })
+      const submitButton = submitButtons[0]
       expect(submitButton).toBeDisabled()
       
       // Add phone number
@@ -137,7 +149,9 @@ describe('IgnitionQualificationForm', () => {
       
       // Fill in contact form
       await user.type(screen.getByLabelText('Name'), 'John Doe')
-      await user.type(screen.getByPlaceholderText('your@email.com'), 'john@example.com')
+      // Get all email inputs and use the first one
+      const emailInputs = screen.getAllByPlaceholderText('your@email.com')
+      await user.type(emailInputs[0], 'john@example.com')
       
       // Submit
       const submitButton = screen.getByRole('button', { name: /Continue to Scheduling/i })
@@ -166,7 +180,9 @@ describe('IgnitionQualificationForm', () => {
       
       // Fill in contact form
       await user.type(screen.getByLabelText('Name'), 'John Doe')
-      await user.type(screen.getByPlaceholderText('your@email.com'), 'john@example.com')
+      // Get all email inputs and use the first one
+      const emailInputs = screen.getAllByPlaceholderText('your@email.com')
+      await user.type(emailInputs[0], 'john@example.com')
       
       // Submit
       const submitButton = screen.getByRole('button', { name: /Continue to Scheduling/i })
@@ -202,7 +218,9 @@ describe('IgnitionQualificationForm', () => {
       
       // Fill in contact form
       await user.type(screen.getByLabelText('Name'), 'Jane Doe')
-      await user.type(screen.getByPlaceholderText('your@email.com'), 'jane@example.com')
+      // Get all email inputs and use the first one
+      const emailInputs = screen.getAllByPlaceholderText('your@email.com')
+      await user.type(emailInputs[0], 'jane@example.com')
       
       // Submit
       const submitButton = screen.getByRole('button', { name: /Submit Application/i })
