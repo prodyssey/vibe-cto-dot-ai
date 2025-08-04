@@ -1,4 +1,4 @@
-import { Home, Zap, Rocket, Sparkles, BookOpen, Menu, X } from "lucide-react";
+import { Home, Zap, Rocket, Sparkles, BookOpen, Menu, X, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -16,7 +16,11 @@ export const Navigation = () => {
     { path: "/ignition", label: "Ignition", icon: Zap },
     { path: "/launch-control", label: "Launch Control", icon: Rocket },
     { path: "/resources", label: "Resources", icon: BookOpen },
+    { path: "/about", label: "About", icon: User },
   ];
+
+  // Desktop nav items (without Home)
+  const desktopNavItems = navItems.filter(item => item.path !== "/");
 
   const handleNavClick = () => {
     setIsOpen(false);
@@ -41,7 +45,7 @@ export const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
-            {navItems.map((item) => {
+            {desktopNavItems.map((item) => {
               const Icon = item.icon;
               const isActive =
                 location.pathname === item.path ||
