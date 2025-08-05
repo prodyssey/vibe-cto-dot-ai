@@ -69,9 +69,9 @@ const About = () => {
                     as many people and organizations as I can.
                   </p>
                   <p>
-                    My journey has been anything but linear. From co-founding
+                    My journey hasn't been a straight line. From co-founding
                     startups to leading product at a public company and scale
-                    ups, from writing code to coaching executive teams, I've
+                    ups, from writing code to coaching executives and teams, I've
                     learned that the best solutions come from understanding both
                     the technical and human sides of building products.
                   </p>
