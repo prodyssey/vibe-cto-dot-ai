@@ -24,46 +24,12 @@ const About = () => {
             {/* Header Section */}
             <div className="text-center mb-16">
               <h1 className="text-5xl font-bold text-white mb-6">
-                From Vibes to the Joy of Building
+                Unlocking the Joy of Building
               </h1>
-              <p className="text-xl text-purple-200">
-                Building a bridge between inspiration and implementation
-              </p>
+              {/* <p className="text-xl text-purple-200">
+                AI 
+              </p> */}
             </div>
-
-            {/* Mission Section */}
-            <Card className="bg-gray-800/50 backdrop-blur-lg border-purple-500/20 p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6">
-                Why VibeCTO.ai Exists
-              </h2>
-              <div className="space-y-4 text-gray-300">
-                <p>
-                  Every great product starts with a vibe—the spark of an idea,
-                  that vision of what could be. But the journey from vibe to
-                  valuable product is where most dreams die.
-                </p>
-                <p>
-                  I've spent my entire 20+ year career wrestling with this
-                  challenge. From engineer to cofounder + CTO to VP of product
-                  to fractional CTO, I've learned the patterns that hold back
-                  great ideas from capturing opportunity.
-                </p>
-                <p>
-                  Now, we're in the midst of a new era where AI is changing how
-                  software product development works, for better and for worse.
-                </p>
-                <p>
-                  VibeCTO.ai is my answer to democratizing the product
-                  development process and bringing effective, transformative
-                  practices to established companies.
-                </p>
-                <p>
-                  By combining battle-tested methodologies with cutting-edge AI
-                  capabilities, we're making it possible for more people with
-                  vision to build something great - fast.
-                </p>
-              </div>
-            </Card>
 
             {/* About Craig Section */}
             <Card className="bg-gray-800/50 backdrop-blur-lg border-purple-500/20 p-8 mb-12 overflow-hidden">
