@@ -1,10 +1,11 @@
-import { Zap, Rocket, Sparkles, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { addSavvyCalTracking } from "@/lib/analytics";
+import { getOrderedServices } from "@/config/services";
 
 export const Paths = () => {
   const ignitionLinkRef = useRef<HTMLAnchorElement>(null);
@@ -21,60 +22,23 @@ export const Paths = () => {
       );
     }
   }, []);
-  const paths = [
-    {
-      icon: Sparkles,
-      title: "Transformation",
-      subtitle:
-        "For established teams that want to build quality products much faster",
-      description:
-        "Transform your team's development velocity with enterprise-grade AI agent integration.",
-      features: [
-        "Team transformation",
-        "AI agent deployment",
-        "Sophisticated measurement",
-        "Enterprise support",
-      ],
-      cta: "Schedule Team Call",
-      link: "/transformation",
-      color: "from-purple-600 to-blue-600",
-    },
-    {
-      icon: Zap,
-      title: "Ignition",
-      subtitle:
-        "For founders with ideas who want to test them quickly and intelligently",
-      description:
-        "Compress months of wandering into weeks of clarity. Get a working MVP + validation framework from an expert 0 to 1 builder in just 2-4 weeks.",
-      features: [
-        "2-4 hour intensive discovery",
-        "Rapid MVP development",
-        "Tech stack selection",
-        "Assumption testing & iteration",
-      ],
-      cta: "Build My Idea",
-      link: "https://savvycal.com/craigsturgis/vibecto-clarity-call",
-      isExternal: true,
-      color: "from-yellow-600 to-orange-600",
-    },
-    {
-      icon: Rocket,
-      title: "Launch Control",
-      subtitle:
-        "Mission Command - where successful prototypes achieve escape velocity",
-      description:
-        "Your vibe coded product has achieved liftoff. Get the technical infrastructure and strategic guidance to scale into a market-capturing product.",
-      features: [
-        "6-12+ week transformation",
-        "Performance optimization",
-        "Team augmentation",
-        "Fractional CTO/CPO support",
-      ],
-      cta: "Explore Mission Parameters",
-      link: "/launch-control",
-      color: "from-blue-600 to-cyan-600",
-    },
-  ];
+  
+  const services = getOrderedServices();
+  const paths = services.map(service => ({
+    icon: service.icon,
+    title: service.label,
+    subtitle: service.subtitle,
+    description: service.subtitle === "Mission Command - where successful prototypes achieve escape velocity" 
+      ? "Your vibe coded product has achieved liftoff. Get the technical infrastructure and strategic guidance to scale into a market-capturing product."
+      : service.subtitle === "For founders with ideas who want to test them quickly and intelligently"
+      ? "Compress months of wandering into weeks of clarity. Get a working MVP + validation framework from an expert 0 to 1 builder in just 2-4 weeks."
+      : "Transform your team's development velocity with enterprise-grade AI agent integration.",
+    features: service.features,
+    cta: service.cta,
+    link: service.link,
+    isExternal: service.isExternal,
+    color: service.color,
+  }));
 
   return (
     <section id="journey" className="py-20 px-6">

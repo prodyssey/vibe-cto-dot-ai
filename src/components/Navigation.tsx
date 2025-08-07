@@ -1,8 +1,5 @@
 import {
   Home,
-  Zap,
-  Rocket,
-  Sparkles,
   BookOpen,
   Menu,
   X,
@@ -24,31 +21,13 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { getOrderedServices } from "@/config/services";
 
 export const Navigation = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
-  const serviceItems = [
-    {
-      path: "/transformation",
-      label: "Transformation",
-      icon: Sparkles,
-      description: "Accelerate product velocity with AI tools",
-    },
-    {
-      path: "/ignition",
-      label: "Ignition",
-      icon: Zap,
-      description: "Jump start your vibe coded prototype",
-    },
-    {
-      path: "/launch-control",
-      label: "Launch Control",
-      icon: Rocket,
-      description: "Vibe code to production product",
-    },
-  ];
+  const serviceItems = getOrderedServices();
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },

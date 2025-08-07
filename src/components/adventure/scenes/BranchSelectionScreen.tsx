@@ -1,7 +1,8 @@
-import { Flame, Rocket, Sparkles, Radio } from "lucide-react";
+import { Flame, Radio } from "lucide-react";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { getOrderedServices } from "@/config/services";
 
 import {
   IgnitionPortal,
@@ -41,59 +42,23 @@ interface Portal {
   };
 }
 
-const PORTALS: Portal[] = [
-  {
-    id: "transformation-path",
-    title: "Transformation",
-    icon: <Sparkles className="w-12 h-12" />,
-    description:
-      "✨ We're well on our way - but want help to go further, faster",
-    fullDescription:
-      "Accelerate your velocity with AI-powered transformation and sophisticated measurement.",
-    color: "from-purple-600 to-indigo-600",
-    glowColor: "shadow-purple-500/50",
-    nextScene: "transformationDetail",
-    pathWeight: {
-      ignition: 0,
-      launch_control: 0,
-      transformation: 3,
-    },
-  },
-  {
-    id: "ignition-path",
-    title: "Ignition",
-    icon: <Flame className="w-12 h-12" />,
-    description:
-      "🔥 I have an idea I believe in - but need help getting started",
-    fullDescription:
-      "Transform your vision into reality with our 2-4 week intensive jumpstart program.",
-    color: "from-orange-600 to-red-600",
-    glowColor: "shadow-orange-500/50",
-    nextScene: "ignitionDetail",
-    pathWeight: {
-      ignition: 3,
-      launch_control: 0,
-      transformation: 0,
-    },
-  },
-  {
-    id: "launch-control-path",
-    title: "Launch Control",
-    icon: <Rocket className="w-12 h-12" />,
-    description:
-      "🚀 I've got a real vibe coded prototype with traction - ready to gear up for scale",
-    fullDescription:
-      "Scale your prototype into a production-ready system with expert technical guidance.",
-    color: "from-blue-600 to-cyan-600",
-    glowColor: "shadow-blue-500/50",
-    nextScene: "launchControlDetail",
-    pathWeight: {
-      ignition: 0,
-      launch_control: 3,
-      transformation: 0,
-    },
-  },
-];
+const services = getOrderedServices();
+const PORTALS: Portal[] = services.map(service => ({
+  id: service.adventureSceneId,
+  title: service.label,
+  icon: service.id === 'ignition' ? <Flame className="w-12 h-12" /> : <service.icon className="w-12 h-12" />,
+  description: service.shortDescription,
+  fullDescription: 
+    service.id === 'transformation' 
+      ? "Accelerate your velocity with AI-powered transformation and sophisticated measurement."
+      : service.id === 'ignition'
+      ? "Transform your vision into reality with our 2-4 week intensive jumpstart program."
+      : "Scale your prototype into a production-ready system with expert technical guidance.",
+  color: service.color.replace('from-yellow-600 to-orange-600', 'from-orange-600 to-red-600').replace('from-purple-600 to-blue-600', 'from-purple-600 to-indigo-600'),
+  glowColor: service.glowColor,
+  nextScene: service.adventureNextScene,
+  pathWeight: service.pathWeight,
+}));
 
 export const BranchSelectionScreen = () => {
   const [hoveredPortal, setHoveredPortal] = useState<string | null>(null);
