@@ -28,11 +28,7 @@ export const Paths = () => {
     icon: service.icon,
     title: service.label,
     subtitle: service.subtitle,
-    description: service.subtitle === "Mission Command - where successful prototypes achieve escape velocity" 
-      ? "Your vibe coded product has achieved liftoff. Get the technical infrastructure and strategic guidance to scale into a market-capturing product."
-      : service.subtitle === "For founders with ideas who want to test them quickly and intelligently"
-      ? "Compress months of wandering into weeks of clarity. Get a working MVP + validation framework from an expert 0 to 1 builder in just 2-4 weeks."
-      : "Transform your team's development velocity with enterprise-grade AI agent integration.",
+    description: service.longDescription,
     features: service.features,
     cta: service.cta,
     link: service.link,

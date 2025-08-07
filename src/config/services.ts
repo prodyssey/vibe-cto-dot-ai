@@ -9,6 +9,7 @@ export interface Service {
   description: string;
   shortDescription: string;
   subtitle: string;
+  longDescription: string;
   features: string[];
   cta: string;
   link: string;
@@ -36,6 +37,8 @@ export const SERVICES: Service[] = [
       "✨ We're well on our way - but want help to go further, faster",
     subtitle:
       "For established teams that want to build quality products much faster",
+    longDescription:
+      "Transform your team's development velocity with enterprise-grade AI agent integration.",
     features: [
       "Team transformation",
       "AI agent deployment",
@@ -65,6 +68,8 @@ export const SERVICES: Service[] = [
       "🔥 I have an idea I believe in - but need help getting started",
     subtitle:
       "For founders with ideas who want to test them quickly and intelligently",
+    longDescription:
+      "Compress months of wandering into weeks of clarity. Get a working MVP + validation framework from an expert 0 to 1 builder in just 2-4 weeks.",
     features: [
       "2-4 hour intensive discovery",
       "Rapid MVP development",
@@ -95,6 +100,8 @@ export const SERVICES: Service[] = [
       "🚀 I've got a real vibe coded prototype with traction - ready to gear up for scale",
     subtitle:
       "Mission Command - where successful prototypes achieve escape velocity",
+    longDescription:
+      "Your vibe coded product has achieved liftoff. Get the technical infrastructure and strategic guidance to scale into a market-capturing product.",
     features: [
       "6-12+ week transformation",
       "Performance optimization",
