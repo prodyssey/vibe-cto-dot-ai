@@ -84,14 +84,14 @@ export const Hero = () => {
             </div>
 
             {/* Visual indicators */}
-            <div className="mt-16 flex justify-center lg:justify-start space-x-12 opacity-60">
-              <div className="flex items-center space-x-2 text-gray-400">
-                <Rocket className="w-5 h-5" />
-                <span className="text-sm">Ship fast</span>
+            <div className="mt-16 flex justify-center lg:justify-start space-x-12">
+              <div className="flex items-center space-x-2">
+                <Rocket className="w-5 h-5 text-pink-400" />
+                <span className="text-sm text-pink-300 font-medium">Ship fast</span>
               </div>
-              <div className="flex items-center space-x-2 text-gray-400">
-                <Code className="w-5 h-5" />
-                <span className="text-sm">Confidence from experience</span>
+              <div className="flex items-center space-x-2">
+                <Code className="w-5 h-5 text-pink-400" />
+                <span className="text-sm text-pink-300 font-medium">Confidence from experience</span>
               </div>
             </div>
           </div>
