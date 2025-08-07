@@ -1,26 +1,60 @@
-import { Home, Zap, Rocket, Sparkles, BookOpen, Menu, X, User } from "lucide-react";
+import {
+  Home,
+  Zap,
+  Rocket,
+  Sparkles,
+  BookOpen,
+  Menu,
+  X,
+  User,
+  ChevronDown,
+  Briefcase,
+} from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 export const Navigation = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
+  const serviceItems = [
+    {
+      path: "/transformation",
+      label: "Transformation",
+      icon: Sparkles,
+      description: "Accelerate product velocity with AI tools",
+    },
+    {
+      path: "/ignition",
+      label: "Ignition",
+      icon: Zap,
+      description: "Jump start your vibe coded prototype",
+    },
+    {
+      path: "/launch-control",
+      label: "Launch Control",
+      icon: Rocket,
+      description: "Vibe code to production product",
+    },
+  ];
+
   const navItems = [
     { path: "/", label: "Home", icon: Home },
-    { path: "/transformation", label: "Transformation", icon: Sparkles },
-    { path: "/ignition", label: "Ignition", icon: Zap },
-    { path: "/launch-control", label: "Launch Control", icon: Rocket },
     { path: "/resources", label: "Resources", icon: BookOpen },
     { path: "/about", label: "About", icon: User },
   ];
-
-  // Desktop nav items (without Home)
-  const desktopNavItems = navItems.filter(item => item.path !== "/");
 
   const handleNavClick = () => {
     setIsOpen(false);
@@ -45,29 +79,75 @@ export const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
-            {desktopNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                location.pathname === item.path ||
-                (item.path === "/resources" &&
-                  location.pathname.startsWith("/resources"));
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent text-white hover:bg-white/10 data-[state=open]:bg-white/10">
+                    <Briefcase className="w-4 h-4 mr-2" />
+                    Services
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 bg-black/95 backdrop-blur-lg border border-white/10">
+                      {serviceItems.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = location.pathname === item.path;
 
-              return (
-                <Link key={item.path} to={item.path}>
-                  <Button
-                    variant={isActive ? "default" : "ghost"}
-                    className={`flex items-center space-x-2 ${
-                      isActive
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-                        : "text-white hover:bg-white/10"
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span className="hidden lg:inline">{item.label}</span>
-                  </Button>
-                </Link>
-              );
-            })}
+                        return (
+                          <li key={item.path}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={item.path}
+                                className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors ${
+                                  isActive
+                                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                                    : "hover:bg-white/10 hover:text-white text-white/90"
+                                }`}
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <Icon className="w-4 h-4" />
+                                  <div className="text-sm font-medium leading-none">
+                                    {item.label}
+                                  </div>
+                                </div>
+                                <p className="line-clamp-2 text-sm leading-snug text-white/60">
+                                  {item.description}
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+
+            {navItems
+              .filter((item) => item.path !== "/")
+              .map((item) => {
+                const Icon = item.icon;
+                const isActive =
+                  location.pathname === item.path ||
+                  (item.path === "/resources" &&
+                    location.pathname.startsWith("/resources"));
+
+                return (
+                  <Link key={item.path} to={item.path}>
+                    <Button
+                      variant={isActive ? "default" : "ghost"}
+                      className={`flex items-center space-x-2 ${
+                        isActive
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                          : "text-white hover:bg-white/10"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span className="hidden lg:inline">{item.label}</span>
+                    </Button>
+                  </Link>
+                );
+              })}
           </div>
 
           {/* Mobile Navigation */}
@@ -110,33 +190,85 @@ export const Navigation = () => {
               </div>
 
               <div className="p-6 space-y-2">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive =
-                    location.pathname === item.path ||
-                    (item.path === "/resources" &&
-                      location.pathname.startsWith("/resources"));
+                {/* Home */}
+                <Link to="/" onClick={handleNavClick}>
+                  <Button
+                    variant={location.pathname === "/" ? "default" : "ghost"}
+                    className={`w-full justify-start space-x-3 text-left ${
+                      location.pathname === "/"
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                        : "text-white hover:bg-white/10"
+                    }`}
+                  >
+                    <Home className="w-5 h-5" />
+                    <span className="text-base">Home</span>
+                  </Button>
+                </Link>
 
-                  return (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      onClick={handleNavClick}
-                    >
-                      <Button
-                        variant={isActive ? "default" : "ghost"}
-                        className={`w-full justify-start space-x-3 text-left ${
-                          isActive
-                            ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-                            : "text-white hover:bg-white/10"
-                        }`}
+                {/* Services Section */}
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2 px-3 py-2 text-white/60 text-sm font-medium">
+                    <Briefcase className="w-4 h-4" />
+                    <span>Services</span>
+                  </div>
+                  <div className="ml-4 space-y-1">
+                    {serviceItems.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = location.pathname === item.path;
+
+                      return (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          onClick={handleNavClick}
+                        >
+                          <Button
+                            variant={isActive ? "default" : "ghost"}
+                            className={`w-full justify-start space-x-3 text-left ${
+                              isActive
+                                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                                : "text-white hover:bg-white/10"
+                            }`}
+                          >
+                            <Icon className="w-5 h-5" />
+                            <span className="text-base">{item.label}</span>
+                          </Button>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Other Nav Items */}
+                {navItems
+                  .filter((item) => item.path !== "/")
+                  .map((item) => {
+                    const Icon = item.icon;
+                    const isActive =
+                      location.pathname === item.path ||
+                      (item.path === "/resources" &&
+                        location.pathname.startsWith("/resources"));
+
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        onClick={handleNavClick}
                       >
-                        <Icon className="w-5 h-5" />
-                        <span className="text-base">{item.label}</span>
-                      </Button>
-                    </Link>
-                  );
-                })}
+                        <Button
+                          variant={isActive ? "default" : "ghost"}
+                          className={`w-full justify-start space-x-3 text-left ${
+                            isActive
+                              ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                              : "text-white hover:bg-white/10"
+                          }`}
+                        >
+                          <Icon className="w-5 h-5" />
+                          <span className="text-base">{item.label}</span>
+                        </Button>
+                      </Link>
+                    );
+                  })}
               </div>
             </SheetContent>
           </Sheet>
