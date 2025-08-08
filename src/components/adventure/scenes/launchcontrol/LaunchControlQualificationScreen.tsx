@@ -74,7 +74,9 @@ export const LaunchControlQualificationScreen = () => {
     },
   ];
 
-  if (!scene) return null;
+  if (!scene) {
+    return null;
+  }
 
   const handleAnswer = async (questionId: string, answer: boolean) => {
     const newAnswers = { ...answers, [questionId]: answer };

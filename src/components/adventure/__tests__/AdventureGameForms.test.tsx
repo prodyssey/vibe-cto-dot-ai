@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen, waitFor } from '@/test/utils'
 import userEvent from '@testing-library/user-event'
 // Import and activate the Supabase mock BEFORE importing components
-import '@/test/mocks/supabase'
 import { mockSupabaseClient, resetSupabaseMocks, mockSuccessfulInsert, mockFailedInsert } from '@/test/mocks/supabase'
 
 // Import form components from the adventure game

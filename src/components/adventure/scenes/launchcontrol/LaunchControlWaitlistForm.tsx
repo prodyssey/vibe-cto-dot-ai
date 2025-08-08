@@ -59,7 +59,9 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
         is_waitlist: isWaitlist,
       });
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       // Track form submission
       trackFormSubmission('launch_control_waitlist_form', {
