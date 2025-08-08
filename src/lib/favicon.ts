@@ -12,7 +12,7 @@ export const generateFaviconSVG = () => {
       </linearGradient>
     </defs>
   </svg>`;
-  
+
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 };
 

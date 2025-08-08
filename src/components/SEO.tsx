@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Helmet } from "react-helmet-async";
 
 interface SEOProps {
@@ -14,19 +15,19 @@ interface SEOProps {
   jsonLd?: object;
 }
 
-const SEO = ({
-  title = "VibeCTO.ai - From vibes to product",
-  description = "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development.",
-  keywords = "AI development, CTO services, software development, AI consulting, product development, startup technology, AI transformation",
-  ogTitle,
-  ogDescription,
-  ogImage = "https://vibecto.ai/vibe-cto-og.png",
-  ogType = "website",
-  twitterCard = "summary_large_image",
-  twitterSite = "@vibecto_ai",
-  canonicalUrl,
-  jsonLd,
-}: SEOProps) => {
+  function SEO({
+    title = "VibeCTO.ai - From vibes to product",
+    description = "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development.",
+    keywords = "AI development, CTO services, software development, AI consulting, product development, startup technology, AI transformation",
+    ogTitle,
+    ogDescription,
+    ogImage = "https://vibecto.ai/vibe-cto-og.png",
+    ogType = "website",
+    twitterCard = "summary_large_image",
+    twitterSite = "@vibecto_ai",
+    canonicalUrl,
+    jsonLd,
+  }: SEOProps) {
   const structuredData = jsonLd || {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -75,6 +76,6 @@ const SEO = ({
       </script>
     </Helmet>
   );
-};
+  }
 
-export default SEO;
+  export default SEO;
