@@ -16,7 +16,9 @@ export const LaunchControlBudgetScreen = () => {
   const { pushScene } = useBrowserNavigation();
   const scene = getScene("launchControlBudget");
 
-  if (!scene) return null;
+  if (!scene) {
+    return null;
+  }
 
   const budgetOptions = [
     {

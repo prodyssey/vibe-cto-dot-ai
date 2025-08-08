@@ -22,7 +22,9 @@ export const LaunchControlRateReductionScreen = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [additionalInfo, setAdditionalInfo] = useState('');
 
-  if (!scene) return null;
+  if (!scene) {
+    return null;
+  }
 
   const categories = [
     {

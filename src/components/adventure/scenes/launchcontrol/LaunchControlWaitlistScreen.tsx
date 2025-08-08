@@ -18,7 +18,9 @@ export const LaunchControlWaitlistScreen = () => {
   const scene = getScene('launchControlWaitlist');
   const [submitted, setSubmitted] = useState(false);
 
-  if (!scene) return null;
+  if (!scene) {
+    return null;
+  }
 
   const handleSuccess = async () => {
     setSubmitted(true);

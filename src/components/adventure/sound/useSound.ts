@@ -21,14 +21,14 @@ export const useSound = () => {
       // Cleanup on unmount
       soundManager.stopMusic();
     };
-  }, []);
+  }, [preferences.soundEnabled, preferences.musicVolume, preferences.effectsVolume]);
 
   // Update sound manager when preferences change
   useEffect(() => {
     soundManager.setEnabled(preferences.soundEnabled);
     soundManager.setMusicVolume(preferences.musicVolume);
     soundManager.setEffectsVolume(preferences.effectsVolume);
-  }, [preferences]);
+  }, [preferences.soundEnabled, preferences.musicVolume, preferences.effectsVolume]);
 
   const playSound = useCallback((soundId: string, options?: { volume?: number; loop?: boolean }) => {
     soundManager.play(soundId, options);

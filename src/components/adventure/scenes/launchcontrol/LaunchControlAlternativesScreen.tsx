@@ -19,7 +19,9 @@ export const LaunchControlAlternativesScreen = () => {
   const [hasSignedUp, setHasSignedUp] = useState(false);
   const scene = getScene("launchControlAlternatives");
 
-  if (!scene) return null;
+  if (!scene) {
+    return null;
+  }
 
   const alternatives = [
     {
