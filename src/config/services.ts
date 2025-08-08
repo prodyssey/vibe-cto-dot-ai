@@ -24,6 +24,18 @@ export interface Service {
     transformation: number;
   };
   order: number;
+  // ProblemPromise component specific styling
+  problemPromise: {
+    heading: string;
+    description: string;
+    features: string[];
+    borderColor: string;
+    shadowColor: string;
+    iconBgColor: string;
+    iconColor: string;
+    dotColor: string;
+    buttonColor: string;
+  };
 }
 
 export const SERVICES: Service[] = [
@@ -57,6 +69,21 @@ export const SERVICES: Service[] = [
       transformation: 3,
     },
     order: 3,
+    problemPromise: {
+      heading: "Team ready to accelerate?",
+      description: "Transform your team's velocity with AI agents. Enterprise-grade strategies to ship faster, measure impact, and maintain quality and security.",
+      features: [
+        "AI agent integration",
+        "Sophisticated measurement",
+        "Experienced support"
+      ],
+      borderColor: "border-purple-500/30 hover:border-purple-400/50",
+      shadowColor: "hover:shadow-purple-500/20",
+      iconBgColor: "bg-purple-500/20",
+      iconColor: "text-purple-400",
+      dotColor: "bg-purple-400",
+      buttonColor: "bg-purple-600 hover:bg-purple-700"
+    },
   },
   {
     id: "ignition",
@@ -89,6 +116,21 @@ export const SERVICES: Service[] = [
       transformation: 0,
     },
     order: 1,
+    problemPromise: {
+      heading: "Need a jump start?",
+      description: "I'll work with you to get your idea to a working vibe coded prototype fast. Benefit from years of experience going from 0 to 1. Test and iterate from a good foundation.",
+      features: [
+        "Discovery workshops",
+        "A rapid prototype you can build on",
+        "Assumption testing guidance"
+      ],
+      borderColor: "border-green-500/30 hover:border-green-400/50",
+      shadowColor: "hover:shadow-green-500/20",
+      iconBgColor: "bg-green-500/20",
+      iconColor: "text-green-400",
+      dotColor: "bg-green-400",
+      buttonColor: "bg-green-600 hover:bg-green-700"
+    },
   },
   {
     id: "launch-control",
@@ -120,6 +162,21 @@ export const SERVICES: Service[] = [
       transformation: 0,
     },
     order: 2,
+    problemPromise: {
+      heading: "Prototype hitting its limits?",
+      description: "Scale your vibe-coded prototype into a production-ready system. Get fractional CTO guidance to handle security, performance, and team growth.",
+      features: [
+        "Architecture & scaling strategy",
+        "Security & compliance",
+        "Team & process optimization"
+      ],
+      borderColor: "border-blue-500/30 hover:border-blue-400/50",
+      shadowColor: "hover:shadow-blue-500/20",
+      iconBgColor: "bg-blue-500/20",
+      iconColor: "text-blue-400",
+      dotColor: "bg-blue-400",
+      buttonColor: "bg-blue-600 hover:bg-blue-700"
+    },
   },
 ];
 
