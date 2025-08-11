@@ -44,11 +44,10 @@ export const SERVICES: Service[] = [
     path: "/transformation",
     label: "Transformation",
     icon: Sparkles,
-    description: "Accelerate product velocity with AI tools",
+    description: "Accelerate your roadmap with AI tool adoption",
     shortDescription:
       "✨ We're well on our way - but want help to go further, faster",
-    subtitle:
-      "For established teams that want to build quality products much faster",
+    subtitle: "For Series A, B+, and Growth Equity companies",
     longDescription:
       "Transform your team's development velocity with enterprise-grade AI agent integration.",
     features: [
@@ -68,21 +67,22 @@ export const SERVICES: Service[] = [
       launch_control: 0,
       transformation: 3,
     },
-    order: 3,
+    order: 1,
     problemPromise: {
-      heading: "Team ready to accelerate?",
-      description: "Transform your team's velocity with AI agents. Enterprise-grade strategies to ship faster, measure impact, and maintain quality and security.",
+      heading: "Established company / product?",
+      description:
+        "Racing the competition to adopt AI more effectively? Get expert help to adopt the latest in AI tools and processes throughout your whole lifecycle.",
       features: [
-        "AI agent integration",
+        "Hands-on AI agent integration",
         "Sophisticated measurement",
-        "Experienced support"
+        "Experienced support",
       ],
       borderColor: "border-purple-500/30 hover:border-purple-400/50",
       shadowColor: "hover:shadow-purple-500/20",
       iconBgColor: "bg-purple-500/20",
       iconColor: "text-purple-400",
       dotColor: "bg-purple-400",
-      buttonColor: "bg-purple-600 hover:bg-purple-700"
+      buttonColor: "bg-purple-600 hover:bg-purple-700",
     },
   },
   {
@@ -93,8 +93,7 @@ export const SERVICES: Service[] = [
     description: "Jump start your vibe coded prototype",
     shortDescription:
       "🔥 I have an idea I believe in - but need help getting started",
-    subtitle:
-      "For founders with ideas who want to test them quickly and intelligently",
+    subtitle: "For builders with vibe code ready ideas who could use a boost",
     longDescription:
       "Compress months of wandering into weeks of clarity. Get a working MVP + validation framework from an expert 0 to 1 builder in just 2-4 weeks.",
     features: [
@@ -104,8 +103,8 @@ export const SERVICES: Service[] = [
       "Assumption testing & iteration",
     ],
     cta: "Build My Idea",
-    link: "https://savvycal.com/craigsturgis/vibecto-clarity-call",
-    isExternal: true,
+    link: "/ignition",
+    isExternal: false,
     color: "from-yellow-600 to-orange-600",
     glowColor: "shadow-orange-500/50",
     adventureSceneId: "ignition-path",
@@ -115,21 +114,22 @@ export const SERVICES: Service[] = [
       launch_control: 0,
       transformation: 0,
     },
-    order: 1,
+    order: 3,
     problemPromise: {
-      heading: "Need a jump start?",
-      description: "I'll work with you to get your idea to a working vibe coded prototype fast. Benefit from years of experience going from 0 to 1. Test and iterate from a good foundation.",
+      heading: "Trouble getting off the ground?",
+      description:
+        "I'll work with you to get your idea to a working vibe coded prototype fast. Benefit from years of experience going from 0 to 1. Test and iterate from a good foundation.",
       features: [
         "Discovery workshops",
         "A rapid prototype you can build on",
-        "Assumption testing guidance"
+        "Assumption testing guidance",
       ],
       borderColor: "border-green-500/30 hover:border-green-400/50",
       shadowColor: "hover:shadow-green-500/20",
       iconBgColor: "bg-green-500/20",
       iconColor: "text-green-400",
       dotColor: "bg-green-400",
-      buttonColor: "bg-green-600 hover:bg-green-700"
+      buttonColor: "bg-green-600 hover:bg-green-700",
     },
   },
   {
@@ -140,8 +140,7 @@ export const SERVICES: Service[] = [
     description: "Vibe code to production product",
     shortDescription:
       "🚀 I've got a real vibe coded prototype with traction - ready to gear up for scale",
-    subtitle:
-      "Mission Command - where successful prototypes achieve escape velocity",
+    subtitle: "For vibe coding builders ready to scale with confidence",
     longDescription:
       "Your vibe coded product has achieved liftoff. Get the technical infrastructure and strategic guidance to scale into a market-capturing product.",
     features: [
@@ -163,19 +162,20 @@ export const SERVICES: Service[] = [
     },
     order: 2,
     problemPromise: {
-      heading: "Prototype hitting its limits?",
-      description: "Scale your vibe-coded prototype into a production-ready system. Get fractional CTO guidance to handle security, performance, and team growth.",
+      heading: "Vibe code hitting its limits?",
+      description:
+        "Scale your vibe-coded application into a production-ready system. Get experienced guidance to handle security, performance, and team growth.",
       features: [
         "Architecture & scaling strategy",
         "Security & compliance",
-        "Team & process optimization"
+        "Team & process optimization",
       ],
       borderColor: "border-blue-500/30 hover:border-blue-400/50",
       shadowColor: "hover:shadow-blue-500/20",
       iconBgColor: "bg-blue-500/20",
       iconColor: "text-blue-400",
       dotColor: "bg-blue-400",
-      buttonColor: "bg-blue-600 hover:bg-blue-700"
+      buttonColor: "bg-blue-600 hover:bg-blue-700",
     },
   },
 ];

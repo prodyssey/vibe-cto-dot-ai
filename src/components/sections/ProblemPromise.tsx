@@ -23,8 +23,8 @@ export const ProblemPromise = () => {
             Where are you in your journey?
           </h2>
           <p className="text-xl text-gray-100 max-w-3xl mx-auto">
-            Whether you're just starting or scaling up, I've got the exact
-            guidance you need.
+            Whether you're established or having trouble building momentum, I've
+            got the exact guidance you need.
           </p>
         </div>
 
@@ -32,9 +32,9 @@ export const ProblemPromise = () => {
           {services.map((service) => {
             const Icon = service.icon;
             const pp = service.problemPromise;
-            
+
             return (
-              <Card 
+              <Card
                 key={service.id}
                 className={`relative group bg-gray-900/80 backdrop-blur-sm ${pp.borderColor} transition-all duration-300 hover:scale-105 hover:shadow-2xl ${pp.shadowColor}`}
               >
@@ -55,7 +55,9 @@ export const ProblemPromise = () => {
                   <ul className="space-y-3 mb-8 text-gray-50">
                     {pp.features.map((feature, idx) => (
                       <li key={idx} className="flex items-center space-x-3">
-                        <div className={`w-2 h-2 ${pp.dotColor} rounded-full flex-shrink-0`}></div>
+                        <div
+                          className={`w-2 h-2 ${pp.dotColor} rounded-full flex-shrink-0`}
+                        ></div>
                         <span className="text-base">{feature}</span>
                       </li>
                     ))}
