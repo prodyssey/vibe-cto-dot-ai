@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { ReactElement } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
@@ -40,5 +41,5 @@ export * from '@testing-library/react'
 export { customRender as render }
 
 // Helper to wait for async operations
-export const waitForLoadingToFinish = () => 
+export const waitForLoadingToFinish = () =>
   new Promise(resolve => setTimeout(resolve, 0))

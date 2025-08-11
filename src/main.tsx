@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client'
 
 import App from './App.tsx'
 import './index.css'
-import { updateFavicon } from './components/Favicon'
+import { updateFavicon } from '@/lib/favicon'
 
 import { Buffer } from 'buffer'
 
