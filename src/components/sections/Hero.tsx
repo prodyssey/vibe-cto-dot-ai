@@ -37,19 +37,20 @@ export const Hero = () => {
 
             {/* Main headline */}
             <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-6 leading-tight">
-              From vibes to
+              Shorten your roadmap
               <br />
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                product
+                with AI
               </span>
             </h1>
 
             {/* Subcopy */}
             <p className="text-xl md:text-2xl text-gray-100 max-w-4xl lg:max-w-none mx-auto mb-12 leading-relaxed">
-              I help builders use AI tools to ship
+              I help builders of all kinds adopt the latest AI tools and
+              processes to accelerate
               <span className="text-blue-400 font-semibold">
                 {" "}
-                real products, internal tools, and prototypes - fast
+                roadmaps, prototypes, and internal operations
               </span>
               .
             </p>
@@ -87,11 +88,15 @@ export const Hero = () => {
             <div className="mt-16 flex justify-center lg:justify-start space-x-12">
               <div className="flex items-center space-x-2">
                 <Rocket className="w-5 h-5 text-pink-400" />
-                <span className="text-sm text-pink-300 font-medium">Ship fast</span>
+                <span className="text-sm text-pink-300 font-medium">
+                  Ship fast
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <Code className="w-5 h-5 text-pink-400" />
-                <span className="text-sm text-pink-300 font-medium">Confidence from experience</span>
+                <span className="text-sm text-pink-300 font-medium">
+                  Confidence from experience
+                </span>
               </div>
             </div>
           </div>
@@ -106,7 +111,7 @@ export const Hero = () => {
               />
               {/* Quote under avatar */}
               <p className="mt-6 text-lg text-gray-200 italic">
-                "Hi. I'm Craig. Let's build and learn together."
+                "Hi. I'm Craig. Let's build together.
               </p>
               {/* Glow effect behind avatar */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-2xl -z-10 scale-110"></div>
