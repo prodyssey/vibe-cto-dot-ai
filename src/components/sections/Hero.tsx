@@ -37,7 +37,7 @@ export const Hero = () => {
 
             {/* Main headline */}
             <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-6 leading-tight">
-              Capture the market faster
+              Accelerate your roadmap
               <br />
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 with AI
