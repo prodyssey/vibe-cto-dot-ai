@@ -1,17 +1,15 @@
 import {
   ArrowRight,
   ArrowLeft,
-  DollarSign,
   Phone,
   Mail,
   CheckCircle,
   Loader2,
-  Info,
   MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 
-import { EmailOptIn } from "@/components/EmailOptIn";
+import { BudgetSlider } from "@/components/BudgetSlider";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,19 +21,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
-import { qualificationFormSchema, waitlistFormSchema, validateForm } from "@/lib/validation";
+import { waitlistFormSchema, validateForm } from "@/lib/validation";
 
-type FormStep =
-  | "budget"
-  | "rate-reduction"
-  | "contact"
-  | "success"
-  | "alternatives";
+type FormStep = "budget" | "contact" | "success";
 
 interface IgnitionQualificationFormProps {
   onSuccess?: () => void;
@@ -44,39 +36,48 @@ interface IgnitionQualificationFormProps {
 
 interface FormData {
   budget: string;
-  needsRateReduction: boolean;
-  rateReductionReason?: string;
   name: string;
   email: string;
   preferredContact: "email" | "phone" | "text" | "either";
   phone?: string;
 }
 
-const BUDGET_OPTIONS = [
+const BUDGET_RANGES = [
   {
-    value: "ready-high",
-    label: "$15K - $50K+",
-    amount: "Ready to invest",
+    min: 0,
+    max: 100,
+    label: "Just exploring",
+    description: "I'd like to learn more about vibe coding on my own",
+    color: "from-gray-600 to-gray-700",
+  },
+  {
+    min: 100,
+    max: 4999,
+    label: "Starter budget",
+    description: "Let's explore options that might work",
+    color: "from-orange-600 to-amber-600",
+  },
+  {
+    min: 5000,
+    max: 14999,
+    label: "Low-Mid budget",
+    description: "I've got a budget, but it's limited",
+    color: "from-blue-600 to-cyan-600",
+  },
+  {
+    min: 15000,
+    max: 50000,
+    label: "Ready to invest",
     description:
       "I understand the investment and I'm ready to transform my idea",
+    color: "from-green-600 to-emerald-600",
   },
   {
-    value: "ready-mid",
-    label: "$5K - $15K",
-    amount: "Limited budget available",
-    description: "I've got a budget, but it's limited",
-  },
-  {
-    value: "ready-low",
-    label: "$1 - $4,999",
-    amount: "Not ready yet",
-    description: "Let's explore alternative options",
-  },
-  {
-    value: "not-ready",
-    label: "Just my time",
-    amount: "No budget available",
-    description: "But I'd like to learn more about vibe coding on my own",
+    min: 50001,
+    max: 100000,
+    label: "Premium investment",
+    description: "Ready for comprehensive transformation",
+    color: "from-purple-600 to-indigo-600",
   },
 ];
 
@@ -89,52 +90,22 @@ export const IgnitionQualificationForm = ({
   const [showBackupButton, setShowBackupButton] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     budget: "",
-    needsRateReduction: false,
     name: "",
     email: "",
     preferredContact: "email",
   });
   const { toast } = useToast();
 
-  const handleBudgetSelect = (value: string) => {
+  const handleBudgetChange = (value: number) => {
     setFormData({ ...formData, budget: value });
-
-    // Handle different budget levels
-    if (value === "ready-high") {
-      // $15K+ goes straight to contact info then SavvyCal
-      setFormData({ ...formData, budget: value, needsRateReduction: false });
-      setCurrentStep("contact");
-    } else if (value === "ready-mid") {
-      // $5K-$15K shows rate reduction option
-      setFormData({ ...formData, budget: value, needsRateReduction: true });
-      setCurrentStep("rate-reduction");
-    } else {
-      // Under $5K or no budget - redirect to email signup
-      setCurrentStep("alternatives");
-    }
   };
 
-  const handleRateReductionSubmit = () => {
+  const handleBudgetContinue = () => {
+    // Allow all budgets including $0 to continue
     setCurrentStep("contact");
   };
 
   const handleContactSubmit = async () => {
-    // Validate qualification data
-    const qualValidation = validateForm(qualificationFormSchema, {
-      budget: formData.budget,
-      needsRateReduction: formData.needsRateReduction,
-      rateReductionReason: formData.rateReductionReason,
-    });
-
-    if (!qualValidation.success) {
-      toast({
-        title: "Validation Error",
-        description: Object.values(qualValidation.errors)[0],
-        variant: "destructive",
-      });
-      return;
-    }
-
     // Validate contact data
     const contactValidation = validateForm(waitlistFormSchema, {
       name: formData.name,
@@ -158,8 +129,8 @@ export const IgnitionQualificationForm = ({
       // Try to save qualification data to Supabase
       const { error } = await supabase.from("ignition_qualifications").insert({
         budget: formData.budget,
-        needs_rate_reduction: formData.needsRateReduction,
-        rate_reduction_reason: formData.rateReductionReason,
+        needs_rate_reduction: false,
+        rate_reduction_reason: null,
         name: formData.name,
         email: formData.email,
         preferred_contact: formData.preferredContact,
@@ -172,17 +143,21 @@ export const IgnitionQualificationForm = ({
 
       setCurrentStep("success");
 
-      // Only high budget goes straight to SavvyCal
+      // Only high budget gets immediate SavvyCal redirect
       if (formData.budget === "ready-high") {
         const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
           formData.email
         )}&display_name=${encodeURIComponent(formData.name)}`;
 
         setTimeout(() => {
-          trackSavvyCalClick('ignition_qualification_form', 'ignition_alignment', {
-            budget: formData.budget,
-            email: formData.email
-          });
+          trackSavvyCalClick(
+            "ignition_qualification_form",
+            "ignition_alignment",
+            {
+              budget: formData.budget,
+              email: formData.email,
+            }
+          );
           const newWindow = window.open(savvycalUrl, "_blank");
 
           // Check if popup was blocked
@@ -210,20 +185,14 @@ export const IgnitionQualificationForm = ({
   };
 
   const handleBack = () => {
-    if (currentStep === "contact" && formData.needsRateReduction) {
-      setCurrentStep("rate-reduction");
-    } else if (
-      currentStep === "rate-reduction" ||
-      currentStep === "contact" ||
-      currentStep === "alternatives"
-    ) {
+    if (currentStep === "contact") {
       setCurrentStep("budget");
     }
   };
 
   if (currentStep === "success") {
     const savvycalUrl =
-      formData.budget === "ready-high"
+      formData.budget >= 15000
         ? `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
             formData.email
           )}&display_name=${encodeURIComponent(formData.name)}`
@@ -232,35 +201,121 @@ export const IgnitionQualificationForm = ({
     return (
       <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
         <CardContent className="pt-6">
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-6">
             <CheckCircle className="w-12 h-12 text-green-500 mx-auto" />
-            <h3 className="text-xl font-semibold text-white">
-              {formData.needsRateReduction
-                ? "Application Submitted!"
-                : "Success!"}
-            </h3>
-            <p className="text-gray-300">
-              {formData.needsRateReduction
-                ? "We'll review your rate reduction application and contact you within 1-2 business days."
-                : showBackupButton
-                ? "Your information has been saved. Click the button below to schedule your call."
-                : "Redirecting you to schedule your alignment call..."}
-            </p>
+            <div>
+              <h3 className="text-xl font-semibold text-white mb-2">
+                Thank You, {formData.name}!
+              </h3>
+              <p className="text-gray-300">
+                {formData.budget >= 15000
+                  ? showBackupButton
+                    ? "Your information has been saved. Click below to schedule your alignment call."
+                    : "Redirecting you to schedule your alignment call..."
+                  : formData.budget === 0
+                  ? "Thanks for your interest! We'll send you vibe coding resources and add you to our community updates."
+                  : "We've received your information and will be in touch soon."}
+              </p>
+            </div>
 
-            {showBackupButton && formData.budget === "ready-high" && (
+            {/* SavvyCal button for high budget */}
+            {formData.budget >= 15000 && showBackupButton && (
               <Button
                 onClick={() => {
-                  trackSavvyCalClick('ignition_qualification_form_backup', 'ignition_alignment', {
-                    budget: formData.budget,
-                    email: formData.email
-                  });
+                  trackSavvyCalClick(
+                    "ignition_qualification_form_backup",
+                    "ignition_alignment",
+                    {
+                      budget: formData.budget,
+                      email: formData.email,
+                    }
+                  );
                   window.open(savvycalUrl, "_blank");
                 }}
                 className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
               >
-                Schedule Your Call
+                Schedule Your Call Now
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
+            )}
+
+            {/* Alternative resources based on budget */}
+            {formData.budget < 15000 && (
+              <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 text-left">
+                <h4 className="font-semibold text-white mb-3">
+                  While you wait, here are some resources:
+                </h4>
+                {formData.budget > 0 ? (
+                  <ul className="space-y-2 text-gray-300 text-sm">
+                    <li className="flex items-start">
+                      <span className="text-orange-400 mr-2">•</span>
+                      <span>
+                        Check out our{" "}
+                        <a
+                          href="/resources"
+                          className="text-orange-400 hover:text-orange-300 underline"
+                        >
+                          free resources
+                        </a>{" "}
+                        on vibe coding
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-orange-400 mr-2">•</span>
+                      <span>Join our newsletter for tips and case studies</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-orange-400 mr-2">•</span>
+                      <span>
+                        Explore DIY options with our recommended AI tools
+                      </span>
+                    </li>
+                    {formData.budget >= 1000 && formData.budget < 15000 && (
+                      <li className="flex items-start">
+                        <span className="text-orange-400 mr-2">•</span>
+                        <span>
+                          We'll discuss options that might work for your budget
+                        </span>
+                      </li>
+                    )}
+                  </ul>
+                ) : (
+                  <ul className="space-y-2 text-gray-300 text-sm">
+                    <li className="flex items-start">
+                      <span className="text-orange-400 mr-2">•</span>
+                      <span>
+                        Start with our{" "}
+                        <a
+                          href="/resources"
+                          className="text-orange-400 hover:text-orange-300 underline"
+                        >
+                          free vibe coding guides
+                        </a>
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-orange-400 mr-2">•</span>
+                      <span>
+                        Learn the fundamentals through our blog and resources
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-orange-400 mr-2">•</span>
+                      <span>
+                        Apply to join our community to connect with other
+                        builders
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-orange-400 mr-2">•</span>
+                      <span>
+                        We'll notify you about future cohort programs or group
+                        options
+                      </span>
+                    </li>
+                  </ul>
+                )}
+              </div>
             )}
           </div>
         </CardContent>
@@ -272,98 +327,36 @@ export const IgnitionQualificationForm = ({
     <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
       <CardHeader>
         <CardTitle className="text-white">
-          {currentStep === "budget" && "Let's Check Your Readiness"}
-          {currentStep === "rate-reduction" && "Rate Reduction Application"}
+          {currentStep === "budget" && "Investment Planning"}
           {currentStep === "contact" && "Contact Information"}
-          {currentStep === "alternatives" && "Alternative Options"}
         </CardTitle>
-        <CardDescription className="text-gray-400">
-          {currentStep === "budget" && "What's your budget for this project?"}
-          {currentStep === "rate-reduction" &&
-            "Tell us why you'd be a great fit for a reduced rate"}
-          {currentStep === "contact" && "How can we reach you?"}
-          {currentStep === "alternatives" &&
-            "Let's find the right path for you"}
-        </CardDescription>
+        {currentStep === "contact" && (
+          <CardDescription className="text-gray-400">
+            How can we reach you?
+          </CardDescription>
+        )}
       </CardHeader>
 
       <CardContent className="space-y-6">
         {currentStep === "budget" && (
-          <RadioGroup
-            value={formData.budget}
-            onValueChange={handleBudgetSelect}
-            className="space-y-3"
-          >
-            {BUDGET_OPTIONS.map((option) => (
-              <label
-                key={option.value}
-                className={cn(
-                  "flex items-start space-x-3 p-4 rounded-lg border cursor-pointer transition-all",
-                  formData.budget === option.value
-                    ? "border-orange-500 bg-orange-500/10"
-                    : "border-gray-700 hover:border-gray-600"
-                )}
-              >
-                <RadioGroupItem
-                  value={option.value}
-                  className="mt-1 text-orange-500"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <DollarSign className="w-4 h-4 text-orange-400" />
-                    <span className="font-semibold text-white">
-                      {option.label}
-                    </span>
-                  </div>
-                  <div className="text-sm font-medium text-gray-300 mt-1">
-                    {option.amount}
-                  </div>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {option.description}
-                  </p>
-                </div>
-              </label>
-            ))}
-          </RadioGroup>
-        )}
+          <div className="space-y-6">
+            <BudgetSlider
+              min={0}
+              max={100000}
+              step={500}
+              value={formData.budget}
+              onChange={handleBudgetChange}
+              ranges={BUDGET_RANGES}
+              label=""
+              description="Select your budget range or enter a specific amount"
+              showRecommendations={true}
+            />
 
-        {currentStep === "rate-reduction" && (
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="reason" className="text-white mb-2">
-                What is special about your project that we should consider for a
-                possible reduced rate?
-              </Label>
-              <Textarea
-                id="reason"
-                placeholder="Tell us about your situation, your idea's potential impact, or why you'd be an ideal candidate for a reduced rate..."
-                className="min-h-[120px] bg-gray-800 border-gray-700 text-white placeholder-gray-500"
-                value={formData.rateReductionReason || ""}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    rateReductionReason: e.target.value,
-                  })
-                }
-              />
-              <p className="text-xs text-gray-500 mt-2">
-                We review applications based on potential impact, founder
-                background, commitment, and available capacity.
-              </p>
-            </div>
-
-            <div className="flex gap-3">
+            <div className="flex justify-end">
               <Button
-                variant="outline"
-                onClick={handleBack}
-                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
-              <Button
-                onClick={handleRateReductionSubmit}
-                className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+                onClick={handleBudgetContinue}
+                disabled={false}
+                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
               >
                 Continue
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -517,73 +510,12 @@ export const IgnitionQualificationForm = ({
                   </>
                 ) : (
                   <>
-                    {formData.needsRateReduction
-                      ? "Submit Application"
-                      : "Continue to Scheduling"}
+                    Submit Information
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </>
                 )}
               </Button>
             </div>
-          </div>
-        )}
-
-        {currentStep === "alternatives" && (
-          <div className="space-y-6">
-            <div className="text-center mb-6">
-              <div className="inline-flex p-3 rounded-full bg-orange-500/20 mb-4">
-                <Info className="w-8 h-8 text-orange-400" />
-              </div>
-
-              <h3 className="text-lg font-semibold text-white mb-2">
-                Let&apos;s Start with Learning
-              </h3>
-
-              <p className="text-gray-300">
-                While Ignition requires a minimum investment, you can still
-                learn about vibe coding and building products through our
-                resources and community.
-              </p>
-            </div>
-
-            <div className="bg-gray-800/30 border border-gray-700 rounded-lg p-6 space-y-4">
-              <h4 className="font-semibold text-white">Get Started with:</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex items-start">
-                  <span className="text-orange-400 mr-2">•</span>
-                  Free resources and guides on vibe coding
-                </li>
-                <li className="flex items-start">
-                  <span className="text-orange-400 mr-2">•</span>
-                  Community updates and case studies
-                </li>
-                <li className="flex items-start">
-                  <span className="text-orange-400 mr-2">•</span>
-                  Early access to new tools and techniques
-                </li>
-                <li className="flex items-start">
-                  <span className="text-orange-400 mr-2">•</span>
-                  Special offers when you&apos;re ready to invest
-                </li>
-              </ul>
-            </div>
-
-            <EmailOptIn
-              variant="minimal"
-              title="Join the Vibe Coding Community"
-              description="Get free resources and learn to build faster"
-              buttonText="Sign Me Up"
-              className="border-orange-500/30"
-            />
-
-            <Button
-              variant="outline"
-              onClick={handleBack}
-              className="w-full border-gray-600 text-gray-300 hover:bg-gray-800"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Budget Options
-            </Button>
           </div>
         )}
       </CardContent>
