@@ -27,7 +27,7 @@ import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
 
-type FormStep = "budget" | "contact" | "success";
+type FormStep = "contact" | "budget" | "success";
 
 interface IgnitionQualificationFormProps {
   onSuccess?: () => void;
@@ -35,11 +35,13 @@ interface IgnitionQualificationFormProps {
 }
 
 interface FormData {
-  budget: string;
+  budget: number;
   name: string;
   email: string;
   preferredContact: "email" | "phone" | "text" | "either";
   phone?: string;
+  recordId?: string;
+  sessionId?: string;
 }
 
 const BUDGET_RANGES = [
@@ -85,14 +87,15 @@ export const IgnitionQualificationForm = ({
   onSuccess,
   className,
 }: IgnitionQualificationFormProps) => {
-  const [currentStep, setCurrentStep] = useState<FormStep>("budget");
+  const [currentStep, setCurrentStep] = useState<FormStep>("contact");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showBackupButton, setShowBackupButton] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-    budget: "",
+    budget: 0,
     name: "",
     email: "",
     preferredContact: "email",
+    sessionId: crypto.randomUUID(), // Generate unique session ID for this form instance
   });
   const { toast } = useToast();
 
@@ -100,42 +103,19 @@ export const IgnitionQualificationForm = ({
     setFormData({ ...formData, budget: value });
   };
 
-  const handleBudgetContinue = () => {
-    // Allow all budgets including $0 to continue
-    setCurrentStep("contact");
-  };
-
-  const handleContactSubmit = async () => {
-    // Validate contact data
-    const contactValidation = validateForm(waitlistFormSchema, {
-      name: formData.name,
-      email: formData.email,
-      preferredContact: formData.preferredContact,
-      phone: formData.phone,
-    });
-
-    if (!contactValidation.success) {
-      toast({
-        title: "Validation Error",
-        description: Object.values(contactValidation.errors)[0],
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const handleBudgetSubmit = async () => {
     setIsSubmitting(true);
-
+    
     try {
-      // Try to save qualification data to Supabase
-      const { error } = await supabase.from("ignition_qualifications").insert({
-        budget: formData.budget,
-        needs_rate_reduction: false,
-        rate_reduction_reason: null,
-        name: formData.name,
-        email: formData.email,
-        preferred_contact: formData.preferredContact,
-        phone: formData.phone,
-      });
+      // Update the existing record with budget information and mark as completed
+      const { error } = await supabase
+        .from("ignition_qualifications")
+        .update({
+          budget: String(formData.budget),
+          completed: true, // Mark as fully completed
+        })
+        .eq("id", formData.recordId)
+        .eq("session_id", formData.sessionId); // Use session ID for secure update
 
       if (error) {
         throw error;
@@ -143,8 +123,8 @@ export const IgnitionQualificationForm = ({
 
       setCurrentStep("success");
 
-      // Only high budget gets immediate SavvyCal redirect
-      if (formData.budget === "ready-high") {
+      // Budget $15K+ gets immediate SavvyCal redirect
+      if (formData.budget >= 15000) {
         const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(
           formData.email
         )}&display_name=${encodeURIComponent(formData.name)}`;
@@ -173,10 +153,68 @@ export const IgnitionQualificationForm = ({
 
       onSuccess?.();
     } catch (error) {
-      console.error("Error submitting qualification:", error);
+      console.error("Error updating budget:", error);
       toast({
         title: "Error",
-        description: "Failed to submit your information. Please try again.",
+        description: "Failed to save your budget. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleContactSubmit = async () => {
+    // Validate contact data
+    const contactValidation = validateForm(waitlistFormSchema, {
+      name: formData.name,
+      email: formData.email,
+      preferredContact: formData.preferredContact,
+      phone: formData.phone,
+    });
+
+    if (!contactValidation.success) {
+      toast({
+        title: "Validation Error",
+        description: Object.values(contactValidation.errors)[0],
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Save contact data first (budget will be added in next step)
+      const { data, error } = await supabase
+        .from("ignition_qualifications")
+        .insert({
+          budget: "pending", // Will be updated when budget is selected
+          needs_rate_reduction: false,
+          rate_reduction_reason: null,
+          name: formData.name,
+          email: formData.email,
+          preferred_contact: formData.preferredContact,
+          phone: formData.phone,
+          completed: false, // Track completion status
+          session_id: formData.sessionId, // Include session ID for RLS
+        })
+        .select()
+        .eq("session_id", formData.sessionId) // Filter by session ID for security
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      // Store the record ID for updating with budget later
+      setFormData({ ...formData, recordId: data.id });
+      setCurrentStep("budget");
+    } catch (error) {
+      console.error("Error saving contact information:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save your information. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -185,8 +223,8 @@ export const IgnitionQualificationForm = ({
   };
 
   const handleBack = () => {
-    if (currentStep === "contact") {
-      setCurrentStep("budget");
+    if (currentStep === "budget") {
+      setCurrentStep("contact");
     }
   };
 
@@ -327,44 +365,16 @@ export const IgnitionQualificationForm = ({
     <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
       <CardHeader>
         <CardTitle className="text-white">
+          {currentStep === "contact" && "Let's Get Started"}
           {currentStep === "budget" && "Investment Planning"}
-          {currentStep === "contact" && "Contact Information"}
         </CardTitle>
-        {currentStep === "contact" && (
-          <CardDescription className="text-gray-400">
-            How can we reach you?
-          </CardDescription>
-        )}
+        <CardDescription className="text-gray-400">
+          {currentStep === "contact" && "First, tell us how to reach you"}
+          {currentStep === "budget" && "Now, let's discuss your investment level"}
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {currentStep === "budget" && (
-          <div className="space-y-6">
-            <BudgetSlider
-              min={0}
-              max={100000}
-              step={500}
-              value={formData.budget}
-              onChange={handleBudgetChange}
-              ranges={BUDGET_RANGES}
-              label=""
-              description="Select your budget range or enter a specific amount"
-              showRecommendations={true}
-            />
-
-            <div className="flex justify-end">
-              <Button
-                onClick={handleBudgetContinue}
-                disabled={false}
-                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
-              >
-                Continue
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </div>
-        )}
-
         {currentStep === "contact" && (
           <div className="space-y-4">
             <div className="grid gap-4">
@@ -482,15 +492,7 @@ export const IgnitionQualificationForm = ({
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
+            <div className="flex justify-end">
               <Button
                 onClick={handleContactSubmit}
                 disabled={
@@ -501,6 +503,50 @@ export const IgnitionQualificationForm = ({
                     formData.preferredContact === "text") &&
                     !formData.phone)
                 }
+                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    Continue
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {currentStep === "budget" && (
+          <div className="space-y-6">
+            <BudgetSlider
+              min={0}
+              max={100000}
+              step={500}
+              value={formData.budget}
+              onChange={handleBudgetChange}
+              ranges={BUDGET_RANGES}
+              label=""
+              description="Select your budget range or enter a specific amount"
+              showRecommendations={true}
+            />
+
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={handleBack}
+                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <Button
+                onClick={handleBudgetSubmit}
+                disabled={isSubmitting}
                 className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
               >
                 {isSubmitting ? (
@@ -510,7 +556,7 @@ export const IgnitionQualificationForm = ({
                   </>
                 ) : (
                   <>
-                    Submit Information
+                    Complete Registration
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </>
                 )}

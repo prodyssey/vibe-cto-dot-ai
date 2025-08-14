@@ -27,7 +27,7 @@ import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
 
-type FormStep = "budget" | "contact" | "success";
+type FormStep = "contact" | "budget" | "success";
 
 interface LaunchControlQualificationFormProps {
   onSuccess?: () => void;
@@ -40,6 +40,8 @@ interface FormData {
   email: string;
   preferredContact: "email" | "phone" | "text" | "either";
   phone?: string;
+  recordId?: string;
+  sessionId?: string;
 }
 
 const BUDGET_RANGES = [
@@ -61,7 +63,7 @@ const BUDGET_RANGES = [
     min: 15000,
     max: 39999,
     label: "Growth budget",
-    description: "Limited budget but serious about growth",
+    description: "Ready to invest in scaling - let's talk!",
     color: "from-blue-600 to-cyan-600",
   },
   {
@@ -84,7 +86,7 @@ export const LaunchControlQualificationForm = ({
   onSuccess,
   className,
 }: LaunchControlQualificationFormProps) => {
-  const [currentStep, setCurrentStep] = useState<FormStep>("budget");
+  const [currentStep, setCurrentStep] = useState<FormStep>("contact");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showBackupButton, setShowBackupButton] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -92,6 +94,7 @@ export const LaunchControlQualificationForm = ({
     name: "",
     email: "",
     preferredContact: "email",
+    sessionId: crypto.randomUUID(), // Generate unique session ID for this form instance
   });
   const { toast } = useToast();
 
@@ -99,44 +102,19 @@ export const LaunchControlQualificationForm = ({
     setFormData({ ...formData, budget: value });
   };
 
-  const handleBudgetContinue = () => {
-    // Allow all budgets including $0 to continue
-    setCurrentStep("contact");
-  };
-
-  const handleContactSubmit = async () => {
-    // Validate contact data
-    const contactValidation = validateForm(waitlistFormSchema, {
-      name: formData.name,
-      email: formData.email,
-      preferredContact: formData.preferredContact,
-      phone: formData.phone,
-    });
-
-    if (!contactValidation.success) {
-      toast({
-        title: "Validation Error",
-        description: Object.values(contactValidation.errors)[0],
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const handleBudgetSubmit = async () => {
     setIsSubmitting(true);
-
+    
     try {
-      // Try to save qualification data to Supabase
+      // Update the existing record with budget information and mark as completed
       const { error } = await supabase
         .from("launch_control_qualifications")
-        .insert({
+        .update({
           budget: String(formData.budget),
-          needs_rate_reduction: false,
-          rate_reduction_reason: null,
-          name: formData.name,
-          email: formData.email,
-          preferred_contact: formData.preferredContact,
-          phone: formData.phone,
-        });
+          completed: true, // Mark as fully completed
+        })
+        .eq("id", formData.recordId)
+        .eq("session_id", formData.sessionId); // Use session ID for secure update
 
       if (error) {
         throw error;
@@ -144,8 +122,8 @@ export const LaunchControlQualificationForm = ({
 
       setCurrentStep("success");
 
-      // Budget $40K+ gets immediate SavvyCal redirect
-      if (formData.budget >= 40000) {
+      // Budget $15K+ gets immediate SavvyCal redirect
+      if (formData.budget >= 15000) {
         const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
           formData.email
         )}&display_name=${encodeURIComponent(formData.name)}`;
@@ -174,10 +152,68 @@ export const LaunchControlQualificationForm = ({
 
       onSuccess?.();
     } catch (error) {
-      console.error("Error submitting qualification:", error);
+      console.error("Error updating budget:", error);
       toast({
         title: "Error",
-        description: "Failed to submit your information. Please try again.",
+        description: "Failed to save your budget. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleContactSubmit = async () => {
+    // Validate contact data
+    const contactValidation = validateForm(waitlistFormSchema, {
+      name: formData.name,
+      email: formData.email,
+      preferredContact: formData.preferredContact,
+      phone: formData.phone,
+    });
+
+    if (!contactValidation.success) {
+      toast({
+        title: "Validation Error",
+        description: Object.values(contactValidation.errors)[0],
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Save contact data first (budget will be added in next step)
+      const { data, error } = await supabase
+        .from("launch_control_qualifications")
+        .insert({
+          budget: "pending", // Will be updated when budget is selected
+          needs_rate_reduction: false,
+          rate_reduction_reason: null,
+          name: formData.name,
+          email: formData.email,
+          preferred_contact: formData.preferredContact,
+          phone: formData.phone,
+          completed: false, // Track completion status
+          session_id: formData.sessionId, // Include session ID for RLS
+        })
+        .select()
+        .eq("session_id", formData.sessionId) // Filter by session ID for security
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      // Store the record ID for updating with budget later
+      setFormData({ ...formData, recordId: data.id });
+      setCurrentStep("budget");
+    } catch (error) {
+      console.error("Error saving contact information:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save your information. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -186,14 +222,14 @@ export const LaunchControlQualificationForm = ({
   };
 
   const handleBack = () => {
-    if (currentStep === "contact") {
-      setCurrentStep("budget");
+    if (currentStep === "budget") {
+      setCurrentStep("contact");
     }
   };
 
   if (currentStep === "success") {
     const savvycalUrl =
-      formData.budget === "ready-high"
+      formData.budget >= 15000
         ? `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
             formData.email
           )}&display_name=${encodeURIComponent(formData.name)}`
@@ -209,7 +245,7 @@ export const LaunchControlQualificationForm = ({
                 Thank You, {formData.name}!
               </h3>
               <p className="text-gray-300">
-                {formData.budget >= 10000
+                {formData.budget >= 15000
                   ? showBackupButton
                     ? "Your information has been saved. Click below to schedule your mission assessment call."
                     : "Redirecting you to schedule your mission assessment call..."
@@ -220,7 +256,7 @@ export const LaunchControlQualificationForm = ({
             </div>
 
             {/* SavvyCal button for high budget */}
-            {formData.budget >= 10000 && showBackupButton && (
+            {formData.budget >= 15000 && showBackupButton && (
               <Button
                 onClick={() => {
                   trackSavvyCalClick(
@@ -241,7 +277,7 @@ export const LaunchControlQualificationForm = ({
             )}
 
             {/* Alternative resources based on budget */}
-            {formData.budget < 40000 && (
+            {formData.budget < 15000 && (
               <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 text-left">
                 <h4 className="font-semibold text-white mb-3">
                   While you wait, here are some resources:
@@ -273,7 +309,7 @@ export const LaunchControlQualificationForm = ({
                         checklist
                       </span>
                     </li>
-                    {formData.budget >= 15000 && formData.budget < 40000 && (
+                    {formData.budget >= 5000 && formData.budget < 15000 && (
                       <li className="flex items-start">
                         <span className="text-cyan-400 mr-2">•</span>
                         <span>
@@ -337,44 +373,16 @@ export const LaunchControlQualificationForm = ({
     <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
       <CardHeader>
         <CardTitle className="text-white">
+          {currentStep === "contact" && "Mission Control Check-In"}
           {currentStep === "budget" && "Scaling Investment"}
-          {currentStep === "contact" && "Contact Information"}
         </CardTitle>
-        {currentStep === "contact" && (
-          <CardDescription className="text-gray-400">
-            How can mission control reach you?
-          </CardDescription>
-        )}
+        <CardDescription className="text-gray-400">
+          {currentStep === "contact" && "First, let's establish communication"}
+          {currentStep === "budget" && "Now, let's discuss your scaling investment"}
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {currentStep === "budget" && (
-          <div className="space-y-6">
-            <BudgetSlider
-              min={0}
-              max={150000}
-              step={1000}
-              value={formData.budget}
-              onChange={handleBudgetChange}
-              ranges={BUDGET_RANGES}
-              label=""
-              description="From bootstrap to enterprise - select your investment level"
-              showRecommendations={true}
-            />
-
-            <div className="flex justify-end">
-              <Button
-                onClick={handleBudgetContinue}
-                disabled={false}
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
-              >
-                Continue
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </div>
-        )}
-
         {currentStep === "contact" && (
           <div className="space-y-4">
             <div className="grid gap-4">
@@ -492,15 +500,7 @@ export const LaunchControlQualificationForm = ({
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
+            <div className="flex justify-end">
               <Button
                 onClick={handleContactSubmit}
                 disabled={
@@ -511,6 +511,50 @@ export const LaunchControlQualificationForm = ({
                     formData.preferredContact === "text") &&
                     !formData.phone)
                 }
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    Continue
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {currentStep === "budget" && (
+          <div className="space-y-6">
+            <BudgetSlider
+              min={0}
+              max={150000}
+              step={1000}
+              value={formData.budget}
+              onChange={handleBudgetChange}
+              ranges={BUDGET_RANGES}
+              label=""
+              description="From bootstrap to enterprise - select your investment level"
+              showRecommendations={true}
+            />
+
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={handleBack}
+                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <Button
+                onClick={handleBudgetSubmit}
+                disabled={isSubmitting}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
               >
                 {isSubmitting ? (
@@ -520,7 +564,7 @@ export const LaunchControlQualificationForm = ({
                   </>
                 ) : (
                   <>
-                    Submit Information
+                    Complete Registration
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </>
                 )}
