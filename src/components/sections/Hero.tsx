@@ -46,7 +46,7 @@ export const Hero = () => {
 
             {/* Subcopy */}
             <p className="text-xl md:text-2xl text-gray-100 max-w-4xl lg:max-w-none mx-auto mb-12 leading-relaxed">
-              I help builders of all kinds adopt the latest AI tools and
+              I work with builders of all kinds to adopt the most effective AI tools and
               processes to accelerate
               <span className="text-blue-400 font-semibold">
                 {" "}
