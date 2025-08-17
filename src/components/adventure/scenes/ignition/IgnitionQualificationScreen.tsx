@@ -19,7 +19,7 @@ const QUALIFICATION_SCENE: SceneType = {
   backgroundClass: "bg-gradient-to-br from-orange-900 via-red-900 to-slate-900",
 };
 
-const getQualificationQuestions = (appliedForRateReduction: boolean) => [
+const QUALIFICATION_QUESTIONS = [
   {
     id: "commitment",
     question: "Can you commit 2-4 hours per week for intensive collaboration?",
@@ -39,12 +39,8 @@ const getQualificationQuestions = (appliedForRateReduction: boolean) => [
   },
   {
     id: "investment",
-    question: appliedForRateReduction
-      ? "Do you have the budget allocated (assuming rate reduction approval)?"
-      : "Do you have the budget allocated and ready to invest?",
-    why: appliedForRateReduction
-      ? "We want to ensure you're prepared to invest once your rate reduction is approved"
-      : "We want to ensure there are no blockers to starting immediately",
+    question: "Do you have the budget allocated and ready to invest?",
+    why: "We want to ensure there are no blockers to starting immediately",
   },
 ];
 
@@ -52,15 +48,8 @@ export const IgnitionQualificationScreen = () => {
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const [showResults, setShowResults] = useState(false);
   const [isWaitlistActive, setIsWaitlistActive] = useState(false);
-  const { sessionId, makeChoice, choices } = useGameStore();
+  const { sessionId, makeChoice } = useGameStore();
   const { pushScene } = useBrowserNavigation();
-
-  // Check if user came through rate reduction path
-  const rateReductionChoice = choices.find(
-    (c) => c.sceneId === "ignitionRateReduction"
-  );
-  const appliedForRateReduction =
-    rateReductionChoice?.choiceId === "rate-reduction-applied";
 
   // Check if waitlist is active
   useEffect(() => {
@@ -74,9 +63,6 @@ export const IgnitionQualificationScreen = () => {
     checkActiveProjects();
   }, []);
 
-  const QUALIFICATION_QUESTIONS = getQualificationQuestions(
-    appliedForRateReduction
-  );
 
   const handleAnswer = (questionId: string, answer: boolean) => {
     const newAnswers = { ...answers, [questionId]: answer };
