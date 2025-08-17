@@ -1,7 +1,7 @@
 ---
 title: "Cursor's Composer: A Game Changer for Development"
 description: "How AI-assisted coding is transforming development productivity and focus time"
-date: "2025-01-13"
+date: "2025-01-21"
 readTime: "3 min read"
 featured: true
 type: "markdown"
@@ -29,3 +29,7 @@ Things that are working the best for me as of right now:
 - Trying things that I don't expect to work and sometimes being surprised that they do or at least ending up with a kernel of value I can build on.
 
 If you're an experienced engineer and you're not putting this tech to work and experimenting, you're missing out. Find the time - you don't need a ton of it.
+
+---
+
+[Join the conversation on LinkedIn](https://www.linkedin.com/posts/craigsturgis_cursors-composer-and-especially-the-agent-activity-7287471945099489280-h9aO)
