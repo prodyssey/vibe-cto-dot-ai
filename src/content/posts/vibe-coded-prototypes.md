@@ -5,7 +5,16 @@ date: "2025-03-28"
 readTime: "2 min read"
 featured: false
 type: "markdown"
-tags: ["ai", "development", "prototypes", "architecture", "startup", "mvp"]
+tags:
+  [
+    "ai",
+    "vibe-coding",
+    "development",
+    "prototypes",
+    "architecture",
+    "startup",
+    "mvp",
+  ]
 author: "Craig Sturgis"
 ---
 

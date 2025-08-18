@@ -3,11 +3,11 @@ title: "Vibe Check: GPT-5 in Codex CLI vs Claude Code"
 description: "Comparing GPT-5 and Claude Code for building a Linear workspace migration tool - the polish difference is significant"
 date: "2025-08-10"
 readTime: "3 min read"
-featured: false
+featured: true
 type: "markdown"
 tags:
   [
-    "vibecoding",
+    "vibe-coding",
     "augmented-engineering",
     "gpt5",
     "claude",

@@ -9,6 +9,7 @@ tags:
   [
     "git",
     "worktrees",
+    "augmented-engineering",
     "ai",
     "coding",
     "agents",

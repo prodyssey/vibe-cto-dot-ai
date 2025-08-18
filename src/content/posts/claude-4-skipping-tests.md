@@ -3,7 +3,7 @@ title: "Claude 4's Nasty Habit"
 description: "Why effective testing remains crucial even as AI makes writing code nearly free"
 date: "2025-07-07"
 readTime: "2 min read"
-featured: true
+featured: false
 type: "markdown"
 tags:
   [

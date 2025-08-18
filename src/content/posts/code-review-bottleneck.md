@@ -1,5 +1,5 @@
 ---
-title: "Writing the Code Was Probably Not Your Main Bottleneck"
+title: "Code Review is the Obvious Next Bottleneck"
 description: "How AI-generated code is making code review the new bottleneck and strategies to manage it effectively"
 date: "2025-07-15"
 readTime: "3 min read"

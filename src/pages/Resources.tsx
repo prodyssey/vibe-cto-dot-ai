@@ -88,7 +88,7 @@ export default function Resources() {
               </h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
                 Stay ahead with the latest strategies, tools, and insights for
-                vibe coders.
+                AI powered builders.
               </p>
             </div>
 

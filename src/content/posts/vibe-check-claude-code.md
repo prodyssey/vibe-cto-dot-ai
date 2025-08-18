@@ -3,7 +3,7 @@ title: "Vibe Check: Claude Code is the Most Impressive Coding Agent Yet"
 description: "First impressions of Claude Code compared to other AI coding tools and thoughts on multi-agent workflows"
 date: "2025-06-23"
 readTime: "1 min read"
-featured: true
+featured: false
 type: "markdown"
 tags: ["vibe-check", "ai", "claude", "coding", "agents", "development", "tools"]
 author: "Craig Sturgis"

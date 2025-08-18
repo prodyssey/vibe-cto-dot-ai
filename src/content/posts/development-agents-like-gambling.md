@@ -3,9 +3,18 @@ title: "The Gambler"
 description: "Know when to hold em, fold em, walk away, and run when working with AI development agents"
 date: "2025-01-28"
 readTime: "2 min read"
-featured: true
+featured: false
 type: "markdown"
-tags: ["ai", "development", "productivity", "agents", "workflow"]
+tags:
+  [
+    "ai",
+    "development",
+    "augmented-engineering",
+    "vibe-coding",
+    "productivity",
+    "agents",
+    "workflow",
+  ]
 author: "Craig Sturgis"
 headerImage: "/images/posts/cs-the-gambler.png"
 ---

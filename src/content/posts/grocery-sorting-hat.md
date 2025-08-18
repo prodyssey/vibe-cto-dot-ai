@@ -7,7 +7,7 @@ featured: true
 type: "markdown"
 tags:
   [
-    "vibecoding",
+    "vibe-coding",
     "show-and-tell",
     "youneedabudget",
     "ynab",

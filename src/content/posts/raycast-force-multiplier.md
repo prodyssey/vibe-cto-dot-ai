@@ -9,7 +9,17 @@ tags: ["productivity", "tools", "raycast", "ai", "workflow", "automation"]
 author: "Craig Sturgis"
 ---
 
-Protip: Raycast is a big force multiplier, especially since their recent AI extensions launch. I was hesitant to switch away from my trusty Alfred launch bar replacement, especially to something with a subscription for the useful bits, but it has been more than worth it. Just the ability to be able to create multiple Jira issues in natural language takes a good deal of pain out of the day to day when working with teams that haven't switched to linear yet. It's even better working with linear btw. Their snippets are powerful enough to migrate off of textexpander too. Latest useful thing: an auto prompt in the middle of your screen to join meetings for when you're neck deep in something and have tuned out all the other reminders It's getting better all the time both in the base product and in the extensions ecosystem. Recommended.
+Protip: Raycast is a big force multiplier, especially since their recent AI extensions launch.
+
+I was hesitant to switch away from my trusty Alfred launch bar replacement, especially to something with a subscription for the useful bits, but it has been more than worth it.
+
+Just the ability to be able to create multiple Jira issues in natural language takes a good deal of pain out of the day to day when working with teams that haven't switched to linear yet. It's even better working with linear btw.
+
+Their snippets are powerful enough to migrate off of textexpander too.
+
+Latest useful thing: an auto prompt in the middle of your screen to join meetings for when you're neck deep in something and have tuned out all the other reminders It's getting better all the time both in the base product and in the extensions ecosystem.
+
+Recommended.
 
 ---
 

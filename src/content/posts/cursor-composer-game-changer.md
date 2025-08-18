@@ -3,9 +3,17 @@ title: "Cursor's Composer: A Game Changer for Development"
 description: "How AI-assisted coding is transforming development productivity and focus time"
 date: "2025-01-21"
 readTime: "3 min read"
-featured: true
+featured: false
 type: "markdown"
-tags: ["ai", "development", "productivity", "cursor", "typescript"]
+tags:
+  [
+    "ai",
+    "development",
+    "augmented-engineering",
+    "productivity",
+    "cursor",
+    "typescript",
+  ]
 author: "Craig Sturgis"
 ---
 

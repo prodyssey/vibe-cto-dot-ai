@@ -8,6 +8,7 @@ type: "markdown"
 tags:
   [
     "ai",
+    "augmented-engineering",
     "management",
     "coding",
     "career",
