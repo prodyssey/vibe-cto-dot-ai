@@ -10,8 +10,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run lint` - Run ESLint for code quality checks
 - `npm run preview` - Preview production build locally
 
+### Testing Commands
+- `npm run test` - Run tests in watch mode
+- `npm run test:run` - Run tests once
+- `npm run test:ui` - Run tests with UI interface
+- `npm run test:coverage` - Run tests with coverage report
+
 ### Installation
-- `npm install` - Install all dependencies
+- `npm install` - Install all dependencies (automatically sets up git hooks via husky)
+
+### Git Hooks
+The project uses Husky + lint-staged for automated code quality checks:
+- **Pre-commit hook**: Automatically runs linting and tests on staged files before each commit
+- **Automatic setup**: Git hooks are installed automatically when running `npm install`
+- **Performance optimized**: Only runs checks on files that are being committed (not the entire codebase)
 
 ## Architecture Overview
 
