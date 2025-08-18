@@ -88,7 +88,7 @@ export const LaunchControlContactScreen = () => {
       }
 
       // Store the record ID and contact info for use later
-      makeChoice("launchControlContact", "submitted", { 
+      makeChoice("launchControlContact", "submitted", undefined, { 
         recordId: data.id,
         sessionId: contactData.sessionId,
         name: contactData.name,

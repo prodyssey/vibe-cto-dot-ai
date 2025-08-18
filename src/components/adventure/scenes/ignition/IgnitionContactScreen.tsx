@@ -88,7 +88,7 @@ export const IgnitionContactScreen = () => {
       }
 
       // Store the record ID and contact info for use later
-      makeChoice("ignitionContact", "submitted", { 
+      makeChoice("ignitionContact", "submitted", undefined, { 
         recordId: data.id,
         sessionId: contactData.sessionId,
         name: contactData.name,

@@ -93,6 +93,7 @@ export const IgnitionFinalScreen = () => {
     completeGame,
     resetGame,
     choices,
+    getChoiceData,
   } = useGameStore();
   const { handleEmailSignup, handleExploreService } = useGameCompletion();
   const { pushScene } = useBrowserNavigation();
@@ -112,7 +113,8 @@ export const IgnitionFinalScreen = () => {
   const isNoBudget = budgetChoice?.choiceId === "not-ready";
   
   // Check if contact info was already collected
-  const hasContactInfo = choices.find((c) => c.sceneId === "ignitionContact" && c.choiceId === "submitted");
+  const contactData = getChoiceData('ignitionContact', 'submitted');
+  const hasContactInfo = !!contactData;
   
   // High budget users can schedule directly
   const canScheduleDirect = isHighBudget;
@@ -131,11 +133,9 @@ export const IgnitionFinalScreen = () => {
 
   const handleScheduleCall = async () => {
     // Check if we already have contact info from earlier
-    const contactInfo = choices.find((c) => c.sceneId === "ignitionContact" && c.choiceId === "submitted");
-    
-    if (contactInfo && contactInfo.data?.email && contactInfo.data?.name) {
+    if (hasContactInfo && contactData?.email && contactData?.name) {
       // We already have the contact info, use it directly
-      await handleEmailSubmit(contactInfo.data.email, contactInfo.data.name);
+      await handleEmailSubmit(contactData.email, contactData.name);
     } else {
       // We don't have contact info, show the form
       setShowEmailForm(true);
@@ -295,9 +295,8 @@ export const IgnitionFinalScreen = () => {
                   {canScheduleDirect && (
                     <AnimatedButton
                       onClick={() => {
-                        const contactInfo = choices.find((c) => c.sceneId === "ignitionContact" && c.choiceId === "submitted");
-                        const email = contactInfo?.data?.email || "";
-                        const name = contactInfo?.data?.name || "";
+                        const email = contactData?.email || "";
+                        const name = contactData?.name || "";
                         const url = email && name 
                           ? `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(email)}&display_name=${encodeURIComponent(name)}`
                           : `https://savvycal.com/craigsturgis/vibecto-ignition-alignment`;
