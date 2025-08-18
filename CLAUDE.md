@@ -17,8 +17,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run test:coverage` - Run tests with coverage report
 
 ### Installation
-- `npm install` - Install all dependencies
-- `./scripts/setup-git-hooks.sh` - Set up git hooks (run after npm install)
+- `npm install` - Install all dependencies (automatically sets up git hooks via husky)
+
+### Git Hooks
+The project uses Husky + lint-staged for automated code quality checks:
+- **Pre-commit hook**: Automatically runs linting and tests on staged files before each commit
+- **Automatic setup**: Git hooks are installed automatically when running `npm install`
+- **Performance optimized**: Only runs checks on files that are being committed (not the entire codebase)
 
 ## Architecture Overview
 
