@@ -10,8 +10,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run lint` - Run ESLint for code quality checks
 - `npm run preview` - Preview production build locally
 
+### Testing Commands
+- `npm run test` - Run tests in watch mode
+- `npm run test:run` - Run tests once
+- `npm run test:ui` - Run tests with UI interface
+- `npm run test:coverage` - Run tests with coverage report
+
 ### Installation
 - `npm install` - Install all dependencies
+- `./scripts/setup-git-hooks.sh` - Set up git hooks (run after npm install)
 
 ## Architecture Overview
 
