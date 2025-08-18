@@ -3,7 +3,7 @@ title: "Step up to the plate"
 description: "To make progress, empower your inner 5 year old"
 date: "2025-07-02"
 readTime: "2 min read"
-featured: true
+featured: false
 type: "markdown"
 tags: ["mindset", "learning", "growth"]
 author: "Craig Sturgis"
