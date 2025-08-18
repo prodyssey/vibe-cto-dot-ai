@@ -1,7 +1,7 @@
 ---
 title: "Writing the Code Was Probably Not Your Main Bottleneck"
 description: "How AI-generated code is making code review the new bottleneck and strategies to manage it effectively"
-date: "2025-06-09"
+date: "2025-07-15"
 readTime: "3 min read"
 featured: true
 type: "markdown"
