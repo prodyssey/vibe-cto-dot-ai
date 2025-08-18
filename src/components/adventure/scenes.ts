@@ -116,6 +116,15 @@ export const SCENES: Record<string, Scene> = {
       "bg-gradient-to-br from-orange-900 via-red-900 to-slate-900",
   },
 
+  ignitionContact: {
+    id: "ignitionContact",
+    type: "choice",
+    title: "Contact Information",
+    description: "Let's get your contact details to start your journey",
+    backgroundClass:
+      "bg-gradient-to-br from-orange-900 via-red-900 to-slate-900",
+  },
+
   ignitionBudget: {
     id: "ignitionBudget",
     type: "choice",
@@ -172,6 +181,15 @@ export const SCENES: Record<string, Scene> = {
     nextScene: "ignitionQualification",
   },
 
+  launchControlContact: {
+    id: "launchControlContact",
+    type: "choice",
+    title: "Contact Information",
+    description: "Let's establish communication for your scaling mission",
+    backgroundClass:
+      "bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900",
+  },
+
   launchControlBudget: {
     id: "launchControlBudget",
     type: "choice",
@@ -190,15 +208,6 @@ export const SCENES: Record<string, Scene> = {
     backgroundClass:
       "bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900",
     nextScene: "launchControlBudget",
-  },
-
-  launchControlRateReduction: {
-    id: "launchControlRateReduction",
-    type: "choice",
-    title: "Rate Reduction Opportunity",
-    description: "You may qualify for our reduced rate program",
-    backgroundClass:
-      "bg-gradient-to-br from-blue-900 via-cyan-900 to-slate-900",
   },
 
   launchControlQualification: {

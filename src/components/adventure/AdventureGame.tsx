@@ -17,12 +17,12 @@ import { BranchSelectionScreen } from "./scenes/BranchSelectionScreen";
 import { EntryScreen } from "./scenes/EntryScreen";
 import { IgnitionAlternativesScreen } from "./scenes/ignition/IgnitionAlternativesScreen";
 import { IgnitionBudgetScreen } from "./scenes/ignition/IgnitionBudgetScreen";
+import { IgnitionContactScreen } from "./scenes/ignition/IgnitionContactScreen";
 import { IgnitionDetailScreen } from "./scenes/ignition/IgnitionDetailScreen";
 import { IgnitionFinalScreen } from "./scenes/ignition/IgnitionFinalScreen";
 import { IgnitionPaymentInfoScreen } from "./scenes/ignition/IgnitionPaymentInfoScreen";
 import { IgnitionProcessScreen } from "./scenes/ignition/IgnitionProcessScreen";
 import { IgnitionQualificationScreen } from "./scenes/ignition/IgnitionQualificationScreen";
-import { IgnitionRateReductionScreen } from "./scenes/ignition/IgnitionRateReductionScreen";
 import { TransformationAlignmentScreen } from "./scenes/transformation/TransformationAlignmentScreen";
 import { TransformationAlternativesScreen } from "./scenes/transformation/TransformationAlternativesScreen";
 import { TransformationDetailScreen } from "./scenes/transformation/TransformationDetailScreen";
@@ -32,11 +32,11 @@ import { TransformationProcessScreen } from "./scenes/transformation/Transformat
 import { LaunchControlAlternativesScreen } from "./scenes/launchcontrol/LaunchControlAlternativesScreen";
 import { LaunchControlApplicationScreen } from "./scenes/launchcontrol/LaunchControlApplicationScreen";
 import { LaunchControlBudgetScreen } from "./scenes/launchcontrol/LaunchControlBudgetScreen";
+import { LaunchControlContactScreen } from "./scenes/launchcontrol/LaunchControlContactScreen";
 import { LaunchControlDetailScreen } from "./scenes/launchcontrol/LaunchControlDetailScreen";
 import { LaunchControlFinalScreen } from "./scenes/launchcontrol/LaunchControlFinalScreen";
 import { LaunchControlProcessScreen } from "./scenes/launchcontrol/LaunchControlProcessScreen";
 import { LaunchControlQualificationScreen } from "./scenes/launchcontrol/LaunchControlQualificationScreen";
-import { LaunchControlRateReductionScreen } from "./scenes/launchcontrol/LaunchControlRateReductionScreen";
 import { LaunchControlTestimonialsScreen } from "./scenes/launchcontrol/LaunchControlTestimonialsScreen";
 import { LaunchControlWaitlistScreen } from "./scenes/launchcontrol/LaunchControlWaitlistScreen";
 import { PlayerSetupScreen } from "./scenes/PlayerSetupScreen";
@@ -275,17 +275,17 @@ export const AdventureGame = () => {
       </SceneTransition>
     );
   }
+  if (currentSceneId === "ignitionContact") {
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <IgnitionContactScreen />
+      </SceneTransition>
+    );
+  }
   if (currentSceneId === "ignitionBudget") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <IgnitionBudgetScreen />
-      </SceneTransition>
-    );
-  }
-  if (currentSceneId === "ignitionRateReduction") {
-    return (
-      <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <IgnitionRateReductionScreen />
       </SceneTransition>
     );
   }
@@ -326,6 +326,13 @@ export const AdventureGame = () => {
       </SceneTransition>
     );
   }
+  if (currentSceneId === "launchControlContact") {
+    return (
+      <SceneTransition sceneId={currentSceneId} transitionType="slide">
+        <LaunchControlContactScreen />
+      </SceneTransition>
+    );
+  }
   if (currentSceneId === "launchControlBudget") {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
@@ -337,13 +344,6 @@ export const AdventureGame = () => {
     return (
       <SceneTransition sceneId={currentSceneId} transitionType="slide">
         <LaunchControlProcessScreen />
-      </SceneTransition>
-    );
-  }
-  if (currentSceneId === "launchControlRateReduction") {
-    return (
-      <SceneTransition sceneId={currentSceneId} transitionType="slide">
-        <LaunchControlRateReductionScreen />
       </SceneTransition>
     );
   }

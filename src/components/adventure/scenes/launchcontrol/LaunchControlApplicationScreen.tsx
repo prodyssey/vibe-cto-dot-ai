@@ -30,9 +30,13 @@ export const LaunchControlApplicationScreen = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [isWaitlistActive, setIsWaitlistActive] = useState(false);
-  const { sessionId, makeChoice, playerName, isGeneratedName, completeGame, choices } =
+  const { sessionId, makeChoice, playerName, isGeneratedName, completeGame, choices, getChoiceData } =
     useGameStore();
   const { pushScene } = useBrowserNavigation();
+
+  // Check if contact info has already been collected
+  const contactData = getChoiceData('launchControlContact', 'submitted');
+  const hasContactInfo = !!contactData;
 
   // Check user's path through the adventure
   const budgetChoice = choices.find(c => c.sceneId === 'launchControlBudget');
@@ -46,13 +50,21 @@ export const LaunchControlApplicationScreen = () => {
     // TODO: Query database for active project count
     setIsWaitlistActive(false);
 
-    // Determine which form to show
-    if (needsReview || isWaitlistActive) {
-      setShowWaitlistForm(true);
+    // If we already have contact info, pre-populate the form data
+    if (hasContactInfo && contactData) {
+      setUserEmail(contactData.email || '');
+      setUserName(contactData.name || '');
+      setHasCollectedEmail(true);
+      setShowEmailForm(false);
     } else {
-      setShowEmailForm(true);
+      // Determine which form to show
+      if (needsReview || isWaitlistActive) {
+        setShowWaitlistForm(true);
+      } else {
+        setShowEmailForm(true);
+      }
     }
-  }, [needsReview, isWaitlistActive]);
+  }, [needsReview, isWaitlistActive, hasContactInfo, contactData]);
 
   const handleEmailSubmit = async (email: string, name: string) => {
     logger.debug("handleEmailSubmit called");

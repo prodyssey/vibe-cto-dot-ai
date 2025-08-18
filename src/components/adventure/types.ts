@@ -39,6 +39,7 @@ export interface GameState {
     sceneId: string;
     choiceId: string;
     timestamp: string;
+    additionalData?: any;
   }[];
   discoveredPaths: Set<ServicePath>;
   unlockedContent: string[];
@@ -50,7 +51,7 @@ export interface GameState {
   completionStatus: {
     isCompleted: boolean;
     completedAt: string | null;
-    finalOutcome: 'email_signup' | 'explore_service' | null;
+    finalOutcome: 'email_signup' | 'explore_service' | 'waitlist' | null;
   };
 }
 

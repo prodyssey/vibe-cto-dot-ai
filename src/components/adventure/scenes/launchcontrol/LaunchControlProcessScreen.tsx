@@ -98,7 +98,7 @@ export const LaunchControlProcessScreen = () => {
   };
 
   const handleContinue = () => {
-    pushScene("launchControlBudget");
+    pushScene("launchControlContact");
   };
 
   const currentPhase = MISSION_PHASES[activePhase];

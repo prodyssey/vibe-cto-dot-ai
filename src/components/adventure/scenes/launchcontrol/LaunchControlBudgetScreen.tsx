@@ -1,7 +1,8 @@
-import { DollarSign } from "lucide-react";
+import { DollarSign, ArrowRight } from "lucide-react";
+import { useState } from "react";
 
+import { BudgetSlider } from "@/components/BudgetSlider";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 
 import { Scene } from "../../Scene";
 import { SceneNavigation } from "../../SceneNavigation";
@@ -11,7 +12,46 @@ import { useBrowserNavigation } from "../../hooks";
 import { getScene } from "../../scenes";
 import { saveChoice } from "../../utils";
 
+const BUDGET_RANGES = [
+  {
+    min: 0,
+    max: 999,
+    label: "Just exploring",
+    description: "Learning about scaling best practices",
+    color: "from-gray-600 to-gray-700",
+  },
+  {
+    min: 1000,
+    max: 14999,
+    label: "Starter budget",
+    description: "Exploring my options",
+    color: "from-orange-600 to-amber-600",
+  },
+  {
+    min: 15000,
+    max: 39999,
+    label: "Growth budget",
+    description: "I can invest, but not a lot yet",
+    color: "from-blue-600 to-cyan-600",
+  },
+  {
+    min: 40000,
+    max: 75000,
+    label: "Ready to scale",
+    description: "Ready to invest in production excellence",
+    color: "from-green-600 to-emerald-600",
+  },
+  {
+    min: 75001,
+    max: 150000,
+    label: "Enterprise ready",
+    description: "Ready for comprehensive transformation",
+    color: "from-purple-600 to-indigo-600",
+  },
+];
+
 export const LaunchControlBudgetScreen = () => {
+  const [budgetValue, setBudgetValue] = useState<number>(0);
   const { sessionId, makeChoice } = useGameStore();
   const { pushScene } = useBrowserNavigation();
   const scene = getScene("launchControlBudget");
@@ -20,46 +60,37 @@ export const LaunchControlBudgetScreen = () => {
     return null;
   }
 
-  const budgetOptions = [
-    {
-      id: "ready-high",
-      amount: "$40K - $75K+",
-      description: "Ready to invest in production excellence",
-      nextScene: "launchControlQualification",
-      pathWeight: { launchControl: 3 },
-    },
-    {
-      id: "ready-mid",
-      amount: "$15K - $40K",
-      description: "I can invest, but not a lot yet",
-      nextScene: "launchControlRateReduction",
-      pathWeight: { launchControl: 2 },
-    },
-    {
-      id: "ready-low",
-      amount: "$1 - $14,999",
-      description: "I can't really invest yet",
-      nextScene: "launchControlAlternatives",
-      pathWeight: { launchControl: 1 },
-    },
-    {
-      id: "not-ready",
-      amount: "Just my time",
-      description: "No budget available",
-      nextScene: "launchControlAlternatives",
-      pathWeight: { launchControl: 0 },
-    },
-  ];
-
-  const handleBudgetChoice = async (option: (typeof budgetOptions)[0]) => {
-    makeChoice("launchControlBudget", option.id, option.pathWeight);
+  const handleBudgetContinue = async () => {
+    // Allow all budgets including $0
+    
+    // Determine budget category and path weight
+    let budgetCategory = "exploring";
+    let pathWeight = { launchControl: 0 };
+    
+    if (budgetValue >= 40000) {
+      budgetCategory = "ready-high";
+      pathWeight = { launchControl: 3 };
+    } else if (budgetValue >= 15000) {
+      budgetCategory = "ready-mid";
+      pathWeight = { launchControl: 2 };
+    } else if (budgetValue >= 1000) {
+      budgetCategory = "ready-low";
+      pathWeight = { launchControl: 1 };
+    } else {
+      budgetCategory = "exploring";
+      pathWeight = { launchControl: 0 };
+    }
+    
+    makeChoice("launchControlBudget", budgetCategory, pathWeight);
     await saveChoice(
       sessionId,
       "launchControlBudget",
-      option.id,
-      `Budget: ${option.amount}`
+      budgetCategory,
+      `Budget: $${budgetValue.toLocaleString()}`
     );
-    pushScene(option.nextScene);
+    
+    // All budgets go to qualification
+    pushScene("launchControlQualification");
   };
 
   return (
@@ -72,7 +103,7 @@ export const LaunchControlBudgetScreen = () => {
             </div>
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">
-            Investment Readiness
+            Your Scaling Journey
           </h2>
           <p className="text-gray-300 text-lg">
             Launch Control is a comprehensive production readiness program. To
@@ -81,31 +112,32 @@ export const LaunchControlBudgetScreen = () => {
           </p>
         </div>
 
-        <div className="space-y-4 mb-8">
-          {budgetOptions.map((option) => (
-            <Card
-              key={option.id}
-              className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer"
-              onClick={() => handleBudgetChoice(option)}
-            >
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-1">
-                      {option.amount}
-                    </h3>
-                    <p className="text-gray-400">{option.description}</p>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    className="text-blue-400 hover:text-blue-300"
-                  >
-                    Select →
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+        {/* Budget Slider */}
+        <div className="bg-gray-800/30 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-6 mb-8">
+          <BudgetSlider
+            min={0}
+            max={150000}
+            step={1000}
+            value={budgetValue}
+            onChange={setBudgetValue}
+            ranges={BUDGET_RANGES}
+            label="Scaling Investment Level"
+            description="From $0 bootstrap to enterprise - we meet you where you are"
+            showRecommendations={true}
+          />
+        </div>
+
+        {/* Continue Button */}
+        <div className="text-center mb-8">
+          <Button
+            onClick={handleBudgetContinue}
+            disabled={false}
+            size="lg"
+            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Continue to Qualification
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
         </div>
 
         <div className="bg-blue-500/10 backdrop-blur-sm rounded-lg p-6 border border-blue-500/20">

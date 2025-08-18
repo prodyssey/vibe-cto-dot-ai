@@ -10,12 +10,12 @@ interface GameStore extends GameState {
   setSessionId: (id: string) => void;
   startSession: () => void;
   navigateToScene: (sceneId: string) => void;
-  makeChoice: (sceneId: string, choiceId: string, pathWeight?: Record<ServicePath, number>) => void;
+  makeChoice: (sceneId: string, choiceId: string, pathWeight?: Record<ServicePath, number>, additionalData?: any) => void;
   calculateFinalPath: () => ServicePath;
   discoverPath: (path: ServicePath) => void;
   unlockContent: (contentId: string) => void;
   updatePreferences: (preferences: Partial<GameState['preferences']>) => void;
-  completeGame: (outcome: 'email_signup' | 'explore_service') => void;
+  completeGame: (outcome: 'email_signup' | 'explore_service' | 'waitlist') => Promise<void>;
   resetGame: () => void;
   restoreProgress: (progress: Partial<GameState>) => void;
   
@@ -27,6 +27,7 @@ interface GameStore extends GameState {
   getSessionDuration: () => number;
   hasVisitedScene: (sceneId: string) => boolean;
   getVisitCount: (sceneId: string) => number;
+  getChoiceData: (sceneId: string, choiceId: string) => any;
 }
 
 const initialState: GameState = {
@@ -97,10 +98,10 @@ export const useGameStore = create<GameStore>()(
         }));
       },
 
-      makeChoice: (sceneId, choiceId, pathWeight) => {
+      makeChoice: (sceneId, choiceId, pathWeight, additionalData) => {
         get().trackEvent({
           eventType: 'choice_made',
-          data: { sceneId, choiceId, pathWeight },
+          data: { sceneId, choiceId, pathWeight, additionalData },
         });
 
         set((state) => {
@@ -110,6 +111,7 @@ export const useGameStore = create<GameStore>()(
               sceneId,
               choiceId,
               timestamp: new Date().toISOString(),
+              additionalData,
             },
           ];
 
@@ -170,7 +172,7 @@ export const useGameStore = create<GameStore>()(
         }));
       },
 
-      completeGame: (outcome) => {
+      completeGame: async (outcome) => {
         const completedAt = new Date().toISOString();
         
         get().trackEvent({
@@ -249,6 +251,12 @@ export const useGameStore = create<GameStore>()(
       getVisitCount: (sceneId) => {
         const { visitedScenes } = get();
         return visitedScenes[sceneId] || 0;
+      },
+
+      getChoiceData: (sceneId, choiceId) => {
+        const { choices } = get();
+        const choice = choices.find(c => c.sceneId === sceneId && c.choiceId === choiceId);
+        return choice?.additionalData;
       },
     }),
     {

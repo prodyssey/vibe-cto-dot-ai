@@ -97,7 +97,7 @@ export const IgnitionProcessScreen = () => {
   };
 
   const handleContinue = () => {
-    pushScene("ignitionBudget");
+    pushScene("ignitionContact");
   };
 
   const currentStep = PROCESS_STEPS[activeStep];

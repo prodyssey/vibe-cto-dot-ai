@@ -31,41 +31,39 @@ const FINAL_SCENE: SceneType = {
   backgroundClass: "bg-gradient-to-br from-orange-900 via-red-900 to-slate-900",
 };
 
-const NEXT_STEPS_WAITLIST = [
+const NEXT_STEPS_QUALIFIED = [
   {
     icon: <MessageSquare className="w-5 h-5" />,
-    title: "Submit Your Contact Info",
-    description: "Tell us how you prefer to be contacted",
+    title: "Information Received",
+    description: "We have your contact details",
   },
   {
     icon: <Calendar className="w-5 h-5" />,
-    title: "We'll Reach Out Within 2 Days",
-    description: "Our team will contact you to schedule your discovery call",
+    title: "We'll Review Your Submission",
+    description: "Our team will evaluate your project fit",
   },
   {
     icon: <Flame className="w-5 h-5" />,
-    title: "Start Your Journey",
-    description: "Begin your 2-4 week transformation",
+    title: "Potential Next Steps",
+    description: "If we're a good match, we'll discuss your journey",
   },
 ];
 
-const NEXT_STEPS_REVIEW = [
+const NEXT_STEPS_EXPLORING = [
   {
     icon: <MessageSquare className="w-5 h-5" />,
-    title: "Application Under Review",
-    description: "We're reviewing your rate reduction application",
+    title: "Information Received",
+    description: "Thanks for your interest in Ignition",
   },
   {
     icon: <Calendar className="w-5 h-5" />,
-    title: "Response Within 1-2 Business Days",
-    description:
-      "We'll contact you to schedule a virtual discussion if approved",
+    title: "Resources Available",
+    description: "Check out our free guides and resources",
   },
   {
     icon: <Flame className="w-5 h-5" />,
-    title: "Custom Plan",
-    description:
-      "We'll work to align on a plan that works for you and our team",
+    title: "Future Opportunities",
+    description: "We'll notify you about cohort programs or workshops",
   },
 ];
 
@@ -95,6 +93,7 @@ export const IgnitionFinalScreen = () => {
     completeGame,
     resetGame,
     choices,
+    getChoiceData,
   } = useGameStore();
   const { handleEmailSignup, handleExploreService } = useGameCompletion();
   const { pushScene } = useBrowserNavigation();
@@ -106,15 +105,19 @@ export const IgnitionFinalScreen = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
 
-  // Check if user selected a budget under $15K or applied for rate reduction
+  // Check user's budget selection
   const budgetChoice = choices.find((c) => c.sceneId === "ignitionBudget");
-  const rateReductionChoice = choices.find(
-    (c) => c.sceneId === "ignitionRateReduction"
-  );
-  const needsReview =
-    budgetChoice?.choiceId === "ready-mid" ||
-    budgetChoice?.choiceId === "ready-low" ||
-    rateReductionChoice?.choiceId === "rate-reduction-applied";
+  const isHighBudget = budgetChoice?.choiceId === "ready-high";
+  const isMidBudget = budgetChoice?.choiceId === "ready-mid";
+  const isLowBudget = budgetChoice?.choiceId === "ready-low";
+  const isNoBudget = budgetChoice?.choiceId === "not-ready";
+  
+  // Check if contact info was already collected
+  const contactData = getChoiceData('ignitionContact', 'submitted');
+  const hasContactInfo = !!contactData;
+  
+  // High budget users can schedule directly
+  const canScheduleDirect = isHighBudget;
 
   // Check if there are active projects (in real app, this would be from database)
   useEffect(() => {
@@ -129,8 +132,14 @@ export const IgnitionFinalScreen = () => {
   }, []);
 
   const handleScheduleCall = async () => {
-    // Always show email collection form first
-    setShowEmailForm(true);
+    // Check if we already have contact info from earlier
+    if (hasContactInfo && contactData?.email && contactData?.name) {
+      // We already have the contact info, use it directly
+      await handleEmailSubmit(contactData.email, contactData.name);
+    } else {
+      // We don't have contact info, show the form
+      setShowEmailForm(true);
+    }
   };
 
   const handleEmailSubmit = async (email: string, name: string) => {
@@ -213,15 +222,17 @@ export const IgnitionFinalScreen = () => {
               </div>
 
               <h2 className="text-3xl font-bold text-white mb-4">
-                {needsReview
-                  ? `Thank you, ${playerName}!`
-                  : `Congratulations, ${playerName}!`}
+                Thank you, {playerName}!
               </h2>
 
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                {needsReview
-                  ? "Your application has been submitted! We'll review it and get back to you within 1-2 business days."
-                  : "You're ready to join the Ignition program and transform your idea into a working prototype in just 2-4 weeks."}
+                {canScheduleDirect
+                  ? "You're ready to join the Ignition program and transform your idea into a working prototype in just 2-4 weeks."
+                  : isMidBudget
+                  ? "We've received your information and will review your submission to see if we're a good fit."
+                  : isLowBudget || isNoBudget
+                  ? "Thanks for your interest! Check out our resources below to learn more about vibe coding."
+                  : "Thanks for your interest in Ignition! We'll share resources to help you on your journey."}
               </p>
             </div>
 
@@ -242,11 +253,11 @@ export const IgnitionFinalScreen = () => {
               )}
 
               <div className="space-y-4 mb-8">
-                {(needsReview
-                  ? NEXT_STEPS_REVIEW
-                  : isWaitlistActive
-                  ? NEXT_STEPS_WAITLIST
-                  : NEXT_STEPS_DIRECT
+                {(canScheduleDirect && !isWaitlistActive
+                  ? NEXT_STEPS_DIRECT
+                  : (isLowBudget || isNoBudget || budgetChoice?.choiceId === "exploring")
+                  ? NEXT_STEPS_EXPLORING
+                  : NEXT_STEPS_QUALIFIED
                 ).map((step, idx) => (
                   <div
                     key={idx}
@@ -267,7 +278,44 @@ export const IgnitionFinalScreen = () => {
               </div>
 
               {/* CTAs */}
-              {showEmailForm ? (
+              {hasContactInfo ? (
+                // If contact info was already collected, show success message
+                <div className="text-center p-8 bg-green-900/20 border border-green-500/30 rounded-lg">
+                  <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-4" />
+                  <h4 className="text-lg font-semibold text-white mb-2">
+                    You're all set!
+                  </h4>
+                  <p className="text-gray-300">
+                    {canScheduleDirect
+                      ? "Your information has been saved. Schedule your alignment call when you're ready."
+                      : (isLowBudget || isNoBudget || budgetChoice?.choiceId === "exploring")
+                      ? "Thanks for your interest! We'll keep you updated on future opportunities."
+                      : "We've received your information and will review your submission."}
+                  </p>
+                  {canScheduleDirect && (
+                    <AnimatedButton
+                      onClick={() => {
+                        const email = contactData?.email || "";
+                        const name = contactData?.name || "";
+                        const url = email && name 
+                          ? `https://savvycal.com/craigsturgis/vibecto-ignition-alignment?email=${encodeURIComponent(email)}&display_name=${encodeURIComponent(name)}`
+                          : `https://savvycal.com/craigsturgis/vibecto-ignition-alignment`;
+                        trackSavvyCalClick('ignition_adventure_final', 'ignition_alignment', {
+                          email: email,
+                          player_name: name
+                        });
+                        window.open(url, "_blank", "noopener,noreferrer");
+                      }}
+                      size="lg"
+                      className="mt-6 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+                      particleColors={["#dc2626", "#ea580c", "#f97316"]}
+                    >
+                      Schedule Your Call
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </AnimatedButton>
+                  )}
+                </div>
+              ) : showEmailForm ? (
                 <SessionEmailForm
                   sessionId={sessionId}
                   playerName={playerName}
@@ -294,7 +342,7 @@ export const IgnitionFinalScreen = () => {
                     contact.
                   </p>
                 </div>
-              ) : hasCollectedEmail && !needsReview && !isWaitlistActive ? (
+              ) : hasCollectedEmail && canScheduleDirect && !isWaitlistActive ? (
                 <div className="text-center space-y-4">
                   <div className="p-8 bg-green-900/20 border border-green-500/30 rounded-lg">
                     <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-4" />
@@ -336,7 +384,7 @@ export const IgnitionFinalScreen = () => {
                     <h4 className="text-lg font-semibold text-white">
                       Let's go!
                     </h4>
-                    {needsReview ? (
+                    {!canScheduleDirect ? (
                       <>
                         <AnimatedButton
                           onClick={() => setShowWaitlistForm(true)}
@@ -352,9 +400,7 @@ export const IgnitionFinalScreen = () => {
                           <ArrowRight className="ml-2 w-5 h-5" />
                         </AnimatedButton>
                         <p className="text-xs text-gray-400 text-center">
-                          {isWaitlistActive
-                            ? "Currently accepting waitlist applications"
-                            : "We'll contact you within 1-2 business days"}
+                          We'll contact you within 1-2 business days
                         </p>
                       </>
                     ) : isWaitlistActive ? (
@@ -392,7 +438,9 @@ export const IgnitionFinalScreen = () => {
                           <ArrowRight className="ml-2 w-5 h-5" />
                         </AnimatedButton>
                         <p className="text-xs text-gray-400 text-center">
-                          We'll collect your info and open scheduling
+                          {hasContactInfo 
+                            ? "Click to open scheduling with your info" 
+                            : "We'll collect your info and open scheduling"}
                         </p>
                       </>
                     )}
@@ -416,6 +464,37 @@ export const IgnitionFinalScreen = () => {
                 </div>
               )}
             </div>
+
+            {/* Alternative Resources for Lower Budget Users */}
+            {(isLowBudget || isNoBudget) && (
+              <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
+                <h4 className="font-semibold text-white mb-3">
+                  While you wait, here are some resources:
+                </h4>
+                <ul className="space-y-2 text-gray-300 text-sm">
+                  <li className="flex items-start">
+                    <span className="text-orange-400 mr-2">•</span>
+                    <span>Check out our <a href="/resources" className="text-orange-400 hover:text-orange-300 underline">free resources</a> on vibe coding</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-orange-400 mr-2">•</span>
+                    <span>Join our community newsletter for tips and case studies</span>
+                  </li>
+                  {isLowBudget && (
+                    <li className="flex items-start">
+                      <span className="text-orange-400 mr-2">•</span>
+                      <span>We'll discuss payment plan options when we connect</span>
+                    </li>
+                  )}
+                  {isNoBudget && (
+                    <li className="flex items-start">
+                      <span className="text-orange-400 mr-2">•</span>
+                      <span>We'll notify you about future cohort programs or group workshops</span>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            )}
 
             {/* Additional Options */}
             <div className="text-center space-y-4">

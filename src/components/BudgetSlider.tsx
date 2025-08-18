@@ -198,21 +198,23 @@ export const BudgetSlider = ({
         </div>
 
         {/* Range labels */}
-        <div className="flex justify-between mt-6 text-xs text-gray-500">
-          <span>{formatCurrency(min)}</span>
-          {ranges.map((range, index) => {
-            if (index === 0) return null;
-            return (
-              <span
-                key={index}
-                className="absolute transform -translate-x-1/2"
-                style={{ left: `${((range.min - min) / (max - min)) * 100}%` }}
-              >
-                {formatCurrency(range.min)}
-              </span>
-            );
-          })}
-          <span>{formatCurrency(max)}</span>
+        <div className="relative mt-6 h-6">
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>{formatCurrency(min)}</span>
+            <span>{formatCurrency(max)}</span>
+          </div>
+          {/* Only show middle range if there's enough space */}
+          {ranges.length > 2 && max > 50000 && (
+            <span
+              className="absolute text-xs text-gray-500 transform -translate-x-1/2"
+              style={{ 
+                left: "50%",
+                top: "0"
+              }}
+            >
+              {formatCurrency(Math.floor((min + max) / 2))}
+            </span>
+          )}
         </div>
       </div>
 

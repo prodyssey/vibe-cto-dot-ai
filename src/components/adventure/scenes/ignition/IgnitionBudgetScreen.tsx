@@ -1,6 +1,7 @@
-import { DollarSign, CheckCircle, XCircle, Info } from "lucide-react";
+import { DollarSign, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
+import { BudgetSlider } from "@/components/BudgetSlider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -19,63 +20,75 @@ const BUDGET_SCENE: SceneType = {
   backgroundClass: "bg-gradient-to-br from-orange-900 via-red-900 to-slate-900",
 };
 
-const BUDGET_OPTIONS = [
+const BUDGET_RANGES = [
   {
-    id: "ready-high",
-    title: "$15K - $50K+",
-    amount: "Ready to invest",
-    description:
-      "I understand the investment and I'm ready to transform my idea",
-    icon: <CheckCircle className="w-6 h-6" />,
-    color: "from-green-600 to-emerald-600",
-    nextScene: "ignitionQualification",
-  },
-  {
-    id: "ready-mid",
-    title: "$5K - $15K",
-    amount: "Limited budget available",
-    description: "I've got a budget, but it's limited",
-    icon: <CheckCircle className="w-6 h-6" />,
-    color: "from-blue-600 to-cyan-600",
-    nextScene: "ignitionRateReduction",
-  },
-  {
-    id: "ready-low",
-    title: "$1 - $4,999",
-    amount: "Not ready yet",
-    description: "Let's explore alternative options",
-    icon: <XCircle className="w-6 h-6" />,
-    color: "from-orange-600 to-amber-600",
-    nextScene: "ignitionAlternatives",
-  },
-  {
-    id: "not-ready",
-    title: "Just my time",
-    amount: "No budget available",
-    description: "But I'd like to learn more about vibe coding on my own",
-    icon: <XCircle className="w-6 h-6" />,
+    min: 0,
+    max: 999,
+    label: "Just exploring",
+    description: "I'd like to understand vibe coding better first",
     color: "from-gray-600 to-gray-700",
-    nextScene: "ignitionAlternatives",
+  },
+  {
+    min: 1000,
+    max: 4999,
+    label: "Starter budget",
+    description: "I want to learn more about what's possible",
+    color: "from-orange-600 to-amber-600",
+  },
+  {
+    min: 5000,
+    max: 14999,
+    label: "Growth budget",
+    description: "I've got a budget, but it's limited",
+    color: "from-blue-600 to-cyan-600",
+  },
+  {
+    min: 15000,
+    max: 50000,
+    label: "Ready to invest",
+    description: "I understand the investment and I'm ready to transform my idea",
+    color: "from-green-600 to-emerald-600",
+  },
+  {
+    min: 50001,
+    max: 100000,
+    label: "Premium investment",
+    description: "Ready for comprehensive transformation",
+    color: "from-purple-600 to-indigo-600",
   },
 ];
 
 export const IgnitionBudgetScreen = () => {
-  const [hoveredOption, setHoveredOption] = useState<string | null>(null);
+  const [budgetValue, setBudgetValue] = useState<number>(0);
   const { sessionId, makeChoice } = useGameStore();
   const { pushScene } = useBrowserNavigation();
 
-  const handleBudgetChoice = async (option: (typeof BUDGET_OPTIONS)[0]) => {
+  const handleBudgetContinue = async () => {
+    // Allow all budgets including $0
+    
+    // Determine budget category
+    let budgetCategory = "exploring";
+    if (budgetValue >= 15000) {
+      budgetCategory = "ready-high";
+    } else if (budgetValue >= 5000) {
+      budgetCategory = "ready-mid";
+    } else if (budgetValue >= 1000) {
+      budgetCategory = "ready-low";
+    } else {
+      budgetCategory = "exploring";
+    }
+    
     // Save choice
-    makeChoice(BUDGET_SCENE.id, option.id);
+    makeChoice(BUDGET_SCENE.id, budgetCategory);
     await saveChoice(
       sessionId,
       BUDGET_SCENE.id,
-      option.id,
-      `${option.title}: ${option.amount}`
+      budgetCategory,
+      `Budget: $${budgetValue.toLocaleString()}`
     );
 
-    // Navigate to next scene based on budget selection
-    pushScene(option.nextScene);
+    // All budgets go to qualification
+    pushScene("ignitionQualification");
   };
 
   return (
@@ -108,7 +121,7 @@ export const IgnitionBudgetScreen = () => {
             <div className="bg-gray-900/50 backdrop-blur-sm border border-orange-500/30 rounded-lg p-6">
               <h3 className="text-xl font-bold text-white mb-4 flex items-center">
                 <DollarSign className="w-6 h-6 mr-2 text-orange-400" />
-                Ignition Investment Overview
+                What You Get with Ignition
               </h3>
 
               <div className="grid md:grid-cols-2 gap-4 text-gray-300">
@@ -143,60 +156,32 @@ export const IgnitionBudgetScreen = () => {
               </div>
             </div>
 
-            {/* Budget Options */}
-            <div className="space-y-4">
-              {BUDGET_OPTIONS.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => handleBudgetChoice(option)}
-                  onMouseEnter={() => setHoveredOption(option.id)}
-                  onMouseLeave={() => setHoveredOption(null)}
-                  className={cn(
-                    "w-full text-left transition-all duration-300",
-                    "bg-gray-800/30 backdrop-blur-sm border rounded-xl p-6",
-                    "hover:scale-[1.02] hover:bg-gray-800/50",
-                    hoveredOption === option.id
-                      ? "border-transparent shadow-xl"
-                      : "border-gray-700/50"
-                  )}
-                  style={{
-                    boxShadow:
-                      hoveredOption === option.id
-                        ? `0 10px 40px -10px ${
-                            option.color.includes("green")
-                              ? "rgba(34, 197, 94, 0.3)"
-                              : option.color.includes("blue")
-                              ? "rgba(59, 130, 246, 0.3)"
-                              : option.color.includes("orange")
-                              ? "rgba(251, 146, 60, 0.3)"
-                              : "rgba(107, 114, 128, 0.3)"
-                          }`
-                        : "none",
-                  }}
-                >
-                  <div className="flex items-start space-x-4">
-                    <div
-                      className={cn(
-                        "p-3 rounded-lg bg-gradient-to-br text-white",
-                        option.color
-                      )}
-                    >
-                      {option.icon}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-white mb-1">
-                        {option.title}
-                      </h4>
-                      <div className="text-xl font-bold text-gray-300 mb-2">
-                        {option.amount}
-                      </div>
-                      <p className="text-sm text-gray-400">
-                        {option.description}
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              ))}
+            {/* Budget Slider */}
+            <div className="bg-gray-900/50 backdrop-blur-sm border border-orange-500/30 rounded-lg p-6">
+              <BudgetSlider
+                min={0}
+                max={100000}
+                step={500}
+                value={budgetValue}
+                onChange={setBudgetValue}
+                ranges={BUDGET_RANGES}
+                label="Your Ignition Investment"
+                description="Starting from $0 - every founder's journey is unique"
+                showRecommendations={true}
+              />
+            </div>
+
+            {/* Continue Button */}
+            <div className="text-center">
+              <Button
+                onClick={handleBudgetContinue}
+                disabled={false}
+                size="lg"
+                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Continue to Qualification
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
             </div>
 
             {/* Additional Info */}
