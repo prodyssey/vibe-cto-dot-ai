@@ -1,17 +1,15 @@
 import {
   ArrowRight,
   ArrowLeft,
-  DollarSign,
   Phone,
   Mail,
   CheckCircle,
   Loader2,
-  Info,
   MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 
-import { EmailOptIn } from "@/components/EmailOptIn";
+import { BudgetSlider } from "@/components/BudgetSlider";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,19 +21,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
-import { qualificationFormSchema, waitlistFormSchema, validateForm } from "@/lib/validation";
+import { waitlistFormSchema, validateForm } from "@/lib/validation";
 
-type FormStep =
-  | "budget"
-  | "rate-reduction"
-  | "contact"
-  | "success"
-  | "alternatives";
+type FormStep = "contact" | "budget" | "success";
 
 interface LaunchControlQualificationFormProps {
   onSuccess?: () => void;
@@ -43,39 +35,50 @@ interface LaunchControlQualificationFormProps {
 }
 
 interface FormData {
-  budget: string;
-  needsRateReduction: boolean;
-  rateReductionReason?: string;
+  budget: number;
   name: string;
   email: string;
   preferredContact: "email" | "phone" | "text" | "either";
   phone?: string;
+  recordId?: string;
+  sessionId?: string;
 }
 
-const BUDGET_OPTIONS = [
+const BUDGET_RANGES = [
   {
-    value: "ready-high",
-    label: "$40K - $75K+",
-    amount: "Ready to invest in production excellence",
-    description: "I understand the investment needed for scaling success",
+    min: 0,
+    max: 999,
+    label: "Just exploring",
+    description: "I'd like to learn more about scaling vibe code",
+    color: "from-gray-600 to-gray-700",
   },
   {
-    value: "ready-mid",
-    label: "$15K - $40K",
-    amount: "I can invest, but not a lot yet",
-    description: "Limited budget but serious about growth",
-  },
-  {
-    value: "ready-low",
-    label: "$1 - $14,999",
-    amount: "I can't really invest yet",
+    min: 1000,
+    max: 14999,
+    label: "Starter budget",
     description: "Let's explore alternative options",
+    color: "from-orange-600 to-amber-600",
   },
   {
-    value: "not-ready",
-    label: "Just my time",
-    amount: "No budget available",
-    description: "But I'd like to learn more about scaling",
+    min: 15000,
+    max: 39999,
+    label: "Growth budget",
+    description: "Ready to invest in scaling - let's talk!",
+    color: "from-blue-600 to-cyan-600",
+  },
+  {
+    min: 40000,
+    max: 75000,
+    label: "Ready to scale",
+    description: "I understand the investment needed for scaling success",
+    color: "from-green-600 to-emerald-600",
+  },
+  {
+    min: 75001,
+    max: 150000,
+    label: "Enterprise ready",
+    description: "Ready for comprehensive production transformation",
+    color: "from-purple-600 to-indigo-600",
   },
 ];
 
@@ -83,57 +86,84 @@ export const LaunchControlQualificationForm = ({
   onSuccess,
   className,
 }: LaunchControlQualificationFormProps) => {
-  const [currentStep, setCurrentStep] = useState<FormStep>("budget");
+  const [currentStep, setCurrentStep] = useState<FormStep>("contact");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showBackupButton, setShowBackupButton] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-    budget: "",
-    needsRateReduction: false,
+    budget: 0,
     name: "",
     email: "",
     preferredContact: "email",
+    sessionId: crypto.randomUUID(), // Generate unique session ID for this form instance
   });
   const { toast } = useToast();
 
-  const handleBudgetSelect = (value: string) => {
+  const handleBudgetChange = (value: number) => {
     setFormData({ ...formData, budget: value });
-
-    // Handle different budget levels
-    if (value === "ready-high") {
-      // $40K+ goes straight to contact info then SavvyCal
-      setFormData({ ...formData, budget: value, needsRateReduction: false });
-      setCurrentStep("contact");
-    } else if (value === "ready-mid") {
-      // $15K-$40K shows rate reduction option
-      setFormData({ ...formData, budget: value, needsRateReduction: true });
-      setCurrentStep("rate-reduction");
-    } else {
-      // Under $15K or no budget - redirect to email signup
-      setCurrentStep("alternatives");
-    }
   };
 
-  const handleRateReductionSubmit = () => {
-    setCurrentStep("contact");
+  const handleBudgetSubmit = async () => {
+    setIsSubmitting(true);
+    
+    try {
+      // Update the existing record with budget information and mark as completed
+      const { error } = await supabase
+        .from("launch_control_qualifications")
+        .update({
+          budget: String(formData.budget),
+          completed: true, // Mark as fully completed
+        })
+        .eq("id", formData.recordId)
+        .eq("session_id", formData.sessionId); // Use session ID for secure update
+
+      if (error) {
+        throw error;
+      }
+
+      setCurrentStep("success");
+
+      // Budget $15K+ gets immediate SavvyCal redirect
+      if (formData.budget >= 15000) {
+        const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
+          formData.email
+        )}&display_name=${encodeURIComponent(formData.name)}`;
+
+        setTimeout(() => {
+          trackSavvyCalClick(
+            "launch_control_qualification_form",
+            "launch_control_alignment",
+            {
+              budget: formData.budget,
+              email: formData.email,
+            }
+          );
+          const newWindow = window.open(savvycalUrl, "_blank");
+
+          // Check if popup was blocked
+          if (
+            !newWindow ||
+            newWindow.closed ||
+            typeof newWindow.closed === "undefined"
+          ) {
+            setShowBackupButton(true);
+          }
+        }, 1500);
+      }
+
+      onSuccess?.();
+    } catch (error) {
+      console.error("Error updating budget:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save your budget. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleContactSubmit = async () => {
-    // Validate qualification data
-    const qualValidation = validateForm(qualificationFormSchema, {
-      budget: formData.budget,
-      needsRateReduction: formData.needsRateReduction,
-      rateReductionReason: formData.rateReductionReason,
-    });
-
-    if (!qualValidation.success) {
-      toast({
-        title: "Validation Error",
-        description: Object.values(qualValidation.errors)[0],
-        variant: "destructive",
-      });
-      return;
-    }
-
     // Validate contact data
     const contactValidation = validateForm(waitlistFormSchema, {
       name: formData.name,
@@ -154,55 +184,36 @@ export const LaunchControlQualificationForm = ({
     setIsSubmitting(true);
 
     try {
-      // Try to save qualification data to Supabase
-      const { error } = await supabase
+      // Save contact data first (budget will be added in next step)
+      const { data, error } = await supabase
         .from("launch_control_qualifications")
         .insert({
-          budget: formData.budget,
-          needs_rate_reduction: formData.needsRateReduction,
-          rate_reduction_reason: formData.rateReductionReason,
+          budget: "pending", // Will be updated when budget is selected
+          needs_rate_reduction: false,
+          rate_reduction_reason: null,
           name: formData.name,
           email: formData.email,
           preferred_contact: formData.preferredContact,
           phone: formData.phone,
-        });
+          completed: false, // Track completion status
+          session_id: formData.sessionId, // Include session ID for RLS
+        })
+        .select()
+        .eq("session_id", formData.sessionId) // Filter by session ID for security
+        .single();
 
       if (error) {
         throw error;
       }
 
-      setCurrentStep("success");
-
-      // Only high budget goes straight to SavvyCal
-      if (formData.budget === "ready-high") {
-        const savvycalUrl = `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
-          formData.email
-        )}&display_name=${encodeURIComponent(formData.name)}`;
-
-        setTimeout(() => {
-          trackSavvyCalClick('launch_control_qualification_form', 'launch_control_alignment', {
-            budget: formData.budget,
-            email: formData.email
-          });
-          const newWindow = window.open(savvycalUrl, "_blank");
-
-          // Check if popup was blocked
-          if (
-            !newWindow ||
-            newWindow.closed ||
-            typeof newWindow.closed === "undefined"
-          ) {
-            setShowBackupButton(true);
-          }
-        }, 1500);
-      }
-
-      onSuccess?.();
+      // Store the record ID for updating with budget later
+      setFormData({ ...formData, recordId: data.id });
+      setCurrentStep("budget");
     } catch (error) {
-      console.error("Error submitting qualification:", error);
+      console.error("Error saving contact information:", error);
       toast({
         title: "Error",
-        description: "Failed to submit your information. Please try again.",
+        description: "Failed to save your information. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -211,20 +222,14 @@ export const LaunchControlQualificationForm = ({
   };
 
   const handleBack = () => {
-    if (currentStep === "contact" && formData.needsRateReduction) {
-      setCurrentStep("rate-reduction");
-    } else if (
-      currentStep === "rate-reduction" ||
-      currentStep === "contact" ||
-      currentStep === "alternatives"
-    ) {
-      setCurrentStep("budget");
+    if (currentStep === "budget") {
+      setCurrentStep("contact");
     }
   };
 
   if (currentStep === "success") {
     const savvycalUrl =
-      formData.budget === "ready-high"
+      formData.budget >= 15000
         ? `https://savvycal.com/craigsturgis/vibecto-launch-control-alignment?email=${encodeURIComponent(
             formData.email
           )}&display_name=${encodeURIComponent(formData.name)}`
@@ -233,35 +238,130 @@ export const LaunchControlQualificationForm = ({
     return (
       <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
         <CardContent className="pt-6">
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-6">
             <CheckCircle className="w-12 h-12 text-green-500 mx-auto" />
-            <h3 className="text-xl font-semibold text-white">
-              {formData.needsRateReduction
-                ? "Application Submitted!"
-                : "Mission Briefing Scheduled!"}
-            </h3>
-            <p className="text-gray-300">
-              {formData.needsRateReduction
-                ? "We'll review your rate reduction application and contact you within 1-2 business days."
-                : showBackupButton
-                ? "Your information has been saved. Click the button below to schedule your call."
-                : "Redirecting you to schedule your mission assessment call..."}
-            </p>
+            <div>
+              <h3 className="text-xl font-semibold text-white mb-2">
+                Thank You, {formData.name}!
+              </h3>
+              <p className="text-gray-300">
+                {formData.budget >= 15000
+                  ? showBackupButton
+                    ? "Your information has been saved. Click below to schedule your mission assessment call."
+                    : "Redirecting you to schedule your mission assessment call..."
+                  : formData.budget === 0
+                  ? "Thanks for your interest! We'll send you scaling best practices and add you to our growth-focused updates."
+                  : "We've received your information and will be in touch soon."}
+              </p>
+            </div>
 
-            {showBackupButton && formData.budget === "ready-high" && (
+            {/* SavvyCal button for high budget */}
+            {formData.budget >= 15000 && showBackupButton && (
               <Button
                 onClick={() => {
-                  trackSavvyCalClick('launch_control_qualification_form_backup', 'launch_control_alignment', {
-                    budget: formData.budget,
-                    email: formData.email
-                  });
+                  trackSavvyCalClick(
+                    "launch_control_qualification_form_backup",
+                    "launch_control_alignment",
+                    {
+                      budget: formData.budget,
+                      email: formData.email,
+                    }
+                  );
                   window.open(savvycalUrl, "_blank");
                 }}
                 className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
               >
-                Schedule Your Call
+                Schedule Your Call Now
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
+            )}
+
+            {/* Alternative resources based on budget */}
+            {formData.budget < 15000 && (
+              <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 text-left">
+                <h4 className="font-semibold text-white mb-3">
+                  While you wait, here are some resources:
+                </h4>
+                {formData.budget > 0 ? (
+                  <ul className="space-y-2 text-gray-300 text-sm">
+                    <li className="flex items-start">
+                      <span className="text-cyan-400 mr-2">•</span>
+                      <span>
+                        Review our{" "}
+                        <a
+                          href="/resources"
+                          className="text-cyan-400 hover:text-cyan-300 underline"
+                        >
+                          scaling best practices
+                        </a>
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-cyan-400 mr-2">•</span>
+                      <span>
+                        Check out case studies of successful scaling journeys
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-cyan-400 mr-2">•</span>
+                      <span>
+                        Prepare your team with our production readiness
+                        checklist
+                      </span>
+                    </li>
+                    {formData.budget >= 5000 && formData.budget < 15000 && (
+                      <li className="flex items-start">
+                        <span className="text-cyan-400 mr-2">•</span>
+                        <span>
+                          We'll discuss options that might work for your budget
+                        </span>
+                      </li>
+                    )}
+                  </ul>
+                ) : (
+                  <ul className="space-y-2 text-gray-300 text-sm">
+                    <li className="flex items-start">
+                      <span className="text-cyan-400 mr-2">•</span>
+                      <span>
+                        Start with our{" "}
+                        <a
+                          href="/resources"
+                          className="text-cyan-400 hover:text-cyan-300 underline"
+                        >
+                          free scaling guides
+                        </a>
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-cyan-400 mr-2">•</span>
+                      <span>
+                        Learn about production best practices through our
+                        resources
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-cyan-400 mr-2">•</span>
+                      <span>
+                        Consider starting with{" "}
+                        <a
+                          href="/ignition"
+                          className="text-cyan-400 hover:text-cyan-300 underline"
+                        >
+                          Ignition
+                        </a>{" "}
+                        to build your MVP first
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-cyan-400 mr-2">•</span>
+                      <span>
+                        We'll notify you about future cohort programs or group
+                        workshops
+                      </span>
+                    </li>
+                  </ul>
+                )}
+              </div>
             )}
           </div>
         </CardContent>
@@ -273,106 +373,16 @@ export const LaunchControlQualificationForm = ({
     <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
       <CardHeader>
         <CardTitle className="text-white">
-          {currentStep === "budget" && "Mission Readiness Check"}
-          {currentStep === "rate-reduction" && "Special Mission Application"}
-          {currentStep === "contact" && "Mission Contact Information"}
-          {currentStep === "alternatives" && "Alternative Flight Paths"}
+          {currentStep === "contact" && "Mission Control Check-In"}
+          {currentStep === "budget" && "Scaling Investment"}
         </CardTitle>
         <CardDescription className="text-gray-400">
-          {currentStep === "budget" &&
-            "What's your budget for this scaling mission?"}
-          {currentStep === "rate-reduction" &&
-            "Tell us why you'd be a great fit for our reduced rate program"}
-          {currentStep === "contact" && "How can mission control reach you?"}
-          {currentStep === "alternatives" &&
-            "Let's find the right trajectory for your journey"}
+          {currentStep === "contact" && "First, let's establish communication"}
+          {currentStep === "budget" && "Now, let's discuss your scaling investment"}
         </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {currentStep === "budget" && (
-          <RadioGroup
-            value={formData.budget}
-            onValueChange={handleBudgetSelect}
-            className="space-y-3"
-          >
-            {BUDGET_OPTIONS.map((option) => (
-              <label
-                key={option.value}
-                className={cn(
-                  "flex items-start space-x-3 p-4 rounded-lg border cursor-pointer transition-all",
-                  formData.budget === option.value
-                    ? "border-cyan-500 bg-cyan-500/10"
-                    : "border-gray-700 hover:border-gray-600"
-                )}
-              >
-                <RadioGroupItem
-                  value={option.value}
-                  className="mt-1 text-cyan-500"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <DollarSign className="w-4 h-4 text-cyan-400" />
-                    <span className="font-semibold text-white">
-                      {option.label}
-                    </span>
-                  </div>
-                  <div className="text-sm font-medium text-gray-300 mt-1">
-                    {option.amount}
-                  </div>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {option.description}
-                  </p>
-                </div>
-              </label>
-            ))}
-          </RadioGroup>
-        )}
-
-        {currentStep === "rate-reduction" && (
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="reason" className="text-white mb-2">
-                Why should we consider you for our special mission rate?
-              </Label>
-              <Textarea
-                id="reason"
-                placeholder="Tell us about your current traction, potential impact, or why you'd be an ideal candidate for a reduced rate..."
-                className="min-h-[120px] bg-gray-800 border-gray-700 text-white placeholder-gray-500"
-                value={formData.rateReductionReason || ""}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    rateReductionReason: e.target.value,
-                  })
-                }
-              />
-              <p className="text-xs text-gray-500 mt-2">
-                We review applications based on product traction, team
-                commitment, and available mission capacity.
-              </p>
-            </div>
-
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
-              <Button
-                onClick={handleRateReductionSubmit}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
-              >
-                Continue
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </div>
-        )}
-
         {currentStep === "contact" && (
           <div className="space-y-4">
             <div className="grid gap-4">
@@ -490,15 +500,7 @@ export const LaunchControlQualificationForm = ({
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
+            <div className="flex justify-end">
               <Button
                 onClick={handleContactSubmit}
                 disabled={
@@ -509,6 +511,50 @@ export const LaunchControlQualificationForm = ({
                     formData.preferredContact === "text") &&
                     !formData.phone)
                 }
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    Continue
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {currentStep === "budget" && (
+          <div className="space-y-6">
+            <BudgetSlider
+              min={0}
+              max={150000}
+              step={1000}
+              value={formData.budget}
+              onChange={handleBudgetChange}
+              ranges={BUDGET_RANGES}
+              label=""
+              description="From bootstrap to enterprise - select your investment level"
+              showRecommendations={true}
+            />
+
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={handleBack}
+                className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <Button
+                onClick={handleBudgetSubmit}
+                disabled={isSubmitting}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
               >
                 {isSubmitting ? (
@@ -518,73 +564,12 @@ export const LaunchControlQualificationForm = ({
                   </>
                 ) : (
                   <>
-                    {formData.needsRateReduction
-                      ? "Submit Application"
-                      : "Continue to Scheduling"}
+                    Complete Registration
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </>
                 )}
               </Button>
             </div>
-          </div>
-        )}
-
-        {currentStep === "alternatives" && (
-          <div className="space-y-6">
-            <div className="text-center mb-6">
-              <div className="inline-flex p-3 rounded-full bg-cyan-500/20 mb-4">
-                <Info className="w-8 h-8 text-cyan-400" />
-              </div>
-
-              <h3 className="text-lg font-semibold text-white mb-2">
-                Prepare for Your Mission
-              </h3>
-
-              <p className="text-gray-300">
-                While Launch Control requires significant investment, you can
-                still learn about scaling and prepare for when you&apos;re ready
-                to achieve escape velocity.
-              </p>
-            </div>
-
-            <div className="bg-gray-800/30 border border-gray-700 rounded-lg p-6 space-y-4">
-              <h4 className="font-semibold text-white">Get Started with:</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex items-start">
-                  <span className="text-cyan-400 mr-2">•</span>
-                  Scaling best practices and architecture guides
-                </li>
-                <li className="flex items-start">
-                  <span className="text-cyan-400 mr-2">•</span>
-                  Production readiness checklists
-                </li>
-                <li className="flex items-start">
-                  <span className="text-cyan-400 mr-2">•</span>
-                  Team building and hiring resources
-                </li>
-                <li className="flex items-start">
-                  <span className="text-cyan-400 mr-2">•</span>
-                  Early access to scaling tools and frameworks
-                </li>
-              </ul>
-            </div>
-
-            <EmailOptIn
-              variant="minimal"
-              title="Join the Mission Briefing List"
-              description="Get scaling insights and be first to know when spots open up"
-              buttonText="Sign Me Up"
-              className="border-cyan-500/30"
-            />
-
-            <Button
-              variant="outline"
-              onClick={handleBack}
-              className="w-full border-gray-600 text-gray-300 hover:bg-gray-800"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Budget Options
-            </Button>
           </div>
         )}
       </CardContent>
