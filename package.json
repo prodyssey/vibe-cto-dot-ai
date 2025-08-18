@@ -18,8 +18,10 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "eslint --fix",
-      "npm run test:run"
+      "eslint --fix"
+    ],
+    "*.{ts,tsx}": [
+      "bash -c 'npm run test:run'"
     ]
   },
   "dependencies": {

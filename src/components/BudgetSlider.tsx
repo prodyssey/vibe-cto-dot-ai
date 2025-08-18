@@ -1,4 +1,4 @@
-import { DollarSign, Info } from "lucide-react";
+import { DollarSign, Info } from "lucide-react"; 
 import { useState, useEffect } from "react";
 
 import { Input } from "@/components/ui/input";
