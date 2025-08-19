@@ -8,6 +8,7 @@ import { Paths } from "@/components/sections/Paths";
 import { ProblemPromise } from "@/components/sections/ProblemPromise";
 import { Proof } from "@/components/sections/Proof";
 import { Resources } from "@/components/sections/Resources";
+import { getAllPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "VibeCTO.ai - From vibes to product | AI-Powered Development",
@@ -36,7 +37,10 @@ export const metadata: Metadata = {
   }
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const posts = await getAllPosts();
+  const featuredPosts = posts.filter(post => post.featured).slice(0, 3);
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -46,7 +50,7 @@ export default function HomePage() {
           <ProblemPromise />
           <HowItWorks />
           {/* <Proof /> */}
-          <Resources />
+          <Resources posts={featuredPosts} />
           <div className="py-16 px-6">
             <EmailOptIn
               title="Follow along"

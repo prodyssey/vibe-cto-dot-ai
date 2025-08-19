@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getAllPosts } from '@/lib/posts'
 import { ResourcesClient } from './ResourcesClient'
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
   }
 }
 
-export default function ResourcesPage() {
-  return <ResourcesClient />
+export default async function ResourcesPage() {
+  const posts = await getAllPosts()
+  return <ResourcesClient posts={posts} />
 }
