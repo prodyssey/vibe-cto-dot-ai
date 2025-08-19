@@ -38,20 +38,19 @@ export const Hero = () => {
             {/* Main headline */}
             <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-6 leading-tight">
               Human help to build
-              <br />
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                {" "}
                 with AI
               </span>
             </h1>
 
             {/* Subcopy */}
             <p className="text-xl md:text-2xl text-gray-100 max-w-4xl lg:max-w-none mx-auto mb-12 leading-relaxed">
-              I work with builders of all stripes to adopt AI and accelerate
-              <span className="text-blue-400 font-semibold">
-                {" "}
-                roadmaps, prototypes, and internal operations
-              </span>
-              .
+              I work with builders to adopt AI and accelerate
+              <span className="text-blue-400 font-semibold"> roadmaps</span>,
+              <span className="text-purple-400 font-semibold"> operations</span>
+              , and
+              <span className="text-pink-400 font-semibold"> prototypes</span>.
             </p>
 
             {/* Primary CTA */}
@@ -94,7 +93,7 @@ export const Hero = () => {
               <div className="flex items-center space-x-2">
                 <Code className="w-5 h-5 text-pink-400" />
                 <span className="text-sm text-pink-300 font-medium">
-                  Confidence from experience
+                  Experienced help
                 </span>
               </div>
             </div>
