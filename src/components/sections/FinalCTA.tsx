@@ -1,13 +1,15 @@
+"use client";
+
 import { Calendar, ArrowRight, Clock } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { addSavvyCalTracking } from "@/lib/analytics";
 
 export const FinalCTA = () => {
   const linkRef = useRef<HTMLAnchorElement>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (linkRef.current) {
@@ -35,7 +37,7 @@ export const FinalCTA = () => {
 
           <div className="space-y-8">
             <Button
-              onClick={() => navigate("/adventure")}
+              onClick={() => router.push("/adventure")}
               size="lg"
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 md:px-12 py-4 md:py-6 text-lg md:text-xl font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
             >

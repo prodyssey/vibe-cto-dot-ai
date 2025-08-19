@@ -1,16 +1,18 @@
+"use client";
+
 import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getOrderedServices } from "@/config/services";
 
 export const ProblemPromise = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const services = getOrderedServices();
 
   const handleNavigation = (path: string) => {
-    navigate(path);
+    router.push(path);
     // Scroll to top after navigation
     setTimeout(() => window.scrollTo(0, 0), 0);
   };

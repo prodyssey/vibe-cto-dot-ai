@@ -1,6 +1,8 @@
+"use client";
+
 import { Calendar, FileText, Code, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
@@ -103,7 +105,7 @@ export default function Resources() {
                   {featuredPosts.map((post) => {
                     const Icon = getIcon(post.type);
                     return (
-                      <Link key={post.slug} to={`/resources/${post.slug}`}>
+                      <Link key={post.slug} href={`/resources/${post.slug}`}>
                         <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full">
                           <CardContent className="p-6">
                             <div className="flex items-center justify-between mb-4">
@@ -176,7 +178,7 @@ export default function Resources() {
                 {regularPosts.map((post) => {
                   const Icon = getIcon(post.type);
                   return (
-                    <Link key={post.slug} to={`/resources/${post.slug}`}>
+                    <Link key={post.slug} href={`/resources/${post.slug}`}>
                       <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full">
                         <CardContent className="p-6">
                           <div className="flex items-center justify-between mb-4">
