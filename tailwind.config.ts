@@ -4,9 +4,9 @@ export default {
 	darkMode: ["class"],
 	content: [
 		"./app/**/*.{js,ts,jsx,tsx,mdx}",        // App Router pages and layouts
-		"./components/**/*.{js,ts,jsx,tsx,mdx}", // Global components
+		"./src/**/*.{js,ts,jsx,tsx,mdx}",        // All source components and pages
+		"./components/**/*.{js,ts,jsx,tsx,mdx}", // Global components (if any)
 		"./lib/**/*.{js,ts,jsx,tsx,mdx}",        // Utility functions with JSX
-		// Remove './pages/**/*' and './src/**/*' - we're using App Router, not Pages Router
 	],
 	prefix: "",
 	theme: {
