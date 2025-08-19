@@ -24,7 +24,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getPostBySlug, getReactComponent, Post } from "@/lib/content";
 
-
 import "highlight.js/styles/github-dark.css";
 
 export default function ResourcePost() {
@@ -161,12 +160,11 @@ export default function ResourcePost() {
           {/* Header Image */}
           {post.metadata.headerImage && (
             <Card className="bg-white/5 backdrop-blur-sm border-white/10 mb-8 overflow-hidden">
-              <div className="relative w-full" style={{ maxHeight: '400px' }}>
+              <div className="relative w-full flex items-center justify-center px-2 py-4 sm:px-8 sm:py-6 md:px-16 md:py-8 lg:px-24 lg:py-10 max-h-[60vh] sm:max-h-[70vh] md:max-h-[80vh]">
                 <img
                   src={post.metadata.headerImage}
                   alt={post.metadata.title}
-                  className="w-full h-auto object-cover"
-                  style={{ maxHeight: '400px' }}
+                  className="w-full h-auto max-h-[60vh] object-contain"
                 />
               </div>
             </Card>
