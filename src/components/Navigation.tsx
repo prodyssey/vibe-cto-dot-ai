@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Home,
   BookOpen,
@@ -8,7 +10,8 @@ import {
   Briefcase,
 } from "lucide-react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
@@ -24,7 +27,7 @@ import {
 import { getOrderedServices } from "@/config/services";
 
 export const Navigation = () => {
-  const location = useLocation();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   const serviceItems = getOrderedServices();
@@ -44,7 +47,7 @@ export const Navigation = () => {
       <div className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link
-            to="/"
+            href="/"
             className="flex items-center space-x-3 text-xl sm:text-2xl font-bold text-white"
           >
             <Logo size="md" />
@@ -69,13 +72,13 @@ export const Navigation = () => {
                     <ul className="grid w-[400px] gap-3 p-4 bg-black/95 backdrop-blur-lg border border-white/10">
                       {serviceItems.map((item) => {
                         const Icon = item.icon;
-                        const isActive = location.pathname === item.path;
+                        const isActive = pathname === item.path;
 
                         return (
                           <li key={item.path}>
                             <NavigationMenuLink asChild>
                               <Link
-                                to={item.path}
+                                href={item.path}
                                 className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors ${
                                   isActive
                                     ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
@@ -107,12 +110,12 @@ export const Navigation = () => {
               .map((item) => {
                 const Icon = item.icon;
                 const isActive =
-                  location.pathname === item.path ||
+                  pathname === item.path ||
                   (item.path === "/resources" &&
-                    location.pathname.startsWith("/resources"));
+                    pathname.startsWith("/resources"));
 
                 return (
-                  <Link key={item.path} to={item.path}>
+                  <Link key={item.path} href={item.path}>
                     <Button
                       variant={isActive ? "default" : "ghost"}
                       className={`flex items-center space-x-2 ${
@@ -146,7 +149,7 @@ export const Navigation = () => {
             >
               <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <Link
-                  to="/"
+                  href="/"
                   onClick={handleNavClick}
                   className="flex items-center space-x-3 text-xl font-bold text-white"
                 >
@@ -170,11 +173,11 @@ export const Navigation = () => {
 
               <div className="p-6 space-y-2">
                 {/* Home */}
-                <Link to="/" onClick={handleNavClick}>
+                <Link href="/" onClick={handleNavClick}>
                   <Button
-                    variant={location.pathname === "/" ? "default" : "ghost"}
+                    variant={pathname === "/" ? "default" : "ghost"}
                     className={`w-full justify-start space-x-3 text-left ${
-                      location.pathname === "/"
+                      pathname === "/"
                         ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
                         : "text-white hover:bg-white/10"
                     }`}
@@ -193,12 +196,12 @@ export const Navigation = () => {
                   <div className="ml-4 space-y-1">
                     {serviceItems.map((item) => {
                       const Icon = item.icon;
-                      const isActive = location.pathname === item.path;
+                      const isActive = pathname === item.path;
 
                       return (
                         <Link
                           key={item.path}
-                          to={item.path}
+                          href={item.path}
                           onClick={handleNavClick}
                         >
                           <Button
@@ -224,14 +227,14 @@ export const Navigation = () => {
                   .map((item) => {
                     const Icon = item.icon;
                     const isActive =
-                      location.pathname === item.path ||
+                      pathname === item.path ||
                       (item.path === "/resources" &&
-                        location.pathname.startsWith("/resources"));
+                        pathname.startsWith("/resources"));
 
                     return (
                       <Link
                         key={item.path}
-                        to={item.path}
+                        href={item.path}
                         onClick={handleNavClick}
                       >
                         <Button

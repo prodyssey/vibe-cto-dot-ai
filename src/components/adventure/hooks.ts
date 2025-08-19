@@ -84,7 +84,7 @@ export const useGameCompletion = () => {
     } else if (finalPath === 'transformation') {
       router.push('/transformation');
     }
-  }, [completeGame, finalPath, navigate]);
+  }, [completeGame, finalPath, router]);
 
   return {
     isCompleted: completionStatus.isCompleted,

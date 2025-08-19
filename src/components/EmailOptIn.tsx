@@ -1,3 +1,5 @@
+'use client'
+
 import { Mail, CheckCircle2 } from "lucide-react";
 import React, { useState, useRef } from "react";
 
@@ -26,7 +28,7 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const formId = import.meta.env.VITE_CONVERTKIT_FORM_ID || "8281105";
+  const formId = process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID || "8281105";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

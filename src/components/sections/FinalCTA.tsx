@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { Calendar, ArrowRight, Clock } from "lucide-react";
 import { useEffect, useRef } from "react";

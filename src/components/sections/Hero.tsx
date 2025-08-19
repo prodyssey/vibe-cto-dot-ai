@@ -1,10 +1,12 @@
+'use client'
+
 import { ArrowRight, Code, Rocket, Gamepad2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 
 export const Hero = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const scrollToJourney = () => {
     const journeySection = document.getElementById("journey");
@@ -57,7 +59,7 @@ export const Hero = () => {
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Button
-                  onClick={() => navigate("/adventure")}
+                  onClick={() => router.push("/adventure")}
                   size="lg"
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
                 >
