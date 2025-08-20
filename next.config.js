@@ -17,9 +17,9 @@ const nextConfig = {
     unoptimized: true
   },
   
-  // Enable static export for current hosting setup (if needed)
-  output: 'export',
-  trailingSlash: true,
+  // For Netlify deployment, we don't need static export
+  // output: 'export',
+  // trailingSlash: true,
   
   // Next.js 15+ specific optimizations
   experimental: {

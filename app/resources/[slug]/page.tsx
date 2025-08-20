@@ -4,9 +4,9 @@ import { getPostBySlug, getAllPosts } from '@/lib/posts'
 import { ResourcePostClient } from './ResourcePostClient'
 
 interface ResourcePostPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateStaticParams() {
