@@ -32,6 +32,9 @@ export class SoundManager {
   }
 
   private initializeOnInteraction() {
+    // Only initialize on client-side
+    if (typeof window === 'undefined') {return;}
+    
     const initAudio = () => {
       if (!this.audioContext) {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -244,4 +247,5 @@ export const SOUND_EFFECTS: Sound[] = [
 ];
 
 // Helper function to get sound manager instance
-export const soundManager = SoundManager.getInstance();
+// Only create instance on client-side
+export const soundManager: SoundManager | null = typeof window !== 'undefined' ? SoundManager.getInstance() : null;

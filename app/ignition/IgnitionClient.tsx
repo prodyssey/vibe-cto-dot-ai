@@ -64,9 +64,10 @@ export function IgnitionClient() {
 
   return (
     <>
-      <Navigation />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <Navigation />
 
-      <div className="pt-20">
+        <div className="pt-20">
         {/* Hero Section */}
         <section className="py-20 px-6">
           <div className="max-w-4xl mx-auto text-center">
@@ -226,9 +227,9 @@ export function IgnitionClient() {
             </div>
           </div>
         </section>
-      </div>
+        </div>
 
-      {/* Qualification Form Dialog */}
+        {/* Qualification Form Dialog */}
       <Dialog open={showQualificationForm} onOpenChange={setShowQualificationForm}>
         <DialogContent className="max-w-2xl bg-gray-900 border-gray-700">
           <DialogHeader>
@@ -248,6 +249,7 @@ export function IgnitionClient() {
           />
         </DialogContent>
       </Dialog>
+      </div>
     </>
   );
 }

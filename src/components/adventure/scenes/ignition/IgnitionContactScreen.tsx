@@ -29,13 +29,13 @@ interface ContactData {
 
 export const IgnitionContactScreen = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { sessionId, makeChoice } = useGameStore();
   const [contactData, setContactData] = useState<ContactData>({
     name: "",
     email: "",
     preferredContact: "email",
-    sessionId: crypto.randomUUID(),
+    sessionId: sessionId || "", // Use existing session ID from game store
   });
-  const { sessionId, makeChoice } = useGameStore();
   const { pushScene } = useBrowserNavigation();
   const { toast } = useToast();
   const scene = getScene("ignitionContact");

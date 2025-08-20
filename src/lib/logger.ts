@@ -3,7 +3,7 @@
  * Use this instead of console.log in production code
  */
 
-const isDevelopment = import.meta.env.DEV;
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 // List of sensitive field names to redact
 const SENSITIVE_FIELDS = [
