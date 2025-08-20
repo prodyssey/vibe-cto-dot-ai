@@ -33,7 +33,7 @@ export const LaunchControlQualificationScreen = () => {
 
   // Check if user applied for rate reduction
   const appliedForRateReduction =
-    choices["launchControlRateReduction"]?.choiceId === "applied";
+    choices.find(c => c.sceneId === "launchControlRateReduction")?.choiceId === "applied";
 
   const questions: QualificationQuestion[] = [
     {
@@ -93,7 +93,9 @@ export const LaunchControlQualificationScreen = () => {
       );
       
       makeChoice("launchControlQualification", "not-qualified", {
-        launchControl: 0,
+        ignition: 0,
+        launch_control: 0,
+        transformation: 0,
       });
       
       pushScene("launchControlAlternatives");
@@ -119,12 +121,16 @@ export const LaunchControlQualificationScreen = () => {
   const handleContinue = () => {
     if (isQualified) {
       makeChoice("launchControlQualification", "qualified", {
-        launchControl: 3,
+        ignition: 0,
+        launch_control: 3,
+        transformation: 0,
       });
       pushScene("launchControlApplication");
     } else {
       makeChoice("launchControlQualification", "not-qualified", {
-        launchControl: 0,
+        ignition: 0,
+        launch_control: 0,
+        transformation: 0,
       });
       pushScene("launchControlAlternatives");
     }

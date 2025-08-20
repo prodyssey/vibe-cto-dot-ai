@@ -186,7 +186,7 @@ export const TransformationInvestmentScreen = () => {
                 <AnimatedButton
                   onClick={handleViewAlternatives}
                   variant="ghost"
-                  size="md"
+                  size="default"
                   className="text-purple-300 hover:text-purple-200 hover:bg-purple-900/20 border border-purple-500/30 hover:border-purple-500/50"
                 >
                   Explore Self-Service Alternatives

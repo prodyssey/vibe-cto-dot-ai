@@ -115,9 +115,9 @@ export const LaunchControlFinalScreen = () => {
     // Check if we already have contact info from earlier
     const contactInfo = choices.find((c) => c.sceneId === "launchControlContact" && c.choiceId === "submitted");
     
-    if (contactInfo && contactInfo.data?.email && contactInfo.data?.name) {
+    if (contactInfo && contactInfo.additionalData?.email && contactInfo.additionalData?.name) {
       // We already have the contact info, use it directly
-      await handleEmailSubmit(contactInfo.data.email, contactInfo.data.name);
+      await handleEmailSubmit(contactInfo.additionalData.email, contactInfo.additionalData.name);
     } else {
       // We don't have contact info, show the form
       setShowEmailForm(true);
@@ -295,8 +295,8 @@ export const LaunchControlFinalScreen = () => {
                     <AnimatedButton
                       onClick={() => {
                         const contactInfo = choices.find((c) => c.sceneId === "launchControlContact" && c.choiceId === "submitted");
-                        const email = contactInfo?.data?.email || "";
-                        const name = contactInfo?.data?.name || "";
+                        const email = contactInfo?.additionalData?.email || "";
+                        const name = contactInfo?.additionalData?.name || "";
                         const url = email && name 
                           ? `https://savvycal.com/craigsturgis/vibecto-launch-control?email=${encodeURIComponent(email)}&display_name=${encodeURIComponent(name)}`
                           : `https://savvycal.com/craigsturgis/vibecto-launch-control`;

@@ -21,7 +21,7 @@ export const useSound = () => {
 
     return () => {
       // Cleanup on unmount
-      soundManager.stopMusic();
+      soundManager?.stopMusic();
     };
   }, [preferences.soundEnabled, preferences.musicVolume, preferences.effectsVolume]);
 

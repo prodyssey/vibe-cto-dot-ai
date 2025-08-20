@@ -106,12 +106,19 @@ export const LaunchControlQualificationForm = ({
     setIsSubmitting(true);
     
     try {
+      if (!formData.recordId) {
+        throw new Error('No record ID found. Please restart the process.');
+      }
+      if (!formData.sessionId) {
+        throw new Error('No session ID found. Please restart the process.');
+      }
+
       // Update the existing record with budget information and mark as completed
       const { error } = await supabase
-        .from("launch_control_qualifications")
+        .from("ignition_waitlist")
         .update({
-          budget: String(formData.budget),
-          completed: true, // Mark as fully completed
+          notes: `Launch Control Budget: $${formData.budget}`,
+          status: "launch_control_completed", // Mark as fully completed
         })
         .eq("id", formData.recordId)
         .eq("session_id", formData.sessionId); // Use session ID for secure update

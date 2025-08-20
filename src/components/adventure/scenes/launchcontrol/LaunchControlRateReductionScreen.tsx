@@ -68,7 +68,7 @@ export const LaunchControlRateReductionScreen = () => {
       timestamp: new Date().toISOString(),
     };
 
-    makeChoice('launchControlRateReduction', 'applied', { launchControl: 2 });
+    makeChoice('launchControlRateReduction', 'applied', { ignition: 0, launch_control: 2, transformation: 0 });
     await saveChoice(
       sessionId,
       'launchControlRateReduction',
@@ -80,7 +80,7 @@ export const LaunchControlRateReductionScreen = () => {
   };
 
   const handleSkip = async () => {
-    makeChoice('launchControlRateReduction', 'skipped', { launchControl: 2 });
+    makeChoice('launchControlRateReduction', 'skipped', { ignition: 0, launch_control: 2, transformation: 0 });
     await saveChoice(sessionId, 'launchControlRateReduction', 'skipped', 'Skipped rate reduction');
     pushScene('launchControlQualification');
   };

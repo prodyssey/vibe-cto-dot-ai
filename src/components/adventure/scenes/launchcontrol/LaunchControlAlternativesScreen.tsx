@@ -80,7 +80,7 @@ export const LaunchControlAlternativesScreen = () => {
           "ignition",
           "Redirected to Ignition"
         );
-        makeChoice("launchControlAlternatives", "ignition", { ignition: 2 });
+        makeChoice("launchControlAlternatives", "ignition", { ignition: 2, launch_control: 0, transformation: 0 });
         pushScene("ignitionDetail");
       },
     },

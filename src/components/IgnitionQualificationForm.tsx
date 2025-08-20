@@ -107,12 +107,19 @@ export const IgnitionQualificationForm = ({
     setIsSubmitting(true);
     
     try {
+      if (!formData.recordId) {
+        throw new Error('No record ID found. Please restart the process.');
+      }
+      if (!formData.sessionId) {
+        throw new Error('No session ID found. Please restart the process.');
+      }
+
       // Update the existing record with budget information and mark as completed
       const { error } = await supabase
-        .from("ignition_qualifications")
+        .from("ignition_waitlist")
         .update({
-          budget: String(formData.budget),
-          completed: true, // Mark as fully completed
+          notes: `Budget: $${formData.budget}`, // Store budget in notes field
+          status: "completed", // Mark as fully completed
         })
         .eq("id", formData.recordId)
         .eq("session_id", formData.sessionId); // Use session ID for secure update
@@ -187,20 +194,16 @@ export const IgnitionQualificationForm = ({
     try {
       // Save contact data first (budget will be added in next step)
       const { data, error } = await supabase
-        .from("ignition_qualifications")
+        .from("ignition_waitlist")
         .insert({
-          budget: "pending", // Will be updated when budget is selected
-          needs_rate_reduction: false,
-          rate_reduction_reason: null,
-          name: formData.name,
-          email: formData.email,
-          preferred_contact: formData.preferredContact,
-          phone: formData.phone,
-          completed: false, // Track completion status
+          player_name: formData.name,
+          preferred_contact: formData.email,
+          contact_method: formData.preferredContact + (formData.phone ? `: ${formData.phone}` : ''),
+          status: "pending", // Will be updated when budget is selected
+          notes: "Contact info collected, awaiting budget selection",
           session_id: formData.sessionId, // Include session ID for RLS
         })
         .select()
-        .eq("session_id", formData.sessionId) // Filter by session ID for security
         .single();
 
       if (error) {

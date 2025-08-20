@@ -149,7 +149,7 @@ export const useGameStore = create<GameStore>()(
         });
 
         set((state) => ({
-          discoveredPaths: new Set([...state.discoveredPaths, path]),
+          discoveredPaths: new Set([...Array.from(state.discoveredPaths), path]),
         }));
       },
 

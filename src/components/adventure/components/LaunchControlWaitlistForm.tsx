@@ -75,18 +75,19 @@ export const LaunchControlWaitlistForm = ({
       }
 
       const { error: dbError } = await supabase
-        .from("launch_control_waitlist")
+        .from("ignition_waitlist")
         .insert({
           session_id: sessionId,
           player_name: formData.name || playerName,
           preferred_contact: preferredContact,
           contact_method: formData.contactMethod,
+          status: "launch_control", // Distinguish from ignition waitlist
           notes:
-            formData.phone &&
+            `Launch Control Path. ` + (formData.phone &&
             formData.contactMethod !== "phone" &&
             formData.contactMethod !== "text"
               ? `Phone: ${formData.phone}`
-              : null,
+              : "Contact via selected method"),
         });
 
       if (dbError) {

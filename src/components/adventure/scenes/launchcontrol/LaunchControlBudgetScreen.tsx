@@ -65,20 +65,20 @@ export const LaunchControlBudgetScreen = () => {
     
     // Determine budget category and path weight
     let budgetCategory = "exploring";
-    let pathWeight = { launchControl: 0 };
+    let pathWeight = { ignition: 0, launch_control: 0, transformation: 0 };
     
     if (budgetValue >= 40000) {
       budgetCategory = "ready-high";
-      pathWeight = { launchControl: 3 };
+      pathWeight = { ignition: 0, launch_control: 3, transformation: 0 };
     } else if (budgetValue >= 15000) {
       budgetCategory = "ready-mid";
-      pathWeight = { launchControl: 2 };
+      pathWeight = { ignition: 0, launch_control: 2, transformation: 0 };
     } else if (budgetValue >= 1000) {
       budgetCategory = "ready-low";
-      pathWeight = { launchControl: 1 };
+      pathWeight = { ignition: 0, launch_control: 1, transformation: 0 };
     } else {
       budgetCategory = "exploring";
-      pathWeight = { launchControl: 0 };
+      pathWeight = { ignition: 0, launch_control: 0, transformation: 0 };
     }
     
     makeChoice("launchControlBudget", budgetCategory, pathWeight);

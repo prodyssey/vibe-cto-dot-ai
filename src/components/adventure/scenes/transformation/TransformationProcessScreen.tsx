@@ -82,7 +82,7 @@ export const TransformationProcessScreen = () => {
       setIsAnimating(true);
       setActivePhase(index);
       // Mark phase as viewed
-      setViewedPhases(prev => new Set([...prev, index]));
+      setViewedPhases(prev => new Set([...Array.from(prev), index]));
       setTimeout(() => setIsAnimating(false), 300);
     }
   };

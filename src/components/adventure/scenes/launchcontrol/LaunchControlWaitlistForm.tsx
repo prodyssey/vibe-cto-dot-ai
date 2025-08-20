@@ -33,6 +33,7 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
     email: '',
     phone: '',
     preferredContact: 'email',
+    notificationPreference: 'email',
     companyName: '',
     currentScale: '',
   });
@@ -48,15 +49,13 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
       const validatedData = extendedWaitlistSchema.parse(formData);
 
       // Save to database
-      const { error } = await supabase.from('launch_control_waitlist').insert({
+      const { error } = await supabase.from('ignition_waitlist').insert({
         session_id: sessionId,
-        name: validatedData.name,
-        email: validatedData.email,
-        phone: validatedData.phone || null,
-        preferred_contact: validatedData.preferredContact,
-        company_name: validatedData.companyName || null,
-        current_scale: validatedData.currentScale || null,
-        is_waitlist: isWaitlist,
+        player_name: validatedData.name,
+        preferred_contact: validatedData.email,
+        contact_method: validatedData.preferredContact + (validatedData.phone ? `: ${validatedData.phone}` : ''),
+        status: "launch_control", // Distinguish from ignition waitlist
+        notes: `Launch Control from adventure game. Company: ${validatedData.companyName || 'N/A'}, Scale: ${validatedData.currentScale || 'N/A'}`,
       });
 
       if (error) {
