@@ -118,25 +118,36 @@ export const AdventureGame = () => {
       
       // Save initial session record first, then scene visit to avoid RLS issues
       const initializeSession = async () => {
-        const gameState = useGameStore.getState();
-        const progress = {
-          sessionId: newSessionId,
-          playerName: gameState.playerName,
-          currentSceneId: gameState.currentSceneId,
-          visitedScenes: gameState.visitedScenes,
-          choices: gameState.choices,
-          finalPath: gameState.finalPath || undefined,
-          completedAt: undefined,
-          discoveredPaths: Array.from(gameState.discoveredPaths),
-          unlockedContent: gameState.unlockedContent,
-          preferences: gameState.preferences,
-        };
-        
-        // Save session first to satisfy RLS policy
-        await saveGameProgress(progress);
-        
-        // Then save initial scene visit
-        await saveSceneVisit(newSessionId, currentSceneId, 1);
+        try {
+          // Set session context first for RLS policies
+          await supabase.rpc('set_config', {
+            setting_name: 'app.current_session_id',
+            setting_value: newSessionId,
+            is_local: false
+          });
+
+          const gameState = useGameStore.getState();
+          const progress = {
+            sessionId: newSessionId,
+            playerName: gameState.playerName,
+            currentSceneId: gameState.currentSceneId,
+            visitedScenes: gameState.visitedScenes,
+            choices: gameState.choices,
+            finalPath: gameState.finalPath || undefined,
+            completedAt: undefined,
+            discoveredPaths: Array.from(gameState.discoveredPaths),
+            unlockedContent: gameState.unlockedContent,
+            preferences: gameState.preferences,
+          };
+          
+          // Save session first to satisfy RLS policy
+          await saveGameProgress(progress);
+          
+          // Then save initial scene visit
+          await saveSceneVisit(newSessionId, currentSceneId, 1);
+        } catch (error) {
+          console.error('Error initializing session:', error);
+        }
       };
       
       initializeSession();

@@ -109,7 +109,7 @@ export const saveSceneVisit = async (
       .from("adventure_sessions")
       .select("id")
       .eq("id", sessionId)
-      .single();
+      .maybeSingle();
 
     console.log("Session check result:", { sessionExists, checkError });
 
@@ -180,10 +180,16 @@ export const saveChoice = async (
 
     const { error } = await supabase.from("adventure_choices").insert({
       session_id: sessionId,
+      // New schema fields
       scene_id: sceneId,
       choice_id: choiceId,
-      choice_text: choiceText,
       made_at: new Date().toISOString(),
+      // Old schema fields (required NOT NULL columns)
+      question_number: 1, // Default value for backward compatibility
+      question_text: `Choice made in scene: ${sceneId}`,
+      choice_text: choiceText,
+      choice_value: choiceId,
+      answered_at: new Date().toISOString(),
     });
 
     if (error) {
@@ -282,16 +288,16 @@ export const loadGameProgress = async (
     }
 
     return {
-      sessionId: data.id,
-      playerName: data.player_name,
-      currentSceneId: data.current_scene_id || "entry",
-      visitedScenes: data.visited_scenes || {},
-      choices: data.choices || [],
-      finalPath: data.final_path,
-      completedAt: data.completed_at,
-      discoveredPaths: data.discovered_paths || [],
-      unlockedContent: data.unlocked_content || [],
-      preferences: data.preferences,
+      sessionId: (data as any).id,
+      playerName: (data as any).player_name,
+      currentSceneId: (data as any).current_scene_id || "entry",
+      visitedScenes: (data as any).visited_scenes || {},
+      choices: (data as any).choices || [],
+      finalPath: (data as any).final_path,
+      completedAt: (data as any).completed_at,
+      discoveredPaths: (data as any).discovered_paths || [],
+      unlockedContent: (data as any).unlocked_content || [],
+      preferences: (data as any).preferences,
     };
   } catch (error) {
     logger.error("Error loading game progress:", {
