@@ -120,7 +120,7 @@ export const AdventureGame = () => {
       const initializeSession = async () => {
         try {
           // Set session context first for RLS policies
-          await supabase.rpc('set_config', {
+          await (supabase as any).rpc('set_config', {
             setting_name: 'app.current_session_id',
             setting_value: newSessionId,
             is_local: false
@@ -236,7 +236,7 @@ export const AdventureGame = () => {
         currentSceneId,
         visitedScenes,
         choices: useGameStore.getState().choices,
-        finalPath,
+        finalPath: finalPath || undefined,
       });
     }
   }, [currentSceneId, sessionId, playerName, visitedScenes, finalPath]);
