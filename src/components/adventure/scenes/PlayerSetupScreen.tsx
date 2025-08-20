@@ -61,7 +61,7 @@ export const PlayerSetupScreen = () => {
       }
 
       // Set session context for RLS policies
-      await (supabase as any).rpc('set_config', {
+      await supabase.rpc('set_config', {
         setting_name: 'app.current_session_id',
         setting_value: existingSessionId,
         is_local: false

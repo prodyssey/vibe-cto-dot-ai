@@ -67,13 +67,16 @@ export const IgnitionContactScreen = () => {
     try {
       // Save contact data first (budget will be added in next step)
       const { data, error } = await supabase
-        .from("ignition_waitlist")
+        .from("ignition_qualifications")
         .insert({
-          player_name: contactData.name,
-          preferred_contact: contactData.email,
-          contact_method: contactData.preferredContact + (contactData.phone ? `: ${contactData.phone}` : ''),
-          status: "pending", // Will be updated when budget is selected
-          notes: "Contact info collected from adventure game, awaiting budget selection",
+          budget: "pending", // Will be updated when budget is selected
+          needs_rate_reduction: false,
+          rate_reduction_reason: null,
+          name: contactData.name,
+          email: contactData.email,
+          preferred_contact: contactData.preferredContact,
+          phone: contactData.phone,
+          completed: false, // Track completion status
           session_id: contactData.sessionId, // Include session ID for RLS
         })
         .select()

@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export interface Database {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -45,6 +45,13 @@ export interface Database {
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "adventure_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "adventure_analytics_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions_public"
             referencedColumns: ["id"]
           },
         ]
@@ -94,6 +101,13 @@ export interface Database {
             referencedRelation: "adventure_sessions"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "adventure_choices_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       adventure_scene_visits: {
@@ -129,12 +143,20 @@ export interface Database {
             referencedRelation: "adventure_sessions"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "adventure_scene_visits_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       adventure_sessions: {
         Row: {
           choices: Json | null
           completed_at: string | null
+          completion_status: string | null
           created_at: string
           current_scene_id: string | null
           discovered_paths: string[] | null
@@ -143,6 +165,7 @@ export interface Database {
           final_path: Database["public"]["Enums"]["adventure_path"] | null
           id: string
           is_generated_name: boolean
+          path_scores: Json | null
           player_name: string
           preferences: Json | null
           session_duration: number | null
@@ -153,6 +176,7 @@ export interface Database {
         Insert: {
           choices?: Json | null
           completed_at?: string | null
+          completion_status?: string | null
           created_at?: string
           current_scene_id?: string | null
           discovered_paths?: string[] | null
@@ -161,6 +185,7 @@ export interface Database {
           final_path?: Database["public"]["Enums"]["adventure_path"] | null
           id?: string
           is_generated_name?: boolean
+          path_scores?: Json | null
           player_name: string
           preferences?: Json | null
           session_duration?: number | null
@@ -171,6 +196,7 @@ export interface Database {
         Update: {
           choices?: Json | null
           completed_at?: string | null
+          completion_status?: string | null
           created_at?: string
           current_scene_id?: string | null
           discovered_paths?: string[] | null
@@ -179,6 +205,7 @@ export interface Database {
           final_path?: Database["public"]["Enums"]["adventure_path"] | null
           id?: string
           is_generated_name?: boolean
+          path_scores?: Json | null
           player_name?: string
           preferences?: Json | null
           session_duration?: number | null
@@ -188,38 +215,83 @@ export interface Database {
         }
         Relationships: []
       }
+      ignition_qualifications: {
+        Row: {
+          budget: string
+          completed: boolean | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          needs_rate_reduction: boolean | null
+          phone: string | null
+          preferred_contact: string
+          rate_reduction_reason: string | null
+          session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          budget: string
+          completed?: boolean | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          needs_rate_reduction?: boolean | null
+          phone?: string | null
+          preferred_contact: string
+          rate_reduction_reason?: string | null
+          session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          budget?: string
+          completed?: boolean | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          needs_rate_reduction?: boolean | null
+          phone?: string | null
+          preferred_contact?: string
+          rate_reduction_reason?: string | null
+          session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ignition_waitlist: {
         Row: {
+          contact_method: string
+          created_at: string | null
           id: string
-          session_id: string | null
+          notes: string | null
           player_name: string | null
           preferred_contact: string
-          contact_method: string
+          session_id: string | null
           status: string
-          notes: string | null
-          created_at: string | null
           updated_at: string | null
         }
         Insert: {
+          contact_method: string
+          created_at?: string | null
           id?: string
-          session_id?: string | null
+          notes?: string | null
           player_name?: string | null
           preferred_contact: string
-          contact_method: string
+          session_id?: string | null
           status?: string
-          notes?: string | null
-          created_at?: string | null
           updated_at?: string | null
         }
         Update: {
+          contact_method?: string
+          created_at?: string | null
           id?: string
-          session_id?: string | null
+          notes?: string | null
           player_name?: string | null
           preferred_contact?: string
-          contact_method?: string
+          session_id?: string | null
           status?: string
-          notes?: string | null
-          created_at?: string | null
           updated_at?: string | null
         }
         Relationships: [
@@ -230,17 +302,217 @@ export interface Database {
             referencedRelation: "adventure_sessions"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "ignition_waitlist_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      launch_control_qualifications: {
+        Row: {
+          budget: string
+          completed: boolean | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          needs_rate_reduction: boolean | null
+          phone: string | null
+          preferred_contact: string
+          rate_reduction_reason: string | null
+          session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          budget: string
+          completed?: boolean | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          needs_rate_reduction?: boolean | null
+          phone?: string | null
+          preferred_contact: string
+          rate_reduction_reason?: string | null
+          session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          budget?: string
+          completed?: boolean | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          needs_rate_reduction?: boolean | null
+          phone?: string | null
+          preferred_contact?: string
+          rate_reduction_reason?: string | null
+          session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      launch_control_waitlist: {
+        Row: {
+          company_name: string | null
+          created_at: string | null
+          current_scale: string | null
+          email: string
+          id: string
+          is_waitlist: boolean | null
+          name: string
+          phone: string | null
+          preferred_contact: string
+          session_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          company_name?: string | null
+          created_at?: string | null
+          current_scale?: string | null
+          email: string
+          id?: string
+          is_waitlist?: boolean | null
+          name: string
+          phone?: string | null
+          preferred_contact: string
+          session_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          company_name?: string | null
+          created_at?: string | null
+          current_scale?: string | null
+          email?: string
+          id?: string
+          is_waitlist?: boolean | null
+          name?: string
+          phone?: string | null
+          preferred_contact?: string
+          session_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "launch_control_waitlist_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "launch_control_waitlist_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      adventure_choices_unified: {
+        Row: {
+          answered_at: string | null
+          choice_id: string | null
+          choice_text: string | null
+          choice_value: string | null
+          id: string | null
+          made_at: string | null
+          question_number: number | null
+          question_text: string | null
+          scene_id: string | null
+          session_id: string | null
+        }
+        Insert: {
+          answered_at?: string | null
+          choice_id?: never
+          choice_text?: string | null
+          choice_value?: string | null
+          id?: string | null
+          made_at?: never
+          question_number?: number | null
+          question_text?: string | null
+          scene_id?: never
+          session_id?: string | null
+        }
+        Update: {
+          answered_at?: string | null
+          choice_id?: never
+          choice_text?: string | null
+          choice_value?: string | null
+          id?: string | null
+          made_at?: never
+          question_number?: number | null
+          question_text?: string | null
+          scene_id?: never
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "adventure_choices_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "adventure_choices_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      adventure_sessions_public: {
+        Row: {
+          created_at: string | null
+          current_scene_id: string | null
+          id: string | null
+          is_generated_name: boolean | null
+          player_name: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_scene_id?: string | null
+          id?: string | null
+          is_generated_name?: boolean | null
+          player_name?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_scene_id?: string | null
+          id?: string | null
+          is_generated_name?: boolean | null
+          player_name?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      get_current_session_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      set_config: {
+        Args: {
+          is_local?: boolean
+          setting_name: string
+          setting_value: string
+        }
+        Returns: string
+      }
     }
     Enums: {
-      adventure_path: "ignition" | "launch_control" | "transformation"
+      adventure_path: "ignition" | "launch_control" | "interstellar"
       game_outcome: "email_signup" | "book_meeting" | "explore_service"
     }
     CompositeTypes: {
@@ -369,7 +641,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      adventure_path: ["ignition", "launch_control", "transformation"],
+      adventure_path: ["ignition", "launch_control", "interstellar"],
       game_outcome: ["email_signup", "book_meeting", "explore_service"],
     },
   },

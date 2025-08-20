@@ -115,10 +115,10 @@ export const LaunchControlQualificationForm = ({
 
       // Update the existing record with budget information and mark as completed
       const { error } = await supabase
-        .from("ignition_waitlist")
+        .from("launch_control_qualifications")
         .update({
-          notes: `Launch Control Budget: $${formData.budget}`,
-          status: "launch_control_completed", // Mark as fully completed
+          budget: String(formData.budget),
+          completed: true, // Mark as fully completed
         })
         .eq("id", formData.recordId)
         .eq("session_id", formData.sessionId); // Use session ID for secure update

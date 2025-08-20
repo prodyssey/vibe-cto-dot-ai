@@ -1,4 +1,4 @@
-export type ServicePath = 'ignition' | 'launch_control' | 'transformation';
+export type ServicePath = 'ignition' | 'launch_control' | 'interstellar';
 
 export interface Scene {
   id: string;
@@ -18,7 +18,7 @@ export interface Choice {
   pathWeight?: {
     ignition: number;
     launch_control: number;
-    transformation: number;
+    interstellar: number;
   };
 }
 

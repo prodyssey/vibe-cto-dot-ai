@@ -34,7 +34,7 @@ export const generateRandomName = (): string => {
 // Helper function to set session context for RLS policies
 const setSessionContext = async (sessionId: string): Promise<void> => {
   try {
-    await (supabase as any).rpc('set_config', {
+    await supabase.rpc('set_config', {
       setting_name: 'app.current_session_id',
       setting_value: sessionId,
       is_local: false
