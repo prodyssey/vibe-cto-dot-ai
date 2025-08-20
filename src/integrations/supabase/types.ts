@@ -512,7 +512,11 @@ export interface Database {
       }
     }
     Enums: {
-      adventure_path: "ignition" | "launch_control" | "interstellar"
+      adventure_path:
+        | "ignition"
+        | "launch_control"
+        | "interstellar"
+        | "transformation"
       game_outcome: "email_signup" | "book_meeting" | "explore_service"
     }
     CompositeTypes: {
@@ -641,7 +645,12 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      adventure_path: ["ignition", "launch_control", "interstellar"],
+      adventure_path: [
+        "ignition",
+        "launch_control",
+        "interstellar",
+        "transformation",
+      ],
       game_outcome: ["email_signup", "book_meeting", "explore_service"],
     },
   },

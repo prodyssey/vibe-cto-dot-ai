@@ -206,7 +206,6 @@ export const LaunchControlQualificationForm = ({
           session_id: formData.sessionId, // Include session ID for RLS
         })
         .select()
-        .eq("session_id", formData.sessionId) // Filter by session ID for security
         .single();
 
       if (error) {

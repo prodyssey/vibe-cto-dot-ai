@@ -74,19 +74,14 @@ export const AdventureGame = () => {
   useEffect(() => {
     // Handle scene migrations for renamed scenes
     const sceneMapping: Record<string, string> = {
-      'interstellarDetail': 'transformationDetail',
-      'interstellarCapabilities': 'transformationProcess',
-      'interstellarEngagement': 'transformationProcess',
-      'interstellarFeatures': 'transformationProcess',
-      'interstellarPartnership': 'transformationAlignment',
-      'interstellarContact': 'transformationAlignment',
-      'interstellarFinal': 'transformationFinal',
-      'interstellarProcess': 'transformationProcess',
+      'transformationDetail': 'transformationDetail',
       'transformationCapabilities': 'transformationProcess',
       'transformationEngagement': 'transformationProcess',
       'transformationFeatures': 'transformationProcess',
       'transformationPartnership': 'transformationAlignment',
       'transformationContact': 'transformationAlignment',
+      'transformationFinal': 'transformationFinal',
+      'transformationProcess': 'transformationProcess',
     };
     
     // Check if we need to migrate the scene
