@@ -195,7 +195,7 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
                     rehypePlugins={[rehypeHighlight, rehypeSlug]}
                     components={{
                       img: ({ src, alt, ...props }) => {
-                        if (!src) {
+                        if (!src || typeof src !== 'string') {
                           return null
                         }
                         return (
