@@ -1,1 +1,9 @@
-npx lint-staged
+# Ensure Node.js is available for IDEs
+export PATH="/Users/craigsturgis/.nvm/versions/node/v22.13.1/bin:$PWD/node_modules/.bin:$PATH"
+
+# Source nvm if available (for terminal usage)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 2>/dev/null || true
+
+# Run lint-staged with explicit path
+/Users/craigsturgis/.nvm/versions/node/v22.13.1/bin/npx lint-staged
