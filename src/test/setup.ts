@@ -28,6 +28,13 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(),
 }))
 
+// Mock Next.js Link component
+vi.mock('next/link', () => ({
+  default: ({ children, href, ...props }: any) => {
+    return React.createElement('a', { href, ...props }, children)
+  },
+}))
+
 // Mock window.matchMedia (used by some components)
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
