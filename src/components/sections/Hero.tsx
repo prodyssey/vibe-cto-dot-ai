@@ -4,6 +4,7 @@ import { ArrowRight, Code, Rocket, Gamepad2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 export const Hero = () => {
   const router = useRouter();
@@ -104,10 +105,14 @@ export const Hero = () => {
           {/* Right column - Avatar */}
           <div className="flex justify-center lg:justify-end lg:mr-10">
             <div className="relative text-center mx-auto lg:mx-0">
-              <img
+              <OptimizedImage
                 src="/lovable-uploads/8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png"
                 alt="VibeCTO Avatar"
+                width={384}
+                height={384}
+                priority
                 className="w-80 h-80 lg:w-96 lg:h-96 object-contain hover:scale-105 transition-transform duration-300 mx-auto"
+                sizes="(max-width: 768px) 320px, 384px"
               />
               {/* Quote under avatar */}
               <p className="mt-6 text-lg text-gray-200 italic">

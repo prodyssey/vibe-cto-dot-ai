@@ -13,8 +13,13 @@ const nextConfig = {
         search: '',
       }
     ],
-    // For static export compatibility
-    unoptimized: true
+    // Enable optimization for better Lighthouse scores
+    unoptimized: false,
+    // Support modern formats
+    formats: ['image/avif', 'image/webp'],
+    // Enable responsive images
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   
   // For Netlify deployment, we don't need static export
