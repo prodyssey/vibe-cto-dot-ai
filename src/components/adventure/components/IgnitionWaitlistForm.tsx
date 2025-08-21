@@ -93,6 +93,24 @@ export const IgnitionWaitlistForm = ({
         throw dbError;
       }
 
+      // Also update the adventure_sessions record with the contact info
+      const sessionUpdateData: any = { email: formData.email };
+      if (isGeneratedName && formData.name) {
+        // Update the player name if they provided their real name
+        sessionUpdateData.player_name = formData.name;
+        sessionUpdateData.is_generated_name = false;
+      }
+      
+      const { error: sessionUpdateError } = await supabase
+        .from("adventure_sessions")
+        .update(sessionUpdateData)
+        .eq("id", sessionId);
+
+      if (sessionUpdateError) {
+        console.warn("Failed to update session with contact info:", sessionUpdateError);
+        // Don't throw here - the contact info is saved in ignition_waitlist
+      }
+
       // Track form submission
       trackFormSubmission('ignition_waitlist_form', {
         source: 'adventure_game',
