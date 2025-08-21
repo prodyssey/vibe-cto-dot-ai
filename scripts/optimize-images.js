@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readdir, mkdir, stat } from 'fs/promises';
+import { readdir, mkdir, stat, access } from 'fs/promises';
 import { join, extname, basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import imagemin from 'imagemin';
@@ -8,6 +8,10 @@ import imageminWebp from 'imagemin-webp';
 import imageminAvif from 'imagemin-avif';
 import imageminMozjpeg from 'imagemin-mozjpeg';
 import imageminPngquant from 'imagemin-pngquant';
+
+// Environment detection
+const isCI = process.env.CI === 'true' || process.env.NETLIFY === 'true';
+const isLocal = !isCI;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = join(__dirname, '..', 'public');
@@ -50,10 +54,37 @@ async function getImageFiles(dir, files = []) {
 // Optimize images and generate multiple formats
 async function optimizeImages() {
   console.log('🖼️  Starting image optimization...');
+  console.log(`Environment: ${isCI ? 'CI/CD' : 'Local'}`);
+  console.log(`Node version: ${process.version}`);
+  console.log(`Platform: ${process.platform}`);
+  console.log(`Working directory: ${process.cwd()}`);
+  console.log(`Public directory: ${publicDir}`);
+  console.log(`Optimized directory: ${optimizedDir}`);
   
-  await ensureOptimizedDir();
+  // Check if we should skip optimization entirely
+  if (process.env.SKIP_IMAGE_OPTIMIZATION === 'true') {
+    console.log('⏭️  Skipping image optimization (SKIP_IMAGE_OPTIMIZATION=true)');
+    return;
+  }
   
-  const imageFiles = await getImageFiles(join(publicDir, 'images'));
+  try {
+    await ensureOptimizedDir();
+    console.log('✅ Created optimized directory structure');
+  } catch (error) {
+    console.error('❌ Failed to create optimized directory:', error.message);
+    console.log('⚠️  Skipping image optimization - directory creation failed');
+    return;
+  }
+  
+  let imageFiles;
+  try {
+    const imagesDir = join(publicDir, 'images');
+    await access(imagesDir);
+    imageFiles = await getImageFiles(imagesDir);
+  } catch (error) {
+    console.log('ℹ️  No images directory found - skipping optimization');
+    return;
+  }
   
   if (imageFiles.length === 0) {
     console.log('No images found to optimize.');
@@ -62,76 +93,105 @@ async function optimizeImages() {
   
   console.log(`Found ${imageFiles.length} images to optimize...`);
   
+  let successCount = 0;
+  let errorCount = 0;
+  
   for (const filePath of imageFiles) {
     const relativePath = filePath.replace(publicDir + '/', '');
     const outputBase = join(optimizedDir, relativePath.replace(extname(relativePath), ''));
     const outputDir = dirname(outputBase);
     
-    // Ensure output directory exists
-    await mkdir(outputDir, { recursive: true });
-    
-    console.log(`Optimizing: ${relativePath}`);
-    
     try {
-      // Generate AVIF (best compression) - with error handling
-      try {
-        await imagemin([filePath], {
-          destination: dirname(outputBase),
-          plugins: [
-            imageminAvif({
-              quality: 50,
-              effort: 6
-            })
-          ]
-        });
-      } catch (avifError) {
-        console.warn(`⚠️  AVIF generation failed for ${relativePath}: ${avifError.message}`);
+      // Ensure output directory exists
+      await mkdir(outputDir, { recursive: true });
+      
+      console.log(`Optimizing: ${relativePath}`);
+      
+      let hasSuccess = false;
+      
+      // Skip AVIF in CI environments if it's problematic
+      if (isLocal) {
+        try {
+          await imagemin([filePath], {
+            destination: dirname(outputBase),
+            plugins: [
+              imageminAvif({
+                quality: 50,
+                effort: isCI ? 4 : 6 // Lower effort in CI for speed
+              })
+            ]
+          });
+          hasSuccess = true;
+        } catch (avifError) {
+          console.warn(`⚠️  AVIF generation failed for ${relativePath}: ${avifError.message}`);
+        }
       }
       
-      // Generate WebP (good compression, wide support)
+      // Generate WebP (more reliable in CI)
       try {
         await imagemin([filePath], {
           destination: dirname(outputBase),
           plugins: [
             imageminWebp({
-              quality: 75
+              quality: 75,
+              method: isCI ? 4 : 6 // Faster method in CI
             })
           ]
         });
+        hasSuccess = true;
       } catch (webpError) {
         console.warn(`⚠️  WebP generation failed for ${relativePath}: ${webpError.message}`);
       }
       
       // Optimize original format as fallback
-      const ext = extname(filePath).toLowerCase();
-      if (ext === '.png') {
-        await imagemin([filePath], {
-          destination: dirname(outputBase),
-          plugins: [
-            imageminPngquant({
-              quality: [0.6, 0.8]
-            })
-          ]
-        });
-      } else if (['.jpg', '.jpeg'].includes(ext)) {
-        await imagemin([filePath], {
-          destination: dirname(outputBase),
-          plugins: [
-            imageminMozjpeg({
-              quality: 80,
-              progressive: true
-            })
-          ]
-        });
+      try {
+        const ext = extname(filePath).toLowerCase();
+        if (ext === '.png') {
+          await imagemin([filePath], {
+            destination: dirname(outputBase),
+            plugins: [
+              imageminPngquant({
+                quality: [0.6, 0.8],
+                speed: isCI ? 1 : 3 // Faster in CI
+              })
+            ]
+          });
+          hasSuccess = true;
+        } else if (['.jpg', '.jpeg'].includes(ext)) {
+          await imagemin([filePath], {
+            destination: dirname(outputBase),
+            plugins: [
+              imageminMozjpeg({
+                quality: 80,
+                progressive: true
+              })
+            ]
+          });
+          hasSuccess = true;
+        }
+      } catch (originalError) {
+        console.warn(`⚠️  Original format optimization failed for ${relativePath}: ${originalError.message}`);
       }
       
-      console.log(`✅ Optimized: ${relativePath}`);
+      if (hasSuccess) {
+        console.log(`✅ Optimized: ${relativePath}`);
+        successCount++;
+      } else {
+        console.log(`⚠️  No formats generated for: ${relativePath}`);
+        errorCount++;
+      }
     } catch (error) {
       console.error(`❌ Failed to optimize ${relativePath}:`, error.message);
+      errorCount++;
     }
   }
   
-  console.log('🎉 Image optimization complete!');
+  console.log(`🎉 Image optimization complete! ✅ ${successCount} success, ⚠️ ${errorCount} errors`);
+  
+  // Don't fail the build if some optimizations fail
+  if (successCount === 0 && imageFiles.length > 0) {
+    console.log('⚠️  No images were optimized, but continuing build...');
+  }
 }
 
 // Run optimization
