@@ -13,7 +13,7 @@ const subscribeSchema = z.object({
 
 // ConvertKit API configuration
 const CONVERTKIT_API_SECRET = process.env.CONVERTKIT_API_SECRET;
-const CONVERTKIT_FORM_ID = process.env.CONVERTKIT_FORM_ID || process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID;
+const CONVERTKIT_FORM_ID = process.env.CONVERTKIT_FORM_ID;
 
 if (!CONVERTKIT_API_SECRET) {
   console.error('CONVERTKIT_API_SECRET environment variable is required');
@@ -78,12 +78,21 @@ export async function POST(request: NextRequest) {
         body: errorText,
       });
 
-      // Handle known ConvertKit errors
+      // Handle known ConvertKit errors with more specific parsing
       if (convertKitResponse.status === 400) {
-        return NextResponse.json(
-          { error: 'Invalid email address or already subscribed' },
-          { status: 400 }
-        );
+        try {
+          const errorData = JSON.parse(errorText);
+          const errorMessage = errorData.message || errorData.error || 'Invalid email address or already subscribed';
+          return NextResponse.json(
+            { error: errorMessage },
+            { status: 400 }
+          );
+        } catch {
+          return NextResponse.json(
+            { error: 'Invalid email address or already subscribed' },
+            { status: 400 }
+          );
+        }
       }
 
       return NextResponse.json(
@@ -96,27 +105,28 @@ export async function POST(request: NextRequest) {
     
     // If we have tags to add and the subscription was successful
     if (tags && tags.length > 0 && convertKitData.subscription) {
-      // Add tags to the subscriber
-      for (const tag of tags) {
-        try {
-          await fetch(`https://api.convertkit.com/v3/tags`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
+      // Add tags in parallel for better performance
+      const tagPromises = tags.map(tag => 
+        fetch(`https://api.convertkit.com/v3/tags`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            api_secret: CONVERTKIT_API_SECRET,
+            tag: {
+              name: tag,
+              email,
             },
-            body: JSON.stringify({
-              api_secret: CONVERTKIT_API_SECRET,
-              tag: {
-                name: tag,
-                email,
-              },
-            }),
-          });
-        } catch (error) {
+          }),
+        }).catch(error => {
           console.warn(`Failed to add tag "${tag}" to ${email}:`, error);
           // Don't fail the whole request if tagging fails
-        }
-      }
+          return null;
+        })
+      );
+      
+      await Promise.allSettled(tagPromises);
     }
 
     return NextResponse.json({
@@ -139,7 +149,9 @@ export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': process.env.NODE_ENV === 'production' 
+        ? 'https://your-domain.com' 
+        : 'http://localhost:3000',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },
