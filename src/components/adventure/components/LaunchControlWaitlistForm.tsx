@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { trackFormSubmission } from "@/lib/analytics";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
+import { subscribeToConvertKit, getContextualTags, getCustomFields } from "@/lib/convertkit";
 
 import { AnimatedButton } from "./AnimatedButton";
 
@@ -89,6 +90,36 @@ export const LaunchControlWaitlistForm = ({
 
       if (dbError) {
         throw dbError;
+      }
+
+      // Subscribe to ConvertKit mailing list
+      try {
+        const convertKitTags = getContextualTags('adventure-launch-control');
+        if (isWaitlistActive) {
+          convertKitTags.push(...getContextualTags('launch-control-waitlist'));
+        }
+
+        const customFields = getCustomFields('launch-control-waitlist', {
+          contactMethod: formData.contactMethod,
+          program: 'launch-control',
+          is_waitlist: isWaitlistActive,
+        });
+
+        const subscribeResult = await subscribeToConvertKit({
+          email: formData.email,
+          firstName: formData.name || playerName,
+          source: 'launch-control-waitlist',
+          tags: convertKitTags,
+          customFields,
+        });
+
+        if (!subscribeResult.success) {
+          console.warn('ConvertKit subscription failed:', subscribeResult.error);
+          // Don't fail the whole form submission if ConvertKit fails
+        }
+      } catch (error) {
+        console.warn('ConvertKit subscription error:', error);
+        // Don't fail the whole form submission if ConvertKit fails
       }
 
       // Track form submission
