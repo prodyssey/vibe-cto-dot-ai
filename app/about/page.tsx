@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { EmailOptIn } from '@/components/EmailOptIn'
+import { OptimizedImage } from '@/components/OptimizedImage'
 import { Briefcase, Code, Lightbulb, Users, Gamepad2 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -42,10 +43,14 @@ export default function AboutPage() {
                     {/* Background card for avatar */}
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-2xl blur-xl scale-105 group-hover:scale-110 transition-transform duration-500"></div>
                     <div className="relative bg-gray-900/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-6">
-                      <img
+                      <OptimizedImage
                         src="/lovable-uploads/8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png"
                         alt="Craig Sturgis - VibeCTO Avatar"
+                        width={288}
+                        height={288}
+                        priority
                         className="w-64 h-64 lg:w-72 lg:h-72 object-contain hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 1024px) 256px, 288px"
                       />
                       <p className="mt-4 text-center text-purple-300 font-medium italic">
                         "Let's build something great together"
