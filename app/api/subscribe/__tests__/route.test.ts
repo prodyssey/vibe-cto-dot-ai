@@ -292,26 +292,66 @@ describe('/api/subscribe', () => {
   describe('OPTIONS /api/subscribe', () => {
     it('should return correct CORS headers for development', async () => {
       process.env.NODE_ENV = 'development';
+      delete process.env.DEPLOY_PRIME_URL;
+      delete process.env.DEPLOY_URL;
 
       const response = await OPTIONS();
 
       expect(response.status).toBe(200);
       const headers = Object.fromEntries(response.headers.entries());
-      expect(headers['access-control-allow-origin']).toBe('http://localhost:3000');
+      expect(headers['access-control-allow-origin']).toBe('http://localhost:8080');
       expect(headers['access-control-allow-methods']).toBe('POST, OPTIONS');
       expect(headers['access-control-allow-headers']).toBe('Content-Type');
     });
 
     it('should return restricted CORS headers for production', async () => {
       process.env.NODE_ENV = 'production';
+      delete process.env.DEPLOY_PRIME_URL;
+      delete process.env.DEPLOY_URL;
 
       const response = await OPTIONS();
 
       expect(response.status).toBe(200);
       const headers = Object.fromEntries(response.headers.entries());
-      expect(headers['access-control-allow-origin']).toBe('https://your-domain.com');
+      expect(headers['access-control-allow-origin']).toBe('https://vibecto.ai');
       expect(headers['access-control-allow-methods']).toBe('POST, OPTIONS');
       expect(headers['access-control-allow-headers']).toBe('Content-Type');
+    });
+
+    it('should handle Netlify deploy preview URLs', async () => {
+      process.env.NODE_ENV = 'test';
+      process.env.DEPLOY_PRIME_URL = 'https://deploy-preview-123--vibecto.netlify.app';
+      delete process.env.DEPLOY_URL;
+
+      const response = await OPTIONS();
+
+      expect(response.status).toBe(200);
+      const headers = Object.fromEntries(response.headers.entries());
+      expect(headers['access-control-allow-origin']).toBe('https://deploy-preview-123--vibecto.netlify.app');
+    });
+
+    it('should handle Netlify branch deploy URLs', async () => {
+      process.env.NODE_ENV = 'test';
+      delete process.env.DEPLOY_PRIME_URL;
+      process.env.DEPLOY_URL = 'https://feature-branch--vibecto.netlify.app';
+
+      const response = await OPTIONS();
+
+      expect(response.status).toBe(200);
+      const headers = Object.fromEntries(response.headers.entries());
+      expect(headers['access-control-allow-origin']).toBe('https://feature-branch--vibecto.netlify.app');
+    });
+
+    it('should fallback to wildcard for unknown environments', async () => {
+      process.env.NODE_ENV = 'test';
+      delete process.env.DEPLOY_PRIME_URL;
+      delete process.env.DEPLOY_URL;
+
+      const response = await OPTIONS();
+
+      expect(response.status).toBe(200);
+      const headers = Object.fromEntries(response.headers.entries());
+      expect(headers['access-control-allow-origin']).toBe('*');
     });
   });
 });
