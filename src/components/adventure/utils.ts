@@ -31,30 +31,61 @@ export const generateRandomName = (): string => {
   return RETRO_NAMES[Math.floor(Math.random() * RETRO_NAMES.length)];
 };
 
+// Helper function to set session context for RLS policies
+const setSessionContext = async (sessionId: string): Promise<void> => {
+  try {
+    await supabase.rpc('set_config', {
+      setting_name: 'app.current_session_id',
+      setting_value: sessionId,
+      is_local: false
+    });
+  } catch (error) {
+    console.warn("Failed to set session context:", error);
+  }
+};
+
 export const saveGameProgress = async (
   progress: GameProgress
 ): Promise<void> => {
   try {
+    // Skip database operations if Supabase is not properly configured
+    if (!supabase) {
+      logger.log("Supabase client not available, skipping game progress save");
+      return;
+    }
+
+    console.log("Attempting to save game progress for session:", progress.sessionId);
+    
+    // Set session context for RLS policies
+    await setSessionContext(progress.sessionId);
+    
     const gameState = useGameStore.getState();
+    
+    // Use minimal data that should work with any schema version
     const { error } = await supabase.from("adventure_sessions").upsert({
       id: progress.sessionId,
       player_name: progress.playerName,
-      current_scene_id: progress.currentSceneId,
-      visited_scenes: progress.visitedScenes,
-      choices: progress.choices,
-      final_path: progress.finalPath,
-      completed_at: progress.completedAt,
-      discovered_paths: progress.discoveredPaths || [],
-      unlocked_content: progress.unlockedContent || [],
-      preferences: progress.preferences || gameState.preferences,
-      session_duration: gameState.getSessionDuration(),
+      // Only include fields that are likely to exist in the database
+      ...(progress.currentSceneId && { current_scene_id: progress.currentSceneId }),
+      ...(progress.visitedScenes && { visited_scenes: progress.visitedScenes }),
+      ...(progress.choices && { choices: progress.choices }),
+      ...(progress.finalPath && { final_path: progress.finalPath }),
+      ...(progress.completedAt && { completed_at: progress.completedAt }),
     });
 
     if (error) {
       throw error;
     }
   } catch (error) {
-    logger.error("Error saving game progress:", error);
+    console.error("Error saving game progress:", {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: (error as any)?.code,
+      status: (error as any)?.status,
+      statusText: (error as any)?.statusText,
+      hint: (error as any)?.hint,
+      details: (error as any)?.details,
+      full_error: error
+    });
   }
 };
 
@@ -64,18 +95,71 @@ export const saveSceneVisit = async (
   visitCount: number
 ): Promise<void> => {
   try {
-    const { error } = await supabase.from("adventure_scene_visits").upsert({
+    if (!supabase) {
+      logger.log("Supabase client not available, skipping scene visit save");
+      return;
+    }
+
+    // Set session context for RLS policies
+    await setSessionContext(sessionId);
+
+    // First ensure the session record exists by checking if it's in the database
+    console.log("Checking if session exists:", sessionId);
+    const { data: sessionExists, error: checkError } = await supabase
+      .from("adventure_sessions")
+      .select("id")
+      .eq("id", sessionId)
+      .maybeSingle();
+
+    console.log("Session check result:", { sessionExists, checkError });
+
+    if (!sessionExists) {
+      console.log("Session doesn't exist, creating it first");
+      // If session doesn't exist, create it first
+      const gameState = useGameStore.getState();
+      const sessionProgress = {
+        sessionId: sessionId,
+        playerName: gameState.playerName,
+        currentSceneId: gameState.currentSceneId,
+        visitedScenes: gameState.visitedScenes,
+        choices: gameState.choices,
+        finalPath: gameState.finalPath || undefined,
+        completedAt: undefined,
+        discoveredPaths: Array.from(gameState.discoveredPaths),
+        unlockedContent: gameState.unlockedContent,
+        preferences: gameState.preferences,
+      };
+      
+      // Create session first
+      await saveGameProgress(sessionProgress);
+      console.log("Session created, now proceeding with scene visit");
+    } else {
+      console.log("Session exists, proceeding with scene visit");
+    }
+
+    // Now save the scene visit
+    console.log("Attempting to save scene visit:", { sessionId, sceneId, visitCount });
+    const { data, error } = await supabase.from("adventure_scene_visits").upsert({
       session_id: sessionId,
       scene_id: sceneId,
       visit_count: visitCount,
       last_visited_at: new Date().toISOString(),
     });
 
+    console.log("Scene visit save result:", { data, error });
+    
     if (error) {
       throw error;
     }
   } catch (error) {
-    logger.error("Error saving scene visit:", error);
+    console.error("Error saving scene visit:", {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: (error as any)?.code,
+      status: (error as any)?.status,
+      hint: (error as any)?.hint,
+      details: (error as any)?.details,
+      full_error: error
+    });
   }
 };
 
@@ -86,19 +170,39 @@ export const saveChoice = async (
   choiceText: string
 ): Promise<void> => {
   try {
+    if (!supabase) {
+      logger.log("Supabase client not available, skipping choice save");
+      return;
+    }
+
+    // Set session context for RLS policies
+    await setSessionContext(sessionId);
+
     const { error } = await supabase.from("adventure_choices").insert({
       session_id: sessionId,
+      // New schema fields
       scene_id: sceneId,
       choice_id: choiceId,
-      choice_text: choiceText,
       made_at: new Date().toISOString(),
+      // Old schema fields (required NOT NULL columns)
+      question_number: 1, // Default value for backward compatibility
+      question_text: `Choice made in scene: ${sceneId}`,
+      choice_text: choiceText,
+      choice_value: choiceId,
+      answered_at: new Date().toISOString(),
     });
 
     if (error) {
       throw error;
     }
   } catch (error) {
-    logger.error("Error saving choice:", error);
+    console.error("Error saving choice:", {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: (error as any)?.code,
+      hint: (error as any)?.hint,
+      details: (error as any)?.details,
+      full_error: error
+    });
   }
 };
 
@@ -147,6 +251,14 @@ export const loadGameProgress = async (
   sessionId: string
 ): Promise<GameProgress | null> => {
   try {
+    if (!supabase) {
+      logger.log("Supabase client not available, skipping game progress load");
+      return null;
+    }
+
+    // Set session context for RLS policies
+    await setSessionContext(sessionId);
+
     const { data, error } = await supabase
       .from("adventure_sessions")
       .select(`
@@ -176,25 +288,37 @@ export const loadGameProgress = async (
     }
 
     return {
-      sessionId: data.id,
-      playerName: data.player_name,
-      currentSceneId: data.current_scene_id || "entry",
-      visitedScenes: data.visited_scenes || {},
-      choices: data.choices || [],
-      finalPath: data.final_path,
-      completedAt: data.completed_at,
-      discoveredPaths: data.discovered_paths || [],
-      unlockedContent: data.unlocked_content || [],
-      preferences: data.preferences,
+      sessionId: (data as any).id,
+      playerName: (data as any).player_name,
+      currentSceneId: (data as any).current_scene_id || "entry",
+      visitedScenes: (data as any).visited_scenes || {},
+      choices: (data as any).choices || [],
+      finalPath: (data as any).final_path,
+      completedAt: (data as any).completed_at,
+      discoveredPaths: (data as any).discovered_paths || [],
+      unlockedContent: (data as any).unlocked_content || [],
+      preferences: (data as any).preferences,
     };
   } catch (error) {
-    logger.error("Error loading game progress:", error);
+    logger.error("Error loading game progress:", {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: (error as any)?.code,
+      hint: (error as any)?.hint,
+    });
     return null;
   }
 };
 
 export const clearGameProgress = async (sessionId: string): Promise<void> => {
   try {
+    if (!supabase) {
+      logger.log("Supabase client not available, skipping game progress clear");
+      return;
+    }
+
+    // Set session context for RLS policies
+    await setSessionContext(sessionId);
+
     const { error } = await supabase
       .from("adventure_sessions")
       .delete()
@@ -204,6 +328,10 @@ export const clearGameProgress = async (sessionId: string): Promise<void> => {
       throw error;
     }
   } catch (error) {
-    logger.error("Error clearing game progress:", error);
+    logger.error("Error clearing game progress:", {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: (error as any)?.code,
+      hint: (error as any)?.hint,
+    });
   }
 };

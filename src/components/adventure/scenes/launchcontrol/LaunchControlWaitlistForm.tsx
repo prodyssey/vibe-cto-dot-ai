@@ -33,6 +33,7 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
     email: '',
     phone: '',
     preferredContact: 'email',
+    notificationPreference: 'email',
     companyName: '',
     currentScale: '',
   });

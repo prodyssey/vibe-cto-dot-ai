@@ -53,13 +53,29 @@ export const PlayerSetupScreen = () => {
     setIsLoading(true);
 
     try {
+      // Get the existing session ID from the game store
+      const { sessionId: existingSessionId } = useGameStore.getState();
+      
+      if (!existingSessionId) {
+        throw new Error('No session ID found. Please restart the game.');
+      }
+
+      // Set session context for RLS policies
+      await supabase.rpc('set_config', {
+        setting_name: 'app.current_session_id',
+        setting_value: existingSessionId,
+        is_local: false
+      });
+
+      // Update the existing session record with player information
       const { data, error } = await supabase
         .from('adventure_sessions')
-        .insert({
+        .update({
           player_name: playerName,
           is_generated_name: isGeneratedName,
           current_scene_id: 'destinationSelection',
         })
+        .eq('id', existingSessionId)
         .select()
         .single();
 
@@ -67,8 +83,7 @@ export const PlayerSetupScreen = () => {
         throw error;
       }
       
-      setSessionId(data.id);
-      startSession();
+      // No need to setSessionId as it's already set
       pushScene('destinationSelection');
     } catch (error) {
       console.error('Error starting game:', error);

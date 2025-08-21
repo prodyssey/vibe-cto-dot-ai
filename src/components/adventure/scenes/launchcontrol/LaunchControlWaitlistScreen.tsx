@@ -24,7 +24,7 @@ export const LaunchControlWaitlistScreen = () => {
 
   const handleSuccess = async () => {
     setSubmitted(true);
-    makeChoice('launchControlWaitlist', 'joined', { launchControl: 2 });
+    makeChoice('launchControlWaitlist', 'joined', { ignition: 0, launch_control: 2, transformation: 0 });
     await saveChoice(sessionId, 'launchControlWaitlist', 'joined', 'Joined waitlist');
     
     // Navigate to final screen after a short delay

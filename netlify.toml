@@ -1,11 +1,9 @@
 [build]
-  publish = "dist"
   command = "npm run build"
+  publish = ".next"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # Security Headers
 [[headers]]

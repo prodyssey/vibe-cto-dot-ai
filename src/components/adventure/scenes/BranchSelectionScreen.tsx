@@ -250,9 +250,9 @@ export const BranchSelectionScreen = () => {
                     </div>
 
                     {/* Title with compact dark backdrop */}
-                    <div className="bg-black/70 backdrop-blur-sm rounded-lg px-4 py-3 lg:px-6 lg:py-4 mb-3 lg:mb-4 max-w-full">
+                    <div className="bg-black/70 backdrop-blur-sm rounded-lg px-4 py-3 lg:px-6 lg:py-4 mb-3 lg:mb-4 w-full flex justify-center">
                       <h3
-                        className="text-2xl lg:text-3xl font-bold text-white"
+                        className="text-2xl lg:text-3xl font-bold text-white text-center"
                         style={{ textShadow: "0 2px 4px rgba(0,0,0,0.9)" }}
                       >
                         {portal.title}
@@ -260,9 +260,9 @@ export const BranchSelectionScreen = () => {
                     </div>
 
                     {/* Description with compact dark backdrop */}
-                    <div className="bg-black/70 backdrop-blur-sm rounded-lg px-4 py-3 lg:px-6 lg:py-4 mb-4 lg:mb-6 max-w-full">
+                    <div className="bg-black/70 backdrop-blur-sm rounded-lg px-4 py-3 lg:px-6 lg:py-4 mb-4 lg:mb-6 w-full flex justify-center">
                       <p
-                        className="text-base lg:text-lg text-gray-100 font-medium leading-relaxed"
+                        className="text-base lg:text-lg text-gray-100 font-medium leading-relaxed text-center"
                         style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
                       >
                         {portal.description}

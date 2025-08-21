@@ -74,19 +74,14 @@ export const AdventureGame = () => {
   useEffect(() => {
     // Handle scene migrations for renamed scenes
     const sceneMapping: Record<string, string> = {
-      'interstellarDetail': 'transformationDetail',
-      'interstellarCapabilities': 'transformationProcess',
-      'interstellarEngagement': 'transformationProcess',
-      'interstellarFeatures': 'transformationProcess',
-      'interstellarPartnership': 'transformationAlignment',
-      'interstellarContact': 'transformationAlignment',
-      'interstellarFinal': 'transformationFinal',
-      'interstellarProcess': 'transformationProcess',
+      'transformationDetail': 'transformationDetail',
       'transformationCapabilities': 'transformationProcess',
       'transformationEngagement': 'transformationProcess',
       'transformationFeatures': 'transformationProcess',
       'transformationPartnership': 'transformationAlignment',
       'transformationContact': 'transformationAlignment',
+      'transformationFinal': 'transformationFinal',
+      'transformationProcess': 'transformationProcess',
     };
     
     // Check if we need to migrate the scene
@@ -105,13 +100,52 @@ export const AdventureGame = () => {
     }
     
     if (!sessionId) {
-      // Generate a unique session ID
-      const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      // Generate a unique session ID (UUID format for database compatibility)
+      const newSessionId = typeof crypto !== 'undefined' && crypto.randomUUID 
+        ? crypto.randomUUID()
+        : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+          });
       setSessionId(newSessionId);
       startSession();
       
-      // Save initial scene visit
-      saveSceneVisit(newSessionId, currentSceneId, 1);
+      // Save initial session record first, then scene visit to avoid RLS issues
+      const initializeSession = async () => {
+        try {
+          // Set session context first for RLS policies
+          await (supabase as any).rpc('set_config', {
+            setting_name: 'app.current_session_id',
+            setting_value: newSessionId,
+            is_local: false
+          });
+
+          const gameState = useGameStore.getState();
+          const progress = {
+            sessionId: newSessionId,
+            playerName: gameState.playerName,
+            currentSceneId: gameState.currentSceneId,
+            visitedScenes: gameState.visitedScenes,
+            choices: gameState.choices,
+            finalPath: gameState.finalPath || undefined,
+            completedAt: undefined,
+            discoveredPaths: Array.from(gameState.discoveredPaths),
+            unlockedContent: gameState.unlockedContent,
+            preferences: gameState.preferences,
+          };
+          
+          // Save session first to satisfy RLS policy
+          await saveGameProgress(progress);
+          
+          // Then save initial scene visit
+          await saveSceneVisit(newSessionId, currentSceneId, 1);
+        } catch (error) {
+          console.error('Error initializing session:', error);
+        }
+      };
+      
+      initializeSession();
     }
   }, [sessionId, setSessionId, startSession, currentSceneId, currentScene, navigateToScene]);
 
@@ -197,7 +231,7 @@ export const AdventureGame = () => {
         currentSceneId,
         visitedScenes,
         choices: useGameStore.getState().choices,
-        finalPath,
+        finalPath: finalPath || undefined,
       });
     }
   }, [currentSceneId, sessionId, playerName, visitedScenes, finalPath]);

@@ -106,6 +106,13 @@ export const LaunchControlQualificationForm = ({
     setIsSubmitting(true);
     
     try {
+      if (!formData.recordId) {
+        throw new Error('No record ID found. Please restart the process.');
+      }
+      if (!formData.sessionId) {
+        throw new Error('No session ID found. Please restart the process.');
+      }
+
       // Update the existing record with budget information and mark as completed
       const { error } = await supabase
         .from("launch_control_qualifications")
@@ -199,7 +206,6 @@ export const LaunchControlQualificationForm = ({
           session_id: formData.sessionId, // Include session ID for RLS
         })
         .select()
-        .eq("session_id", formData.sessionId) // Filter by session ID for security
         .single();
 
       if (error) {

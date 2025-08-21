@@ -9,6 +9,8 @@ export const useSound = () => {
 
   // Initialize sounds on mount
   useEffect(() => {
+    if (!soundManager) {return;}
+    
     // Load all sounds
     soundManager.loadSounds(SOUND_EFFECTS);
     
@@ -19,22 +21,26 @@ export const useSound = () => {
 
     return () => {
       // Cleanup on unmount
-      soundManager.stopMusic();
+      soundManager?.stopMusic();
     };
   }, [preferences.soundEnabled, preferences.musicVolume, preferences.effectsVolume]);
 
   // Update sound manager when preferences change
   useEffect(() => {
+    if (!soundManager) {return;}
+    
     soundManager.setEnabled(preferences.soundEnabled);
     soundManager.setMusicVolume(preferences.musicVolume);
     soundManager.setEffectsVolume(preferences.effectsVolume);
   }, [preferences.soundEnabled, preferences.musicVolume, preferences.effectsVolume]);
 
   const playSound = useCallback((soundId: string, options?: { volume?: number; loop?: boolean }) => {
+    if (!soundManager) {return;}
     soundManager.play(soundId, options);
   }, []);
 
   const stopSound = useCallback((soundId: string) => {
+    if (!soundManager) {return;}
     soundManager.stop(soundId);
   }, []);
 
@@ -67,14 +73,17 @@ export const useSound = () => {
   }, [playSound]);
 
   const playMusic = useCallback((musicId: string) => {
+    if (!soundManager) {return;}
     soundManager.play(musicId, { loop: true });
   }, []);
 
   const stopMusic = useCallback(() => {
+    if (!soundManager) {return;}
     soundManager.stopMusic();
   }, []);
 
   const fadeOutMusic = useCallback((duration = 1000) => {
+    if (!soundManager) {return;}
     soundManager.fadeOut('', duration);
   }, []);
 

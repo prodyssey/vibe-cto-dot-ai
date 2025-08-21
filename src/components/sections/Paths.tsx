@@ -1,5 +1,7 @@
+'use client'
+
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -109,7 +111,7 @@ export const Paths = () => {
                     </Button>
                   </a>
                 ) : (
-                  <Link to={path.link} className="block pt-4">
+                  <Link href={path.link} className="block pt-4">
                     <Button
                       className={`w-full bg-gradient-to-r ${path.color} hover:opacity-90 text-white font-semibold`}
                     >

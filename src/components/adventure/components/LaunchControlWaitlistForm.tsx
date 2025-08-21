@@ -78,15 +78,13 @@ export const LaunchControlWaitlistForm = ({
         .from("launch_control_waitlist")
         .insert({
           session_id: sessionId,
-          player_name: formData.name || playerName,
+          name: formData.name || playerName,
+          email: formData.email,
           preferred_contact: preferredContact,
-          contact_method: formData.contactMethod,
-          notes:
-            formData.phone &&
-            formData.contactMethod !== "phone" &&
-            formData.contactMethod !== "text"
-              ? `Phone: ${formData.phone}`
-              : null,
+          phone: formData.phone || null,
+          company_name: null,
+          current_scale: null,
+          is_waitlist: true,
         });
 
       if (dbError) {

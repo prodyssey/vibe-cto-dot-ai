@@ -12,6 +12,7 @@ import { LaunchControlWaitlistForm } from '@/components/adventure/scenes/launchc
 // Mock analytics
 vi.mock('@/lib/analytics', () => ({
   trackSavvyCalClick: vi.fn(),
+  trackFormSubmission: vi.fn(),
 }))
 
 // Mock the game store
@@ -172,7 +173,15 @@ describe('Adventure Game Forms', () => {
       })
 
       it('handles submission errors gracefully', async () => {
-        mockFailedInsert('ignition_waitlist', { message: 'Database error' })
+        // Set up failed insert mock - IgnitionWaitlistForm uses direct insert without select/single
+        const mockInsertResult = vi.fn().mockResolvedValue({
+          data: null,
+          error: { message: "Database error" }
+        });
+        
+        mockSupabaseClient.from.mockReturnValue({
+          insert: mockInsertResult
+        });
         
         // Name is already filled
         render(<IgnitionWaitlistForm {...defaultProps} />)

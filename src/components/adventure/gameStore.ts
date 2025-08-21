@@ -149,7 +149,7 @@ export const useGameStore = create<GameStore>()(
         });
 
         set((state) => ({
-          discoveredPaths: new Set([...state.discoveredPaths, path]),
+          discoveredPaths: new Set([...Array.from(state.discoveredPaths), path]),
         }));
       },
 
@@ -221,7 +221,7 @@ export const useGameStore = create<GameStore>()(
         };
         
         // Log to console in development
-        if (import.meta.env.DEV) {
+        if (process.env.NODE_ENV === 'development') {
           console.log('Analytics Event:', analyticsEvent);
         }
         
@@ -262,6 +262,7 @@ export const useGameStore = create<GameStore>()(
     {
       name: 'adventure-game-storage',
       storage: createJSONStorage(() => localStorage),
+      skipHydration: true,
       partialize: (state) => ({
         playerName: state.playerName,
         isGeneratedName: state.isGeneratedName,

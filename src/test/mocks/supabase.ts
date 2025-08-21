@@ -1,74 +1,106 @@
 import { vi } from 'vitest'
 
-// Mock Supabase client
-export const mockSupabaseClient = {
-  from: vi.fn(() => ({
-    insert: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    select: vi.fn(() => Promise.resolve({ data: [], error: null })),
-    update: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    delete: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    upsert: vi.fn(() => Promise.resolve({ data: null, error: null })),
-  })),
+// Helper functions for setting up common mock scenarios
+export const mockSuccessfulInsert = (data: any = { id: '123' }) => {
+  const mockResult = {
+    data,
+    error: null,
+  }
+  
+  const mockSingleChain = vi.fn().mockResolvedValue(mockResult)
+  const mockSelectChain = vi.fn().mockReturnValue({
+    single: mockSingleChain
+  })
+  const mockInsertChain = vi.fn().mockReturnValue({
+    select: mockSelectChain
+  })
+  
+  return { mockInsertChain, mockSelectChain, mockSingleChain, mockResult }
+}
+
+export const mockFailedInsert = (error: any = { message: 'Database error' }) => {
+  const mockResult = {
+    data: null,
+    error,
+  }
+  
+  const mockSingleChain = vi.fn().mockResolvedValue(mockResult)
+  const mockSelectChain = vi.fn().mockReturnValue({
+    single: mockSingleChain
+  })
+  const mockInsertChain = vi.fn().mockReturnValue({
+    select: mockSelectChain
+  })
+  
+  return { mockInsertChain, mockSelectChain, mockSingleChain, mockResult }
+}
+
+export const mockMultipleOperations = (operations: { data?: any; error?: any }[]) => {
+  let callIndex = 0
+  
+  const mockSingleChain = vi.fn().mockImplementation(() => {
+    const result = operations[callIndex] || operations[0]
+    callIndex++
+    return Promise.resolve(result)
+  })
+  
+  const mockSelectChain = vi.fn().mockReturnValue({
+    single: mockSingleChain
+  })
+  
+  const mockInsertChain = vi.fn().mockReturnValue({
+    select: mockSelectChain
+  })
+  
+  return { mockInsertChain, mockSelectChain, mockSingleChain }
+}
+
+// Create a mock Supabase client
+const mockSupabaseClient = {
+  from: vi.fn(),
   auth: {
-    getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
-    signUp: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    signInWithPassword: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    signOut: vi.fn(() => Promise.resolve({ error: null })),
+    signInAnonymously: vi.fn().mockResolvedValue({
+      data: { user: null, session: null },
+      error: null
+    }),
+    getSession: vi.fn().mockResolvedValue({
+      data: { session: null },
+      error: null
+    }),
+    onAuthStateChange: vi.fn().mockReturnValue({
+      data: { subscription: { unsubscribe: vi.fn() } }
+    }),
   },
 }
 
-// Mock the entire Supabase module
+// Mock the Supabase client module
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: mockSupabaseClient,
 }))
 
-// Helper to reset all mocks
 export const resetSupabaseMocks = () => {
   vi.clearAllMocks()
-}
-
-// Helper to mock a successful insert
-export const mockSuccessfulInsert = (table: string) => {
-  const mockChain = {
-    insert: vi.fn(() => mockChain),
-    update: vi.fn(() => mockChain),
-    select: vi.fn(() => mockChain),
-    eq: vi.fn(() => mockChain),
-    single: vi.fn(() => Promise.resolve({ data: { id: 'test-id' }, error: null })),
-  }
-  mockSupabaseClient.from.mockReturnValueOnce(mockChain)
-}
-
-// Helper to mock a failed insert
-export const mockFailedInsert = (table: string, error: any) => {
-  const mockChain = {
-    insert: vi.fn(() => mockChain),
-    update: vi.fn(() => mockChain),
-    select: vi.fn(() => mockChain),
-    eq: vi.fn(() => mockChain),
-    single: vi.fn(() => Promise.resolve({ data: null, error })),
-  }
-  mockSupabaseClient.from.mockReturnValueOnce(mockChain)
-}
-
-// Helper to mock multiple successful operations (for full form flow)
-export const mockMultipleOperations = (table: string) => {
-  // First operation (insert for contact)
-  const insertChain = {
-    insert: vi.fn(() => insertChain),
-    select: vi.fn(() => insertChain),
-    eq: vi.fn(() => insertChain),
-    single: vi.fn(() => Promise.resolve({ data: { id: 'test-id' }, error: null })),
-  }
+  mockSupabaseClient.from.mockClear()
+  mockSupabaseClient.auth.signInAnonymously.mockClear()
+  mockSupabaseClient.auth.getSession.mockClear()
+  mockSupabaseClient.auth.onAuthStateChange.mockClear()
   
-  // Second operation (update for budget)
-  const updateChain = {
-    update: vi.fn(() => updateChain),
-    eq: vi.fn(() => updateChain),
-    single: vi.fn(() => Promise.resolve({ data: { id: 'test-id' }, error: null })),
-  }
+  // Set up default successful behavior for all operations
+  const { mockInsertChain } = mockSuccessfulInsert()
   
-  mockSupabaseClient.from
-    .mockReturnValueOnce(insertChain)
-    .mockReturnValueOnce(updateChain)
+  // Mock update operations with eq chains
+  const mockUpdateResult = { data: { id: '123' }, error: null }
+  const mockEqChain = vi.fn().mockResolvedValue(mockUpdateResult)
+  const mockUpdateChain = vi.fn().mockReturnValue({
+    eq: vi.fn().mockReturnValue({
+      eq: mockEqChain
+    })
+  })
+  
+  mockSupabaseClient.from.mockReturnValue({
+    insert: mockInsertChain,
+    update: mockUpdateChain,
+  })
 }
+
+export { mockSupabaseClient }

@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 import { useGameStore } from './gameStore';
 import type { ServicePath } from './types';
@@ -8,7 +8,7 @@ import type { ServicePath } from './types';
  * Hook to handle browser navigation (back/forward buttons)
  */
 export const useBrowserNavigation = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { currentSceneId, navigateToScene, canNavigateBack } = useGameStore();
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export const useSessionTimer = () => {
  * Hook to handle game completion
  */
 export const useGameCompletion = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { 
     finalPath, 
     completeGame,
@@ -78,13 +78,13 @@ export const useGameCompletion = () => {
     
     // Navigate to appropriate service page
     if (finalPath === 'ignition') {
-      navigate('/ignition');
+      router.push('/ignition');
     } else if (finalPath === 'launch_control') {
-      navigate('/launch-control');
+      router.push('/launch-control');
     } else if (finalPath === 'transformation') {
-      navigate('/transformation');
+      router.push('/transformation');
     }
-  }, [completeGame, finalPath, navigate]);
+  }, [completeGame, finalPath, router]);
 
   return {
     isCompleted: completionStatus.isCompleted,

@@ -288,13 +288,6 @@ export const IgnitionQualificationScreen = () => {
           <SceneNavigation 
             showBack 
             showReset 
-            onBack={() => {
-              if (showResults) {
-                setShowResults(false);
-                // Clear answers to let them try again
-                setAnswers({});
-              }
-            }}
           />
         </Scene>
       </div>
