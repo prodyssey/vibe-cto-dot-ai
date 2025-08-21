@@ -152,6 +152,13 @@ images: {
 ### Local Development
 Images are not optimized during development for faster builds. Optimization only runs during production builds.
 
+### Repository Management
+Optimized images are **not stored in Git** - they're generated during build:
+- ✅ Original images stored in `public/images/` (tracked in Git)
+- ✅ Optimized images generated to `public/optimized/` (ignored by Git)
+- ✅ Build systems generate optimized versions automatically
+- ❌ No binary bloat in repository
+
 ### Adding New Optimization Formats
 To add new formats, update `scripts/optimize-images.js` and install the appropriate imagemin plugin:
 
