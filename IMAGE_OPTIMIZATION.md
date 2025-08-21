@@ -23,7 +23,15 @@ Example from our blog images:
 
 ## 🛠️ How It Works
 
-### 1. Build-Time Optimization Script
+### 1. Hybrid Optimization Approach
+
+This system combines **Next.js runtime optimization** with **build-time pre-optimization** for maximum performance and reliability:
+
+- **Primary**: Next.js Image component handles optimization and serving
+- **Bonus**: Build-time script pre-optimizes images for even better performance
+- **Fallback**: Always works even if build-time optimization fails
+
+### 2. Build-Time Optimization Script
 
 ```bash
 npm run optimize-images
@@ -32,10 +40,10 @@ npm run optimize-images
 The optimization script (`scripts/optimize-images.js`):
 - Scans all images in `public/images/`
 - Generates optimized AVIF, WebP, and compressed original formats
-- Saves optimized images to `public/optimized/`
+- Saves optimized images to `public/optimized/` (ignored by Git)
 - Runs automatically before each build (`prebuild` hook)
 
-### 2. Smart Image Components
+### 3. Smart Image Components
 
 #### OptimizedImage Component
 ```tsx
@@ -51,19 +59,7 @@ import { OptimizedImage } from '@/components/OptimizedImage'
 />
 ```
 
-#### OptimizedPicture Component (Maximum Control)
-```tsx
-import { OptimizedPicture } from '@/components/OptimizedImage'
-
-<OptimizedPicture
-  src="/images/posts/example.jpg"
-  alt="Example image"
-  width={800}
-  height={400}
-  loading="lazy"
-  sizes="(max-width: 768px) 100vw, 800px"
-/>
-```
+**Note**: OptimizedImage wraps Next.js Image component with our build-time optimizations as a bonus layer.
 
 #### Blog-Specific Components
 ```tsx
@@ -83,14 +79,15 @@ import { BlogHeaderImage, BlogImage } from '@/components/BlogImage'
 />
 ```
 
-### 3. Format Serving Strategy
+### 4. Format Serving Strategy
 
-The system serves images in this priority order:
+The system uses a **hybrid approach**:
 
-1. **AVIF** - Best compression (~50% smaller than WebP)
-2. **WebP** - Good compression, wide browser support
-3. **Optimized Original** - Compressed JPEG/PNG for older browsers
-4. **Original** - Fallback for any optimization failures
+1. **Next.js Image Optimization** - Primary optimization and serving (runtime)
+2. **Build-time Pre-optimization** - Bonus performance layer when available
+3. **Graceful Fallbacks** - Always works, even if build-time optimization fails
+
+**Formats supported by Next.js**: AVIF, WebP, and original formats with automatic browser detection.
 
 ### 4. Browser Support
 

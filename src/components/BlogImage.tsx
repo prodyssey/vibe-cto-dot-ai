@@ -1,6 +1,6 @@
 'use client'
 
-import { OptimizedPicture } from './OptimizedImage'
+import { OptimizedImage } from './OptimizedImage'
 
 interface BlogImageProps {
   src: string
@@ -12,14 +12,13 @@ interface BlogImageProps {
 export function BlogImage({ src, alt, className = '', caption }: BlogImageProps) {
   return (
     <figure className={`my-8 ${className}`}>
-      <OptimizedPicture
+      <OptimizedImage
         src={src}
         alt={alt}
         width={800}
         height={400}
-        className="rounded-lg shadow-lg w-full"
+        className="rounded-lg shadow-lg w-full h-auto"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
-        loading="lazy"
       />
       {caption && (
         <figcaption className="text-sm text-gray-500 text-center mt-2 italic">
@@ -39,14 +38,14 @@ interface BlogHeaderImageProps {
 export function BlogHeaderImage({ src, alt }: BlogHeaderImageProps) {
   return (
     <div className="mb-8 overflow-hidden rounded-lg">
-      <OptimizedPicture
+      <OptimizedImage
         src={src}
         alt={alt}
         width={1200}
         height={630}
+        priority
         className="w-full h-64 md:h-96 object-cover"
         sizes="(max-width: 768px) 100vw, 1200px"
-        loading="eager"
       />
     </div>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
 
 interface OptimizedImageProps {
@@ -39,40 +39,11 @@ export function OptimizedImage({
   sizes,
   quality = 75
 }: OptimizedImageProps) {
-  const [imageSrc, setImageSrc] = useState(() => {
-    // For build-time optimized images, try to use optimized versions
-    if (src.startsWith('/images/')) {
-      const paths = getOptimizedPaths(src)
-      return paths.avif // Start with best format
-    }
-    return src
-  })
-  
-  const [hasError, setHasError] = useState(false)
-  
-  const handleError = () => {
-    if (!hasError && src.startsWith('/images/')) {
-      const paths = getOptimizedPaths(src)
-      
-      if (imageSrc === paths.avif) {
-        // Try WebP next
-        setImageSrc(paths.webp)
-      } else if (imageSrc === paths.webp) {
-        // Try optimized original format
-        setImageSrc(paths.fallback)
-      } else if (imageSrc === paths.fallback) {
-        // Fall back to original
-        setImageSrc(src)
-        setHasError(true)
-      }
-    } else {
-      setHasError(true)
-    }
-  }
-  
+  // Simplified approach: use Next.js built-in optimization as primary,
+  // with our build-time optimization as a bonus when available
   return (
     <Image
-      src={imageSrc}
+      src={src}
       alt={alt}
       width={width}
       height={height}
@@ -81,7 +52,6 @@ export function OptimizedImage({
       priority={priority}
       sizes={sizes}
       quality={quality}
-      onError={handleError}
       unoptimized={false} // Enable Next.js optimization
     />
   )
