@@ -28,7 +28,7 @@ describe("IgnitionQualificationForm", () => {
 
   describe("Budget Selection Step", () => {
     it("renders budget options correctly", async () => {
-      mockSuccessfulInsert("ignition_qualifications");
+      // Default resetSupabaseMocks already sets up successful insert
       render(<IgnitionQualificationForm onSuccess={mockOnSuccess} />);
 
       // Fill in contact form first to get to budget step
@@ -199,8 +199,17 @@ describe("IgnitionQualificationForm", () => {
     });
 
     it("handles submission errors gracefully", async () => {
-      mockFailedInsert("ignition_qualifications", {
+      // Set up failed insert mock
+      const { mockInsertChain } = mockFailedInsert({
         message: "Database error",
+      });
+      mockSupabaseClient.from.mockReturnValue({
+        insert: mockInsertChain,
+        update: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({ data: null, error: null })
+          })
+        })
       });
 
       render(<IgnitionQualificationForm onSuccess={mockOnSuccess} />);
@@ -232,7 +241,7 @@ describe("IgnitionQualificationForm", () => {
 
   describe("Navigation", () => {
     it("allows going back from budget step to contact", async () => {
-      mockSuccessfulInsert("ignition_qualifications");
+      // Default resetSupabaseMocks already sets up successful insert
       render(<IgnitionQualificationForm onSuccess={mockOnSuccess} />);
 
       // Fill in contact form and proceed to budget

@@ -175,7 +175,18 @@ describe('LaunchControlQualificationForm', () => {
     })
 
     it('handles submission errors gracefully', async () => {
-      mockFailedInsert('launch_control_qualifications', { message: 'Database error' })
+      // Set up failed insert mock
+      const { mockInsertChain } = mockFailedInsert({
+        message: "Database error",
+      });
+      mockSupabaseClient.from.mockReturnValue({
+        insert: mockInsertChain,
+        update: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({ data: null, error: null })
+          })
+        })
+      });
       
       render(<LaunchControlQualificationForm onSuccess={mockOnSuccess} />)
       

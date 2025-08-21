@@ -12,16 +12,19 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         'src/test/',
+        'app/',
         '**/*.d.ts',
         '**/*.config.*',
         '**/mockData.ts',
         'src/main.tsx',
+        '.next/',
       ],
     },
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@/app': path.resolve(__dirname, './app'),
     },
   },
 })
