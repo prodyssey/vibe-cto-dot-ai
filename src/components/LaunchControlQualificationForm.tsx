@@ -26,6 +26,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
+import { subscribeToConvertKit, getContextualTags, getCustomFields } from "@/lib/convertkit";
 
 type FormStep = "contact" | "budget" | "success";
 
@@ -125,6 +126,44 @@ export const LaunchControlQualificationForm = ({
 
       if (error) {
         throw error;
+      }
+
+      // Subscribe to ConvertKit mailing list with full context
+      try {
+        const convertKitTags = getContextualTags('launch-control-qualification');
+        
+        // Add budget-level tags
+        if (formData.budget >= 15000) {
+          convertKitTags.push(...getContextualTags('high-budget'));
+        } else if (formData.budget >= 5000) {
+          convertKitTags.push(...getContextualTags('mid-budget'));
+        } else if (formData.budget > 0) {
+          convertKitTags.push(...getContextualTags('low-budget'));
+        } else {
+          convertKitTags.push(...getContextualTags('exploring'));
+        }
+
+        const customFields = getCustomFields('launch-control-qualification', {
+          budget: formData.budget,
+          contactMethod: formData.preferredContact,
+          program: 'launch-control',
+        });
+
+        const subscribeResult = await subscribeToConvertKit({
+          email: formData.email,
+          firstName: formData.name,
+          source: 'launch-control-qualification',
+          tags: convertKitTags,
+          customFields,
+        });
+
+        if (!subscribeResult.success) {
+          console.warn('ConvertKit subscription failed:', subscribeResult.error);
+          // Don't fail the whole form submission if ConvertKit fails
+        }
+      } catch (error) {
+        console.warn('ConvertKit subscription error:', error);
+        // Don't fail the whole form submission if ConvertKit fails
       }
 
       setCurrentStep("success");
