@@ -8,11 +8,20 @@ export interface SubscribeOptions {
   customFields?: Record<string, string>;
 }
 
+export interface ConvertKitSubscription {
+  id: number;
+  state: string;
+  created_at: string;
+  email_address: string;
+  first_name?: string;
+  fields?: Record<string, string>;
+}
+
 export interface SubscribeResponse {
   success: boolean;
   message?: string;
   error?: string;
-  subscription?: any;
+  subscription?: ConvertKitSubscription;
 }
 
 /**
@@ -87,7 +96,16 @@ export function getContextualTags(context: string): string[] {
 /**
  * Get custom fields based on context and additional data
  */
-export function getCustomFields(context: string, data: Record<string, any> = {}): Record<string, string> {
+export interface CustomFieldsData {
+  budget?: number;
+  contactMethod?: string;
+  program?: string;
+  company?: string;
+  currentScale?: string;
+  [key: string]: any;
+}
+
+export function getCustomFields(context: string, data: CustomFieldsData = {}): Record<string, string> {
   const fields: Record<string, string> = {
     source: context,
     signup_date: new Date().toISOString(),
