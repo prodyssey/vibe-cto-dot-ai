@@ -65,7 +65,7 @@ export const IgnitionContactScreen = () => {
     setIsSubmitting(true);
 
     try {
-      // Save contact data first (budget will be added in next step)
+      // Save contact data to ignition_qualifications first (budget will be added in next step)
       const { data, error } = await supabase
         .from("ignition_qualifications")
         .insert({
@@ -84,6 +84,19 @@ export const IgnitionContactScreen = () => {
 
       if (error) {
         throw error;
+      }
+
+      // Also update the adventure_sessions record with the contact info
+      const sessionUpdateData: any = { email: contactData.email };
+      
+      const { error: sessionUpdateError } = await supabase
+        .from("adventure_sessions")
+        .update(sessionUpdateData)
+        .eq("id", contactData.sessionId);
+
+      if (sessionUpdateError) {
+        console.warn("Failed to update session with contact info:", sessionUpdateError);
+        // Don't throw here - the contact info is saved in ignition_qualifications
       }
 
       // Store the record ID and contact info for use later

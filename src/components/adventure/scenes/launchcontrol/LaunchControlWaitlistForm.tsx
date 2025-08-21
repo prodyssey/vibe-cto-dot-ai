@@ -64,6 +64,19 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
         throw error;
       }
 
+      // Also update the adventure_sessions record with the contact info
+      if (sessionId) {
+        const { error: sessionUpdateError } = await supabase
+          .from("adventure_sessions")
+          .update({ email: validatedData.email })
+          .eq("id", sessionId);
+
+        if (sessionUpdateError) {
+          console.warn("Failed to update session with contact info:", sessionUpdateError);
+          // Don't throw here - the contact info is saved in launch_control_waitlist
+        }
+      }
+
       // Track form submission
       trackFormSubmission('launch_control_waitlist_form', {
         source: 'adventure_game',
