@@ -61,7 +61,7 @@ jobs:
         run: |
           echo "## Main Branch Test Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          if [ $? -eq 0 ]; then
+          if [ "${{ job.status }}" = "success" ]; then
             echo "✅ All tests passed on main branch" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Some tests failed on main branch" >> $GITHUB_STEP_SUMMARY
@@ -82,12 +82,12 @@ jobs:
 
     steps:
       - name: Send Slack notification via Bot
-        uses: slackapi/slack-github-action@v1.27.0
+        uses: slackapi/slack-github-action@v2.1.1
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
-            channel: ${{ vars.SLACK_CHANNEL_ID || '#vibe-cto-alerts' }}
+            channel: ${{ vars.SLACK_CHANNEL_ID || 'general' }}
             text: "🚨 Main branch tests failed in repository ${{ github.repository }}"
             blocks:
               - type: "section"
@@ -117,3 +117,4 @@ jobs:
               This issue was automatically created by the main branch test workflow.`,
               labels: ['bug', 'tests', 'urgent']
             })
+
