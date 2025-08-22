@@ -13,7 +13,14 @@ const subscribeSchema = z.object({
 // ConvertKit API configuration function
 function getConvertKitConfig() {
   const CONVERTKIT_API_SECRET = process.env.CONVERTKIT_API_SECRET;
-  const CONVERTKIT_FORM_ID = process.env.CONVERTKIT_FORM_ID;
+  const CONVERTKIT_FORM_ID = process.env.CONVERTKIT_FORM_ID || process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID;
+
+  console.log("ConvertKit config check:", {
+    hasSecret: !!CONVERTKIT_API_SECRET,
+    hasFormId: !!CONVERTKIT_FORM_ID,
+    formId: CONVERTKIT_FORM_ID, // Log the actual form ID to debug
+    env: process.env.NODE_ENV,
+  });
 
   if (!CONVERTKIT_API_SECRET) {
     console.error("CONVERTKIT_API_SECRET environment variable is required");
@@ -84,6 +91,14 @@ export async function POST(request: NextRequest) {
       });
 
       // Handle known ConvertKit errors with more specific parsing
+      if (convertKitResponse.status === 404) {
+        console.error("ConvertKit form not found. Check CONVERTKIT_FORM_ID:", CONVERTKIT_FORM_ID);
+        return NextResponse.json(
+          { error: "Email subscription service configuration error" },
+          { status: 500 }
+        );
+      }
+
       if (convertKitResponse.status === 400) {
         try {
           const errorData = JSON.parse(errorText);
