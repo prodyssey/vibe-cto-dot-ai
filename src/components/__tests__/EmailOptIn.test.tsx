@@ -60,7 +60,7 @@ describe('EmailOptIn', () => {
       // Mock successful response
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ subscription: { id: '123' } }),
+        json: async () => ({ success: true, message: 'Successfully subscribed', subscription: { id: '123' } }),
       })
       
       render(<EmailOptIn onSuccess={mockOnSuccess} />)
@@ -77,14 +77,15 @@ describe('EmailOptIn', () => {
         expect(screen.getByText('Successfully subscribed!')).toBeInTheDocument()
       })
       
-      // Should have called fetch with ConvertKit endpoint
+      // Should have called our API endpoint
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('kit.com/forms'),
+        '/api/subscribe',
         expect.objectContaining({
           method: 'POST',
           headers: {
-            'Accept': 'application/json',
+            'Content-Type': 'application/json',
           },
+          body: expect.stringContaining('test@example.com'),
         })
       )
       
@@ -97,6 +98,7 @@ describe('EmailOptIn', () => {
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: false,
         statusText: 'Bad Request',
+        json: async () => ({ error: 'Failed to subscribe' }),
       })
       
       render(<EmailOptIn />)
@@ -140,7 +142,7 @@ describe('EmailOptIn', () => {
       // Mock successful response
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ subscription: { id: '123' } }),
+        json: async () => ({ success: true, message: 'Successfully subscribed', subscription: { id: '123' } }),
       })
       
       render(<EmailOptIn />)
@@ -186,7 +188,7 @@ describe('EmailOptIn', () => {
       // Mock successful response
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ subscription: { id: '123' } }),
+        json: async () => ({ success: true, message: 'Successfully subscribed', subscription: { id: '123' } }),
       })
       
       render(<EmailOptIn variant="minimal" onSuccess={mockOnSuccess} />)

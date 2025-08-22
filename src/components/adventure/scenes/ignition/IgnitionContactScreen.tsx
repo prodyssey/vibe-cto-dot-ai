@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
+import { subscribeToConvertKit, getContextualTags, getCustomFields } from "@/lib/convertkit";
 
 import { useGameStore } from "../../gameStore";
 import { useBrowserNavigation } from "../../hooks";
@@ -97,6 +98,33 @@ export const IgnitionContactScreen = () => {
       if (sessionUpdateError) {
         console.warn("Failed to update session with contact info:", sessionUpdateError);
         // Don't throw here - the contact info is saved in ignition_qualifications
+      }
+
+      // Subscribe to ConvertKit mailing list - early stage interested
+      try {
+        const convertKitTags = getContextualTags('adventure-ignition');
+
+        const customFields = getCustomFields('ignition-contact', {
+          contactMethod: contactData.preferredContact,
+          program: 'ignition',
+          stage: 'contact-provided',
+        });
+
+        const subscribeResult = await subscribeToConvertKit({
+          email: contactData.email,
+          firstName: contactData.name,
+          source: 'ignition-contact',
+          tags: convertKitTags,
+          customFields,
+        });
+
+        if (!subscribeResult.success) {
+          console.warn('ConvertKit subscription failed:', subscribeResult.error);
+          // Don't fail the whole form submission if ConvertKit fails
+        }
+      } catch (error) {
+        console.warn('ConvertKit subscription error:', error);
+        // Don't fail the whole form submission if ConvertKit fails
       }
 
       // Store the record ID and contact info for use later
