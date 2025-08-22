@@ -1,8 +1,11 @@
 import { Lightbulb, BookOpen, Users } from 'lucide-react';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { CommunitySignupModal } from '@/components/CommunitySignupModal';
 
 import { useBrowserNavigation } from '../../hooks';
+import { useGameStore } from '../../gameStore';
 import { Scene } from '../../Scene';
 import { SceneNavigation } from '../../SceneNavigation';
 import type { Scene as SceneType } from '../../types';
@@ -41,6 +44,16 @@ const ALTERNATIVES = [
 
 export const IgnitionAlternativesScreen = () => {
   const { pushScene } = useBrowserNavigation();
+  const { sessionId } = useGameStore();
+  const [showCommunityModal, setShowCommunityModal] = useState(false);
+
+  const handleAlternativeClick = (alt: typeof ALTERNATIVES[0]) => {
+    if (alt.title === 'Community') {
+      setShowCommunityModal(true);
+    } else {
+      window.open(alt.url, '_blank');
+    }
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -68,7 +81,7 @@ export const IgnitionAlternativesScreen = () => {
                   <h3 className="text-lg font-semibold text-white mb-2">{alt.title}</h3>
                   <p className="text-sm text-gray-400 mb-6">{alt.description}</p>
                   <Button
-                    onClick={() => window.open(alt.url, '_blank')}
+                    onClick={() => handleAlternativeClick(alt)}
                     variant="outline"
                     className="w-full border-purple-500/50 text-purple-300 hover:bg-purple-500/20"
                   >
@@ -92,6 +105,13 @@ export const IgnitionAlternativesScreen = () => {
           <SceneNavigation showReset />
         </Scene>
       </div>
+
+      <CommunitySignupModal
+        isOpen={showCommunityModal}
+        onClose={() => setShowCommunityModal(false)}
+        sessionId={sessionId}
+        source="adventure-ignition-alternatives"
+      />
     </div>
   );
 };
