@@ -44,7 +44,7 @@ The following status badges have been added to the README.md:
   - Generate test summary
 
 **Failure Notifications**:
-- **Slack Integration**: Sends alerts to Slack webhook (if configured)
+- **Slack Integration**: Sends alerts via Slack Bot Token (if configured)
 - **GitHub Issues**: Automatically creates issues for test failures with:
   - Commit information
   - Author details
@@ -55,25 +55,32 @@ The following status badges have been added to the README.md:
 
 ### 1. Add Main Branch Test Workflow
 
-**Important**: Due to GitHub App permissions, the workflow file cannot be automatically added to `.github/workflows/`. You need to manually add it:
+✅ **Completed**: The workflow file has been moved to `.github/workflows/main-branch-tests.yml`
 
-1. Copy the content from `main-branch-tests.yml` (created in the repository root)
-2. Create `.github/workflows/main-branch-tests.yml`
-3. Paste the content and commit
+### 2. Configure Slack Bot Notifications (Optional)
 
-### 2. Configure Slack Notifications (Optional)
+To enable Slack notifications for test failures using a Slack Bot (recommended approach):
 
-To enable Slack notifications for test failures:
+1. Create a Slack App and Bot in your Slack workspace:
+   - Go to https://api.slack.com/apps
+   - Click "Create New App" → "From scratch"
+   - Name your app (e.g., "GitHub CI/CD Bot") and select your workspace
+   - Go to "OAuth & Permissions" in the left sidebar
+   - Add the following Bot Token Scopes:
+     - `chat:write` - Send messages as the bot
+     - `chat:write.public` - Send messages to channels the bot isn't in
+   - Click "Install to Workspace" and authorize the app
+   - Copy the "Bot User OAuth Token" (starts with `xoxb-`)
 
-1. Create a Slack webhook URL in your Slack workspace:
-   - Go to your Slack App settings
-   - Create a new Incoming Webhook
-   - Copy the webhook URL
-
-2. Add the webhook URL as a repository secret:
+2. Add the bot token and channel configuration:
    - Go to repository Settings → Secrets and variables → Actions
-   - Add new secret: `SLACK_WEBHOOK_URL`
-   - Paste your webhook URL as the value
+   - Add new secret: `SLACK_BOT_TOKEN` with your bot token as the value
+   - Add new variable: `SLACK_CHANNEL_ID` with your channel ID (or leave empty to use 'general')
+   - To find channel ID: Right-click channel → "Copy link" → extract ID from URL
+
+3. Invite the bot to your desired channel:
+   - In Slack, go to the channel where you want notifications
+   - Type `/invite @YourBotName` or add it via channel settings
 
 ### 3. Configure GitHub Issues for Test Failures
 
@@ -153,15 +160,16 @@ The status badges use these URLs:
 - Ensure test files are not corrupted
 
 ### Notifications Not Working
-- Verify `SLACK_WEBHOOK_URL` secret is set correctly
-- Check Slack webhook is still active
+- Verify `SLACK_BOT_TOKEN` secret is set correctly
+- Check bot has proper permissions in Slack workspace
+- Ensure bot is invited to the target channel
+- Verify `SLACK_CHANNEL_ID` variable is set (or defaults to 'general')
 - Review workflow permissions for issue creation
 
 ## Implementation Status
 
 - ✅ Status badges added to README
-- ✅ Main branch test workflow created
-- ✅ Failure notification system implemented
-- ✅ Documentation completed
-- ⚠️ **Manual step required**: Move `main-branch-tests.yml` to `.github/workflows/`
-- ⚠️ **Optional**: Configure Slack webhook for notifications
+- ✅ Main branch test workflow created and moved to `.github/workflows/`
+- ✅ Failure notification system implemented with Slack Bot
+- ✅ Documentation completed and updated for Slack Bot setup
+- ⚠️ **Optional**: Configure Slack Bot token and channel for notifications

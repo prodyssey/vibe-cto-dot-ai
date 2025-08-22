@@ -81,24 +81,26 @@ jobs:
     if: failure()
     
     steps:
-    - name: Send Slack notification
-      if: env.SLACK_WEBHOOK_URL != ''
-      run: |
-        curl -X POST -H 'Content-type: application/json' \
-        --data '{
-          "text": "🚨 Main branch tests failed in repository ${{ github.repository }}",
-          "blocks": [
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "*Main Branch Test Failure* 🚨\n\nRepository: `${{ github.repository }}`\nCommit: `${{ github.sha }}`\nAuthor: ${{ github.actor }}\n\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Test Results>"
+    - name: Send Slack notification via Bot
+      if: ${{ secrets.SLACK_BOT_TOKEN != '' }}
+      uses: slackapi/slack-github-action@v1.27.0
+      with:
+        channel-id: ${{ vars.SLACK_CHANNEL_ID || 'general' }}
+        payload: |
+          {
+            "text": "🚨 Main branch tests failed in repository ${{ github.repository }}",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Main Branch Test Failure* 🚨\n\nRepository: `${{ github.repository }}`\nCommit: `${{ github.sha }}`\nAuthor: ${{ github.actor }}\n\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Test Results>"
+                }
               }
-            }
-          ]
-        }' ${{ env.SLACK_WEBHOOK_URL }}
+            ]
+          }
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
     - name: Create GitHub Issue on Failure
       if: github.event_name == 'push'
