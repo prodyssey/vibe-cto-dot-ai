@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PostMetadata } from "@/lib/posts";
+import { formatPostDate } from "@/lib/dateUtils";
 
 interface ResourcesProps {
   posts: PostMetadata[];
@@ -56,7 +57,7 @@ export const Resources = ({ posts }: ResourcesProps) => {
                       <div className="flex items-center justify-between text-xs text-gray-400">
                         <div className="flex items-center">
                           <Calendar className="w-3 h-3 mr-1" />
-                          {new Date(post.date).toLocaleDateString()}
+                          {formatPostDate(post.date)}
                         </div>
                         <span>{post.readTime}</span>
                       </div>

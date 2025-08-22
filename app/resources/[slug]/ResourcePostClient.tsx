@@ -24,6 +24,7 @@ import { Navigation } from "@/components/Navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatPostDate } from "@/lib/dateUtils";
 import { Separator } from "@/components/ui/separator";
 import { Post } from "@/lib/posts";
 
@@ -135,14 +136,7 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
                     <span className="whitespace-nowrap">
-                      {new Date(post.metadata.date).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }
-                      )}
+                      {formatPostDate(post.metadata.date)}
                     </span>
                   </div>
                   <div className="flex items-center">
