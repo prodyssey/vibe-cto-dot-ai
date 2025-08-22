@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
-. ~/.nvm/nvm.sh
+# Load nvm if available
+[ -s ~/.nvm/nvm.sh ] && . ~/.nvm/nvm.sh
 npx lint-staged
