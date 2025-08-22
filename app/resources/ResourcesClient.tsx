@@ -8,6 +8,7 @@ import { Navigation } from "@/components/Navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { PostMetadata } from "@/lib/posts";
+import { formatPostDate } from "@/lib/dateUtils";
 
 interface ResourcesClientProps {
   posts: PostMetadata[];
@@ -99,7 +100,7 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
                               <div className="flex items-center justify-between text-sm text-gray-400">
                                 <div className="flex items-center">
                                   <Calendar className="w-4 h-4 mr-1" />
-                                  {new Date(post.date).toLocaleDateString()}
+                                  {formatPostDate(post.date)}
                                 </div>
                                 <span>{post.readTime}</span>
                               </div>
@@ -172,7 +173,7 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
                             <div className="flex items-center justify-between text-sm text-gray-400">
                               <div className="flex items-center">
                                 <Calendar className="w-4 h-4 mr-1" />
-                                {new Date(post.date).toLocaleDateString()}
+                                {formatPostDate(post.date)}
                               </div>
                               <span>{post.readTime}</span>
                             </div>
