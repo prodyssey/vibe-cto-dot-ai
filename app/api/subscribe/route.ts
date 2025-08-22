@@ -13,7 +13,7 @@ const subscribeSchema = z.object({
 // ConvertKit API configuration function
 function getConvertKitConfig() {
   const CONVERTKIT_API_SECRET = process.env.CONVERTKIT_API_SECRET;
-  const CONVERTKIT_FORM_ID = process.env.CONVERTKIT_FORM_ID || process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID;
+  const CONVERTKIT_FORM_ID = process.env.CONVERTKIT_FORM_ID;
 
   console.log("ConvertKit config check:", {
     hasSecret: !!CONVERTKIT_API_SECRET,
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { email, firstName, source, tags, customFields } = validation.data;
-    
+
     const { CONVERTKIT_API_SECRET, CONVERTKIT_FORM_ID } = getConvertKitConfig();
 
     if (!CONVERTKIT_API_SECRET || !CONVERTKIT_FORM_ID) {
@@ -92,7 +92,10 @@ export async function POST(request: NextRequest) {
 
       // Handle known ConvertKit errors with more specific parsing
       if (convertKitResponse.status === 404) {
-        console.error("ConvertKit form not found. Check CONVERTKIT_FORM_ID:", CONVERTKIT_FORM_ID);
+        console.error(
+          "ConvertKit form not found. Check CONVERTKIT_FORM_ID:",
+          CONVERTKIT_FORM_ID
+        );
         return NextResponse.json(
           { error: "Email subscription service configuration error" },
           { status: 500 }
@@ -167,7 +170,7 @@ export async function POST(request: NextRequest) {
 export async function OPTIONS() {
   // Determine allowed origin based on environment
   let allowedOrigin = "*"; // Default fallback
-  
+
   if (process.env.NODE_ENV === "production") {
     allowedOrigin = "https://vibecto.ai";
   } else if (process.env.NODE_ENV === "development") {
