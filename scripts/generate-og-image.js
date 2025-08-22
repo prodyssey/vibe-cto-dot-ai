@@ -16,6 +16,11 @@ async function generateOGImage() {
   console.log('🎨 Generating OG image using Sharp...');
   
   try {
+    // Check if public directory exists
+    if (!existsSync(publicDir)) {
+      throw new Error(`Public directory not found: ${publicDir}`);
+    }
+    
     const outputPath = join(publicDir, 'vibe-cto-og.png');
     
     // Create gradient background
@@ -117,10 +122,11 @@ async function generateOGImage() {
       .png();
     
     // Check if avatar image exists
-    const avatarPath = join(publicDir, 'lovable-uploads', '8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png');
+    const avatarDir = join(publicDir, 'lovable-uploads');
+    const avatarPath = join(avatarDir, '8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png');
     let avatarBuffer = null;
     
-    if (existsSync(avatarPath)) {
+    if (existsSync(avatarDir) && existsSync(avatarPath)) {
       console.log('📷 Found avatar image, including it in the composition');
       avatarBuffer = await sharp(avatarPath)
         .resize(320, 320, { 
@@ -130,7 +136,11 @@ async function generateOGImage() {
         .png()
         .toBuffer();
     } else {
-      console.log('⚠️  Avatar image not found, creating placeholder');
+      if (!existsSync(avatarDir)) {
+        console.log('⚠️  Avatar directory not found, creating placeholder');
+      } else {
+        console.log('⚠️  Avatar image not found, creating placeholder');
+      }
       // Create a simple avatar placeholder
       const avatarPlaceholder = `
         <svg width="320" height="320" xmlns="http://www.w3.org/2000/svg">

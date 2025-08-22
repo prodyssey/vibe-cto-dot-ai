@@ -2,6 +2,7 @@
 
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
 import sharp from 'sharp';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -11,6 +12,11 @@ async function createOGPng() {
   console.log('🎨 Creating OG PNG image...');
   
   try {
+    // Check if public directory exists
+    if (!existsSync(publicDir)) {
+      throw new Error(`Public directory not found: ${publicDir}`);
+    }
+    
     const pngPath = join(publicDir, 'vibe-cto-og.png');
     
     // Create a complex SVG with all elements

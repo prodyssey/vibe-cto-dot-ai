@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import sharp from 'sharp';
@@ -14,6 +14,16 @@ async function convertSvgToPng() {
   try {
     const svgPath = join(publicDir, 'vibe-cto-og.svg');
     const pngPath = join(publicDir, 'vibe-cto-og.png');
+    
+    // Check if SVG file exists
+    if (!existsSync(svgPath)) {
+      throw new Error(`SVG file not found: ${svgPath}`);
+    }
+    
+    // Check if public directory exists
+    if (!existsSync(publicDir)) {
+      throw new Error(`Public directory not found: ${publicDir}`);
+    }
     
     const svgBuffer = readFileSync(svgPath);
     
@@ -31,6 +41,7 @@ async function convertSvgToPng() {
     
   } catch (error) {
     console.error('❌ Failed to convert SVG:', error.message);
+    console.error('Stack trace:', error.stack);
     process.exit(1);
   }
 }
