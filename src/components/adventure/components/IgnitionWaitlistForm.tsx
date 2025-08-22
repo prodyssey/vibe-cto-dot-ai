@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { trackFormSubmission } from "@/lib/analytics";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
 import { subscribeToConvertKit, getContextualTags, getCustomFields } from "@/lib/convertkit";
+import { sendSlackNotification } from "@/lib/slack";
 
 import { AnimatedButton } from "./AnimatedButton";
 
@@ -148,6 +149,23 @@ export const IgnitionWaitlistForm = ({
         contact_method: formData.contactMethod,
         is_waitlist: isWaitlistActive
       });
+
+      // Send Slack notification
+      try {
+        await sendSlackNotification({
+          formType: 'ignition_waitlist',
+          email: formData.email,
+          name: formData.name || playerName,
+          phone: formData.phone || undefined,
+          contactMethod: formData.contactMethod,
+          source: 'adventure_game',
+          sessionId: sessionId,
+          isWaitlist: isWaitlistActive,
+        });
+      } catch (error) {
+        console.warn('Failed to send Slack notification:', error);
+        // Don't fail the form submission if Slack notification fails
+      }
 
       onSuccess();
     } catch (err) {

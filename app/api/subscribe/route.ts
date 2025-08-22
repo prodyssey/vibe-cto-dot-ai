@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { sendSlackNotification } from "@/lib/slack";
 
 // Request schema
 const subscribeSchema = z.object({
@@ -150,6 +151,20 @@ export async function POST(request: NextRequest) {
       );
 
       await Promise.allSettled(tagPromises);
+    }
+
+    // Send Slack notification
+    try {
+      await sendSlackNotification({
+        formType: 'email_subscription',
+        email,
+        name: firstName,
+        source,
+        additionalData: customFields,
+      });
+    } catch (error) {
+      console.warn('Failed to send Slack notification:', error);
+      // Don't fail the subscription if Slack notification fails
     }
 
     return NextResponse.json({
