@@ -10,7 +10,7 @@ export const Hero = () => {
   const router = useRouter();
 
   const scrollToJourney = () => {
-    if (typeof document !== 'undefined') {
+    if (typeof document !== "undefined") {
       const journeySection = document.getElementById("journey");
       if (journeySection) {
         journeySection.scrollIntoView({ behavior: "smooth" });
@@ -118,7 +118,9 @@ export const Hero = () => {
               />
               {/* Quote under avatar */}
               <p className="mt-6 text-lg text-gray-200 italic">
-                "Hi. I'm Craig. Let's build together.
+                I'm Craig. I've been a software product builder for 20+ years -
+                and I can tell you from experience that AI tools are totally
+                changing the game. I want to help you ride this wave too.
               </p>
               {/* Glow effect behind avatar */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-2xl -z-10 scale-110"></div>
