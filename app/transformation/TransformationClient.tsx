@@ -111,6 +111,39 @@ export function TransformationClient() {
           </div>
         </section>
 
+        {/* Testimonials Section */}
+        <section className="py-20 px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-16">
+              Client Success Stories
+            </h2>
+            
+            <div className="bg-white/5 backdrop-blur-sm border-white/10 rounded-3xl p-8 md:p-12">
+              <div className="flex justify-center mb-6">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              
+              <blockquote className="text-gray-300 text-xl md:text-2xl mb-8 leading-relaxed">
+                "Craig helped us build a culture around AI-assisted engineering. Thanks to his efforts, we've dramatically increased the pace at which we ship product with 1/3 the manpower. Whether you've got an engineering team of 2 or 200, I highly recommend you reach out."
+              </blockquote>
+              
+              <div className="text-center">
+                <div className="text-white font-semibold text-lg">Jason Burchard</div>
+                <div className="text-gray-400">
+                  CEO, <a href="https://rootnote.co" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">Rootnote</a>
+                </div>
+                <div className="mt-4">
+                  <span className="px-4 py-2 bg-purple-500/20 text-purple-400 rounded-full text-sm font-medium">
+                    Transformation
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Features Section */}
         <section className="py-20 px-6 bg-black/20">
           <div className="max-w-6xl mx-auto">
@@ -260,39 +293,6 @@ export function TransformationClient() {
                   </p>
                 </CardContent>
               </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section className="py-20 px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-16">
-              Client Success Stories
-            </h2>
-            
-            <div className="bg-white/5 backdrop-blur-sm border-white/10 rounded-3xl p-8 md:p-12">
-              <div className="flex justify-center mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />
-                ))}
-              </div>
-              
-              <blockquote className="text-gray-300 text-xl md:text-2xl mb-8 leading-relaxed">
-                "Craig helped us build a culture around AI-assisted engineering. Thanks to his efforts, we've dramatically increased the pace at which we ship product with 1/3 the manpower. Whether you've got an engineering team of 2 or 200, I highly recommend you reach out."
-              </blockquote>
-              
-              <div className="text-center">
-                <div className="text-white font-semibold text-lg">Jason Burchard</div>
-                <div className="text-gray-400">
-                  CEO, <a href="https://rootnote.co" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">Rootnote</a>
-                </div>
-                <div className="mt-4">
-                  <span className="px-4 py-2 bg-purple-500/20 text-purple-400 rounded-full text-sm font-medium">
-                    Transformation
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </section>
