@@ -26,7 +26,7 @@ export async function GET() {
     availableEnvVars: Object.keys(process.env)
       .filter(key => key.includes('CONVERTKIT'))
       .reduce((obj, key) => {
-        obj[key] = key.includes('SECRET') ? '[REDACTED]' : process.env[key];
+        obj[key] = key.includes('SECRET') ? '[REDACTED]' : process.env[key] || '[NOT_SET]';
         return obj;
       }, {} as Record<string, string>)
   });

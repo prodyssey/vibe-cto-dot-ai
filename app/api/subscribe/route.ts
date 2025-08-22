@@ -13,7 +13,7 @@ const subscribeSchema = z.object({
 // ConvertKit API configuration function
 function getConvertKitConfig() {
   const CONVERTKIT_API_SECRET = process.env.CONVERTKIT_API_SECRET;
-  const CONVERTKIT_FORM_ID = process.env.CONVERTKIT_FORM_ID;
+  const CONVERTKIT_FORM_ID = process.env.CONVERTKIT_FORM_ID || process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID;
 
   console.log("ConvertKit config check:", {
     hasSecret: !!CONVERTKIT_API_SECRET,
