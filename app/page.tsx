@@ -49,7 +49,7 @@ export default async function HomePage() {
           <Hero />
           <ProblemPromise />
           <HowItWorks />
-          {/* <Proof /> */}
+          <Proof />
           <Resources posts={featuredPosts} />
           <div className="py-16 px-6">
             <EmailOptIn
