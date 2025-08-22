@@ -56,7 +56,12 @@ export const Resources = ({ posts }: ResourcesProps) => {
                       <div className="flex items-center justify-between text-xs text-gray-400">
                         <div className="flex items-center">
                           <Calendar className="w-3 h-3 mr-1" />
-                          {new Date(post.date).toLocaleDateString()}
+                          {new Date(post.date).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'short', 
+                            day: 'numeric',
+                            timeZone: 'UTC'
+                          })}
                         </div>
                         <span>{post.readTime}</span>
                       </div>
