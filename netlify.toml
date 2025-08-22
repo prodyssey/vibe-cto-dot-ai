@@ -2,6 +2,10 @@
   command = "npm run build"
   publish = ".next"
 
+[build.environment]
+  # Set to "true" to skip image optimization if it causes issues
+  # SKIP_IMAGE_OPTIMIZATION = "true"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 

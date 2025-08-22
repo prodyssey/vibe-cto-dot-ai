@@ -13,6 +13,7 @@ import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
+import { BlogHeaderImage, BlogImage } from "@/components/BlogImage";
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import { toast } from "sonner";
@@ -86,15 +87,10 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
 
           {/* Header Image */}
           {post.metadata.headerImage && (
-            <Card className="bg-white/5 backdrop-blur-sm border-white/10 mb-8 overflow-hidden">
-              <div className="relative w-full flex items-center justify-center px-2 py-4 sm:px-8 sm:py-6 md:px-16 md:py-8 lg:px-24 lg:py-10 max-h-[60vh] sm:max-h-[70vh] md:max-h-[80vh]">
-                <img
-                  src={post.metadata.headerImage}
-                  alt={post.metadata.title}
-                  className="w-full h-auto max-h-[60vh] object-contain"
-                />
-              </div>
-            </Card>
+            <BlogHeaderImage
+              src={post.metadata.headerImage}
+              alt={post.metadata.title}
+            />
           )}
 
           {/* Article Header */}
@@ -197,6 +193,20 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm, remarkToc]}
                     rehypePlugins={[rehypeHighlight, rehypeSlug]}
+                    components={{
+                      img: ({ src, alt, ...props }) => {
+                        if (!src || typeof src !== 'string') {
+                          return null
+                        }
+                        return (
+                          <BlogImage
+                            src={src}
+                            alt={alt || ''}
+                            className="my-6"
+                          />
+                        )
+                      }
+                    }}
                   >
                     {post.content}
                   </ReactMarkdown>

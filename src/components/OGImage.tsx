@@ -1,4 +1,5 @@
 import { Logo } from "@/components/Logo";
+import { OptimizedImage } from "./OptimizedImage";
 
 export const OGImage = () => {
   return (
@@ -37,10 +38,14 @@ export const OGImage = () => {
         {/* Avatar */}
         <div className="relative w-[400px] h-[400px] flex items-center justify-center">
           <div className="absolute inset-[-40px] bg-gradient-radial from-purple-500/30 to-transparent blur-[40px]" />
-          <img
+          <OptimizedImage
             src="/lovable-uploads/8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png"
             alt="VibeCTO Avatar"
+            width={380}
+            height={380}
+            priority
             className="w-[380px] h-[380px] object-contain drop-shadow-[0_0_40px_rgba(139,92,246,0.5)]"
+            sizes="380px"
           />
         </div>
       </div>
