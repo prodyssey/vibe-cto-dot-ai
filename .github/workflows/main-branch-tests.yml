@@ -2,125 +2,119 @@ name: Main Branch Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch: # Allow manual triggers
 
 jobs:
   test-main:
     name: Test Main Branch
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [20.x]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run linter
-      run: npm run lint
+      - name: Run linter
+        run: npm run lint
 
-    - name: Run all tests
-      run: npm run test:run
-      env:
-        # Mock environment variables for tests
-        VITE_SUPABASE_URL: https://test.supabase.co
-        VITE_SUPABASE_ANON_KEY: test-anon-key
+      - name: Run all tests
+        run: npm run test:run
+        env:
+          # Mock environment variables for tests
+          VITE_SUPABASE_URL: https://test.supabase.co
+          VITE_SUPABASE_ANON_KEY: test-anon-key
 
-    - name: Run tests with coverage
-      run: npm run test:coverage
-      env:
-        VITE_SUPABASE_URL: https://test.supabase.co
-        VITE_SUPABASE_ANON_KEY: test-anon-key
+      - name: Run tests with coverage
+        run: npm run test:coverage
+        env:
+          VITE_SUPABASE_URL: https://test.supabase.co
+          VITE_SUPABASE_ANON_KEY: test-anon-key
 
-    - name: Build project
-      run: npm run build
-      env:
-        # Mock environment variables for build
-        VITE_SUPABASE_URL: https://test.supabase.co
-        VITE_SUPABASE_ANON_KEY: test-anon-key
+      - name: Build project
+        run: npm run build
+        env:
+          # Mock environment variables for build
+          VITE_SUPABASE_URL: https://test.supabase.co
+          VITE_SUPABASE_ANON_KEY: test-anon-key
 
-    - name: Upload coverage reports
-      uses: actions/upload-artifact@v4
-      with:
-        name: main-coverage-report
-        path: coverage/
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-coverage-report
+          path: coverage/
 
-    - name: Test Results Summary
-      if: always()
-      run: |
-        echo "## Main Branch Test Results" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        if [ $? -eq 0 ]; then
-          echo "✅ All tests passed on main branch" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "❌ Some tests failed on main branch" >> $GITHUB_STEP_SUMMARY
-        fi
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Test Coverage:" >> $GITHUB_STEP_SUMMARY
-        if [ -f coverage/coverage-summary.json ]; then
-          echo "Coverage report generated successfully" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "⚠️ Coverage report not found" >> $GITHUB_STEP_SUMMARY
-        fi
+      - name: Test Results Summary
+        if: always()
+        run: |
+          echo "## Main Branch Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ All tests passed on main branch" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some tests failed on main branch" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Coverage:" >> $GITHUB_STEP_SUMMARY
+          if [ -f coverage/coverage-summary.json ]; then
+            echo "Coverage report generated successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Coverage report not found" >> $GITHUB_STEP_SUMMARY
+          fi
 
   notify-failure:
     name: Notify on Test Failure
     runs-on: ubuntu-latest
     needs: test-main
     if: failure()
-    
-    steps:
-    - name: Send Slack notification via Bot
-      if: ${{ secrets.SLACK_BOT_TOKEN != '' }}
-      uses: slackapi/slack-github-action@v1.27.0
-      with:
-        channel-id: ${{ vars.SLACK_CHANNEL_ID || 'general' }}
-        payload: |
-          {
-            "text": "🚨 Main branch tests failed in repository ${{ github.repository }}",
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Main Branch Test Failure* 🚨\n\nRepository: `${{ github.repository }}`\nCommit: `${{ github.sha }}`\nAuthor: ${{ github.actor }}\n\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Test Results>"
-                }
-              }
-            ]
-          }
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-    - name: Create GitHub Issue on Failure
-      if: github.event_name == 'push'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          github.rest.issues.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: `🚨 Main branch tests failed - ${context.sha.substring(0, 7)}`,
-            body: `## Test Failure Alert
-            
-            The tests on the main branch have failed after the latest push.
-            
-            **Commit:** ${context.sha}
-            **Author:** ${context.actor}
-            **Workflow Run:** [${context.runId}](${context.payload.repository.html_url}/actions/runs/${context.runId})
-            
-            Please investigate and fix the failing tests as soon as possible to maintain code quality.
-            
-            This issue was automatically created by the main branch test workflow.`,
-            labels: ['bug', 'tests', 'urgent']
-          })
+    steps:
+      - name: Send Slack notification via Bot
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: ${{ vars.SLACK_CHANNEL_ID || 'general' }}
+            text: "🚨 Main branch tests failed in repository ${{ github.repository }}"
+            blocks:
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: "*Main Branch Test Failure* 🚨\n\nRepository: `${{ github.repository }}`\nCommit: `${{ github.sha }}`\nAuthor: ${{ github.actor }}\n\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Test Results>"
+
+      - name: Create GitHub Issue on Failure
+        if: github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Main branch tests failed - ${context.sha.substring(0, 7)}`,
+              body: `## Test Failure Alert
+              
+              The tests on the main branch have failed after the latest push.
+              
+              **Commit:** ${context.sha}
+              **Author:** ${context.actor}
+              **Workflow Run:** [${context.runId}](${context.payload.repository.html_url}/actions/runs/${context.runId})
+              
+              Please investigate and fix the failing tests as soon as possible to maintain code quality.
+              
+              This issue was automatically created by the main branch test workflow.`,
+              labels: ['bug', 'tests', 'urgent']
+            })
+

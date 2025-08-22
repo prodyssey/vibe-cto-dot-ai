@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
-
+# Load nvm if available
+[ -s ~/.nvm/nvm.sh ] && . ~/.nvm/nvm.sh
 npx lint-staged
