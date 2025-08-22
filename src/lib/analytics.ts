@@ -5,8 +5,16 @@ declare global {
       targetId: string,
       config?: Record<string, any>
     ) => void;
+    dataLayer: any[];
   }
 }
+
+// Check if GA is properly loaded
+const isGALoaded = () => {
+  return typeof window !== 'undefined' && 
+         typeof window.gtag === 'function' &&
+         process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+};
 
 export const trackEvent = (
   action: string,
@@ -14,7 +22,7 @@ export const trackEvent = (
   label?: string,
   value?: number
 ) => {
-  if (typeof window !== 'undefined' && window.gtag) {
+  if (isGALoaded()) {
     window.gtag('event', action, {
       event_category: category,
       event_label: label,
@@ -26,7 +34,7 @@ export const trackEvent = (
 export const trackFormSubmission = (formName: string, formData?: Record<string, any>) => {
   trackEvent('form_submit', 'engagement', formName);
   
-  if (formData && typeof window !== 'undefined' && window.gtag) {
+  if (formData && isGALoaded()) {
     window.gtag('event', 'form_submit_details', {
       event_category: 'form_data',
       event_label: formName,
@@ -42,7 +50,7 @@ export const trackAdventureChoice = (
 ) => {
   trackEvent('adventure_choice', 'adventure_game', `${sceneName}: ${choice}`);
   
-  if (additionalData && typeof window !== 'undefined' && window.gtag) {
+  if (additionalData && isGALoaded()) {
     window.gtag('event', 'adventure_progress', {
       event_category: 'adventure_game',
       scene: sceneName,
@@ -53,7 +61,7 @@ export const trackAdventureChoice = (
 };
 
 export const trackPageView = (pageName: string, pageLocation?: string) => {
-  if (typeof window !== 'undefined' && window.gtag) {
+  if (isGALoaded()) {
     window.gtag('event', 'page_view', {
       page_title: pageName,
       page_location: pageLocation || window.location.href,
@@ -67,7 +75,7 @@ export const trackConversion = (
   value?: number,
   additionalData?: Record<string, any>
 ) => {
-  if (typeof window !== 'undefined' && window.gtag) {
+  if (isGALoaded()) {
     // Track as conversion event
     window.gtag('event', 'conversion', {
       event_category: 'conversions',
