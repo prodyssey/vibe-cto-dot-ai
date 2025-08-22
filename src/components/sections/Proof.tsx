@@ -18,18 +18,6 @@ export const Proof = () => {
       role: "CEO, Rootnote",
       path: "Transformation",
       link: "https://rootnote.co"
-    },
-    {
-      quote: "Went from Replit hobby project to paying customers in 3 weeks. The security audit alone saved me months of headaches.",
-      author: "Sarah Chen",
-      role: "Ignition Graduate",
-      path: "Ignition"
-    },
-    {
-      quote: "My Bolt.new prototype was getting 10k users but crashing daily. Now it's rock-solid and handling 100k+ users seamlessly.",
-      author: "Marcus Rodriguez", 
-      role: "Startup Founder",
-      path: "Launch Control"
     }
   ];
 
@@ -46,7 +34,7 @@ export const Proof = () => {
         </div>
 
         {/* Metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
           {metrics.map((metric, index) => (
             <Card key={index} className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300">
               <CardContent className="p-6 text-center">
@@ -56,7 +44,7 @@ export const Proof = () => {
               </CardContent>
             </Card>
           ))}
-        </div>
+        </div> */}
 
         {/* Testimonials */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
