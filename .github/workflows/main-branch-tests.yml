@@ -82,7 +82,7 @@ jobs:
     
     steps:
     - name: Send Slack notification via Bot
-      if: ${{ secrets.SLACK_BOT_TOKEN != '' }}
+      if: ${{ secrets.SLACK_BOT_TOKEN }}
       uses: slackapi/slack-github-action@v1.27.0
       with:
         channel-id: ${{ vars.SLACK_CHANNEL_ID || 'general' }}
