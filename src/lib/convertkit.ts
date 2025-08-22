@@ -77,6 +77,11 @@ export function getContextualTags(context: string): string[] {
     // Waitlists
     'ignition-waitlist': ['ignition-waitlist', 'high-intent'],
     'launch-control-waitlist': ['launch-control-waitlist', 'high-intent'],
+    'community-waitlist': ['community-waitlist', 'community-interested'],
+    
+    // Community
+    'community-signup': ['community-member', 'community-interested'],
+    'community-website': ['community-visitor', 'website-visitor'],
     
     // General website
     'website-signup': ['website-visitor'],
