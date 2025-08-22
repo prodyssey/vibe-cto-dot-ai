@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Providers } from './providers'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://vibecto.ai'),
@@ -46,6 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body>
+        <GoogleAnalytics />
         <Providers>
           <div id="root">{children}</div>
         </Providers>

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { ArrowRight, Code, Rocket, Gamepad2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -58,23 +58,23 @@ export const Hero = () => {
 
             {/* Primary CTA */}
             <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start max-w-xl lg:max-w-none">
                 <Button
                   onClick={() => router.push("/adventure")}
                   size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 lg:px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 flex-1 sm:flex-none"
                 >
                   <Gamepad2 className="mr-2 w-5 h-5" />
-                  Pick Your Path (Fun)
+                  Press Start
                 </Button>
 
                 <Button
                   onClick={scrollToJourney}
                   size="lg"
                   variant="outline"
-                  className="border-2 border-purple-500/50 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-400 px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105"
+                  className="border-2 border-purple-500/50 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-400 px-6 lg:px-8 py-6 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 flex-1 sm:flex-none"
                 >
-                  Pick Your Path (Standard)
+                  Skip to Services
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </div>
