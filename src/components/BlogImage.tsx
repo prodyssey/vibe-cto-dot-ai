@@ -37,14 +37,14 @@ interface BlogHeaderImageProps {
 
 export function BlogHeaderImage({ src, alt }: BlogHeaderImageProps) {
   return (
-    <div className="mb-8 rounded-lg overflow-hidden">
+    <div className="mb-8 rounded-lg overflow-hidden bg-gray-900/50">
       <OptimizedImage
         src={src}
         alt={alt}
         width={1200}
         height={630}
         priority
-        className="w-full h-auto object-contain"
+        className="w-full h-auto max-h-[50vh] sm:max-h-[60vh] object-contain"
         sizes="(max-width: 768px) 100vw, 1200px"
       />
     </div>
