@@ -22,16 +22,16 @@ export const OGImage = () => {
           </div>
           
           <h2 className="text-5xl font-bold text-white mb-5 leading-tight">
-            From vibes to{" "}
+            Human help to build<br />
             <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              products
+              with AI
             </span>
           </h2>
           
           <p className="text-2xl text-white/80 leading-relaxed">
-            Elite AI-powered development guidance.<br />
-            Transform your ideas into real, secure,<br />
-            scalable products.
+            Elite AI augmented engineering and vibe coding guidance.<br />
+            I work with builders to adopt AI and accelerate<br />
+            roadmaps, operations, and prototypes.
           </p>
         </div>
         
