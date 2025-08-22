@@ -27,6 +27,7 @@ import { trackSavvyCalClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
 import { subscribeToConvertKit, getContextualTags, getCustomFields } from "@/lib/convertkit";
+import { sendSlackNotification } from "@/lib/slack";
 
 type FormStep = "contact" | "budget" | "success";
 
@@ -165,6 +166,27 @@ export const IgnitionQualificationForm = ({
       } catch (error) {
         console.warn('ConvertKit subscription error:', error);
         // Don't fail the whole form submission if ConvertKit fails
+      }
+
+      // Send Slack notification for budget submission
+      try {
+        await sendSlackNotification({
+          formType: 'ignition_waitlist',
+          email: formData.email,
+          name: formData.name,
+          phone: formData.phone,
+          contactMethod: formData.preferredContact,
+          source: 'ignition-qualification',
+          sessionId: formData.sessionId,
+          additionalData: {
+            budget: `$${formData.budget.toLocaleString()}`,
+            form_type: 'qualification_form',
+            step: 'budget_completed'
+          },
+        });
+      } catch (error) {
+        console.warn('Failed to send Slack notification:', error);
+        // Don't fail the form submission if Slack notification fails
       }
 
       setCurrentStep("success");

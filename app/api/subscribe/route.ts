@@ -152,6 +152,30 @@ export async function POST(request: NextRequest) {
       await Promise.allSettled(tagPromises);
     }
 
+    // Send Slack notification via internal API
+    try {
+      const slackResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/slack-notify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formType: 'email_subscription',
+          email,
+          name: firstName,
+          source,
+          additionalData: customFields,
+        }),
+      });
+      
+      if (!slackResponse.ok) {
+        console.warn('Slack notification failed');
+      }
+    } catch (error) {
+      console.warn('Failed to send Slack notification:', error);
+      // Don't fail the subscription if Slack notification fails
+    }
+
     return NextResponse.json({
       success: true,
       message: "Successfully subscribed to email list",
