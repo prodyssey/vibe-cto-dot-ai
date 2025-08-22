@@ -14,7 +14,9 @@ export const ProblemPromise = () => {
   const handleNavigation = (path: string) => {
     router.push(path);
     // Scroll to top after navigation
-    setTimeout(() => window.scrollTo(0, 0), 0);
+    if (typeof window !== 'undefined') {
+      setTimeout(() => window.scrollTo(0, 0), 0);
+    }
   };
 
   return (

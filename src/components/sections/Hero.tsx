@@ -10,9 +10,11 @@ export const Hero = () => {
   const router = useRouter();
 
   const scrollToJourney = () => {
-    const journeySection = document.getElementById("journey");
-    if (journeySection) {
-      journeySection.scrollIntoView({ behavior: "smooth" });
+    if (typeof document !== 'undefined') {
+      const journeySection = document.getElementById("journey");
+      if (journeySection) {
+        journeySection.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
