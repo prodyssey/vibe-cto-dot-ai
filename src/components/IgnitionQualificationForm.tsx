@@ -7,7 +7,7 @@ import {
   Loader2,
   MessageSquare,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { BudgetSlider } from "@/components/BudgetSlider";
 import { Button } from "@/components/ui/button";
@@ -97,8 +97,15 @@ export const IgnitionQualificationForm = ({
     name: "",
     email: "",
     preferredContact: "email",
-    sessionId: crypto.randomUUID(), // Generate unique session ID for this form instance
+    sessionId: "", // Will be generated on client side to prevent hydration mismatch
   });
+
+  // Generate session ID only on client side to prevent hydration mismatch
+  useEffect(() => {
+    if (!formData.sessionId && typeof crypto !== 'undefined') {
+      setFormData(prev => ({ ...prev, sessionId: crypto.randomUUID() }));
+    }
+  }, [formData.sessionId]);
   const { toast } = useToast();
 
   const handleBudgetChange = (value: number) => {
