@@ -2,7 +2,6 @@
 
 ![Main Branch Tests](https://github.com/prodyssey/vibe-cto-dot-ai/workflows/Main%20Branch%20Tests/badge.svg)
 ![PR Tests](https://github.com/prodyssey/vibe-cto-dot-ai/workflows/PR%20Tests/badge.svg)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](package.json)
 
 ## Project info
