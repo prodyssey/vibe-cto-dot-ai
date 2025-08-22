@@ -112,3 +112,46 @@ This project was created with Lovable.dev. Changes made through the Lovable plat
 ### Development rules
 
 - when making code changes, make sure there are no lint errors or typescript compilation errors before asking for more input
+
+## Pull Request Process
+
+### Pre-PR Review
+
+Before creating a pull request, Claude Code should perform a comprehensive review of all changes using the following process:
+
+1. **Automated Review**: Use the Task tool with a specialized reviewer sub-agent to analyze all code changes
+2. **Review Scope**: The review should cover:
+   - Code quality and adherence to project conventions
+   - TypeScript compilation errors
+   - ESLint violations
+   - Potential bugs or security issues
+   - Test coverage and functionality
+   - Performance implications
+   - Documentation updates if needed
+
+3. **Review Implementation**: When requested to create a PR, execute this command:
+   ```
+   Task tool with subagent_type: "code-reviewer" 
+   Prompt: "Review all changes in the current branch against main. Check for code quality, TypeScript errors, ESLint violations, potential bugs, security issues, test coverage, performance implications, and ensure documentation is updated. Provide a comprehensive review with specific recommendations."
+   ```
+
+4. **Post-Review Actions**: After the review:
+   - Address any critical issues found during review
+   - Run `npm run lint` and `npm run build` to ensure no errors
+   - Only proceed with PR creation if review passes or issues are resolved
+
+### Branch Targeting for Pull Requests
+
+When creating pull requests, follow these branch targeting rules:
+
+1. **Default Target**: By default, target the current branch's parent branch for the PR
+2. **Main Branch Exception**: If the current branch is `main`, do not create a PR (main should not target itself)
+3. **Merged Branch Check**: If the current branch has already been merged to main, create a new branch and target main
+4. **Manual Override**: Users can explicitly specify a different target branch if needed
+
+**Implementation**: Before creating a PR, check:
+- Is current branch `main`? → Don't create PR, ask user for clarification
+- Has current branch been merged to main? → Create new branch, target main
+- Otherwise → Target the branch this branch was created from (typically main)
+
+This ensures PRs are created with appropriate targeting and prevents common branching mistakes.
