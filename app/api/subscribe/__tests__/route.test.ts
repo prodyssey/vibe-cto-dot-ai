@@ -39,6 +39,12 @@ describe('/api/subscribe', () => {
         }),
       });
 
+      // Mock successful Slack notification response
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
+
       const request = new NextRequest('http://localhost:3000/api/subscribe', {
         method: 'POST',
         body: JSON.stringify({
@@ -55,7 +61,8 @@ describe('/api/subscribe', () => {
       expect(data.success).toBe(true);
       expect(data.message).toBe('Successfully subscribed to email list');
       expect(data.subscription).toBeDefined();
-      expect(mockFetch).toHaveBeenCalledTimes(1);
+      // Should have 1 call for ConvertKit subscription + 1 call for Slack notification
+      expect(mockFetch).toHaveBeenCalledTimes(2);
     });
 
     it('should successfully subscribe with tags and parallelize tag addition', async () => {
@@ -94,11 +101,12 @@ describe('/api/subscribe', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      // Should have 1 call for subscription + 3 calls for tags
-      expect(mockFetch).toHaveBeenCalledTimes(4);
+      // Should have 1 call for subscription + 3 calls for tags + 1 call for Slack notification
+      expect(mockFetch).toHaveBeenCalledTimes(5);
 
       // Verify tag addition calls are made with correct data
-      const tagCalls = mockFetch.mock.calls.slice(1);
+      // First call is ConvertKit subscription, last call is Slack notification, middle 3 are tags
+      const tagCalls = mockFetch.mock.calls.slice(1, 4);
       expect(tagCalls).toHaveLength(3);
       tagCalls.forEach((call, index) => {
         expect(call[0]).toBe('https://api.convertkit.com/v3/tags');
