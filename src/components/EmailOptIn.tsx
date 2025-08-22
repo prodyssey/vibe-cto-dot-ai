@@ -14,6 +14,9 @@ interface EmailOptInProps {
   description?: string;
   buttonText?: string;
   className?: string;
+  source?: string;
+  tags?: string[];
+  customFields?: Record<string, string>;
   onSuccess?: () => void;
 }
 
@@ -23,12 +26,14 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
   description = "Let's ride this wave together.",
   buttonText = "Subscribe",
   className,
+  source = "website-signup",
+  tags = [],
+  customFields = {},
   onSuccess,
 }) => {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const formId = process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID || "8281105";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,13 +53,20 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
     }
 
     try {
-      const response = await fetch(form.action, {
+      const response = await fetch('/api/subscribe', {
         method: "POST",
-        body: formData,
         headers: {
-          "Accept": "application/json",
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          email,
+          source,
+          tags,
+          customFields,
+        }),
       });
+
+      const data = await response.json();
 
       if (response.ok) {
         setStatus("success");
@@ -64,11 +76,13 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
         }
         setTimeout(() => setStatus("idle"), 5000);
       } else {
+        setError(data.error || 'Failed to subscribe');
         setStatus("error");
         setTimeout(() => setStatus("idle"), 3000);
       }
     } catch (error) {
       console.error("Error subscribing:", error);
+      setError('Network error. Please try again.');
       setStatus("error");
       setTimeout(() => setStatus("idle"), 3000);
     }
@@ -78,8 +92,6 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
     return (
       <form
         ref={formRef}
-        action={`https://app.kit.com/forms/${formId}/subscriptions`}
-        method="post"
         onSubmit={handleSubmit}
         className={cn("flex gap-2 max-w-md", className)}
       >
@@ -91,7 +103,6 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
           className="bg-gray-800/80 border-gray-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
           required
         />
-        <input type="hidden" name="fields[source]" value="website-signup" />
         <Button
           type="submit"
           disabled={status === "loading" || status === "success"}
@@ -129,24 +140,17 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
 
       <form
         ref={formRef}
-        action={`https://app.kit.com/forms/${formId}/subscriptions`}
-        method="post"
         onSubmit={handleSubmit}
         className="space-y-4"
       >
-        <ul className="formkit-alert formkit-alert-error hidden" data-element="errors" data-group="alert"></ul>
-        
-        <div className="formkit-fields">
-          <Input
-            type="email"
-            name="email_address"
-            placeholder="Enter your email"
-            disabled={status === "loading" || status === "success"}
-            className="bg-gray-800/80 border-gray-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
-            required
-          />
-          <input type="hidden" name="fields[source]" value="website-signup" />
-        </div>
+        <Input
+          type="email"
+          name="email_address"
+          placeholder="Enter your email"
+          disabled={status === "loading" || status === "success"}
+          className="bg-gray-800/80 border-gray-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
+          required
+        />
 
         <Button
           type="submit"

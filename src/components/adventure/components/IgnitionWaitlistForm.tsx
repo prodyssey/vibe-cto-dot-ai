@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { trackFormSubmission } from "@/lib/analytics";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
+import { subscribeToConvertKit, getContextualTags, getCustomFields } from "@/lib/convertkit";
 
 import { AnimatedButton } from "./AnimatedButton";
 
@@ -109,6 +110,36 @@ export const IgnitionWaitlistForm = ({
       if (sessionUpdateError) {
         console.warn("Failed to update session with contact info:", sessionUpdateError);
         // Don't throw here - the contact info is saved in ignition_waitlist
+      }
+
+      // Subscribe to ConvertKit mailing list
+      try {
+        const convertKitTags = getContextualTags('adventure-ignition');
+        if (isWaitlistActive) {
+          convertKitTags.push(...getContextualTags('ignition-waitlist'));
+        }
+
+        const customFields = getCustomFields('ignition-waitlist', {
+          contactMethod: formData.contactMethod,
+          program: 'ignition',
+          is_waitlist: isWaitlistActive,
+        });
+
+        const subscribeResult = await subscribeToConvertKit({
+          email: formData.email,
+          firstName: formData.name || playerName,
+          source: 'ignition-waitlist',
+          tags: convertKitTags,
+          customFields,
+        });
+
+        if (!subscribeResult.success) {
+          console.warn('ConvertKit subscription failed:', subscribeResult.error);
+          // Don't fail the whole form submission if ConvertKit fails
+        }
+      } catch (error) {
+        console.warn('ConvertKit subscription error:', error);
+        // Don't fail the whole form submission if ConvertKit fails
       }
 
       // Track form submission

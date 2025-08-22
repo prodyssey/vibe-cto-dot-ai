@@ -8,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { supabase } from '@/integrations/supabase/client';
 import { trackFormSubmission } from '@/lib/analytics';
 import { launchControlWaitlistSchema, validateForm } from '@/lib/validation';
+import { subscribeToConvertKit, getContextualTags, getCustomFields } from '@/lib/convertkit';
 
 import { useGameStore } from '../../gameStore';
 
@@ -75,6 +76,38 @@ export const LaunchControlWaitlistForm = ({ onSuccess, isWaitlist = false }: Lau
           console.warn("Failed to update session with contact info:", sessionUpdateError);
           // Don't throw here - the contact info is saved in launch_control_waitlist
         }
+      }
+
+      // Subscribe to ConvertKit mailing list
+      try {
+        const convertKitTags = getContextualTags('adventure-launch-control');
+        if (isWaitlist) {
+          convertKitTags.push(...getContextualTags('launch-control-waitlist'));
+        }
+
+        const customFields = getCustomFields('launch-control-scene-waitlist', {
+          contactMethod: validatedData.preferredContact,
+          program: 'launch-control',
+          is_waitlist: isWaitlist,
+          company: validatedData.companyName,
+          currentScale: validatedData.currentScale,
+        });
+
+        const subscribeResult = await subscribeToConvertKit({
+          email: validatedData.email,
+          firstName: validatedData.name,
+          source: 'launch-control-scene-waitlist',
+          tags: convertKitTags,
+          customFields,
+        });
+
+        if (!subscribeResult.success) {
+          console.warn('ConvertKit subscription failed:', subscribeResult.error);
+          // Don't fail the whole form submission if ConvertKit fails
+        }
+      } catch (error) {
+        console.warn('ConvertKit subscription error:', error);
+        // Don't fail the whole form submission if ConvertKit fails
       }
 
       // Track form submission
