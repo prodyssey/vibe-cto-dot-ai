@@ -47,7 +47,7 @@ export const Proof = () => {
         </div> */}
 
         {/* Testimonials */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className={`grid gap-8 ${testimonials.length < 3 ? 'justify-center' : 'md:grid-cols-2 lg:grid-cols-3'} ${testimonials.length === 1 ? 'max-w-md mx-auto' : testimonials.length === 2 ? 'md:grid-cols-2 max-w-2xl mx-auto' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="bg-white/5 backdrop-blur-sm border-white/10">
               <CardContent className="p-8">
