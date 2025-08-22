@@ -8,6 +8,7 @@ import {
   Sparkles,
   Shield,
   Clock,
+  Star,
 } from "lucide-react";
 
 import { useEffect, useRef } from "react";
@@ -65,6 +66,17 @@ export function TransformationClient() {
     "Infinite Scaling Potential with elastic infrastructure",
   ];
 
+  const testimonials = [
+    {
+      quote: "Craig helped us build a culture around AI-assisted engineering. Thanks to his efforts, we've dramatically increased the pace at which we ship product with 1/3 the manpower. Whether you've got an engineering team of 2 or 200, I highly recommend you reach out.",
+      author: "Jason Burchard",
+      role: "CEO",
+      company: "Rootnote",
+      companyUrl: "https://rootnote.co",
+      path: "Transformation"
+    }
+  ];
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -106,6 +118,67 @@ export function TransformationClient() {
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Client Success Stories */}
+        <section className="py-20 px-6 bg-black/20">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Client Success Stories
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                See how teams have transformed their development velocity with AI-augmented engineering.
+              </p>
+            </div>
+
+            <div className="grid gap-8 justify-center max-w-4xl mx-auto">
+              {testimonials.map((testimonial, index) => (
+                <Card key={index} className="bg-white/5 backdrop-blur-sm border-white/10">
+                  <CardContent className="p-8">
+                    <div className="flex mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                    
+                    <blockquote className="text-gray-300 text-lg mb-6 leading-relaxed">
+                      "{testimonial.quote}"
+                    </blockquote>
+                    
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-white font-semibold">{testimonial.author}</div>
+                        <div className="text-gray-400 text-sm">
+                          {testimonial.role}
+                          {testimonial.company && (
+                            <>
+                              {' - '}
+                              {testimonial.companyUrl ? (
+                                <a 
+                                  href={testimonial.companyUrl} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-blue-400 hover:text-blue-300 transition-colors"
+                                >
+                                  {testimonial.company}
+                                </a>
+                              ) : (
+                                testimonial.company
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400">
+                        {testimonial.path}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </section>

@@ -23,6 +23,14 @@ export const Proof = () => {
       author: "Marcus Rodriguez", 
       role: "Startup Founder",
       path: "Launch Control"
+    },
+    {
+      quote: "Craig helped us build a culture around AI-assisted engineering. Thanks to his efforts, we've dramatically increased the pace at which we ship product with 1/3 the manpower. Whether you've got an engineering team of 2 or 200, I highly recommend you reach out.",
+      author: "Jason Burchard",
+      role: "CEO",
+      company: "Rootnote",
+      companyUrl: "https://rootnote.co",
+      path: "Transformation"
     }
   ];
 
@@ -52,7 +60,7 @@ export const Proof = () => {
         </div>
 
         {/* Testimonials */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className={`grid gap-8 ${testimonials.length >= 3 ? 'md:grid-cols-2 lg:grid-cols-3' : testimonials.length === 2 ? 'md:grid-cols-2 justify-center' : 'justify-center'} ${testimonials.length < 3 ? 'max-w-4xl mx-auto' : ''}`}>
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="bg-white/5 backdrop-blur-sm border-white/10">
               <CardContent className="p-8">
@@ -69,12 +77,33 @@ export const Proof = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-white font-semibold">{testimonial.author}</div>
-                    <div className="text-gray-400 text-sm">{testimonial.role}</div>
+                    <div className="text-gray-400 text-sm">
+                      {testimonial.role}
+                      {testimonial.company && (
+                        <>
+                          {' - '}
+                          {testimonial.companyUrl ? (
+                            <a 
+                              href={testimonial.companyUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:text-blue-300 transition-colors"
+                            >
+                              {testimonial.company}
+                            </a>
+                          ) : (
+                            testimonial.company
+                          )}
+                        </>
+                      )}
+                    </div>
                   </div>
                   <div className={`px-3 py-1 rounded-full text-xs font-medium ${
                     testimonial.path === 'Ignition' 
                       ? 'bg-green-500/20 text-green-400' 
-                      : 'bg-blue-500/20 text-blue-400'
+                      : testimonial.path === 'Launch Control'
+                      ? 'bg-blue-500/20 text-blue-400'
+                      : 'bg-purple-500/20 text-purple-400'
                   }`}>
                     {testimonial.path}
                   </div>
