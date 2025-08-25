@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { PostMetadata } from "@/lib/posts";
@@ -73,7 +74,18 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
                       const Icon = getIcon(post.type);
                       return (
                         <Link key={post.slug} href={`/resources/${post.slug}`}>
-                          <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full">
+                          <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full overflow-hidden">
+                            {post.headerImage && (
+                              <div className="relative h-48 w-full">
+                                <OptimizedImage
+                                  src={post.headerImage}
+                                  alt={post.title}
+                                  fill
+                                  className="object-cover"
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+                                />
+                              </div>
+                            )}
                             <CardContent className="p-6">
                               <div className="flex items-center justify-between mb-4">
                                 <div className="p-2 bg-blue-500/20 rounded-lg">
@@ -146,7 +158,18 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
                     const Icon = getIcon(post.type);
                     return (
                       <Link key={post.slug} href={`/resources/${post.slug}`}>
-                        <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full">
+                        <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full overflow-hidden">
+                          {post.headerImage && (
+                            <div className="relative h-48 w-full">
+                              <OptimizedImage
+                                src={post.headerImage}
+                                alt={post.title}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              />
+                            </div>
+                          )}
                           <CardContent className="p-6">
                             <div className="flex items-center justify-between mb-4">
                               <div className="p-2 bg-blue-500/20 rounded-lg">
