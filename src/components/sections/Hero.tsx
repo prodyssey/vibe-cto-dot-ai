@@ -45,7 +45,7 @@ export const Hero = () => {
               Human help to build
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 {" "}
-                with AI
+                better with AI
               </span>
             </h1>
 
