@@ -196,6 +196,7 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
                           <BlogImage
                             src={src}
                             alt={alt || ''}
+                            caption={alt}
                             className="my-6"
                           />
                         )

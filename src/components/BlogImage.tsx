@@ -11,21 +11,21 @@ interface BlogImageProps {
 
 export function BlogImage({ src, alt, className = '', caption }: BlogImageProps) {
   return (
-    <figure className={`my-8 ${className}`}>
+    <span className={`inline-block my-8 w-full ${className}`}>
       <OptimizedImage
         src={src}
         alt={alt}
         width={800}
         height={400}
-        className="rounded-lg shadow-lg w-full h-auto"
+        className="rounded-lg shadow-lg w-full h-auto max-w-2xl max-h-96 object-contain mx-auto"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
       />
       {caption && (
-        <figcaption className="text-sm text-gray-500 text-center mt-2 italic">
+        <span className="block text-sm text-gray-300 text-center mt-3 px-2 leading-relaxed">
           {caption}
-        </figcaption>
+        </span>
       )}
-    </figure>
+    </span>
   )
 }
 
