@@ -25,7 +25,7 @@ Even so, I built, tested, and shipped a pretty good mobile onboarding flow and h
 
 No figma. Just my experience, taste, Claude code, and some timely code review and internal feedback.
 
-In previous roles, work like this would have taken weeks at best. Maybe a quarter at worst.
+In previous roles, work like this would have taken weeks at best. Maybe a quarter plus at worst.
 
 ## The Context
 
