@@ -70,7 +70,7 @@ Yes, expert design help would have made it better—probably even faster too. Bu
 
 ## Zooming out
 
-There's still room for improvement. More screens need attention. The end-to-end testing suite needs a revamp. But we now have a foundation that's already gathering mostly positive, unsolicited user feedback.
+There's still lots of room for improvement. More screens need attention. The end-to-end testing suite needs a revamp. But we now have a foundation that's already gathering mostly positive, unsolicited user feedback.
 
 Start to production in less than 4 days. Part-time.
 
