@@ -17,7 +17,7 @@ export function BlogImage({ src, alt, className = '', caption }: BlogImageProps)
         alt={alt}
         width={800}
         height={400}
-        className="rounded-lg shadow-lg w-full h-auto max-w-2xl max-h-96 object-contain mx-auto"
+        className="rounded-lg shadow-lg w-full h-auto max-w-2xl max-h-96 object-contain mx-auto bg-white/5 p-4"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
       />
       {caption && (
