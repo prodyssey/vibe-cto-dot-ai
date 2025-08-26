@@ -2,6 +2,7 @@
 
 import { Calendar, FileText, Code } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
@@ -73,21 +74,49 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
                       const Icon = getIcon(post.type);
                       return (
                         <Link key={post.slug} href={`/resources/${post.slug}`}>
-                          <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full">
-                            <CardContent className="p-6">
-                              <div className="flex items-center justify-between mb-4">
-                                <div className="p-2 bg-blue-500/20 rounded-lg">
-                                  <Icon className="w-5 h-5 text-blue-400" />
+                          <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full overflow-hidden">
+                            {/* Header Image */}
+                            {post.headerImage && (
+                              <div className="relative w-full h-48 sm:h-56 md:h-48 lg:h-56 overflow-hidden">
+                                <Image
+                                  src={post.headerImage}
+                                  alt={post.title}
+                                  fill
+                                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                {/* Badge overlay */}
+                                <div className="absolute top-4 right-4">
+                                  <Badge
+                                    className={getBadgeColor(
+                                      post.featured,
+                                      post.type
+                                    )}
+                                  >
+                                    {getBadgeText(post.featured, post.type)}
+                                  </Badge>
                                 </div>
-                                <Badge
-                                  className={getBadgeColor(
-                                    post.featured,
-                                    post.type
-                                  )}
-                                >
-                                  {getBadgeText(post.featured, post.type)}
-                                </Badge>
                               </div>
+                            )}
+                            
+                            <CardContent className="p-6">
+                              {/* Icon and Badge row - only show if no header image */}
+                              {!post.headerImage && (
+                                <div className="flex items-center justify-between mb-4">
+                                  <div className="p-2 bg-blue-500/20 rounded-lg">
+                                    <Icon className="w-5 h-5 text-blue-400" />
+                                  </div>
+                                  <Badge
+                                    className={getBadgeColor(
+                                      post.featured,
+                                      post.type
+                                    )}
+                                  >
+                                    {getBadgeText(post.featured, post.type)}
+                                  </Badge>
+                                </div>
+                              )}
 
                               <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
                                 {post.title}
@@ -146,21 +175,49 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
                     const Icon = getIcon(post.type);
                     return (
                       <Link key={post.slug} href={`/resources/${post.slug}`}>
-                        <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full">
-                          <CardContent className="p-6">
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="p-2 bg-blue-500/20 rounded-lg">
-                                <Icon className="w-5 h-5 text-blue-400" />
+                        <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full overflow-hidden">
+                          {/* Header Image */}
+                          {post.headerImage && (
+                            <div className="relative w-full h-40 sm:h-44 md:h-40 lg:h-44 overflow-hidden">
+                              <Image
+                                src={post.headerImage}
+                                alt={post.title}
+                                fill
+                                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                              {/* Badge overlay */}
+                              <div className="absolute top-3 right-3">
+                                <Badge
+                                  className={getBadgeColor(
+                                    post.featured,
+                                    post.type
+                                  )}
+                                >
+                                  {getBadgeText(post.featured, post.type)}
+                                </Badge>
                               </div>
-                              <Badge
-                                className={getBadgeColor(
-                                  post.featured,
-                                  post.type
-                                )}
-                              >
-                                {getBadgeText(post.featured, post.type)}
-                              </Badge>
                             </div>
+                          )}
+                          
+                          <CardContent className="p-6">
+                            {/* Icon and Badge row - only show if no header image */}
+                            {!post.headerImage && (
+                              <div className="flex items-center justify-between mb-4">
+                                <div className="p-2 bg-blue-500/20 rounded-lg">
+                                  <Icon className="w-5 h-5 text-blue-400" />
+                                </div>
+                                <Badge
+                                  className={getBadgeColor(
+                                    post.featured,
+                                    post.type
+                                  )}
+                                >
+                                  {getBadgeText(post.featured, post.type)}
+                                </Badge>
+                              </div>
+                            )}
 
                             <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
                               {post.title}
