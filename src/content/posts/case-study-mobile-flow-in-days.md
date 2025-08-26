@@ -1,6 +1,6 @@
 ---
 title: "Case Study: How I Built a Mobile Experience From Scratch in Less Than 4 Days (Part-Time)"
-description: ""
+description: "How I shipped a complete mobile experience for a desktop-first analytics product in under 4 days using Claude Code - no design team, no figma, just AI-powered iteration and my judgment."
 date: "2025-08-26"
 readTime: "5 min read"
 featured: true
