@@ -99,12 +99,13 @@ export function TransformationClient() {
 
               <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
                 There's lots of stumbling blocks and cynicism. But there's also
-                huge opportunity.
+                a huge opportunity.
               </p>
 
               <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
                 I'm using 20+ years of experience involving more than 6 major
-                transformation efforts to help apply AI effectively.
+                transformation efforts to help apply AI effectively and
+                accelerate roadmaps.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -182,7 +183,7 @@ export function TransformationClient() {
                   Your Evolution Awaits
                 </h2>
                 <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                  Leverage battle-tested strategies to integrate AI agents into
+                  Integrate field-tested approaches to applying AI agents to
                   your existing workflows.
                 </p>
               </div>
@@ -332,11 +333,11 @@ export function TransformationClient() {
             <div className="max-w-4xl mx-auto text-center">
               <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-sm border border-white/20 rounded-3xl p-12">
                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                  Ready for light speed development?
+                  Ready to become AI-native?
                 </h2>
 
                 <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                  Join leading teams who've transformed their product
+                  Join the teams who've successfully transformed their product
                   development with AI agents.
                 </p>
 
