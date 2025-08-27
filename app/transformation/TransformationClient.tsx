@@ -42,27 +42,27 @@ export function TransformationClient() {
 
   const features = [
     {
+      icon: Users,
+      title: "Team Assessment & Discovery",
+      description:
+        "Deep dive into your team's current velocity and bottlenecks",
+    },
+    {
       icon: Cpu,
       title: "AI Enhancement",
       description:
-        "Augment your team with AI agents tailored to your organization and stack",
+        "Augment your team with AI agents configured for your organization and stack",
     },
     {
       icon: BarChart3,
       title: "Compounded Velocity",
       description:
-        "Multiply your development capacity with targeted AI workflows",
+        "Multiply your product development throughput with targeted AI workflows",
     },
     {
       icon: Shield,
       title: "Comprehensive Measurement",
-      description: "Uncover bottlenecks and optimize for customer value",
-    },
-    {
-      icon: Users,
-      title: "Team Assessment & Discovery",
-      description:
-        "Deep dive into your team's current velocity and bottlenecks",
+      description: "Uncover bottlenecks and optimize for impact",
     },
   ];
 
@@ -94,10 +94,17 @@ export function TransformationClient() {
               </h1>
 
               <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Step into the Metamorphosis Chamber where teams undergo radical
-                transformation. Emerge with AI-augmented capabilities that
-                multiply your development velocity and unlock new dimensions of
-                possibility.
+                AI is changing everything in digital product development.
+              </p>
+
+              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                There's lots of stumbling blocks and cynicism. But there's also
+                huge opportunity.
+              </p>
+
+              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                I'm using 20+ years of experience involving more than 6 major
+                transformation efforts to help apply AI effectively.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -138,11 +145,8 @@ export function TransformationClient() {
 
                 <blockquote className="text-gray-300 text-xl md:text-2xl mb-8 leading-relaxed">
                   "Craig helped us build a culture around AI-assisted
-                  engineering. Thanks to his efforts, we've dramatically
-                  increased the pace at which we ship product despite our
-                  economic need to run engineering with 1/3 the manpower.
-                  Whether you've got an engineering team of 2 or 200, I highly
-                  recommend you reach out."
+                  engineering. We've dramatically increased the pace of delivery
+                  even with 1/3 the capacity we had in early 2024."
                 </blockquote>
 
                 <div className="text-center">

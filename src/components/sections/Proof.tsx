@@ -13,7 +13,7 @@ export const Proof = () => {
   const testimonials = [
     {
       quote:
-        "Craig helped us build a culture around AI-assisted engineering. Thanks to his efforts, we've dramatically increased the pace at which we ship product despite our economic need to run engineering with 1/3 the manpower. Whether you've got an engineering team of 2 or 200, I highly recommend you reach out.",
+        "Craig helped us build a culture around AI-assisted engineering. We've dramatically increased the pace of delivery even with 1/3 the capacity we had in early 2024.",
       author: "Jason Burchard",
       role: "CEO, Rootnote",
       path: "Transformation",
