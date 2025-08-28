@@ -7,7 +7,7 @@ const slack = new WebClient(process.env.SLACK_BOT_TOKEN);
 
 // Request schema
 const slackNotifySchema = z.object({
-  formType: z.enum(['ignition_waitlist', 'launch_control_waitlist', 'email_subscription']),
+  formType: z.enum(['ignition_waitlist', 'launch_control_waitlist', 'community_waitlist', 'email_subscription']),
   email: z.string().email(),
   name: z.string().optional(),
   phone: z.string().optional(),
@@ -85,9 +85,14 @@ function formatFormSubmissionMessage(data: any) {
       color = '#0ea5e9'; // blue
       emoji = '🎯';
       break;
+    case 'community_waitlist':
+      formTitle = 'Community Waitlist';
+      color = '#8b5cf6'; // purple
+      emoji = '👥';
+      break;
     case 'email_subscription':
       formTitle = 'Email Subscription';
-      color = '#8b5cf6'; // purple
+      color = '#10b981'; // green
       emoji = '✉️';
       break;
   }
