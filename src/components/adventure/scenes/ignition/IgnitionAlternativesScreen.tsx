@@ -44,7 +44,7 @@ const ALTERNATIVES = [
 
 export const IgnitionAlternativesScreen = () => {
   const { pushScene } = useBrowserNavigation();
-  const { sessionId } = useGameStore();
+  const { sessionId, getChoiceData } = useGameStore();
   const [showCommunityModal, setShowCommunityModal] = useState(false);
 
   const handleAlternativeClick = (alt: typeof ALTERNATIVES[0]) => {
@@ -53,6 +53,30 @@ export const IgnitionAlternativesScreen = () => {
     } else {
       window.open(alt.url, '_blank');
     }
+  };
+
+  // Extract contact information from any contact choice (ignition or launch control)
+  const getContactData = () => {
+    // Try ignition contact first
+    let contactChoiceData = getChoiceData("ignitionContact", "submitted");
+    
+    // If not found, try launch control contact
+    if (!contactChoiceData) {
+      contactChoiceData = getChoiceData("launchControlContact", "submitted");
+    }
+    
+    if (contactChoiceData) {
+      // Map from contact format to community form format
+      return {
+        name: contactChoiceData.name || "",
+        email: contactChoiceData.email || "",
+        phone: contactChoiceData.phone || "",
+        contactMethod: contactChoiceData.preferredContact === "either" ? "either" : 
+                      contactChoiceData.preferredContact === "text" ? "text" :
+                      contactChoiceData.preferredContact === "phone" ? "phone" : "email"
+      };
+    }
+    return undefined;
   };
 
   return (
@@ -111,6 +135,7 @@ export const IgnitionAlternativesScreen = () => {
         onClose={() => setShowCommunityModal(false)}
         sessionId={sessionId}
         source="adventure-ignition-alternatives"
+        initialData={getContactData()}
       />
     </div>
   );

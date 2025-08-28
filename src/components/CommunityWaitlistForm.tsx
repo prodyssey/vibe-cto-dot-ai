@@ -17,6 +17,12 @@ interface CommunityWaitlistFormProps {
   className?: string;
   buttonText?: string;
   successMessage?: string;
+  initialData?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    contactMethod?: string;
+  };
 }
 
 export const CommunityWaitlistForm = ({
@@ -25,14 +31,15 @@ export const CommunityWaitlistForm = ({
   onSuccess,
   className,
   buttonText = "Join Community Waitlist",
-  successMessage = "Thanks for your interest! We'll reach out when spots open up."
+  successMessage = "Thanks for your interest! We'll reach out when spots open up.",
+  initialData
 }: CommunityWaitlistFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    contactMethod: "email",
+    name: initialData?.name || "",
+    email: initialData?.email || "",
+    phone: initialData?.phone || "",
+    contactMethod: initialData?.contactMethod || "email",
   });
   const [error, setError] = useState<string | null>(null);
 

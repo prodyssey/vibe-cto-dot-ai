@@ -17,6 +17,12 @@ interface CommunitySignupModalProps {
   onClose: () => void;
   sessionId?: string;
   source?: string;
+  initialData?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    contactMethod?: string;
+  };
 }
 
 export const CommunitySignupModal = ({
@@ -24,6 +30,7 @@ export const CommunitySignupModal = ({
   onClose,
   sessionId,
   source = "website",
+  initialData,
 }: CommunitySignupModalProps) => {
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -86,6 +93,7 @@ export const CommunitySignupModal = ({
             onSuccess={handleSuccess}
             buttonText="Join Community Waitlist"
             successMessage="We're building an exclusive community and will reach out when spots open up."
+            initialData={initialData}
           />
         )}
       </DialogContent>
