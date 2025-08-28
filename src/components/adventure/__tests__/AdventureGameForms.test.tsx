@@ -319,8 +319,8 @@ describe('Adventure Game Forms', () => {
         // Test that form can handle error states
         render(<LaunchControlWaitlistForm onSuccess={mockOnSuccess} />)
         
-        // Test with invalid name (contains numbers)
-        await user.type(screen.getByPlaceholderText('Your name'), 'Jane123')
+        // Test with invalid name (contains special characters not allowed)
+        await user.type(screen.getByPlaceholderText('Your name'), 'Jane@123')
         await user.type(screen.getByPlaceholderText('your@email.com'), 'jane@example.com')
         
         const submitButton = screen.getByRole('button', { name: /Submit for Review/i })
@@ -477,8 +477,8 @@ describe('Adventure Game Forms', () => {
       it('prevents XSS in text fields', async () => {
         render(<LaunchControlWaitlistForm onSuccess={mockOnSuccess} />)
         
-        // Test with numbers in name which is invalid
-        await user.type(screen.getByPlaceholderText('Your name'), 'Name123')
+        // Test with special characters in name which is invalid
+        await user.type(screen.getByPlaceholderText('Your name'), 'Name$123')
         await user.type(screen.getByPlaceholderText('your@email.com'), 'test@example.com')
         
         const submitButton = screen.getByRole('button', { name: /Submit for Review/i })
