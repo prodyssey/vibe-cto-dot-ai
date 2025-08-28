@@ -280,7 +280,7 @@ describe('Adventure Game Forms', () => {
         // Should show validation errors
         await waitFor(() => {
           // LaunchControl uses zod validation which shows specific error messages
-          expect(screen.getByText(/Name can only contain letters/i)).toBeInTheDocument()
+          expect(screen.getByText(/Name can only contain letters, numbers/i)).toBeInTheDocument()
         })
       })
 
@@ -328,7 +328,7 @@ describe('Adventure Game Forms', () => {
         
         // Should show validation error for invalid name
         await waitFor(() => {
-          expect(screen.getByText(/Name can only contain letters/i)).toBeInTheDocument()
+          expect(screen.getByText(/Name can only contain letters, numbers/i)).toBeInTheDocument()
         })
       })
     })
@@ -486,7 +486,7 @@ describe('Adventure Game Forms', () => {
         
         // Should show validation error for invalid name
         await waitFor(() => {
-          expect(screen.getByText(/Name can only contain letters/i)).toBeInTheDocument()
+          expect(screen.getByText(/Name can only contain letters, numbers/i)).toBeInTheDocument()
         })
       })
     })
