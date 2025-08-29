@@ -9,9 +9,12 @@ import {
   Shield,
   Clock,
   Star,
+  Play,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -22,6 +25,9 @@ import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
 export function TransformationClient() {
   const heroLinkRef = useRef<HTMLAnchorElement>(null);
   const bottomLinkRef = useRef<HTMLAnchorElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const [hasEnded, setHasEnded] = useState(false);
 
   useEffect(() => {
     if (heroLinkRef.current) {
@@ -39,6 +45,25 @@ export function TransformationClient() {
       );
     }
   }, []);
+
+  const handleVideoEnded = () => {
+    setHasEnded(true);
+  };
+
+  const handleReplay = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+      setHasEnded(false);
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
 
   const features = [
     {
@@ -82,47 +107,139 @@ export function TransformationClient() {
         <div className="pt-20">
           {/* Hero Section */}
           <section className="py-20 px-6">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="flex justify-center mb-6">
-                <div className="p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl">
-                  <Sparkles className="w-12 h-12 text-white" />
+            <div className="max-w-7xl mx-auto">
+              <div className="grid lg:grid-cols-5 gap-12 items-center">
+                {/* Text Content */}
+                <div className="text-center order-2 lg:order-1 lg:col-span-3">
+                  <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 flex flex-col items-center gap-4">
+                    <div className="flex items-center gap-4">
+                      <Sparkles className="w-16 h-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400" />
+                      <span>AI-Powered</span>
+                    </div>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                      Transformation
+                    </span>
+                  </h1>
+
+                  <div className="mb-8">
+                    <p className="text-2xl md:text-3xl text-gray-200 mb-6 font-medium leading-tight">
+                      Augment your team with field-tested AI agent workflows
+                    </p>
+
+                    {/* Key credibility points */}
+                    <div className="flex flex-col gap-4 justify-center mb-8 max-w-2xl mx-auto">
+                      <div className="flex items-center text-gray-300 bg-white/5 backdrop-blur-sm rounded-lg p-4">
+                        <div className="w-3 h-3 bg-purple-400 rounded-full mr-4 flex-shrink-0"></div>
+                        <span className="text-lg font-medium">
+                          20+ years product development experience
+                        </span>
+                      </div>
+                      <div className="flex items-center text-gray-300 bg-white/5 backdrop-blur-sm rounded-lg p-4">
+                        <div className="w-3 h-3 bg-blue-400 rounded-full mr-4 flex-shrink-0"></div>
+                        <span className="text-lg font-medium">
+                          Enthusiastic AI tooling adopter since 2022
+                        </span>
+                      </div>
+                      <div className="flex items-center text-gray-300 bg-white/5 backdrop-blur-sm rounded-lg p-4">
+                        <div className="w-3 h-3 bg-purple-400 rounded-full mr-4 flex-shrink-0"></div>
+                        <span className="text-lg font-medium">
+                          6+ transformations - technology and business model
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
+                      I help companies apply proven AI development tools and
+                      workflows to
+                      <span className="text-white font-semibold">
+                        {" "}
+                        accelerate roadmaps and streamline operations
+                      </span>{" "}
+                      at scale.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    {/* Enhanced CTA with urgency */}
+                    <a
+                      ref={heroLinkRef}
+                      href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group"
+                    >
+                      <Button
+                        size="lg"
+                        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                      >
+                        Get Your Custom AI Roadmap
+                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </a>
+                  </div>
+
+                  {/* Trust indicators */}
+                  <div className="flex items-center gap-4 justify-center mt-6 text-sm text-gray-400">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      <span>30-min strategy call</span>
+                    </div>
+                    <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                    <span>Zero commitment</span>
+                    <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                    <span>Custom analysis</span>
+                  </div>
                 </div>
-              </div>
 
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                Transformation
-              </h1>
+                {/* Video Content */}
+                <div className="relative order-1 lg:order-2 lg:col-span-2 flex flex-col items-center">
+                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden aspect-square max-w-sm w-full">
+                    <video
+                      ref={videoRef}
+                      className="w-full h-full object-cover"
+                      autoPlay
+                      muted
+                      playsInline
+                      onEnded={handleVideoEnded}
+                      preload="metadata"
+                    >
+                      <source
+                        src="/VibeCTO-transformation.mp4"
+                        type="video/mp4"
+                      />
+                      Your browser does not support the video tag.
+                    </video>
 
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                AI is changing everything in digital product development.
-              </p>
+                    {/* Video Controls Overlay */}
+                    <div className="absolute bottom-4 right-4 flex gap-2">
+                      {hasEnded && (
+                        <Button
+                          onClick={handleReplay}
+                          size="sm"
+                          className="bg-black/50 backdrop-blur-sm hover:bg-black/70 text-white border-0 rounded-lg"
+                        >
+                          <Play className="w-4 h-4" />
+                        </Button>
+                      )}
+                      <Button
+                        onClick={toggleMute}
+                        size="sm"
+                        className="bg-black/50 backdrop-blur-sm hover:bg-black/70 text-white border-0 rounded-lg"
+                      >
+                        {isMuted ? (
+                          <VolumeX className="w-4 h-4" />
+                        ) : (
+                          <Volume2 className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
 
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                There's lots of stumbling blocks and cynicism. But there's also
-                a huge opportunity.
-              </p>
-
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                I'm using 20+ years of experience involving more than 6 major
-                transformation efforts to help apply AI effectively and
-                accelerate roadmaps.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  ref={heroLinkRef}
-                  href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
-                  >
-                    Schedule Strategy Call
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </a>
+                  {/* Video Caption */}
+                  <p className="text-gray-400 text-sm italic mt-3 text-center">
+                    I've loved transforming since the '80s
+                  </p>
+                </div>
               </div>
             </div>
           </section>
