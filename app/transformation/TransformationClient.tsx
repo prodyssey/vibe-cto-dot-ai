@@ -9,9 +9,12 @@ import {
   Shield,
   Clock,
   Star,
+  Play,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -22,6 +25,9 @@ import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
 export function TransformationClient() {
   const heroLinkRef = useRef<HTMLAnchorElement>(null);
   const bottomLinkRef = useRef<HTMLAnchorElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const [hasEnded, setHasEnded] = useState(false);
 
   useEffect(() => {
     if (heroLinkRef.current) {
@@ -39,6 +45,25 @@ export function TransformationClient() {
       );
     }
   }, []);
+
+  const handleVideoEnded = () => {
+    setHasEnded(true);
+  };
+
+  const handleReplay = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+      setHasEnded(false);
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
 
   const features = [
     {
@@ -82,47 +107,108 @@ export function TransformationClient() {
         <div className="pt-20">
           {/* Hero Section */}
           <section className="py-20 px-6">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="flex justify-center mb-6">
-                <div className="p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl">
-                  <Sparkles className="w-12 h-12 text-white" />
+            <div className="max-w-7xl mx-auto">
+              <div className="grid lg:grid-cols-3 gap-12 items-center">
+                {/* Text Content */}
+                <div className="text-center lg:text-left order-2 lg:order-1 lg:col-span-2">
+                  <div className="flex justify-center lg:justify-start mb-6">
+                    <div className="p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl">
+                      <Sparkles className="w-12 h-12 text-white" />
+                    </div>
+                  </div>
+
+                  <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+                    Transformation
+                  </h1>
+
+                  <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+                    AI is changing everything in digital product development.
+                  </p>
+
+                  <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+                    I have 20+ years of experience involving more than 6
+                    transformation efforts including tech platform migrations
+                    and business model pivots.
+                  </p>
+
+                  <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+                    I started adopting AI product development tools in 2022 and
+                    have been evaluating and applying the best tools and
+                    workflows as they've evolved.
+                  </p>
+
+                  <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+                    I'm now helping companies apply them effectively and
+                    accelerate their roadmaps and streamline operations.
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a
+                      ref={heroLinkRef}
+                      href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button
+                        size="lg"
+                        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+                      >
+                        Schedule Strategy Call
+                        <ArrowRight className="ml-2 w-5 h-5" />
+                      </Button>
+                    </a>
+                  </div>
                 </div>
-              </div>
 
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                Transformation
-              </h1>
+                {/* Video Content */}
+                <div className="relative order-1 lg:order-2 flex flex-col items-center">
+                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden aspect-square max-w-sm w-full">
+                    <video
+                      ref={videoRef}
+                      className="w-full h-full object-cover"
+                      autoPlay
+                      muted
+                      playsInline
+                      onEnded={handleVideoEnded}
+                      preload="metadata"
+                    >
+                      <source
+                        src="/VibeCTO-transformation.mp4"
+                        type="video/mp4"
+                      />
+                      Your browser does not support the video tag.
+                    </video>
 
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                AI is changing everything in digital product development.
-              </p>
+                    {/* Video Controls Overlay */}
+                    <div className="absolute bottom-4 right-4 flex gap-2">
+                      {hasEnded && (
+                        <Button
+                          onClick={handleReplay}
+                          size="sm"
+                          className="bg-black/50 backdrop-blur-sm hover:bg-black/70 text-white border-0 rounded-lg"
+                        >
+                          <Play className="w-4 h-4" />
+                        </Button>
+                      )}
+                      <Button
+                        onClick={toggleMute}
+                        size="sm"
+                        className="bg-black/50 backdrop-blur-sm hover:bg-black/70 text-white border-0 rounded-lg"
+                      >
+                        {isMuted ? (
+                          <VolumeX className="w-4 h-4" />
+                        ) : (
+                          <Volume2 className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
 
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                There's lots of stumbling blocks and cynicism. But there's also
-                a huge opportunity.
-              </p>
-
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                I'm using 20+ years of experience involving more than 6 major
-                transformation efforts to help apply AI effectively and
-                accelerate roadmaps.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  ref={heroLinkRef}
-                  href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
-                  >
-                    Schedule Strategy Call
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </a>
+                  {/* Video Caption */}
+                  <p className="text-gray-400 text-sm italic mt-3 text-center">
+                    I've loved transforming since the '80s
+                  </p>
+                </div>
               </div>
             </div>
           </section>
