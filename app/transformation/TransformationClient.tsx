@@ -108,60 +108,91 @@ export function TransformationClient() {
           {/* Hero Section */}
           <section className="py-20 px-6">
             <div className="max-w-7xl mx-auto">
-              <div className="grid lg:grid-cols-3 gap-12 items-center">
+              <div className="grid lg:grid-cols-5 gap-12 items-center">
                 {/* Text Content */}
-                <div className="text-center lg:text-left order-2 lg:order-1 lg:col-span-2">
-                  <div className="flex justify-center lg:justify-start mb-6">
-                    <div className="p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl">
-                      <Sparkles className="w-12 h-12 text-white" />
+                <div className="text-center order-2 lg:order-1 lg:col-span-3">
+                  <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 flex flex-col items-center gap-4">
+                    <div className="flex items-center gap-4">
+                      <Sparkles className="w-16 h-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400" />
+                      <span>AI-Powered</span>
                     </div>
-                  </div>
-
-                  <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                    Transformation
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                      Transformation
+                    </span>
                   </h1>
 
-                  <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
-                    AI is changing everything in digital product development.
-                  </p>
+                  <div className="mb-8">
+                    <p className="text-2xl md:text-3xl text-gray-200 mb-6 font-medium leading-tight">
+                      Augment your team with field-tested AI agent workflows
+                    </p>
 
-                  <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
-                    I have 20+ years of experience involving more than 6
-                    transformation efforts including tech platform migrations
-                    and business model pivots.
-                  </p>
+                    {/* Key credibility points */}
+                    <div className="flex flex-col gap-4 justify-center mb-8 max-w-2xl mx-auto">
+                      <div className="flex items-center text-gray-300 bg-white/5 backdrop-blur-sm rounded-lg p-4">
+                        <div className="w-3 h-3 bg-purple-400 rounded-full mr-4 flex-shrink-0"></div>
+                        <span className="text-lg font-medium">
+                          20+ years product development experience
+                        </span>
+                      </div>
+                      <div className="flex items-center text-gray-300 bg-white/5 backdrop-blur-sm rounded-lg p-4">
+                        <div className="w-3 h-3 bg-blue-400 rounded-full mr-4 flex-shrink-0"></div>
+                        <span className="text-lg font-medium">
+                          Enthusiastic AI tooling adopter since 2022
+                        </span>
+                      </div>
+                      <div className="flex items-center text-gray-300 bg-white/5 backdrop-blur-sm rounded-lg p-4">
+                        <div className="w-3 h-3 bg-purple-400 rounded-full mr-4 flex-shrink-0"></div>
+                        <span className="text-lg font-medium">
+                          6+ transformations - technology and business model
+                        </span>
+                      </div>
+                    </div>
 
-                  <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
-                    I started adopting AI product development tools in 2022 and
-                    have been evaluating and applying the best tools and
-                    workflows as they've evolved.
-                  </p>
+                    <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
+                      I help companies apply proven AI development tools and
+                      workflows to
+                      <span className="text-white font-semibold">
+                        {" "}
+                        accelerate roadmaps and streamline operations
+                      </span>{" "}
+                      at scale.
+                    </p>
+                  </div>
 
-                  <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
-                    I'm now helping companies apply them effectively and
-                    accelerate their roadmaps and streamline operations.
-                  </p>
-
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    {/* Enhanced CTA with urgency */}
                     <a
                       ref={heroLinkRef}
                       href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="group"
                     >
                       <Button
                         size="lg"
-                        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+                        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                       >
-                        Schedule Strategy Call
-                        <ArrowRight className="ml-2 w-5 h-5" />
+                        Get Your Custom AI Roadmap
+                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </a>
+                  </div>
+
+                  {/* Trust indicators */}
+                  <div className="flex items-center gap-4 justify-center mt-6 text-sm text-gray-400">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      <span>30-min strategy call</span>
+                    </div>
+                    <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                    <span>Zero commitment</span>
+                    <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                    <span>Custom analysis</span>
                   </div>
                 </div>
 
                 {/* Video Content */}
-                <div className="relative order-1 lg:order-2 flex flex-col items-center">
+                <div className="relative order-1 lg:order-2 lg:col-span-2 flex flex-col items-center">
                   <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden aspect-square max-w-sm w-full">
                     <video
                       ref={videoRef}
