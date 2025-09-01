@@ -90,35 +90,60 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
 
   if (variant === "minimal") {
     return (
-      <form
-        ref={formRef}
-        onSubmit={handleSubmit}
-        className={cn("flex gap-2 max-w-md", className)}
-      >
-        <Input
-          type="email"
-          name="email_address"
-          placeholder="Enter your email"
-          disabled={status === "loading" || status === "success"}
-          className="bg-gray-800/80 border-gray-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
-          required
-        />
-        <Button
-          type="submit"
-          disabled={status === "loading" || status === "success"}
-          className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all"
+      <div className={cn("w-full", className)}>
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="flex flex-col sm:flex-row gap-3 w-full"
         >
-          {status === "success" ? (
-            <CheckCircle2 className="w-4 h-4" />
-          ) : status === "loading" ? (
-            "..."
-          ) : status === "error" ? (
-            "Error"
-          ) : (
-            buttonText
-          )}
-        </Button>
-      </form>
+          <Input
+            type="email"
+            name="email_address"
+            placeholder="Enter your email address"
+            disabled={status === "loading" || status === "success"}
+            className="flex-1 bg-gray-900/80 border-gray-600/50 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400/20 focus:ring-2 h-12 px-4 rounded-xl transition-all duration-200"
+            required
+          />
+          <Button
+            type="submit"
+            disabled={status === "loading" || status === "success"}
+            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 font-medium h-12 px-6 rounded-xl whitespace-nowrap"
+          >
+            {status === "success" ? (
+              <span className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Subscribed!</span>
+              </span>
+            ) : status === "loading" ? (
+              <span className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span className="hidden sm:inline">Subscribing...</span>
+              </span>
+            ) : status === "error" ? (
+              <span className="text-red-200">Try Again</span>
+            ) : (
+              buttonText
+            )}
+          </Button>
+        </form>
+        {error && status === "error" && (
+          <p className="text-red-400 text-sm mt-2 text-center">{error}</p>
+        )}
+        {status === "success" && (
+          <p className="text-green-400 text-sm mt-2 text-center font-medium">
+            Success! Check your email to confirm your subscription.
+          </p>
+        )}
+        
+        {/* Trust indicators for minimal variant */}
+        <div className="flex items-center justify-center gap-3 mt-3 text-xs text-gray-500">
+          <span>No spam, ever</span>
+          <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+          <span>Unsubscribe anytime</span>
+          <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+          <span>Weekly insights only</span>
+        </div>
+      </div>
     );
   }
 
