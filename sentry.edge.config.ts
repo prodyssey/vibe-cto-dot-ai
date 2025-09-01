@@ -8,9 +8,27 @@ import * as Sentry from "@sentry/nextjs";
 Sentry.init({
   dsn: "https://5d634bf5030874ffb62277bda5c3d2a5@o4509945635930112.ingest.us.sentry.io/4509945636847616",
 
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
+  // Optimize sampling for edge runtime performance
+  tracesSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 1,
+
+  // Minimal profiling for edge functions
+  profilesSampleRate: 0,
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: false,
+  debug: process.env.NODE_ENV !== "production",
+
+  // Optimize for edge runtime
+  environment: process.env.NODE_ENV || "development",
+
+  // Minimal integrations for edge runtime
+  integrations: [],
+
+  // Fast error filtering for edge functions
+  beforeSend(event) {
+    // Skip non-critical errors in production
+    if (process.env.NODE_ENV === "production" && event.level === "warning") {
+      return null;
+    }
+    return event;
+  },
 });
