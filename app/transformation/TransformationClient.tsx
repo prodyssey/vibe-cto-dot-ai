@@ -221,17 +221,20 @@ export function TransformationClient() {
                     <div className="text-center mb-6">
                       <div className="flex items-center justify-center gap-4 mb-3">
                         <div className="h-px bg-gray-600/50 flex-1 max-w-20"></div>
-                        <span className="text-gray-300 text-sm font-medium">OR</span>
+                        <span className="text-gray-300 text-sm font-medium">
+                          OR
+                        </span>
                         <div className="h-px bg-gray-600/50 flex-1 max-w-20"></div>
                       </div>
                       <p className="text-gray-300 text-base font-medium mb-1">
                         Not ready for a call yet?
                       </p>
                       <p className="text-gray-400 text-sm">
-                        Get weekly AI transformation insights delivered to your inbox
+                        Get weekly AI transformation insights delivered to your
+                        inbox
                       </p>
                     </div>
-                    
+
                     <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-md mx-auto">
                       <EmailOptIn
                         variant="minimal"
@@ -240,7 +243,7 @@ export function TransformationClient() {
                         buttonText="Get Insights"
                         source="transformation-hero"
                         tags={["transformation", "ai-development"]}
-                        className="flex gap-3"
+                        className="flex flex-col gap-3"
                       />
                     </div>
                   </div>
@@ -584,10 +587,11 @@ export function TransformationClient() {
                       Prefer to start with insights?
                     </p>
                     <p className="text-gray-400 text-sm max-w-md mx-auto">
-                      Get weekly AI transformation strategies and case studies from successful implementations
+                      Get weekly AI transformation strategies and case studies
+                      from successful implementations
                     </p>
                   </div>
-                  
+
                   <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 max-w-lg mx-auto">
                     <EmailOptIn
                       variant="minimal"
@@ -598,7 +602,7 @@ export function TransformationClient() {
                       tags={["transformation", "ai-development", "bottom-cta"]}
                       className="flex gap-3"
                     />
-                    
+
                     <div className="flex items-center justify-center gap-4 mt-4 text-xs text-gray-400">
                       <span>No spam, ever</span>
                       <div className="w-1 h-1 bg-gray-400 rounded-full"></div>

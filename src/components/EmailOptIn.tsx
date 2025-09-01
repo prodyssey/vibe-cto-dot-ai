@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Mail, CheckCircle2 } from "lucide-react";
 import React, { useState, useRef } from "react";
@@ -31,7 +31,9 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
   customFields = {},
   onSuccess,
 }) => {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -42,18 +44,18 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
 
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-    const email = formData.get('email_address') as string;
+    const email = formData.get("email_address") as string;
 
     // Validate email
     const validation = validateForm(emailOptInFormSchema, { email });
     if (!validation.success) {
-      setError(validation.errors.email || 'Invalid email');
+      setError(validation.errors.email || "Invalid email");
       setStatus("error");
       return;
     }
 
     try {
-      const response = await fetch('/api/subscribe', {
+      const response = await fetch("/api/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,13 +78,13 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
         }
         setTimeout(() => setStatus("idle"), 5000);
       } else {
-        setError(data.error || 'Failed to subscribe');
+        setError(data.error || "Failed to subscribe");
         setStatus("error");
         setTimeout(() => setStatus("idle"), 3000);
       }
     } catch (error) {
       console.error("Error subscribing:", error);
-      setError('Network error. Please try again.');
+      setError("Network error. Please try again.");
       setStatus("error");
       setTimeout(() => setStatus("idle"), 3000);
     }
@@ -128,25 +130,29 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
         </form>
 
         {/* Status messages with proper spacing */}
-        <div className="min-h-[1.25rem] mt-4">
-          {error && status === "error" && (
-            <p className="text-red-400 text-sm text-center">{error}</p>
-          )}
-          {status === "success" && (
-            <p className="text-green-400 text-sm text-center font-medium">
-              Success! Check your email to confirm your subscription.
-            </p>
-          )}
-        </div>
-        
+        {(error && status === "error") || status === "success" ? (
+          <div className="mt-4">
+            {error && status === "error" && (
+              <p className="text-red-400 text-sm text-center">{error}</p>
+            )}
+            {status === "success" && (
+              <p className="text-green-400 text-sm text-center font-medium">
+                Success! Check your email to confirm your subscription.
+              </p>
+            )}
+          </div>
+        ) : null}
+
         {/* Trust indicators with proper separation and spacing */}
-        <div className="border-t border-gray-700/30 pt-4 mt-4">
+        <div className="border-t border-gray-700/30 pt-2 mt-2">
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-gray-500">
             <span className="flex items-center gap-1">No spam, ever</span>
             <div className="w-1 h-1 bg-gray-500 rounded-full hidden sm:block"></div>
             <span className="flex items-center gap-1">Unsubscribe anytime</span>
             <div className="w-1 h-1 bg-gray-500 rounded-full hidden sm:block"></div>
-            <span className="flex items-center gap-1">Weekly insights only</span>
+            <span className="flex items-center gap-1">
+              Weekly insights only
+            </span>
           </div>
         </div>
       </div>
@@ -169,11 +175,7 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
 
       <p className="text-gray-300 mb-6 leading-relaxed">{description}</p>
 
-      <form
-        ref={formRef}
-        onSubmit={handleSubmit}
-        className="space-y-4"
-      >
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
         <Input
           type="email"
           name="email_address"
