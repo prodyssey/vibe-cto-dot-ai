@@ -136,7 +136,8 @@ export function TransformationClient() {
           {/* Hero Section */}
           <section className="py-20 px-6">
             <div className="max-w-7xl mx-auto">
-              <div className="grid lg:grid-cols-5 gap-12 items-center">
+              {/* Video and Bullets Row */}
+              <div className="grid lg:grid-cols-5 gap-12 items-center mb-16">
                 {/* Text Content */}
                 <div className="text-center order-2 lg:order-1 lg:col-span-3">
                   <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 flex flex-col items-center gap-4">
@@ -184,72 +185,9 @@ export function TransformationClient() {
                       </span>
                     </p>
                   </div>
-
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    {/* Enhanced CTA with urgency */}
-                    <a
-                      ref={heroLinkRef}
-                      href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group"
-                    >
-                      <Button
-                        size="lg"
-                        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                      >
-                        Get Your Custom AI Roadmap
-                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </a>
-                  </div>
-
-                  {/* Trust indicators */}
-                  <div className="flex items-center gap-4 justify-center mt-6 text-sm text-gray-400">
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
-                      <span>30-min strategy call</span>
-                    </div>
-                    <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                    <span>Zero commitment</span>
-                    <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                    <span>Custom analysis</span>
-                  </div>
-
-                  {/* Secondary CTA - Email Signup */}
-                  <div className="mt-12">
-                    <div className="text-center mb-6">
-                      <div className="flex items-center justify-center gap-4 mb-3">
-                        <div className="h-px bg-gray-600/50 flex-1 max-w-20"></div>
-                        <span className="text-gray-300 text-sm font-medium">
-                          OR
-                        </span>
-                        <div className="h-px bg-gray-600/50 flex-1 max-w-20"></div>
-                      </div>
-                      <p className="text-gray-300 text-base font-medium mb-1">
-                        Not ready for a call yet?
-                      </p>
-                      <p className="text-gray-400 text-sm">
-                        Get weekly AI transformation insights delivered to your
-                        inbox
-                      </p>
-                    </div>
-
-                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-md mx-auto">
-                      <EmailOptIn
-                        variant="minimal"
-                        title="Get AI Transformation Insights"
-                        description="Weekly insights on AI-powered development"
-                        buttonText="Get Insights"
-                        source="transformation-hero"
-                        tags={["transformation", "ai-development"]}
-                        className="flex flex-col gap-3"
-                      />
-                    </div>
-                  </div>
                 </div>
 
-                {/* Video Content */}
+                {/* Video Section */}
                 <div className="relative order-1 lg:order-2 lg:col-span-2 flex flex-col items-center">
                   <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden aspect-square max-w-sm w-full">
                     {/* Loading State */}
@@ -335,6 +273,72 @@ export function TransformationClient() {
                   <p className="text-gray-400 text-sm italic mt-3 text-center">
                     I've loved transforming since the '80s
                   </p>
+                </div>
+              </div>
+
+              {/* CTA Section - Centered Row */}
+              <div className="text-center max-w-4xl mx-auto">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                  {/* Enhanced CTA with urgency */}
+                  <a
+                    ref={heroLinkRef}
+                    href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group"
+                  >
+                    <Button
+                      size="lg"
+                      className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    >
+                      Get Your Custom AI Roadmap
+                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </a>
+                </div>
+
+                {/* Trust indicators */}
+                <div className="flex items-center gap-4 justify-center text-sm text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    <span>30-min strategy call</span>
+                  </div>
+                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                  <span>Zero commitment</span>
+                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                  <span>Custom analysis</span>
+                </div>
+
+                {/* Secondary CTA - Email Signup */}
+                <div className="mt-12">
+                  <div className="text-center mb-6">
+                    <div className="flex items-center justify-center gap-4 mb-3">
+                      <div className="h-px bg-gray-600/50 flex-1 max-w-20"></div>
+                      <span className="text-gray-300 text-sm font-medium">
+                        OR
+                      </span>
+                      <div className="h-px bg-gray-600/50 flex-1 max-w-20"></div>
+                    </div>
+                    <p className="text-gray-300 text-base font-medium mb-1">
+                      Not ready for a call yet?
+                    </p>
+                    <p className="text-gray-400 text-sm">
+                      Get weekly AI transformation insights delivered to your
+                      inbox
+                    </p>
+                  </div>
+
+                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-md mx-auto">
+                    <EmailOptIn
+                      variant="minimal"
+                      title="Get AI Transformation Insights"
+                      description="Weekly insights on AI-powered development"
+                      buttonText="Get Insights"
+                      source="transformation-hero"
+                      tags={["transformation", "ai-development"]}
+                      className="flex flex-col gap-3"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -600,16 +604,8 @@ export function TransformationClient() {
                       buttonText="Get Weekly Insights"
                       source="transformation-bottom-cta"
                       tags={["transformation", "ai-development", "bottom-cta"]}
-                      className="flex gap-3"
+                      className="flex flex-col  gap-3"
                     />
-
-                    <div className="flex items-center justify-center gap-4 mt-4 text-xs text-gray-400">
-                      <span>No spam, ever</span>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                      <span>Unsubscribe anytime</span>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                      <span>Weekly insights only</span>
-                    </div>
                   </div>
                 </div>
               </div>
