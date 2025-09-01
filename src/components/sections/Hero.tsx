@@ -45,7 +45,7 @@ export const Hero = () => {
               Human help to build
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 {" "}
-                with AI
+                better with AI
               </span>
             </h1>
 
@@ -120,7 +120,8 @@ export const Hero = () => {
               <p className="mt-6 text-lg text-gray-200 italic">
                 I'm Craig. I've been a software product builder for 20+ years -
                 and I can tell you from experience that AI tools are totally
-                changing the game. I want to help you ride this wave too.
+                changing the game. I want to help you successfully ride this
+                wave too.
               </p>
               {/* Glow effect behind avatar */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-2xl -z-10 scale-110"></div>

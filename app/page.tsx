@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata } from "next";
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
 import { FinalCTA } from "@/components/sections/FinalCTA";
@@ -12,34 +12,37 @@ import { getAllPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "VibeCTO.ai - From vibes to product | AI-Powered Development",
-  description: "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help.",
+  description:
+    "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help.",
   openGraph: {
     title: "VibeCTO.ai - From vibes to product | AI-Powered Development",
-    description: "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help.",
+    description:
+      "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help.",
     url: "https://vibecto.ai/",
     images: [
       {
-        url: '/vibe-cto-og.png',
+        url: "/vibe-cto-og.png",
         width: 1200,
         height: 630,
-        alt: 'VibeCTO.ai - From vibes to product',
+        alt: "VibeCTO.ai - From vibes to product",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: "VibeCTO.ai - From vibes to product | AI-Powered Development",
-    description: "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help.",
-    images: ['/vibe-cto-og.png'],
+    description:
+      "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help.",
+    images: ["/vibe-cto-og.png"],
   },
   alternates: {
-    canonical: "https://vibecto.ai/"
-  }
-}
+    canonical: "https://vibecto.ai/",
+  },
+};
 
 export default async function HomePage() {
   const posts = await getAllPosts();
-  const featuredPosts = posts.filter(post => post.featured).slice(0, 3);
+  const featuredPosts = posts.filter((post) => post.featured).slice(0, 3);
 
   return (
     <>
@@ -48,8 +51,8 @@ export default async function HomePage() {
         <div className="pt-20">
           <Hero />
           <ProblemPromise />
-          <HowItWorks />
           <Proof />
+          <HowItWorks />
           <Resources posts={featuredPosts} />
           <div className="py-16 px-6">
             <EmailOptIn

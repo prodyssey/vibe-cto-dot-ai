@@ -201,8 +201,16 @@
   margin-bottom: 0.5rem;
 }
 
+.markdown-content ul {
+  list-style-type: disc;
+}
+
 .markdown-content ul li::marker {
   color: #60a5fa;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
 }
 
 .markdown-content ol li::marker {
