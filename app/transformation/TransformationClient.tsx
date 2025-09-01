@@ -323,7 +323,7 @@ export function TransformationClient() {
                       Not ready for a call yet?
                     </p>
                     <p className="text-gray-400 text-sm">
-                      Get weekly AI transformation insights delivered to your
+                      Get weekly AI transformation updates delivered to your
                       inbox
                     </p>
                   </div>
@@ -331,10 +331,10 @@ export function TransformationClient() {
                   <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-md mx-auto overflow-hidden">
                     <EmailOptIn
                       variant="minimal"
-                      title="Get AI Transformation Insights"
-                      description="Weekly insights on AI-powered development"
-                      buttonText="Get Insights"
-                      mobileButtonText="Get Insights"
+                      title="Get AI Transformation Updates"
+                      description="Weekly updates on AI-powered development"
+                      buttonText="Get Updates"
+                      mobileButtonText="Get Updates"
                       source="transformation-hero"
                       tags={["transformation", "ai-development"]}
                       className="flex flex-col gap-3 min-w-0"
@@ -571,7 +571,9 @@ export function TransformationClient() {
                     className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 sm:px-12 py-6 text-lg sm:text-xl font-semibold rounded-xl w-full hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300"
                   >
                     <span className="sm:hidden">Book Strategy Call</span>
-                    <span className="hidden sm:inline">Schedule Your Strategy Call</span>
+                    <span className="hidden sm:inline">
+                      Schedule Your Strategy Call
+                    </span>
                     <Sparkles className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
                   </Button>
                 </a>
@@ -595,7 +597,7 @@ export function TransformationClient() {
                 <div className="mt-12 pt-8 border-t border-white/10">
                   <div className="text-center mb-6">
                     <p className="text-gray-300 text-base font-medium mb-2">
-                      Prefer to start with insights?
+                      Prefer to start with updates?
                     </p>
                     <p className="text-gray-400 text-sm max-w-md mx-auto">
                       Get weekly AI transformation strategies and case studies
@@ -607,9 +609,9 @@ export function TransformationClient() {
                     <EmailOptIn
                       variant="minimal"
                       title="AI Transformation Weekly"
-                      description="Practical insights from 20+ years of product development"
-                      buttonText="Get Weekly Insights"
-                      mobileButtonText="Get Insights"
+                      description="Practical updates from 20+ years of product development"
+                      buttonText="Get Weekly Updates"
+                      mobileButtonText="Get Updates"
                       source="transformation-bottom-cta"
                       tags={["transformation", "ai-development", "bottom-cta"]}
                       className="flex flex-col gap-3 min-w-0"
