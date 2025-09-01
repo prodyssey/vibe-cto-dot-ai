@@ -3,6 +3,9 @@
     "linear": {
       "type": "sse",
       "url": "https://mcp.linear.app/sse"
+    },
+    "Sentry": {
+      "url": "https://mcp.sentry.dev/mcp/vibectoai/javascript-nextjs"
     }
   }
 }

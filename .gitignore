@@ -49,3 +49,5 @@ coverage/
 
 # Optimized images (generated at build time)
 /public/optimized/
+# Sentry Config File
+.env.sentry-build-plugin
