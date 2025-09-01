@@ -140,7 +140,7 @@ export function TransformationClient() {
                 <div className="text-center order-2 lg:order-1 lg:col-span-3">
                   <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 flex flex-col items-center gap-4">
                     <div className="flex items-center gap-4">
-                      <Sparkles className="w-16 h-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400" />
+                      <Sparkles className="w-12 h-12 md:w-16 md:h-16 text-purple-400" />
                       <span>AI-Powered</span>
                     </div>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
