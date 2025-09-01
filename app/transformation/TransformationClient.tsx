@@ -9,19 +9,28 @@ import {
   Shield,
   Clock,
   Star,
+  Play,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { addSavvyCalTracking } from "@/lib/analytics";
 import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
+import { EmailOptIn } from "@/components/EmailOptIn";
 
 export function TransformationClient() {
   const heroLinkRef = useRef<HTMLAnchorElement>(null);
   const bottomLinkRef = useRef<HTMLAnchorElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const [hasEnded, setHasEnded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (heroLinkRef.current) {
@@ -38,7 +47,51 @@ export function TransformationClient() {
         "transformation_alignment"
       );
     }
-  }, []);
+
+    // Show loading briefly, then clear it
+    setIsLoading(true);
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000); // Very short timeout
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [hasError]);
+
+  const handleVideoEnded = () => {
+    setHasEnded(true);
+  };
+
+  const handleVideoError = () => {
+    setHasError(true);
+    setIsLoading(false);
+  };
+
+  const clearLoadingState = () => {
+    setIsLoading(false);
+  };
+
+  const handleReplay = () => {
+    if (videoRef.current && !hasError) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+      setHasEnded(false);
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current && !hasError) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  const handleVolumeChange = () => {
+    if (videoRef.current) {
+      setIsMuted(videoRef.current.muted);
+    }
+  };
 
   const features = [
     {
@@ -82,47 +135,212 @@ export function TransformationClient() {
         <div className="pt-20">
           {/* Hero Section */}
           <section className="py-20 px-6">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="flex justify-center mb-6">
-                <div className="p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl">
-                  <Sparkles className="w-12 h-12 text-white" />
+            <div className="max-w-7xl mx-auto">
+              {/* Video and Bullets Row */}
+              <div className="grid lg:grid-cols-5 gap-12 items-center mb-16">
+                {/* Text Content */}
+                <div className="text-center order-2 lg:order-1 lg:col-span-3">
+                  <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 flex flex-col items-center gap-4">
+                    <div className="flex items-center gap-4">
+                      <Sparkles className="w-12 h-12 md:w-16 md:h-16 text-purple-400" />
+                      <span>AI-Powered</span>
+                    </div>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                      Transformation
+                    </span>
+                  </h1>
+
+                  <div className="mb-8">
+                    <p className="text-2xl md:text-3xl text-gray-200 mb-6 font-medium leading-tight">
+                      Augment your team with field-tested AI agent workflows
+                    </p>
+
+                    {/* Key credibility points */}
+                    <div className="flex flex-col gap-4 justify-center mb-8 max-w-2xl mx-auto">
+                      <div className="flex items-center text-gray-300 bg-white/5 backdrop-blur-sm rounded-lg p-4">
+                        <div className="w-3 h-3 bg-purple-400 rounded-full mr-4 flex-shrink-0"></div>
+                        <span className="text-lg font-medium">
+                          20+ years product development experience
+                        </span>
+                      </div>
+                      <div className="flex items-center text-gray-300 bg-white/5 backdrop-blur-sm rounded-lg p-4">
+                        <div className="w-3 h-3 bg-blue-400 rounded-full mr-4 flex-shrink-0"></div>
+                        <span className="text-lg font-medium">
+                          Enthusiastic AI tooling adopter since 2022
+                        </span>
+                      </div>
+                      <div className="flex items-center text-gray-300 bg-white/5 backdrop-blur-sm rounded-lg p-4">
+                        <div className="w-3 h-3 bg-purple-400 rounded-full mr-4 flex-shrink-0"></div>
+                        <span className="text-lg font-medium">
+                          6+ transformations - technology and business model
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
+                      I help companies apply proven AI tools and workflows to
+                      <span className="text-white font-semibold">
+                        {" "}
+                        accelerate roadmaps and streamline operations.
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Video Section */}
+                <div className="relative order-1 lg:order-2 lg:col-span-2 flex flex-col items-center">
+                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden aspect-square max-w-sm w-full">
+                    {/* Loading State */}
+                    {isLoading && !hasError && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm">
+                        <div className="flex flex-col items-center gap-3">
+                          <div className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+                          <span className="text-gray-300 text-sm">
+                            Loading video...
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Error State */}
+                    {hasError && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm">
+                        <div className="flex flex-col items-center gap-3 text-center p-4">
+                          <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
+                            <span className="text-red-400 text-xl">!</span>
+                          </div>
+                          <div>
+                            <p className="text-gray-300 text-sm mb-1">
+                              Video unavailable
+                            </p>
+                            <p className="text-gray-400 text-xs">
+                              Unable to load transformation video
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <video
+                      ref={videoRef}
+                      className="w-full h-full object-cover"
+                      autoPlay
+                      muted
+                      playsInline
+                      onEnded={handleVideoEnded}
+                      onError={handleVideoError}
+                      onLoadedMetadata={clearLoadingState}
+                      onCanPlay={clearLoadingState}
+                      onPlay={clearLoadingState}
+                      onVolumeChange={handleVolumeChange}
+                      preload="metadata"
+                    >
+                      <source
+                        src="/VibeCTO-transformation.mp4"
+                        type="video/mp4"
+                      />
+                      Your browser does not support the video tag.
+                    </video>
+
+                    {/* Video Controls Overlay */}
+                    {!hasError && !isLoading && (
+                      <div className="absolute bottom-4 right-4 flex gap-2">
+                        {hasEnded && (
+                          <Button
+                            onClick={handleReplay}
+                            size="sm"
+                            className="bg-black/70 backdrop-blur-sm hover:bg-black/90 text-white border-0 rounded-lg shadow-lg"
+                          >
+                            <Play className="w-4 h-4" />
+                          </Button>
+                        )}
+                        <Button
+                          onClick={toggleMute}
+                          size="sm"
+                          className="bg-black/70 backdrop-blur-sm hover:bg-black/90 text-white border-0 rounded-lg shadow-lg"
+                        >
+                          {isMuted ? (
+                            <VolumeX className="w-4 h-4" />
+                          ) : (
+                            <Volume2 className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Video Caption */}
+                  <p className="text-gray-400 text-sm italic mt-3 text-center">
+                    I've loved transforming since the '80s
+                  </p>
                 </div>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                Transformation
-              </h1>
-
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                AI is changing everything in digital product development.
-              </p>
-
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                There's lots of stumbling blocks and cynicism. But there's also
-                a huge opportunity.
-              </p>
-
-              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                I'm using 20+ years of experience involving more than 6 major
-                transformation efforts to help apply AI effectively and
-                accelerate roadmaps.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  ref={heroLinkRef}
-                  href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl"
+              {/* CTA Section - Centered Row */}
+              <div className="text-center max-w-4xl mx-auto">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                  {/* Enhanced CTA with urgency */}
+                  <a
+                    ref={heroLinkRef}
+                    href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group"
                   >
-                    Schedule Strategy Call
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </a>
+                    <Button
+                      size="lg"
+                      className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    >
+                      Get Your Custom AI Roadmap
+                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </a>
+                </div>
+
+                {/* Trust indicators */}
+                <div className="flex items-center gap-4 justify-center text-sm text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    <span>30-min strategy call</span>
+                  </div>
+                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                  <span>Zero commitment</span>
+                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                  <span>Custom analysis</span>
+                </div>
+
+                {/* Secondary CTA - Email Signup */}
+                <div className="mt-12">
+                  <div className="text-center mb-6">
+                    <div className="flex items-center justify-center gap-4 mb-3">
+                      <div className="h-px bg-gray-600/50 flex-1 max-w-20"></div>
+                      <span className="text-gray-300 text-sm font-medium">
+                        OR
+                      </span>
+                      <div className="h-px bg-gray-600/50 flex-1 max-w-20"></div>
+                    </div>
+                    <p className="text-gray-300 text-base font-medium mb-1">
+                      Not ready for a call yet?
+                    </p>
+                    <p className="text-gray-400 text-sm">
+                      Get weekly AI transformation updates delivered to your
+                      inbox
+                    </p>
+                  </div>
+
+                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-md mx-auto overflow-hidden">
+                    <EmailOptIn
+                      variant="minimal"
+                      title="Get AI Transformation Updates"
+                      description="Weekly updates on AI-powered development"
+                      buttonText="Get Updates"
+                      mobileButtonText="Get Updates"
+                      source="transformation-hero"
+                      tags={["transformation", "ai-development"]}
+                      className="flex flex-col gap-3 min-w-0"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -329,9 +547,9 @@ export function TransformationClient() {
           </section>
 
           {/* CTA Section */}
-          <section className="py-20 px-6">
+          <section className="py-20 px-4 sm:px-6">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-sm border border-white/20 rounded-3xl p-12">
+              <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-sm border border-white/20 rounded-3xl p-6 sm:p-8 md:p-12">
                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                   Ready to become AI-native?
                 </h2>
@@ -346,25 +564,59 @@ export function TransformationClient() {
                   href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="block w-full max-w-md mx-auto"
                 >
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 sm:px-12 py-6 text-lg sm:text-xl font-semibold rounded-xl w-full hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300"
                   >
-                    Schedule Your Strategy Call
-                    <Sparkles className="ml-3 w-6 h-6" />
+                    <span className="sm:hidden">Book Strategy Call</span>
+                    <span className="hidden sm:inline">
+                      Schedule Your Strategy Call
+                    </span>
+                    <Sparkles className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
                   </Button>
                 </a>
 
-                <div className="flex items-center justify-center space-x-6 mt-6 text-sm text-gray-400">
-                  <div className="flex items-center space-x-2">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-6 text-sm text-gray-400">
+                  <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4" />
                     <span>30-minute consultation</span>
                   </div>
-                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                  <span>Custom roadmap</span>
-                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                  <span>ROI analysis</span>
+                  <div className="hidden sm:block w-1 h-1 bg-gray-400 rounded-full"></div>
+                  <div className="flex items-center gap-2">
+                    <span>Custom roadmap</span>
+                  </div>
+                  <div className="hidden sm:block w-1 h-1 bg-gray-400 rounded-full"></div>
+                  <div className="flex items-center gap-2">
+                    <span>ROI analysis</span>
+                  </div>
+                </div>
+
+                {/* Alternative Email Signup */}
+                <div className="mt-12 pt-8 border-t border-white/10">
+                  <div className="text-center mb-6">
+                    <p className="text-gray-300 text-base font-medium mb-2">
+                      Prefer to start with updates?
+                    </p>
+                    <p className="text-gray-400 text-sm max-w-md mx-auto">
+                      Get weekly AI transformation strategies and case studies
+                      from successful implementations
+                    </p>
+                  </div>
+
+                  <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 sm:p-6 max-w-lg mx-auto w-full overflow-hidden">
+                    <EmailOptIn
+                      variant="minimal"
+                      title="AI Transformation Weekly"
+                      description="Practical updates from 20+ years of product development"
+                      buttonText="Get Weekly Updates"
+                      mobileButtonText="Get Updates"
+                      source="transformation-bottom-cta"
+                      tags={["transformation", "ai-development", "bottom-cta"]}
+                      className="flex flex-col gap-3 min-w-0"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
