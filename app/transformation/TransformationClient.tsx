@@ -46,6 +46,13 @@ export function TransformationClient() {
         "transformation_alignment"
       );
     }
+
+    // Failsafe: Clear loading state after reasonable time
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000); // 5 second timeout
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const handleVideoEnded = () => {
@@ -57,7 +64,7 @@ export function TransformationClient() {
     setIsLoading(false);
   };
 
-  const handleVideoLoaded = () => {
+  const clearLoadingState = () => {
     setIsLoading(false);
   };
 
@@ -244,7 +251,9 @@ export function TransformationClient() {
                       playsInline
                       onEnded={handleVideoEnded}
                       onError={handleVideoError}
-                      onLoadedData={handleVideoLoaded}
+                      onLoadedMetadata={clearLoadingState}
+                      onCanPlay={clearLoadingState}
+                      onPlay={clearLoadingState}
                       onVolumeChange={handleVolumeChange}
                       preload="metadata"
                     >
