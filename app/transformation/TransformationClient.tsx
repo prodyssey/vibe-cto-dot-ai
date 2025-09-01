@@ -29,7 +29,7 @@ export function TransformationClient() {
   const [isMuted, setIsMuted] = useState(true);
   const [hasEnded, setHasEnded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (heroLinkRef.current) {
@@ -47,13 +47,16 @@ export function TransformationClient() {
       );
     }
 
-    // Failsafe: Clear loading state after reasonable time
+    // Show loading briefly, then clear it
+    setIsLoading(true);
     const timeoutId = setTimeout(() => {
       setIsLoading(false);
-    }, 5000); // 5 second timeout
+    }, 1000); // Very short timeout
 
-    return () => clearTimeout(timeoutId);
-  }, []);
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [hasError]);
 
   const handleVideoEnded = () => {
     setHasEnded(true);
