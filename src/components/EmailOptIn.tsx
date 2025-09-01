@@ -94,7 +94,7 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
         <form
           ref={formRef}
           onSubmit={handleSubmit}
-          className="flex flex-col sm:flex-row gap-4 w-full"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full"
         >
           <Input
             type="email"
@@ -107,7 +107,7 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
           <Button
             type="submit"
             disabled={status === "loading" || status === "success"}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 font-medium h-12 px-8 rounded-xl whitespace-nowrap sm:min-w-[140px]"
+            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 font-medium h-12 px-6 sm:px-8 rounded-xl whitespace-nowrap sm:min-w-[140px]"
           >
             {status === "success" ? (
               <span className="flex items-center gap-2">
@@ -126,22 +126,28 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
             )}
           </Button>
         </form>
-        {error && status === "error" && (
-          <p className="text-red-400 text-sm mt-2 text-center">{error}</p>
-        )}
-        {status === "success" && (
-          <p className="text-green-400 text-sm mt-2 text-center font-medium">
-            Success! Check your email to confirm your subscription.
-          </p>
-        )}
+
+        {/* Status messages with proper spacing */}
+        <div className="min-h-[1.25rem] mt-4">
+          {error && status === "error" && (
+            <p className="text-red-400 text-sm text-center">{error}</p>
+          )}
+          {status === "success" && (
+            <p className="text-green-400 text-sm text-center font-medium">
+              Success! Check your email to confirm your subscription.
+            </p>
+          )}
+        </div>
         
-        {/* Trust indicators for minimal variant */}
-        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-4 text-xs text-gray-500">
-          <span>No spam, ever</span>
-          <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-          <span>Unsubscribe anytime</span>
-          <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-          <span>Weekly insights only</span>
+        {/* Trust indicators with proper separation and spacing */}
+        <div className="border-t border-gray-700/30 pt-4 mt-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-gray-500">
+            <span className="flex items-center gap-1">No spam, ever</span>
+            <div className="w-1 h-1 bg-gray-500 rounded-full hidden sm:block"></div>
+            <span className="flex items-center gap-1">Unsubscribe anytime</span>
+            <div className="w-1 h-1 bg-gray-500 rounded-full hidden sm:block"></div>
+            <span className="flex items-center gap-1">Weekly insights only</span>
+          </div>
         </div>
       </div>
     );
