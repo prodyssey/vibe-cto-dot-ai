@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { addSavvyCalTracking } from "@/lib/analytics";
 import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
+import { EmailOptIn } from "@/components/EmailOptIn";
 
 export function TransformationClient() {
   const heroLinkRef = useRef<HTMLAnchorElement>(null);
@@ -213,6 +214,24 @@ export function TransformationClient() {
                     <span>Zero commitment</span>
                     <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
                     <span>Custom analysis</span>
+                  </div>
+
+                  {/* Secondary CTA - Email Signup */}
+                  <div className="mt-8">
+                    <div className="text-center mb-4">
+                      <p className="text-gray-400 text-sm">
+                        Not ready for a call yet?
+                      </p>
+                    </div>
+                    <EmailOptIn
+                      variant="minimal"
+                      title="Get AI Transformation Insights"
+                      description="Weekly insights on AI-powered development"
+                      buttonText="Get Updates"
+                      source="transformation-hero"
+                      tags={["transformation", "ai-development"]}
+                      className="flex justify-center"
+                    />
                   </div>
                 </div>
 
