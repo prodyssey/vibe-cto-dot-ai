@@ -13,6 +13,7 @@ interface EmailOptInProps {
   title?: string;
   description?: string;
   buttonText?: string;
+  mobileButtonText?: string; // New prop for mobile button text
   className?: string;
   source?: string;
   tags?: string[];
@@ -25,6 +26,7 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
   title = "Stay in the Loop",
   description = "Let's ride this wave together.",
   buttonText = "Subscribe",
+  mobileButtonText, // New prop
   className,
   source = "website-signup",
   tags = [],
@@ -96,35 +98,40 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
         <form
           ref={formRef}
           onSubmit={handleSubmit}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full min-w-0"
         >
           <Input
             type="email"
             name="email_address"
-            placeholder="Enter your email address"
+            placeholder="Enter your email"
             disabled={status === "loading" || status === "success"}
-            className="flex-1 bg-gray-900/80 border-gray-600/50 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400/20 focus:ring-2 h-12 px-5 rounded-xl transition-all duration-200"
+            className="flex-1 bg-gray-900/80 border-gray-600/50 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400/20 focus:ring-2 h-12 px-3 sm:px-5 rounded-xl transition-all duration-200 min-w-0 text-sm sm:text-base"
             required
           />
           <Button
             type="submit"
             disabled={status === "loading" || status === "success"}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 font-medium h-12 px-6 sm:px-8 rounded-xl whitespace-nowrap sm:min-w-[140px]"
+            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 font-medium h-12 px-3 sm:px-8 rounded-xl whitespace-nowrap min-w-0 flex-shrink-0 text-sm sm:text-base"
           >
             {status === "success" ? (
               <span className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="hidden sm:inline">Subscribed!</span>
+                <span className="sm:hidden">Done!</span>
               </span>
             ) : status === "loading" ? (
               <span className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 <span className="hidden sm:inline">Subscribing...</span>
+                <span className="sm:hidden">Loading...</span>
               </span>
             ) : status === "error" ? (
-              <span className="text-red-200">Try Again</span>
+              <span className="text-red-200 text-sm sm:text-base">Try Again</span>
             ) : (
-              buttonText
+              <>
+                <span className="hidden sm:inline">{buttonText}</span>
+                <span className="sm:hidden">{mobileButtonText || buttonText}</span>
+              </>
             )}
           </Button>
         </form>

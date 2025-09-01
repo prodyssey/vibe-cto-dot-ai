@@ -328,15 +328,16 @@ export function TransformationClient() {
                     </p>
                   </div>
 
-                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-md mx-auto">
+                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-md mx-auto overflow-hidden">
                     <EmailOptIn
                       variant="minimal"
                       title="Get AI Transformation Insights"
                       description="Weekly insights on AI-powered development"
                       buttonText="Get Insights"
+                      mobileButtonText="Get Insights"
                       source="transformation-hero"
                       tags={["transformation", "ai-development"]}
-                      className="flex flex-col gap-3"
+                      className="flex flex-col gap-3 min-w-0"
                     />
                   </div>
                 </div>
@@ -546,9 +547,9 @@ export function TransformationClient() {
           </section>
 
           {/* CTA Section */}
-          <section className="py-20 px-6">
+          <section className="py-20 px-4 sm:px-6">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-sm border border-white/20 rounded-3xl p-12">
+              <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-sm border border-white/20 rounded-3xl p-6 sm:p-8 md:p-12">
                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                   Ready to become AI-native?
                 </h2>
@@ -563,25 +564,31 @@ export function TransformationClient() {
                   href="https://savvycal.com/craigsturgis/vibecto-transformation-alignment"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="block w-full max-w-md mx-auto"
                 >
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-6 text-xl font-semibold rounded-xl"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 sm:px-12 py-6 text-lg sm:text-xl font-semibold rounded-xl w-full hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300"
                   >
-                    Schedule Your Strategy Call
-                    <Sparkles className="ml-3 w-6 h-6" />
+                    <span className="sm:hidden">Book Strategy Call</span>
+                    <span className="hidden sm:inline">Schedule Your Strategy Call</span>
+                    <Sparkles className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
                   </Button>
                 </a>
 
-                <div className="flex items-center justify-center space-x-6 mt-6 text-sm text-gray-400">
-                  <div className="flex items-center space-x-2">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-6 text-sm text-gray-400">
+                  <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4" />
                     <span>30-minute consultation</span>
                   </div>
-                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                  <span>Custom roadmap</span>
-                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                  <span>ROI analysis</span>
+                  <div className="hidden sm:block w-1 h-1 bg-gray-400 rounded-full"></div>
+                  <div className="flex items-center gap-2">
+                    <span>Custom roadmap</span>
+                  </div>
+                  <div className="hidden sm:block w-1 h-1 bg-gray-400 rounded-full"></div>
+                  <div className="flex items-center gap-2">
+                    <span>ROI analysis</span>
+                  </div>
                 </div>
 
                 {/* Alternative Email Signup */}
@@ -596,15 +603,16 @@ export function TransformationClient() {
                     </p>
                   </div>
 
-                  <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 max-w-lg mx-auto">
+                  <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 sm:p-6 max-w-lg mx-auto w-full overflow-hidden">
                     <EmailOptIn
                       variant="minimal"
                       title="AI Transformation Weekly"
                       description="Practical insights from 20+ years of product development"
                       buttonText="Get Weekly Insights"
+                      mobileButtonText="Get Insights"
                       source="transformation-bottom-cta"
                       tags={["transformation", "ai-development", "bottom-cta"]}
-                      className="flex flex-col  gap-3"
+                      className="flex flex-col gap-3 min-w-0"
                     />
                   </div>
                 </div>
