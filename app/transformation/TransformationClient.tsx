@@ -176,13 +176,11 @@ export function TransformationClient() {
                     </div>
 
                     <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
-                      I help companies apply proven AI development tools and
-                      workflows to
+                      I help companies apply proven AI tools and workflows to
                       <span className="text-white font-semibold">
                         {" "}
-                        accelerate roadmaps and streamline operations
-                      </span>{" "}
-                      at scale.
+                        accelerate roadmaps and streamline operations.
+                      </span>
                     </p>
                   </div>
 
@@ -226,7 +224,9 @@ export function TransformationClient() {
                       <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm">
                         <div className="flex flex-col items-center gap-3">
                           <div className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
-                          <span className="text-gray-300 text-sm">Loading video...</span>
+                          <span className="text-gray-300 text-sm">
+                            Loading video...
+                          </span>
                         </div>
                       </div>
                     )}
@@ -239,8 +239,12 @@ export function TransformationClient() {
                             <span className="text-red-400 text-xl">!</span>
                           </div>
                           <div>
-                            <p className="text-gray-300 text-sm mb-1">Video unavailable</p>
-                            <p className="text-gray-400 text-xs">Unable to load transformation video</p>
+                            <p className="text-gray-300 text-sm mb-1">
+                              Video unavailable
+                            </p>
+                            <p className="text-gray-400 text-xs">
+                              Unable to load transformation video
+                            </p>
                           </div>
                         </div>
                       </div>
