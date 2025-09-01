@@ -28,6 +28,8 @@ export function TransformationClient() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [hasEnded, setHasEnded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (heroLinkRef.current) {
@@ -50,8 +52,17 @@ export function TransformationClient() {
     setHasEnded(true);
   };
 
+  const handleVideoError = () => {
+    setHasError(true);
+    setIsLoading(false);
+  };
+
+  const handleVideoLoaded = () => {
+    setIsLoading(false);
+  };
+
   const handleReplay = () => {
-    if (videoRef.current) {
+    if (videoRef.current && !hasError) {
       videoRef.current.currentTime = 0;
       videoRef.current.play();
       setHasEnded(false);
@@ -59,8 +70,14 @@ export function TransformationClient() {
   };
 
   const toggleMute = () => {
-    if (videoRef.current) {
+    if (videoRef.current && !hasError) {
       videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  const handleVolumeChange = () => {
+    if (videoRef.current) {
       setIsMuted(videoRef.current.muted);
     }
   };
@@ -194,6 +211,31 @@ export function TransformationClient() {
                 {/* Video Content */}
                 <div className="relative order-1 lg:order-2 lg:col-span-2 flex flex-col items-center">
                   <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden aspect-square max-w-sm w-full">
+                    {/* Loading State */}
+                    {isLoading && !hasError && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm">
+                        <div className="flex flex-col items-center gap-3">
+                          <div className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+                          <span className="text-gray-300 text-sm">Loading video...</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Error State */}
+                    {hasError && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm">
+                        <div className="flex flex-col items-center gap-3 text-center p-4">
+                          <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
+                            <span className="text-red-400 text-xl">!</span>
+                          </div>
+                          <div>
+                            <p className="text-gray-300 text-sm mb-1">Video unavailable</p>
+                            <p className="text-gray-400 text-xs">Unable to load transformation video</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     <video
                       ref={videoRef}
                       className="w-full h-full object-cover"
@@ -201,6 +243,9 @@ export function TransformationClient() {
                       muted
                       playsInline
                       onEnded={handleVideoEnded}
+                      onError={handleVideoError}
+                      onLoadedData={handleVideoLoaded}
+                      onVolumeChange={handleVolumeChange}
                       preload="metadata"
                     >
                       <source
@@ -211,28 +256,30 @@ export function TransformationClient() {
                     </video>
 
                     {/* Video Controls Overlay */}
-                    <div className="absolute bottom-4 right-4 flex gap-2">
-                      {hasEnded && (
-                        <Button
-                          onClick={handleReplay}
-                          size="sm"
-                          className="bg-black/50 backdrop-blur-sm hover:bg-black/70 text-white border-0 rounded-lg"
-                        >
-                          <Play className="w-4 h-4" />
-                        </Button>
-                      )}
-                      <Button
-                        onClick={toggleMute}
-                        size="sm"
-                        className="bg-black/50 backdrop-blur-sm hover:bg-black/70 text-white border-0 rounded-lg"
-                      >
-                        {isMuted ? (
-                          <VolumeX className="w-4 h-4" />
-                        ) : (
-                          <Volume2 className="w-4 h-4" />
+                    {!hasError && !isLoading && (
+                      <div className="absolute bottom-4 right-4 flex gap-2">
+                        {hasEnded && (
+                          <Button
+                            onClick={handleReplay}
+                            size="sm"
+                            className="bg-black/70 backdrop-blur-sm hover:bg-black/90 text-white border-0 rounded-lg shadow-lg"
+                          >
+                            <Play className="w-4 h-4" />
+                          </Button>
                         )}
-                      </Button>
-                    </div>
+                        <Button
+                          onClick={toggleMute}
+                          size="sm"
+                          className="bg-black/70 backdrop-blur-sm hover:bg-black/90 text-white border-0 rounded-lg shadow-lg"
+                        >
+                          {isMuted ? (
+                            <VolumeX className="w-4 h-4" />
+                          ) : (
+                            <Volume2 className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </div>
+                    )}
                   </div>
 
                   {/* Video Caption */}
