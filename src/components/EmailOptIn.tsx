@@ -136,7 +136,7 @@ export const EmailOptIn: React.FC<EmailOptInProps> = ({
         )}
         
         {/* Trust indicators for minimal variant */}
-        <div className="flex items-center justify-center gap-3 mt-4 text-xs text-gray-500">
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-4 text-xs text-gray-500">
           <span>No spam, ever</span>
           <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
           <span>Unsubscribe anytime</span>
