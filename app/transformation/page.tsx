@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { TransformationClient } from './TransformationClient'
+import { getAllPosts } from '@/lib/posts'
 
 export const metadata: Metadata = {
   title: "Transformation - AI-Augmented Engineering | VibeCTO.ai",
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
   }
 }
 
-export default function TransformationPage() {
-  return <TransformationClient />
+export default async function TransformationPage() {
+  const posts = await getAllPosts()
+  return <TransformationClient posts={posts} />
 }
