@@ -60,7 +60,7 @@ test.describe('Debug Contact Form', () => {
     } catch (error) {
       console.log('7. Error with select:', (error as Error).message);
       // Try to close any open dropdown
-      await page.press('Escape');
+      await page.keyboard.press('Escape');
       await page.screenshot({ path: 'debug-select-error.png', fullPage: true });
     }
     
