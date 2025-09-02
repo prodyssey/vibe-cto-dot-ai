@@ -13,7 +13,7 @@ const Index = () => {
   return (
     <>
       <SEO
-        title="VibeCTO.ai - From vibes to product | AI-Powered Development"
+        title="VibeCTO.ai - From ideas to product | AI-Powered Development"
         description="Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help."
         canonicalUrl="https://vibecto.ai/"
         jsonLd={{
