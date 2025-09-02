@@ -104,12 +104,8 @@ export function TransformationClient({ posts = [] }: TransformationClientProps) 
     }
   };
 
-  // Filter posts for case studies with transformation tag
-  const transformationCaseStudies = posts.filter(
-    (post) =>
-      post.tags.includes("case-study") &&
-      post.tags.includes("transformation")
-  );
+  // Posts are now already filtered at build time
+  const transformationCaseStudies = posts;
 
   const features = [
     {
@@ -577,7 +573,13 @@ export function TransformationClient({ posts = [] }: TransformationClientProps) 
                   </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className={`grid gap-8 ${
+                  transformationCaseStudies.length === 1 
+                    ? 'grid-cols-1 max-w-md mx-auto' 
+                    : transformationCaseStudies.length === 2 
+                      ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto' 
+                      : 'md:grid-cols-2 lg:grid-cols-3'
+                }`}>
                   {transformationCaseStudies.map((post) => (
                     <Link key={post.slug} href={`/resources/${post.slug}`}>
                       <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full overflow-hidden">
