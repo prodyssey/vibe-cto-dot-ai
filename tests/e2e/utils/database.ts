@@ -1,8 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/integrations/supabase/types';
 
 export class TestDatabase {
-  public client: SupabaseClient<Database>; // Made public for debug access
+  public client: SupabaseClient<any>; // Made public for debug access
   private testDataIds = new Set<string>();
 
   constructor() {
@@ -13,7 +12,7 @@ export class TestDatabase {
       throw new Error('Missing Supabase environment variables for testing');
     }
 
-    this.client = createClient<Database>(supabaseUrl, supabaseKey, {
+    this.client = createClient(supabaseUrl, supabaseKey, {
       auth: {
         autoRefreshToken: false,
         persistSession: false
@@ -23,7 +22,7 @@ export class TestDatabase {
 
   // Generic method to insert test data and track for cleanup
   async insertTestData<T extends Record<string, any>>(
-    table: keyof Database['public']['Tables'],
+    table: string,
     data: T
   ): Promise<T & { id: string }> {
     const { data: inserted, error } = await this.client
@@ -33,17 +32,17 @@ export class TestDatabase {
       .single();
 
     if (error) {
-      throw new Error(`Failed to insert test data into ${table}: ${error.message}`);
+      throw new Error(`Failed to insert test data into ${String(table)}: ${error.message}`);
     }
 
     if (!inserted) {
-      throw new Error(`No data returned from insert into ${table}`);
+      throw new Error(`No data returned from insert into ${String(table)}`);
     }
 
     // Track the ID for cleanup
     const insertedRecord = inserted as any;
     if (insertedRecord?.id) {
-      this.testDataIds.add(`${table}:${insertedRecord.id}`);
+      this.testDataIds.add(`${String(table)}:${insertedRecord.id}`);
     }
 
     return insertedRecord;
@@ -51,7 +50,7 @@ export class TestDatabase {
 
   // Verify data exists in database
   async verifyDataExists<T>(
-    table: keyof Database['public']['Tables'],
+    table: string,
     conditions: Record<string, any>
   ): Promise<T | null> {
     let query = this.client.from(table as any).select('*');
@@ -64,7 +63,7 @@ export class TestDatabase {
     const { data, error } = await query.single();
 
     if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
-      throw new Error(`Failed to verify data in ${table}: ${error.message}`);
+      throw new Error(`Failed to verify data in ${String(table)}: ${error.message}`);
     }
 
     return (data as T) || null;
@@ -147,7 +146,7 @@ export class TestDatabase {
     });
 
     // Delete from each table
-    for (const [table, ids] of tableIds.entries()) {
+    for (const [table, ids] of Array.from(tableIds.entries())) {
       try {
         const { error } = await this.client
           .from(table as any)

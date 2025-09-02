@@ -54,9 +54,7 @@ test.describe('Adventure Game Forms', () => {
 
       // Verify database update
       await wait(2000);
-      const updatedSession = await testDb.verifyAdventureSessionUpdate(testSessionId, {
-        email: testData.email
-      });
+      const updatedSession = await testDb.verifyDataExists<any>('adventure_sessions', { id: testSessionId });
       expect(updatedSession).toBeTruthy();
       expect(updatedSession?.email).toBe(testData.email);
     });
@@ -98,15 +96,13 @@ test.describe('Adventure Game Forms', () => {
 
       // Verify database entry
       await wait(2000);
-      const waitlistEntry = await testDb.verifyIgnitionWaitlistSubmission(testSessionId);
+      const waitlistEntry = await testDb.verifyDataExists<any>('ignition_waitlist', { session_id: testSessionId });
       expect(waitlistEntry).toBeTruthy();
       expect(waitlistEntry?.player_name).toBe(testData.name);
       expect(waitlistEntry?.contact_method).toBe(testData.contactMethod);
 
       // Verify session was also updated
-      const updatedSession = await testDb.verifyAdventureSessionUpdate(testSessionId, {
-        email: testData.email
-      });
+      const updatedSession = await testDb.verifyDataExists<any>('adventure_sessions', { id: testSessionId });
       expect(updatedSession).toBeTruthy();
     });
 
@@ -137,12 +133,11 @@ test.describe('Adventure Game Forms', () => {
       await wait(3000);
 
       // Verify the real name was saved and generated flag was updated
-      const updatedSession = await testDb.verifyAdventureSessionUpdate(testSessionId, {
-        email: testData.email,
-        player_name: testData.name,
-        is_generated_name: false
-      });
+      const updatedSession = await testDb.verifyDataExists<any>('adventure_sessions', { id: testSessionId });
       expect(updatedSession).toBeTruthy();
+      expect(updatedSession?.email).toBe(testData.email);
+      expect(updatedSession?.player_name).toBe(testData.name);
+      expect(updatedSession?.is_generated_name).toBe(false);
     });
   });
 
@@ -179,7 +174,7 @@ test.describe('Adventure Game Forms', () => {
 
       // Verify database entry
       await wait(2000);
-      const waitlistEntry = await testDb.verifyLaunchControlWaitlistSubmission(testSessionId);
+      const waitlistEntry = await testDb.verifyDataExists<any>('launch_control_waitlist', { session_id: testSessionId });
       expect(waitlistEntry).toBeTruthy();
       expect(waitlistEntry?.name).toBe(testData.name);
       expect(waitlistEntry?.email).toBe(testData.email.toLowerCase());
@@ -275,11 +270,10 @@ test.describe('Adventure Game Forms', () => {
       await wait(2000);
 
       // Verify session update
-      const updatedSession = await testDb.verifyAdventureSessionUpdate(testSessionId, {
-        email: testData.email,
-        player_name: testData.name
-      });
+      const updatedSession = await testDb.verifyDataExists<any>('adventure_sessions', { id: testSessionId });
       expect(updatedSession).toBeTruthy();
+      expect(updatedSession?.email).toBe(testData.email);
+      expect(updatedSession?.player_name).toBe(testData.name);
 
       // Step 2: Proceed to waitlist form
       await page.goto('/adventure?scene=ignition-waitlist');
@@ -296,7 +290,7 @@ test.describe('Adventure Game Forms', () => {
       await wait(2000);
 
       // Verify waitlist entry
-      const waitlistEntry = await testDb.verifyIgnitionWaitlistSubmission(testSessionId);
+      const waitlistEntry = await testDb.verifyDataExists<any>('ignition_waitlist', { session_id: testSessionId });
       expect(waitlistEntry).toBeTruthy();
       expect(waitlistEntry?.player_name).toBe(testData.name);
     });

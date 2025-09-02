@@ -49,7 +49,7 @@ test.describe('Community Waitlist Form', () => {
     await wait(2000);
 
     // Verify data was saved to database
-    const savedEntry = await testDb.verifyCommunityWaitlistSubmission(testData.email);
+    const savedEntry = await testDb.verifyDataExists<any>('community_waitlist', { email: testData.email.toLowerCase() });
     expect(savedEntry).toBeTruthy();
     expect(savedEntry?.name).toBe(testData.name);
     expect(savedEntry?.email).toBe(testData.email.toLowerCase());
@@ -147,7 +147,7 @@ test.describe('Community Waitlist Form', () => {
 
       // Verify in database
       await wait(2000);
-      const savedEntry = await testDb.verifyCommunityWaitlistSubmission(uniqueTestData.email);
+      const savedEntry = await testDb.verifyDataExists<any>('community_waitlist', { email: uniqueTestData.email.toLowerCase() });
       expect(savedEntry?.preferred_contact).toBe(method);
       expect(savedEntry?.contact_method).toBe(method);
 
@@ -168,7 +168,7 @@ test.describe('Community Waitlist Form', () => {
     await wait(2000);
 
     // Verify first submission was saved
-    const firstEntry = await testDb.verifyCommunityWaitlistSubmission(testData.email);
+    const firstEntry = await testDb.verifyDataExists<any>('community_waitlist', { email: testData.email.toLowerCase() });
     expect(firstEntry).toBeTruthy();
 
     // Try to submit the same email again

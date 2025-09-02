@@ -58,10 +58,10 @@ test.describe('Debug Contact Form', () => {
         console.log('9. Closed dropdown (no options found)');
       }
     } catch (error) {
-      console.log('7. Error with select:', error.message);
+      console.log('7. Error with select:', (error as Error).message);
       // Try to close any open dropdown
       await page.press('Escape');
-      await page.screenshot({ path: 'debug-select-error.png' });
+      await page.screenshot({ path: 'debug-select-error.png', fullPage: true });
     }
     
     // Try to submit
@@ -80,6 +80,6 @@ test.describe('Debug Contact Form', () => {
     console.log('13. Error messages:', await errorMessage.count());
     
     // Take final screenshot
-    await page.screenshot({ path: 'debug-final-state.png' });
+    await page.screenshot({ path: 'debug-final-state.png', fullPage: true });
   });
 });

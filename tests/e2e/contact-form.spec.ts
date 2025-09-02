@@ -60,7 +60,7 @@ test.describe('Contact Form', () => {
     await wait(2000);
 
     // Verify data was saved to database (contact form generates its own session ID)
-    const savedContact = await testDb.verifyDataExists('contacts', { email: testData.email.toLowerCase() });
+    const savedContact = await testDb.verifyDataExists<any>('contacts', { email: testData.email.toLowerCase() });
     expect(savedContact).toBeTruthy();
     expect(savedContact?.name).toBe(testData.name);
     expect(savedContact?.email).toBe(testData.email.toLowerCase());
@@ -177,7 +177,7 @@ test.describe('Contact Form', () => {
 
       // Verify in database
       await wait(2000);
-      const savedContact = await testDb.verifyContactSubmission(uniqueTestData.email, testSessionId);
+      const savedContact = await testDb.verifyDataExists<any>('contacts', { email: uniqueTestData.email.toLowerCase() });
       expect(savedContact?.preferred_contact).toBe(method);
 
       // Cleanup

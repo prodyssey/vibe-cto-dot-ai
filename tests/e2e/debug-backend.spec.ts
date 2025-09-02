@@ -49,7 +49,7 @@ test.describe('Backend Integration Debug', () => {
 
     // Check database
     console.log('Checking database for saved contact...');
-    const savedContact = await testDb.verifyDataExists('contacts', { 
+    const savedContact = await testDb.verifyDataExists<any>('contacts', { 
       email: testEmail.toLowerCase() 
     });
 
