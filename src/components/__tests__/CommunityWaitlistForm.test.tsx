@@ -46,7 +46,7 @@ describe('CommunityWaitlistForm', () => {
     await user.type(screen.getByLabelText(/Phone Number/), '555-123-4567')
     
     // Select phone as preferred contact method
-    await user.click(screen.getByLabelText(/Phone/))
+    await user.click(screen.getByRole('radio', { name: /Phone/ }))
     
     // Submit the form
     await user.click(screen.getByRole('button', { name: /Join Community Waitlist/i }))
