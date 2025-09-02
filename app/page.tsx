@@ -12,11 +12,11 @@ import { Resources } from "@/components/sections/Resources";
 import { getAllPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
-  title: "VibeCTO.ai - From vibes to product | AI-Powered Development",
+  title: "VibeCTO.ai - Human help to build better with AI | AI-Powered Development",
   description:
     "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help.",
   openGraph: {
-    title: "VibeCTO.ai - From vibes to product | AI-Powered Development",
+    title: "VibeCTO.ai - Human help to build better with AI | AI-Powered Development",
     description:
       "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help.",
     url: "https://vibecto.ai/",
@@ -25,13 +25,13 @@ export const metadata: Metadata = {
         url: "/vibe-cto-og.png",
         width: 1200,
         height: 630,
-        alt: "VibeCTO.ai - From vibes to product",
+        alt: "VibeCTO.ai - Human help to build better with AI",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "VibeCTO.ai - From vibes to product | AI-Powered Development",
+    title: "VibeCTO.ai - Human help to build better with AI | AI-Powered Development",
     description:
       "Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products with AI-powered development help.",
     images: ["/vibe-cto-og.png"],

@@ -5,11 +5,11 @@ import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://vibecto.ai'),
-  title: 'VibeCTO.ai - From vibes to product',
+  title: 'VibeCTO.ai - Human help to build better with AI',
   description: 'Elite AI augmented engineering and vibe coding guidance',
   keywords: ['AI development', 'engineering', 'CTO', 'product development'],
   openGraph: {
-    title: 'VibeCTO.ai - From vibes to product',
+    title: 'VibeCTO.ai - Human help to build better with AI',
     description: 'Elite AI augmented engineering and vibe coding guidance',
     url: 'https://vibecto.ai',
     siteName: 'VibeCTO.ai',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         url: '/vibe-cto-og.png',
         width: 1200,
         height: 630,
-        alt: 'VibeCTO.ai - From vibes to product',
+        alt: 'VibeCTO.ai - Human help to build better with AI',
       },
     ],
     locale: 'en_US',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'VibeCTO.ai - From vibes to product',
+    title: 'VibeCTO.ai - Human help to build better with AI',
     description: 'Elite AI augmented engineering and vibe coding guidance',
     images: ['/vibe-cto-og.png'],
   },

@@ -104,7 +104,7 @@ export const Footer = () => {
               © {new Date().getFullYear()} VibeCTO.ai. All rights reserved.
             </p>
             <p className="text-gray-500 text-sm mt-2 md:mt-0">
-              From vibes to product
+              Human help to build better with AI
             </p>
           </div>
         </div>
