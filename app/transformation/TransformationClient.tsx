@@ -12,18 +12,29 @@ import {
   Play,
   Volume2,
   VolumeX,
+  FileText,
+  Calendar,
 } from "lucide-react";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { addSavvyCalTracking } from "@/lib/analytics";
 import { CostOfDelayCalculator } from "@/components/CostOfDelayCalculator";
 import { EmailOptIn } from "@/components/EmailOptIn";
+import { PostMetadata } from "@/lib/posts";
+import { formatPostDate } from "@/lib/dateUtils";
 
-export function TransformationClient() {
+interface TransformationClientProps {
+  posts?: PostMetadata[];
+}
+
+export function TransformationClient({ posts = [] }: TransformationClientProps) {
   const heroLinkRef = useRef<HTMLAnchorElement>(null);
   const bottomLinkRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -92,6 +103,13 @@ export function TransformationClient() {
       setIsMuted(videoRef.current.muted);
     }
   };
+
+  // Filter posts for case studies with transformation tag
+  const transformationCaseStudies = posts.filter(
+    (post) =>
+      post.tags.includes("case-study") &&
+      post.tags.includes("transformation")
+  );
 
   const features = [
     {
@@ -545,6 +563,98 @@ export function TransformationClient() {
               </div>
             </div>
           </section>
+
+          {/* Case Studies Section */}
+          {transformationCaseStudies.length > 0 && (
+            <section className="py-20 px-6">
+              <div className="max-w-6xl mx-auto">
+                <div className="text-center mb-16">
+                  <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                    Transformation Case Studies
+                  </h2>
+                  <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Real stories from successful AI-powered transformations
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {transformationCaseStudies.map((post) => (
+                    <Link key={post.slug} href={`/resources/${post.slug}`}>
+                      <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full overflow-hidden">
+                        {post.headerImage && (
+                          <div className="relative h-48 w-full">
+                            <OptimizedImage
+                              src={post.headerImage}
+                              alt={post.title}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            />
+                          </div>
+                        )}
+                        <CardContent className="p-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="p-2 bg-purple-500/20 rounded-lg">
+                              <FileText className="w-5 h-5 text-purple-400" />
+                            </div>
+                            <Badge className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 text-purple-300 border-purple-300/30">
+                              Case Study
+                            </Badge>
+                          </div>
+
+                          <h3 className="text-xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors">
+                            {post.title}
+                          </h3>
+
+                          <p className="text-gray-300 mb-4 leading-relaxed">
+                            {post.description}
+                          </p>
+
+                          <div className="flex items-center justify-between text-sm text-gray-400">
+                            <div className="flex items-center">
+                              <Calendar className="w-4 h-4 mr-1" />
+                              {formatPostDate(post.date)}
+                            </div>
+                            <span>{post.readTime}</span>
+                          </div>
+
+                          {post.tags && post.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-4">
+                              {post.tags
+                                .filter((tag) => ["transformation", "case-study", "augmented-engineering"].includes(tag))
+                                .slice(0, 3)
+                                .map((tag) => (
+                                  <Badge
+                                    key={tag}
+                                    variant="outline"
+                                    className="border-white/20 text-white/70 text-xs"
+                                  >
+                                    {tag}
+                                  </Badge>
+                                ))}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Call to action to view more resources */}
+                <div className="text-center mt-12">
+                  <Link href="/resources">
+                    <Button
+                      variant="outline"
+                      className="border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300"
+                    >
+                      View All Resources
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* CTA Section */}
           <section className="py-20 px-4 sm:px-6">
