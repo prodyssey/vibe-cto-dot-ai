@@ -2,7 +2,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/integrations/supabase/types';
 
 export class TestDatabase {
-  private client: SupabaseClient<Database>;
+  public client: SupabaseClient<Database>; // Made public for debug access
   private testDataIds = new Set<string>();
 
   constructor() {
@@ -36,12 +36,17 @@ export class TestDatabase {
       throw new Error(`Failed to insert test data into ${table}: ${error.message}`);
     }
 
-    // Track the ID for cleanup
-    if (inserted?.id) {
-      this.testDataIds.add(`${table}:${inserted.id}`);
+    if (!inserted) {
+      throw new Error(`No data returned from insert into ${table}`);
     }
 
-    return inserted;
+    // Track the ID for cleanup
+    const insertedRecord = inserted as any;
+    if (insertedRecord?.id) {
+      this.testDataIds.add(`${table}:${insertedRecord.id}`);
+    }
+
+    return insertedRecord;
   }
 
   // Verify data exists in database
@@ -62,7 +67,7 @@ export class TestDatabase {
       throw new Error(`Failed to verify data in ${table}: ${error.message}`);
     }
 
-    return data as T | null;
+    return (data as T) || null;
   }
 
   // Verify contact form submission
