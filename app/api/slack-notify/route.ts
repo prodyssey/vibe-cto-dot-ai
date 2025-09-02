@@ -7,7 +7,7 @@ const slack = new WebClient(process.env.SLACK_BOT_TOKEN);
 
 // Request schema
 const slackNotifySchema = z.object({
-  formType: z.enum(['ignition_waitlist', 'launch_control_waitlist', 'community_waitlist', 'email_subscription']),
+  formType: z.enum(['ignition_waitlist', 'launch_control_waitlist', 'community_waitlist', 'email_subscription', 'contact_form']),
   email: z.string().email(),
   name: z.string().optional(),
   phone: z.string().optional(),
@@ -94,6 +94,11 @@ function formatFormSubmissionMessage(data: any) {
       formTitle = 'Email Subscription';
       color = '#10b981'; // green
       emoji = '✉️';
+      break;
+    case 'contact_form':
+      formTitle = 'Contact Form';
+      color = '#6366f1'; // indigo
+      emoji = '💬';
       break;
   }
 

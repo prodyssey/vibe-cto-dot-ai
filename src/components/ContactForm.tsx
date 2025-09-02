@@ -209,7 +209,7 @@ export const ContactForm = ({ className }: ContactFormProps) => {
                 Thank You, {formData.name}!
               </h3>
               <p className="text-gray-300">
-                We've received your message and will get back to you within 24 hours.
+                We've received your message and will get back to you as soon as we can.
               </p>
             </div>
 
