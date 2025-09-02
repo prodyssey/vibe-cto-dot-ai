@@ -37,20 +37,73 @@ export default function FulfillmentPolicyPage() {
               </p>
               
               <div className="space-y-6 text-gray-300">
-                <p className="bg-yellow-600/20 border border-yellow-600/30 rounded-lg p-4 text-yellow-200">
-                  <strong>Note:</strong> This page structure has been created but requires content from prodyssey.com/fulfillment-policy/ to be manually copied and adapted with "Prodyssey" replaced by "VibeCTO.ai" and dates updated to September 2, 2025.
+                <p className="text-lg leading-relaxed mb-4">
+                  This Fulfillment Policy outlines how VibeCTO.ai delivers services and handles payments and refunds. This policy is part of our compliance with Stripe's terms of service for billing.
                 </p>
-                
-                <p>
-                  This fulfillment policy governs the delivery and completion of services provided by VibeCTO.ai.
+
+                <h2 className="text-2xl font-bold text-white mb-4 mt-8">Service Delivery</h2>
+                <p className="text-lg leading-relaxed mb-4">
+                  All services provided by VibeCTO.ai are governed by individual Master Service Agreements (MSAs) and Statements of Work (SOWs) that are executed between VibeCTO.ai and each client. These agreements detail the specific services to be provided, timelines, deliverables, and payment terms.
                 </p>
-                
-                {/* Content will be added here from prodyssey.com */}
-                <div className="text-center py-12">
-                  <p className="text-xl text-gray-400">
-                    Content to be updated with policy details from prodyssey.com/fulfillment-policy/
-                  </p>
-                </div>
+                <p className="text-lg leading-relaxed mb-4">
+                  Services are typically delivered according to the schedule outlined in the applicable SOW, with regular check-ins and progress updates provided to clients throughout the engagement.
+                </p>
+
+                <h2 className="text-2xl font-bold text-white mb-4 mt-8">Payment Terms</h2>
+                <p className="text-lg leading-relaxed mb-4">
+                  All services are paid for in US Dollars.
+                </p>
+                <p className="text-lg leading-relaxed mb-4">
+                  Payment terms are specified in each client's Master Service Agreement and applicable Statements of Work. These may include:
+                </p>
+                <ul className="list-disc pl-8 mb-4 space-y-2">
+                  <li>Initial deposits or retainers</li>
+                  <li>Milestone-based payments</li>
+                  <li>Monthly recurring payments</li>
+                  <li>Payment upon completion of deliverables</li>
+                </ul>
+                <p className="text-lg leading-relaxed mb-4">
+                  Invoices are typically issued according to the schedule outlined in the client's agreement and are payable within the timeframe specified in that agreement (usually 15-30 days from invoice date).
+                </p>
+
+                <h2 className="text-2xl font-bold text-white mb-4 mt-8">Refund Policy</h2>
+                <p className="text-lg leading-relaxed mb-4">
+                  Refund terms are governed by each client's Master Service Agreement. In general:
+                </p>
+                <ul className="list-disc pl-8 mb-4 space-y-2">
+                  <li>For services that have not yet been performed, clients may be eligible for a full or partial refund as specified in their agreement.</li>
+                  <li>For services that are in progress or have been completed, refunds are handled according to the terms outlined in the client's agreement.</li>
+                  <li>Any disputes regarding service quality or delivery will be addressed according to the dispute resolution process outlined in the client's Master Service Agreement.</li>
+                </ul>
+                <p className="text-lg leading-relaxed mb-4">
+                  Specific refund requests should be directed to your VibeCTO.ai representative or by contacting us through our <a href="/contact" className="text-purple-300 hover:text-purple-100 underline">contact page</a>.
+                </p>
+
+                <h2 className="text-2xl font-bold text-white mb-4 mt-8">Cancellation Policy</h2>
+                <p className="text-lg leading-relaxed mb-4">
+                  Cancellation terms are specified in each client's Master Service Agreement and may include:
+                </p>
+                <ul className="list-disc pl-8 mb-4 space-y-2">
+                  <li>Notice periods required for cancellation</li>
+                  <li>Any fees associated with early termination</li>
+                  <li>Handling of any prepaid amounts for services not yet rendered</li>
+                </ul>
+                <p className="text-lg leading-relaxed mb-4">
+                  Clients wishing to cancel services should refer to their agreement for specific terms and procedures.
+                </p>
+
+                <h2 className="text-2xl font-bold text-white mb-4 mt-8">Contact Information</h2>
+                <p className="text-lg leading-relaxed mb-4">
+                  For questions about this Fulfillment Policy or to discuss specific payment or refund situations, please contact us through our <a href="/contact" className="text-purple-300 hover:text-purple-100 underline">contact page</a>.
+                </p>
+
+                <h2 className="text-2xl font-bold text-white mb-4 mt-8">Policy Updates</h2>
+                <p className="text-lg leading-relaxed mb-4">
+                  This Fulfillment Policy may be updated from time to time. The most current version will always be posted on this page.
+                </p>
+                <p className="text-lg leading-relaxed mb-4">
+                  Last updated: September 2, 2025
+                </p>
               </div>
             </div>
           </div>
