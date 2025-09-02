@@ -9,7 +9,7 @@ import { Briefcase, Code, Lightbulb, Users, Gamepad2 } from 'lucide-react'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: "About - VibeCTO.ai | Behind the Vibes",
+  title: "About - VibeCTO.ai | Behind the Vision",
   description: "Learn about the mission behind VibeCTO.ai and how Craig Sturgis is helping builders transform ideas into reality faster with AI-powered guidance.",
   alternates: {
     canonical: "https://vibecto.ai/about"

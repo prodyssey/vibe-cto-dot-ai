@@ -240,7 +240,7 @@ import { Providers } from './providers'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'VibeCTO.ai - From vibes to product',
+  title: 'VibeCTO.ai - From ideas to product',
   description: 'Elite AI augmented engineering and vibe coding guidance',
 }
 
