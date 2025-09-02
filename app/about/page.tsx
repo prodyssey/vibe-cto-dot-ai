@@ -1,20 +1,21 @@
-import type { Metadata } from 'next'
-import { Navigation } from '@/components/Navigation'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { EmailOptIn } from '@/components/EmailOptIn'
-import { OptimizedImage } from '@/components/OptimizedImage'
-import { Briefcase, Code, Lightbulb, Users, Gamepad2 } from 'lucide-react'
-import Link from 'next/link'
+import type { Metadata } from "next";
+import { Navigation } from "@/components/Navigation";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmailOptIn } from "@/components/EmailOptIn";
+import { OptimizedImage } from "@/components/OptimizedImage";
+import { Briefcase, Code, Lightbulb, Users, Gamepad2 } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "About - VibeCTO.ai | Behind the Vibes",
-  description: "Learn about the mission behind VibeCTO.ai and how Craig Sturgis is helping builders transform ideas into reality faster with AI-powered guidance.",
+  description:
+    "Learn about the mission behind VibeCTO.ai and how Craig Sturgis is helping builders transform ideas into reality faster with AI-powered guidance.",
   alternates: {
-    canonical: "https://vibecto.ai/about"
-  }
-}
+    canonical: "https://vibecto.ai/about",
+  },
+};
 
 export default function AboutPage() {
   return (
@@ -44,8 +45,8 @@ export default function AboutPage() {
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-2xl blur-xl scale-105 group-hover:scale-110 transition-transform duration-500"></div>
                     <div className="relative bg-gray-900/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-6">
                       <OptimizedImage
-                        src="/lovable-uploads/8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png"
-                        alt="Craig Sturgis - VibeCTO Avatar"
+                        src="/craig-sturgis.jpg"
+                        alt="Craig Sturgis - Headshot"
                         width={288}
                         height={288}
                         priority
@@ -53,7 +54,7 @@ export default function AboutPage() {
                         sizes="(max-width: 1024px) 256px, 288px"
                       />
                       <p className="mt-4 text-center text-purple-300 font-medium italic">
-                        "Let's build something great together"
+                        "Let's build and learn together"
                       </p>
                     </div>
                   </div>
@@ -71,20 +72,17 @@ export default function AboutPage() {
                     fundamental to who I am and it's my mission to foster it in
                     as many people and organizations as I can.
                   </p>
-                  <p>
-                    My journey hasn't been a straight line. From co-founding
-                    startups to leading product at a public company and scale
-                    ups, from writing code to coaching executives and teams, I've
-                    learned that the best solutions come from understanding both
-                    the technical and human sides of building products.
+                  <p className="leading-relaxed">
+                    When I first tried AI applied to product development in
+                    2022, I could immediately see how this could empower so many
+                    of the dreams I've had my whole career to bring that joy to
+                    more people more effectively.
                   </p>
                   <p className="leading-relaxed">
-                    When I first tried AI applied to product development, I
-                    could see how this could empower so many of the dreams I've
-                    had my whole career. I've been an early adopter as this wave
-                    continues to build, and I'm interested in taking a pragmatic
-                    approach to adopt the best now while keeping an eye on what
-                    develops.
+                    I've been an early adopter as this wave continues to build
+                    and as new tools and workflows become best practices. I'm
+                    taking a pragmatic approach to adopt the best now while
+                    keeping an eye on what develops.
                   </p>
                   <p>
                     I want you on this journey with me. The more the merrier 😄
@@ -147,8 +145,8 @@ export default function AboutPage() {
                   </h3>
                   <p className="text-gray-300">
                     No fluff, no unnecessary complexity. Just straightforward
-                    guidance on using the latest tools to make great product,
-                    faster.
+                    guidance on using the latest tools to make great products
+                    and companies, faster.
                   </p>
                 </div>
                 <div>
@@ -244,5 +242,5 @@ export default function AboutPage() {
         </div>
       </div>
     </>
-  )
+  );
 }
