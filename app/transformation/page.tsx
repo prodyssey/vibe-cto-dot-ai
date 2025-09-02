@@ -32,5 +32,13 @@ export const metadata: Metadata = {
 
 export default async function TransformationPage() {
   const posts = await getAllPosts()
-  return <TransformationClient posts={posts} />
+  
+  // Filter posts for case studies with transformation tag at build time
+  const transformationCaseStudies = posts.filter(
+    (post) =>
+      post.tags.includes("case-study") &&
+      post.tags.includes("transformation")
+  )
+  
+  return <TransformationClient posts={transformationCaseStudies} />
 }
