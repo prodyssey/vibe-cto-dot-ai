@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { Hero } from "@/components/sections/Hero";
 import { HowItWorks } from "@/components/sections/HowItWorks";
@@ -46,9 +47,9 @@ export default async function HomePage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
         <Navigation />
-        <div className="pt-20">
+        <div className="pt-20 flex-grow">
           <Hero />
           <ProblemPromise />
           <Proof />
@@ -64,6 +65,7 @@ export default async function HomePage() {
           <Paths />
           <FinalCTA />
         </div>
+        <Footer />
       </div>
     </>
   );
