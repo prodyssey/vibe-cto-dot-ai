@@ -54,7 +54,7 @@ export default function AboutPage() {
                         sizes="(max-width: 1024px) 256px, 288px"
                       />
                       <p className="mt-4 text-center text-purple-300 font-medium italic">
-                        "Let's build something great together"
+                        "Let's build and learn together"
                       </p>
                     </div>
                   </div>
@@ -73,12 +73,16 @@ export default function AboutPage() {
                     as many people and organizations as I can.
                   </p>
                   <p className="leading-relaxed">
-                    When I first tried AI applied to product development, I
-                    could see how this could empower so many of the dreams I've
-                    had my whole career. I've been an early adopter as this wave
-                    continues to build, and I'm interested in taking a pragmatic
-                    approach to adopt the best now while keeping an eye on what
-                    develops.
+                    When I first tried AI applied to product development in
+                    2022, I could immediately see how this could empower so many
+                    of the dreams I've had my whole career to bring that joy to
+                    more people more effectively.
+                  </p>
+                  <p className="leading-relaxed">
+                    I've been an early adopter as this wave continues to build
+                    and as new tools and workflows become best practices. I'm
+                    taking a pragmatic approach to adopt the best now while
+                    keeping an eye on what develops.
                   </p>
                   <p>
                     I want you on this journey with me. The more the merrier 😄
@@ -141,8 +145,8 @@ export default function AboutPage() {
                   </h3>
                   <p className="text-gray-300">
                     No fluff, no unnecessary complexity. Just straightforward
-                    guidance on using the latest tools to make great product,
-                    faster.
+                    guidance on using the latest tools to make great products
+                    and companies, faster.
                   </p>
                 </div>
                 <div>
