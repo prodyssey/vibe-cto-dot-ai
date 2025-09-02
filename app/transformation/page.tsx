@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getAllPosts } from '@/lib/posts'
 import { TransformationClient } from './TransformationClient'
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
   }
 }
 
-export default function TransformationPage() {
-  return <TransformationClient />
+export default async function TransformationPage() {
+  const posts = await getAllPosts()
+  return <TransformationClient posts={posts} />
 }
