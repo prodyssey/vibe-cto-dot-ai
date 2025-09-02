@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "next dev -p 8080 --turbopack",
     "optimize-images": "node scripts/optimize-images.js",
-    "prebuild": "npm run optimize-images",
+    "optimize-images:force": "SKIP_IMAGE_OPTIMIZATION=false node scripts/optimize-images.js",
+    "prebuild": "echo 'Skipping automatic image optimization - run npm run optimize-images manually if needed'",
+    "prebuild:with-images": "npm run optimize-images",
     "prebuild:skip-images": "echo 'Skipping image optimization'",
     "build": "next build",
+    "build:with-images": "npm run prebuild:with-images && npm run build",
     "build:skip-images": "npm run prebuild:skip-images && npm run build",
     "start": "next start -p 8080",
     "lint": "next lint",
