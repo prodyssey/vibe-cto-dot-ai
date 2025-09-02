@@ -28,6 +28,29 @@ vi.mock('@/components/adventure/gameStore', () => ({
   }),
 }))
 
+// Mock ConvertKit and Slack API functions to avoid URL errors in tests
+vi.mock('@/lib/convertkit', () => ({
+  subscribeToConvertKit: vi.fn().mockResolvedValue({
+    success: true,
+    message: 'Successfully subscribed',
+    subscription: {
+      id: 123,
+      state: 'active',
+      created_at: new Date().toISOString(),
+      email_address: 'test@example.com',
+    }
+  }),
+  getContextualTags: vi.fn().mockReturnValue(['test-tag']),
+  getCustomFields: vi.fn().mockReturnValue({ source: 'test', signup_date: new Date().toISOString() })
+}))
+
+vi.mock('@/lib/slack', () => ({
+  sendSlackNotification: vi.fn().mockResolvedValue({
+    success: true,
+    message: 'Slack notification sent'
+  })
+}))
+
 // Mock the sound hook with proper sound functions
 vi.mock('@/components/adventure/sound/useSound', () => ({
   useSound: () => ({
