@@ -80,19 +80,6 @@ export const CommunityWaitlistForm = ({
     }
 
     try {
-      // Determine preferred contact based on method
-      let preferredContact = formData.email;
-      if (
-        (formData.contactMethod === "phone" ||
-          formData.contactMethod === "text") &&
-        formData.phone
-      ) {
-        preferredContact = formData.phone;
-      } else if (formData.contactMethod === "either") {
-        preferredContact =
-          formData.email + (formData.phone ? ` / ${formData.phone}` : "");
-      }
-
       // Save to community_waitlist table
       const { error: dbError } = await supabase
         .from("community_waitlist")
@@ -101,7 +88,7 @@ export const CommunityWaitlistForm = ({
           name: formData.name.trim(),
           email: formData.email.trim().toLowerCase(),
           phone: formData.phone || null,
-          preferred_contact: preferredContact,
+          preferred_contact: formData.contactMethod,
           contact_method: formData.contactMethod,
           source: source,
           status: 'pending',
