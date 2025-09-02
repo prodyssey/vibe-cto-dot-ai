@@ -108,7 +108,7 @@ export const Hero = () => {
           <div className="flex justify-center lg:justify-end lg:mr-10">
             <div className="relative text-center mx-auto lg:mx-0">
               <OptimizedImage
-                src="/lovable-uploads/8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png"
+                src="/images/craig-avatar-pixelated.png"
                 alt="VibeCTO Avatar"
                 width={384}
                 height={384}

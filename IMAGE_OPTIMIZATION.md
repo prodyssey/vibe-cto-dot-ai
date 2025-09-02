@@ -128,7 +128,7 @@ images: {
 ### For New Images
 
 1. Add original images to `public/images/`
-2. Use `OptimizedImage` or `OptimizedPicture` components
+2. Use `OptimizedImage` component
 3. Images will be automatically optimized on build
 
 ### For Blog Posts

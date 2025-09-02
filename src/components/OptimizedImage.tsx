@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 
 interface OptimizedImageProps {
@@ -13,6 +13,9 @@ interface OptimizedImageProps {
   fill?: boolean
   sizes?: string
   quality?: number
+  // Advanced options for fallback behavior
+  useOptimizedFallbacks?: boolean
+  loading?: 'lazy' | 'eager'
 }
 
 // Helper to get optimized image paths
@@ -37,10 +40,63 @@ export function OptimizedImage({
   priority = false,
   fill = false,
   sizes,
-  quality = 75
+  quality = 75,
+  useOptimizedFallbacks = true,
+  loading = 'lazy'
 }: OptimizedImageProps) {
-  // Simplified approach: use Next.js built-in optimization as primary,
-  // with our build-time optimization as a bonus when available
+  const [useNextjsOptimization, setUseNextjsOptimization] = useState(true)
+  
+  // Check if this is a local image that should use optimized fallbacks
+  const isLocalImage = src.startsWith('/images/') || src.startsWith('/lovable-uploads/')
+  const shouldUseOptimizedFallbacks = useOptimizedFallbacks && isLocalImage
+  
+  // If we should use optimized fallbacks and we haven't fallen back to Next.js yet
+  if (shouldUseOptimizedFallbacks && useNextjsOptimization) {
+    const paths = getOptimizedPaths(src)
+    
+    return (
+      <picture className={className}>
+        {/* AVIF - best compression */}
+        <source
+          srcSet={paths.avif}
+          type="image/avif"
+          sizes={sizes}
+        />
+        
+        {/* WebP - good compression, wide support */}
+        <source
+          srcSet={paths.webp}
+          type="image/webp"
+          sizes={sizes}
+        />
+        
+        {/* Optimized original format - fallback */}
+        <source
+          srcSet={paths.fallback}
+          type={src.endsWith('.png') ? 'image/png' : 'image/jpeg'}
+          sizes={sizes}
+        />
+        
+        {/* Final fallback to Next.js Image with original src */}
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          fill={fill}
+          className={fill ? className : `${className || ''} w-full h-full object-cover`.trim()}
+          priority={priority}
+          sizes={sizes}
+          quality={quality}
+          loading={loading}
+          unoptimized={false}
+          onError={() => setUseNextjsOptimization(false)}
+        />
+      </picture>
+    )
+  }
+  
+  // Default to Next.js Image component for all other cases or after fallback
   return (
     <Image
       src={src}
@@ -52,74 +108,8 @@ export function OptimizedImage({
       priority={priority}
       sizes={sizes}
       quality={quality}
-      unoptimized={false} // Enable Next.js optimization
+      loading={loading}
+      unoptimized={false}
     />
-  )
-}
-
-// Picture element version for maximum browser support and control
-interface OptimizedPictureProps extends OptimizedImageProps {
-  loading?: 'lazy' | 'eager'
-}
-
-export function OptimizedPicture({
-  src,
-  alt,
-  width,
-  height,
-  className,
-  loading = 'lazy',
-  sizes = '100vw'
-}: OptimizedPictureProps) {
-  if (!src.startsWith('/images/')) {
-    // For non-local images, use regular Image component
-    return (
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        className={className}
-        loading={loading}
-        sizes={sizes}
-      />
-    )
-  }
-  
-  const paths = getOptimizedPaths(src)
-  
-  return (
-    <picture className={className}>
-      {/* AVIF - best compression */}
-      <source
-        srcSet={paths.avif}
-        type="image/avif"
-        sizes={sizes}
-      />
-      
-      {/* WebP - good compression, wide support */}
-      <source
-        srcSet={paths.webp}
-        type="image/webp"
-        sizes={sizes}
-      />
-      
-      {/* Optimized original format - fallback */}
-      <source
-        srcSet={paths.fallback}
-        type={src.endsWith('.png') ? 'image/png' : 'image/jpeg'}
-        sizes={sizes}
-      />
-      
-      {/* Final fallback to original */}
-      <img
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        loading={loading}
-        className="w-full h-full object-cover"
-      />
-    </picture>
   )
 }
