@@ -215,6 +215,114 @@ export interface Database {
         }
         Relationships: []
       }
+      community_waitlist: {
+        Row: {
+          contact_method: string
+          created_at: string | null
+          email: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          preferred_contact: string
+          session_id: string | null
+          source: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          contact_method: string
+          created_at?: string | null
+          email: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          preferred_contact: string
+          session_id?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          contact_method?: string
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          preferred_contact?: string
+          session_id?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_waitlist_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_waitlist_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "adventure_sessions_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contacts: {
+        Row: {
+          company: string | null
+          created_at: string | null
+          email: string
+          id: string
+          inquiry_type: string
+          message: string
+          name: string
+          phone: string | null
+          preferred_contact: string
+          session_id: string | null
+          source: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          inquiry_type: string
+          message: string
+          name: string
+          phone?: string | null
+          preferred_contact?: string
+          session_id?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          inquiry_type?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          preferred_contact?: string
+          session_id?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       ignition_qualifications: {
         Row: {
           budget: string
@@ -406,66 +514,6 @@ export interface Database {
           },
           {
             foreignKeyName: "launch_control_waitlist_session_id_fkey"
-            columns: ["session_id"]
-            isOneToOne: false
-            referencedRelation: "adventure_sessions_public"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      community_waitlist: {
-        Row: {
-          contact_method: string
-          created_at: string | null
-          email: string
-          id: string
-          name: string
-          notes: string | null
-          phone: string | null
-          preferred_contact: string
-          session_id: string | null
-          source: string | null
-          status: string
-          updated_at: string | null
-        }
-        Insert: {
-          contact_method: string
-          created_at?: string | null
-          email: string
-          id?: string
-          name: string
-          notes?: string | null
-          phone?: string | null
-          preferred_contact: string
-          session_id?: string | null
-          source?: string | null
-          status?: string
-          updated_at?: string | null
-        }
-        Update: {
-          contact_method?: string
-          created_at?: string | null
-          email?: string
-          id?: string
-          name?: string
-          notes?: string | null
-          phone?: string | null
-          preferred_contact?: string
-          session_id?: string | null
-          source?: string | null
-          status?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "community_waitlist_session_id_fkey"
-            columns: ["session_id"]
-            isOneToOne: false
-            referencedRelation: "adventure_sessions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "community_waitlist_session_id_fkey"
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "adventure_sessions_public"

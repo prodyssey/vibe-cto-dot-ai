@@ -1,5 +1,5 @@
 interface FormSubmissionData {
-  formType: 'ignition_waitlist' | 'launch_control_waitlist' | 'community_waitlist' | 'email_subscription';
+  formType: 'ignition_waitlist' | 'launch_control_waitlist' | 'community_waitlist' | 'email_subscription' | 'contact_form';
   email: string;
   name?: string;
   phone?: string;
