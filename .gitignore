@@ -35,6 +35,7 @@ tsconfig.tsbuildinfo
 # Environment variables
 .env
 .env.local
+.env.test
 
 # Google Analytics OAuth files
 scripts/credentials.json
@@ -46,6 +47,12 @@ scripts/__pycache__/
 # Test coverage reports
 coverage/
 *.lcov
+
+# Playwright test results
+/test-results/
+/playwright-report/
+/playwright/.cache/
+debug-*.png
 
 # Optimized images (generated at build time)
 /public/optimized/
