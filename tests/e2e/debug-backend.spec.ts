@@ -107,7 +107,7 @@ test.describe('Backend Integration Debug', () => {
       message: 'Testing direct database access',
       inquiry_type: 'general',
       preferred_contact: 'email',
-      source: 'test',
+      source: 'contact_form', // Must match RLS policy requirement
       status: 'pending',
       session_id: crypto.randomUUID(),
     };
