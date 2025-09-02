@@ -51,11 +51,11 @@ export const Hero = () => {
 
             {/* Subcopy */}
             <p className="text-xl md:text-2xl text-gray-100 max-w-4xl lg:max-w-none mx-auto mb-12 leading-relaxed">
-              I work with builders to adopt AI and accelerate
-              <span className="text-blue-400 font-semibold"> roadmaps</span>,
-              <span className="text-purple-400 font-semibold"> operations</span>
-              , and
-              <span className="text-pink-400 font-semibold"> prototypes</span>.
+              I work with builders to adopt AI to accelerate
+              <span className="text-blue-400 font-semibold"> operations </span>
+              {/* <span className="text-purple-400 font-semibold"> operations</span>{" "} */}
+              and
+              <span className="text-pink-400 font-semibold"> roadmaps</span>.
             </p>
 
             {/* Primary CTA */}
@@ -118,10 +118,16 @@ export const Hero = () => {
               />
               {/* Quote under avatar */}
               <p className="mt-6 text-lg text-gray-200 italic">
-                I'm Craig. I've been a software product builder for 20+ years -
-                and I can tell you from experience that AI tools are totally
-                changing the game. I want to help you successfully ride this
-                wave too.
+                I've built digital products for 20+ years.
+              </p>
+              <p className="mt-3 text-lg text-gray-200 italic">
+                I've been adopting the best AI tools and workflows since 2022.
+              </p>
+              <p className="mt-3 text-lg text-gray-200 italic">
+                Want to join me? Let's go!
+              </p>
+              <p className="mt-4 text-sm text-gray-300/80 font-medium not-italic">
+                - Craig Sturgis, Founder
               </p>
               {/* Glow effect behind avatar */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-2xl -z-10 scale-110"></div>
