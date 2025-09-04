@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { testDb } from './utils/database';
 import { createTestWaitlistFormData, generateTestSessionId, wait } from './utils/test-data';
 
-test.describe.skip('Community Waitlist Form', () => {
+test.describe('Community Waitlist Form', () => {
   let testSessionId: string;
   let testData: ReturnType<typeof createTestWaitlistFormData>;
 
@@ -12,8 +12,31 @@ test.describe.skip('Community Waitlist Form', () => {
       email: `community-${Date.now()}@example.com`
     });
     
-    // NOTE: Community section was intentionally removed from homepage
-    // These tests are skipped until community form is accessible elsewhere
+    // Navigate to adventure game and then to ignitionAlternatives scene where community modal is accessible
+    await page.goto('/adventure');
+    await expect(page.locator('text=BEGIN JOURNEY')).toBeVisible({ timeout: 10000 });
+    
+    // Start the adventure to initialize gameStore
+    await page.click('text=BEGIN JOURNEY');
+    
+    // Wait for the gameStore to be available, then directly navigate to alternatives
+    await page.waitForFunction(() => typeof window.gameStore !== 'undefined', { timeout: 10000 });
+    
+    // Directly navigate to ignitionAlternatives scene where community modal is available
+    await page.evaluate(() => {
+      window.gameStore?.getState().navigateToScene('ignitionAlternatives');
+    });
+    
+    // Wait for the alternatives screen to load
+    await expect(page.locator('text=Alternative Paths')).toBeVisible({ timeout: 10000 });
+    
+    // Click the "Join Community" button to open the modal
+    const communityButton = page.locator('button:has-text("Join Community")');
+    await expect(communityButton).toBeVisible();
+    await communityButton.click();
+    
+    // Wait for the modal to open and the form to be visible
+    await expect(page.locator('text=Join Community Waitlist').last()).toBeVisible({ timeout: 10000 });
   });
 
   test.afterEach(async () => {
@@ -58,7 +81,7 @@ test.describe.skip('Community Waitlist Form', () => {
     expect(savedEntry?.name).toBe(testData.name);
     expect(savedEntry?.email).toBe(testData.email.toLowerCase());
     expect(savedEntry?.preferred_contact).toBe(testData.contactMethod);
-    expect(savedEntry?.source).toBe('website-community-section');
+    expect(savedEntry?.source).toBe('adventure-ignition-alternatives');
     expect(savedEntry?.status).toBe('pending');
   });
 
@@ -186,9 +209,13 @@ test.describe.skip('Community Waitlist Form', () => {
     
     await wait(2000);
     
-    // Navigate back to homepage and open modal again
-    await page.goto('/');
-    const communityButton = page.locator('button:has-text("Join Community Waitlist")');
+    // Navigate back to adventure alternatives scene and open modal again
+    await page.evaluate(() => {
+      window.gameStore?.getState().navigateToScene('ignitionAlternatives');
+    });
+    await expect(page.locator('text=Alternative Paths')).toBeVisible({ timeout: 10000 });
+    
+    const communityButton = page.locator('button:has-text("Join Community")');
     await communityButton.click();
     await expect(page.locator('text=Join Community Waitlist').last()).toBeVisible({ timeout: 10000 });
     
