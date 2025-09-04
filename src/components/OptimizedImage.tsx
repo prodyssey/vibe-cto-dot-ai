@@ -47,7 +47,7 @@ export function OptimizedImage({
   const [useNextjsOptimization, setUseNextjsOptimization] = useState(true)
   
   // Check if this is a local image that should use optimized fallbacks
-  const isLocalImage = src.startsWith('/images/') || src.startsWith('/lovable-uploads/')
+  const isLocalImage = src.startsWith('/images/')
   const shouldUseOptimizedFallbacks = useOptimizedFallbacks && isLocalImage
   
   // If we should use optimized fallbacks and we haven't fallen back to Next.js yet
@@ -84,7 +84,7 @@ export function OptimizedImage({
           width={width}
           height={height}
           fill={fill}
-          className={fill ? className : `${className || ''} w-full h-full object-cover`.trim()}
+          className={fill ? className : [className, 'w-full h-full object-cover'].filter(Boolean).join(' ')}
           priority={priority}
           sizes={sizes}
           quality={quality}
