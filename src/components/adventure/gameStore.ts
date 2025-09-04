@@ -279,3 +279,8 @@ export const useGameStore = create<GameStore>()(
     }
   )
 );
+
+// Expose game store to window for testing and development
+if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
+  (window as any).gameStore = useGameStore;
+}

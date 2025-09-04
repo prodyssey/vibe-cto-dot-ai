@@ -174,7 +174,7 @@ export class TestDatabase {
 
   // Clean up specific test data by email or session ID
   async cleanupByEmail(email: string): Promise<void> {
-    const tables = ['contacts', 'community_waitlist', 'ignition_waitlist', 'launch_control_waitlist'];
+    const tables = ['contacts', 'community_waitlist', 'ignition_waitlist', 'launch_control_waitlist', 'ignition_qualifications'];
     
     for (const table of tables) {
       try {
@@ -189,7 +189,7 @@ export class TestDatabase {
   }
 
   async cleanupBySessionId(sessionId: string): Promise<void> {
-    const tables = ['adventure_sessions', 'ignition_waitlist', 'launch_control_waitlist', 'community_waitlist', 'contacts'];
+    const tables = ['adventure_sessions', 'ignition_waitlist', 'launch_control_waitlist', 'community_waitlist', 'contacts', 'ignition_qualifications'];
     
     for (const table of tables) {
       try {

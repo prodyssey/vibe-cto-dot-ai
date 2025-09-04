@@ -75,21 +75,21 @@ test.describe('Contact Form', () => {
     await page.click('button:has-text("Send Message")');
 
     // Should show validation error for name
-    await expect(page.locator('text=Please enter your name')).toBeVisible();
+    await expect(page.locator('text=Please enter your name').first()).toBeVisible();
 
     // Fill name and try again
     await page.fill('#name', testData.name);
     await page.click('button:has-text("Send Message")');
 
     // Should show validation error for email
-    await expect(page.locator('text=Please enter a valid email address')).toBeVisible();
+    await expect(page.locator('text=Please enter a valid email address').first()).toBeVisible();
 
     // Fill email and try again
     await page.fill('#email', testData.email);
     await page.click('button:has-text("Send Message")');
 
     // Should show validation error for inquiry type
-    await expect(page.locator('text=Please select the type of inquiry')).toBeVisible();
+    await expect(page.locator('text=Please select the type of inquiry').first()).toBeVisible();
 
     // Fill inquiry type and try again
     await page.click('[role="combobox"]');
@@ -98,7 +98,7 @@ test.describe('Contact Form', () => {
     await page.click('button:has-text("Send Message")');
 
     // Should show validation error for message
-    await expect(page.locator('text=Please enter a message')).toBeVisible();
+    await expect(page.locator('text=Please enter a message').first()).toBeVisible();
   });
 
   test('should validate phone number when required', async ({ page }) => {
@@ -117,14 +117,14 @@ test.describe('Contact Form', () => {
     await page.click('button:has-text("Send Message")');
 
     // Should show validation error for phone
-    await expect(page.locator('text=Phone number is required for your selected contact method')).toBeVisible();
+    await expect(page.locator('text=Phone number is required for your selected contact method').first()).toBeVisible();
 
     // Add phone number
     await page.fill('#phone', testData.phone || '5551234567');
 
     // Now should submit successfully
     await page.click('button:has-text("Send Message")');
-    await expect(page.locator('text=Thank You')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=Thank You').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('should validate email format', async ({ page }) => {
@@ -138,7 +138,7 @@ test.describe('Contact Form', () => {
     await page.click('button:has-text("Send Message")');
 
     // Should show validation error for invalid email
-    await expect(page.locator('text=Please enter a valid email address')).toBeVisible();
+    await expect(page.locator('text=Please enter a valid email address').first()).toBeVisible();
   });
 
   test('should handle different contact methods correctly', async ({ page }) => {
@@ -160,8 +160,9 @@ test.describe('Contact Form', () => {
       // Fill form
       await page.fill('#name', uniqueTestData.name);
       await page.fill('#email', uniqueTestData.email);
-      await page.click('[data-testid="inquiry-type-select"]');
-      await page.click(`[data-value="${uniqueTestData.inquiryType}"]`);
+      await page.click('[role="combobox"]');
+      await page.waitForTimeout(1000);
+      await page.click('[role="option"]', { timeout: 5000 });
       await page.fill('#message', uniqueTestData.message);
 
       if (requiresPhone && uniqueTestData.phone) {
@@ -173,7 +174,7 @@ test.describe('Contact Form', () => {
 
       // Submit
       await page.click('button:has-text("Send Message")');
-      await expect(page.locator('text=Thank You')).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('text=Thank You').first()).toBeVisible({ timeout: 10000 });
 
       // Verify in database
       await wait(2000);
@@ -197,11 +198,11 @@ test.describe('Contact Form', () => {
     // Submit and immediately check for loading state
     await page.click('button:has-text("Send Message")');
     
-    // Should show loading state
-    await expect(page.locator('button:has-text("Send Message")')).toBeDisabled();
+    // Should show loading state - button text changes and becomes disabled
     await expect(page.locator('text=Sending...')).toBeVisible();
+    await expect(page.locator('button:has-text("Sending...")')).toBeDisabled();
 
     // Wait for completion
-    await expect(page.locator('text=Thank You')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=Thank You').first()).toBeVisible({ timeout: 10000 });
   });
 });

@@ -9,6 +9,7 @@ import { Paths } from "@/components/sections/Paths";
 import { ProblemPromise } from "@/components/sections/ProblemPromise";
 import { Proof } from "@/components/sections/Proof";
 import { Resources } from "@/components/sections/Resources";
+import { CommunitySection } from "@/components/sections/CommunitySection";
 import { getAllPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
@@ -63,6 +64,7 @@ export default async function HomePage() {
             />
           </div>
           <Paths />
+          <CommunitySection />
           <FinalCTA />
         </div>
         <Footer />
