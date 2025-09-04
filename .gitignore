@@ -54,7 +54,6 @@ coverage/
 /playwright/.cache/
 debug-*.png
 
-# Optimized images (generated at build time)
-/public/optimized/
+# Note: optimized images are now tracked in git for deployment consistency
 # Sentry Config File
 .env.sentry-build-plugin

@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "next dev -p 8080 --turbopack",
     "optimize-images": "node scripts/optimize-images.js",
-    "prebuild": "npm run optimize-images",
-    "prebuild:skip-images": "echo 'Skipping image optimization'",
+    "check-images": "node scripts/check-images.js",
+    "prebuild": "npm run check-images",
+    "prebuild:skip-images": "echo 'Skipping image check'",
     "build": "next build",
     "build:skip-images": "npm run prebuild:skip-images && npm run build",
     "start": "next start -p 8080",

@@ -5,7 +5,7 @@ import { join, extname, basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import imagemin from 'imagemin';
 import imageminWebp from 'imagemin-webp';
-import imageminAvif from 'imagemin-avif';
+// Removed imageminAvif - using WebP only for better reliability
 import imageminMozjpeg from 'imagemin-mozjpeg';
 import imageminPngquant from 'imagemin-pngquant';
 
@@ -109,32 +109,16 @@ async function optimizeImages() {
       
       let hasSuccess = false;
       
-      // Skip AVIF in CI environments if it's problematic
-      if (isLocal) {
-        try {
-          await imagemin([filePath], {
-            destination: dirname(outputBase),
-            plugins: [
-              imageminAvif({
-                quality: 50,
-                effort: isCI ? 4 : 6 // Lower effort in CI for speed
-              })
-            ]
-          });
-          hasSuccess = true;
-        } catch (avifError) {
-          console.warn(`⚠️  AVIF generation failed for ${relativePath}: ${avifError.message}`);
-        }
-      }
-      
-      // Generate WebP (more reliable in CI)
+      // Generate WebP (reliable and well-supported)
       try {
         await imagemin([filePath], {
           destination: dirname(outputBase),
           plugins: [
             imageminWebp({
-              quality: 75,
-              method: isCI ? 4 : 6 // Faster method in CI
+              quality: 80, // Slightly higher quality to preserve details
+              method: isCI ? 4 : 6, // Faster method in CI
+              crop: false, // Explicitly disable cropping
+              resize: false // Explicitly disable resizing
             })
           ]
         });
@@ -151,8 +135,10 @@ async function optimizeImages() {
             destination: dirname(outputBase),
             plugins: [
               imageminPngquant({
-                quality: [0.6, 0.8],
-                speed: isCI ? 1 : 3 // Faster in CI
+                quality: [0.8, 0.95], // Higher quality to prevent cropping/distortion
+                speed: isCI ? 1 : 3, // Faster in CI
+                strip: false, // Don't strip metadata that might affect dimensions
+                dithering: false // Disable dithering to prevent visual artifacts
               })
             ]
           });

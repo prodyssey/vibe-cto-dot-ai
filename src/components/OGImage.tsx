@@ -39,7 +39,7 @@ export const OGImage = () => {
         <div className="relative w-[400px] h-[400px] flex items-center justify-center">
           <div className="absolute inset-[-40px] bg-gradient-radial from-purple-500/30 to-transparent blur-[40px]" />
           <OptimizedImage
-            src="/lovable-uploads/8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png"
+            src="/images/craig-avatar-pixelated.png"
             alt="VibeCTO Avatar"
             width={380}
             height={380}

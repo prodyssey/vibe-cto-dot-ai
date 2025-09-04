@@ -122,11 +122,11 @@ async function generateOGImage() {
       .png();
     
     // Check if avatar image exists
-    const avatarDir = join(publicDir, 'lovable-uploads');
-    const avatarPath = join(avatarDir, '8dee8e22-c18f-4fb2-b2ea-7fbe8d2fe25a.png');
+    const avatarDir = join(publicDir, 'images');
+    const avatarPath = join(avatarDir, 'craig-avatar-pixelated.png');
     let avatarBuffer = null;
     
-    if (existsSync(avatarDir) && existsSync(avatarPath)) {
+    if (existsSync(avatarPath)) {
       console.log('📷 Found avatar image, including it in the composition');
       avatarBuffer = await sharp(avatarPath)
         .resize(320, 320, { 
@@ -136,11 +136,7 @@ async function generateOGImage() {
         .png()
         .toBuffer();
     } else {
-      if (!existsSync(avatarDir)) {
-        console.log('⚠️  Avatar directory not found, creating placeholder');
-      } else {
-        console.log('⚠️  Avatar image not found, creating placeholder');
-      }
+      console.log('⚠️  Avatar image not found, creating placeholder');
       // Create a simple avatar placeholder
       const avatarPlaceholder = `
         <svg width="320" height="320" xmlns="http://www.w3.org/2000/svg">
