@@ -14,6 +14,7 @@ export interface PostMetadata {
   slug: string;
   hidden?: boolean;
   headerImage?: string;
+  headerVideo?: string;
 }
 
 export interface Post {

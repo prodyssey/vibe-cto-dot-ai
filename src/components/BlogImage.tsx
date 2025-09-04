@@ -29,24 +29,52 @@ export function BlogImage({ src, alt, className = '', caption }: BlogImageProps)
   )
 }
 
-// Header image component for blog posts
-interface BlogHeaderImageProps {
-  src: string
+// Header media component for blog posts (supports both images and videos)
+interface BlogHeaderMediaProps {
+  src?: string
+  videoSrc?: string
   alt: string
 }
 
-export function BlogHeaderImage({ src, alt }: BlogHeaderImageProps) {
-  return (
-    <div className="mb-8 rounded-lg overflow-hidden bg-gray-900/50">
-      <OptimizedImage
-        src={src}
-        alt={alt}
-        width={1200}
-        height={630}
-        priority
-        className="w-full h-auto max-h-[50vh] sm:max-h-[60vh] object-contain"
-        sizes="(max-width: 768px) 100vw, 1200px"
-      />
-    </div>
-  )
+export function BlogHeaderMedia({ src, videoSrc, alt }: BlogHeaderMediaProps) {
+  if (videoSrc) {
+    return (
+      <div className="mb-8 rounded-lg overflow-hidden bg-gray-900/50">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-auto max-h-[50vh] sm:max-h-[60vh] object-contain"
+          poster={src} // Use still image as poster if available
+        >
+          <source src={videoSrc} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    )
+  }
+
+  if (src) {
+    return (
+      <div className="mb-8 rounded-lg overflow-hidden bg-gray-900/50">
+        <OptimizedImage
+          src={src}
+          alt={alt}
+          width={1200}
+          height={630}
+          priority
+          className="w-full h-auto max-h-[50vh] sm:max-h-[60vh] object-contain"
+          sizes="(max-width: 768px) 100vw, 1200px"
+        />
+      </div>
+    )
+  }
+
+  return null
+}
+
+// Backward compatibility
+export function BlogHeaderImage({ src, alt }: { src: string; alt: string }) {
+  return <BlogHeaderMedia src={src} alt={alt} />
 }
