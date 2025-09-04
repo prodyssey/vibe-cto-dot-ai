@@ -20,7 +20,7 @@ export const ProblemPromise = () => {
   };
 
   return (
-    <section className="py-20 px-6 bg-black/40 backdrop-blur-sm" id="journey">
+    <section className="py-20 px-6 bg-black/40 backdrop-blur-sm mt-8 md:mt-16" id="journey">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">

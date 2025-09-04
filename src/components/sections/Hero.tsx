@@ -19,7 +19,7 @@ export const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 py-20">
+    <section className="relative min-h-screen flex items-center justify-center px-6 py-12 md:py-20 pb-16 md:pb-8">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 backdrop-blur-3xl"></div>
 
@@ -113,7 +113,7 @@ export const Hero = () => {
                 width={384}
                 height={384}
                 priority
-                className="w-80 h-80 lg:w-96 lg:h-96 object-contain hover:scale-105 transition-transform duration-300 mx-auto"
+                className="max-w-80 max-h-80 lg:max-w-96 lg:max-h-96 w-auto h-auto hover:scale-105 transition-transform duration-300 mx-auto"
                 sizes="(max-width: 768px) 320px, 384px"
               />
               {/* Quote under avatar */}
