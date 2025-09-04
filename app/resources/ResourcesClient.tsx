@@ -75,10 +75,10 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
                       return (
                         <Link key={post.slug} href={`/resources/${post.slug}`}>
                           <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full overflow-hidden">
-                            {(post.headerImage || post.headerVideo) && (
+                            {post.headerImage && (
                               <div className="relative h-48 w-full">
                                 <OptimizedImage
-                                  src={post.headerImage!}
+                                  src={post.headerImage}
                                   alt={post.title}
                                   fill
                                   className="object-cover"
@@ -159,10 +159,10 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
                     return (
                       <Link key={post.slug} href={`/resources/${post.slug}`}>
                         <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 group cursor-pointer h-full overflow-hidden">
-                          {(post.headerImage || post.headerVideo) && (
+                          {post.headerImage && (
                             <div className="relative h-48 w-full">
                               <OptimizedImage
-                                src={post.headerImage!}
+                                src={post.headerImage}
                                 alt={post.title}
                                 fill
                                 className="object-cover"
