@@ -4,13 +4,15 @@ import { OptimizedImage } from '@/components/OptimizedImage'
 
 // Mock Next.js Image component
 vi.mock('next/image', () => ({
-  default: vi.fn(({ src, alt, className, onError, ...props }) => (
+  default: vi.fn(({ src, alt, className, onError, priority, loading, ...props }) => (
     <img
       src={src}
       alt={alt}
       className={className}
       data-testid="next-image"
       onError={onError}
+      loading={loading || 'lazy'}
+      fetchpriority={priority ? 'high' : undefined}
       {...props}
     />
   ))
