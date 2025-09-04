@@ -154,7 +154,25 @@ export async function POST(request: NextRequest) {
 
     // Send Slack notification via internal API
     try {
-      const slackResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/slack-notify`, {
+      // Determine site URL using the same logic as OPTIONS method
+      let siteUrl = "http://localhost:3000"; // Default fallback
+      
+      if (process.env.NODE_ENV === "production") {
+        siteUrl = "https://vibecto.ai";
+      } else if (process.env.NODE_ENV === "development") {
+        siteUrl = "http://localhost:8080";
+      } else if (process.env.DEPLOY_PRIME_URL) {
+        // Netlify deploy preview
+        siteUrl = process.env.DEPLOY_PRIME_URL;
+      } else if (process.env.DEPLOY_URL) {
+        // Netlify branch deploy
+        siteUrl = process.env.DEPLOY_URL;
+      } else if (process.env.NEXT_PUBLIC_SITE_URL) {
+        // Fallback to public site URL if set
+        siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+      }
+
+      const slackResponse = await fetch(`${siteUrl}/api/slack-notify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
