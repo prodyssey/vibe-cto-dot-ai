@@ -35,6 +35,7 @@ tsconfig.tsbuildinfo
 # Environment variables
 .env
 .env.local
+.env.test
 
 # Google Analytics OAuth files
 scripts/credentials.json
@@ -47,7 +48,10 @@ scripts/__pycache__/
 coverage/
 *.lcov
 
-# Optimized images (generated at build time)
-/public/optimized/
+# Playwright test artifacts
+playwright-report/
+test-results/
+
+# Note: optimized images are now tracked in git for deployment consistency
 # Sentry Config File
 .env.sentry-build-plugin
