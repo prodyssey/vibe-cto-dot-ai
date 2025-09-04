@@ -48,9 +48,11 @@ scripts/__pycache__/
 coverage/
 *.lcov
 
-# Playwright test artifacts
-playwright-report/
-test-results/
+# Playwright test results
+/test-results/
+/playwright-report/
+/playwright/.cache/
+debug-*.png
 
 # Note: optimized images are now tracked in git for deployment consistency
 # Sentry Config File

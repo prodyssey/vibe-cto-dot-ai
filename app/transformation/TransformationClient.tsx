@@ -379,7 +379,7 @@ export function TransformationClient({ posts = [] }: TransformationClientProps) 
                 <blockquote className="text-gray-300 text-xl md:text-2xl mb-8 leading-relaxed">
                   "Craig helped us build a culture around AI-assisted
                   engineering. We've dramatically increased the pace of delivery
-                  even with 1/3 the capacity we had in early 2024."
+                  even with 1/3 the capacity we had in 2024."
                 </blockquote>
 
                 <div className="text-center">

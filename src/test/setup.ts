@@ -58,6 +58,7 @@ Object.defineProperty(window, 'open', {
   })),
 })
 
+
 // Cleanup after each test
 afterEach(() => {
   cleanup()
