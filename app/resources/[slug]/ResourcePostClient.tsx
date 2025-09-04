@@ -13,7 +13,7 @@ import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
-import { BlogHeaderImage, BlogImage } from "@/components/BlogImage";
+import { BlogHeaderImage, BlogHeaderMedia, BlogImage } from "@/components/BlogImage";
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import { toast } from "sonner";
@@ -86,10 +86,12 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
             </Link>
           </div>
 
-          {/* Header Image */}
-          {post.metadata.headerImage && (
-            <BlogHeaderImage
+          {/* Header Media (Image or Video) */}
+          {(post.metadata.headerImage || post.metadata.headerVideo) && (
+            <BlogHeaderMedia
               src={post.metadata.headerImage}
+              videoSrc={post.metadata.headerVideo}
+              captionSrc={post.metadata.headerVideoCaptions}
               alt={post.metadata.title}
             />
           )}
