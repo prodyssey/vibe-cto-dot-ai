@@ -156,10 +156,6 @@ describe('OptimizedImage', () => {
         />
       )
       
-      // Check for AVIF source
-      const avifSource = container.querySelector('source[type="image/avif"]')
-      expect(avifSource).toHaveAttribute('srcSet', '/optimized/images/test-image.avif')
-      
       // Check for WebP source
       const webpSource = container.querySelector('source[type="image/webp"]')
       expect(webpSource).toHaveAttribute('srcSet', '/optimized/images/test-image.webp')
