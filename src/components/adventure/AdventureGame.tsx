@@ -198,6 +198,41 @@ export const AdventureGame = () => {
 
   const handleEmailSignup = async () => {
     try {
+      // Ensure session exists before updating
+      if (!sessionId) {
+        console.warn("No session ID available for email signup");
+        await handleEmailSignupBase();
+        return;
+      }
+
+      // Check if session record exists, create if needed
+      const { data: existingSession, error: checkError } = await supabase
+        .from("adventure_sessions")
+        .select("id")
+        .eq("id", sessionId)
+        .maybeSingle();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        console.error("Error checking session existence:", checkError);
+        await handleEmailSignupBase();
+        return;
+      }
+
+      if (!existingSession) {
+        // Session doesn't exist, create it first
+        console.log("Session not found, creating before email signup update");
+        const gameState = useGameStore.getState();
+        await saveGameProgress({
+          sessionId,
+          playerName: gameState.playerName,
+          currentSceneId: gameState.currentSceneId,
+          visitedScenes: gameState.visitedScenes,
+          choices: gameState.choices,
+          finalPath: gameState.finalPath || undefined,
+        });
+      }
+
+      // Now update with the final outcome
       await supabase
         .from("adventure_sessions")
         .update({ final_outcome: "email_signup" })
@@ -206,11 +241,48 @@ export const AdventureGame = () => {
       await handleEmailSignupBase();
     } catch (error) {
       console.error("Error updating outcome:", error);
+      // Still allow email signup to proceed even if database update fails
+      await handleEmailSignupBase();
     }
   };
 
   const handleExploreService = async () => {
     try {
+      // Ensure session exists before updating
+      if (!sessionId) {
+        console.warn("No session ID available for explore service");
+        await handleExploreServiceBase();
+        return;
+      }
+
+      // Check if session record exists, create if needed
+      const { data: existingSession, error: checkError } = await supabase
+        .from("adventure_sessions")
+        .select("id")
+        .eq("id", sessionId)
+        .maybeSingle();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        console.error("Error checking session existence:", checkError);
+        await handleExploreServiceBase();
+        return;
+      }
+
+      if (!existingSession) {
+        // Session doesn't exist, create it first
+        console.log("Session not found, creating before explore service update");
+        const gameState = useGameStore.getState();
+        await saveGameProgress({
+          sessionId,
+          playerName: gameState.playerName,
+          currentSceneId: gameState.currentSceneId,
+          visitedScenes: gameState.visitedScenes,
+          choices: gameState.choices,
+          finalPath: gameState.finalPath || undefined,
+        });
+      }
+
+      // Now update with the final outcome
       await supabase
         .from("adventure_sessions")
         .update({ final_outcome: "explore_service" })
@@ -219,6 +291,8 @@ export const AdventureGame = () => {
       await handleExploreServiceBase();
     } catch (error) {
       console.error("Error updating outcome:", error);
+      // Still allow explore service to proceed even if database update fails
+      await handleExploreServiceBase();
     }
   };
 
