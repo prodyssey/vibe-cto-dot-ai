@@ -62,9 +62,10 @@ export default function AboutPage() {
 
                 <div className="lg:col-span-3 space-y-4 text-gray-300">
                   <p className="text-lg leading-relaxed">
-                    I'm Craig Sturgis—founder, product engineer, and someone
-                    who's been in the trenches of software product development
-                    for long enough to know what can actually work.
+                    I'm Craig Sturgis. I'm a founder, product engineer, former
+                    executive leader, and someone who's been in the trenches of
+                    software product development for long enough to know what
+                    can actually work.
                   </p>
                   <p className="leading-relaxed">
                     I've been making software since I was a kid typing BASIC out
