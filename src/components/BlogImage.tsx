@@ -36,10 +36,11 @@ export function BlogImage({ src, alt, className = '', caption }: BlogImageProps)
 interface BlogHeaderMediaProps {
   src?: string
   videoSrc?: string
+  captionSrc?: string
   alt: string
 }
 
-export function BlogHeaderMedia({ src, videoSrc, alt }: BlogHeaderMediaProps) {
+export function BlogHeaderMedia({ src, videoSrc, captionSrc, alt }: BlogHeaderMediaProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -132,7 +133,13 @@ export function BlogHeaderMedia({ src, videoSrc, alt }: BlogHeaderMediaProps) {
           preload="metadata"
         >
           <source src={videoSrc} type="video/mp4" />
-          <track kind="captions" srcLang="en" label="English captions" />
+          <track 
+            kind="captions" 
+            src={captionSrc} 
+            srcLang="en" 
+            label="English captions"
+            default={!!captionSrc}
+          />
           Your browser does not support the video tag.
         </video>
 

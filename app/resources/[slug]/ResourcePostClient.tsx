@@ -91,6 +91,7 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
             <BlogHeaderMedia
               src={post.metadata.headerImage}
               videoSrc={post.metadata.headerVideo}
+              captionSrc={post.metadata.headerVideoCaptions}
               alt={post.metadata.title}
             />
           )}

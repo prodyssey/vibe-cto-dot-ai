@@ -15,6 +15,7 @@ export interface PostMetadata {
   hidden?: boolean;
   headerImage?: string;
   headerVideo?: string;
+  headerVideoCaptions?: string;
 }
 
 export interface Post {
