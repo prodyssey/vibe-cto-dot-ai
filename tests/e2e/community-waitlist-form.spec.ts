@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { testDb } from './utils/database';
 import { createTestWaitlistFormData, generateTestSessionId, wait } from './utils/test-data';
 
-test.describe('Community Waitlist Form', () => {
+test.describe.skip('Community Waitlist Form', () => {
   let testSessionId: string;
   let testData: ReturnType<typeof createTestWaitlistFormData>;
 
@@ -12,20 +12,8 @@ test.describe('Community Waitlist Form', () => {
       email: `community-${Date.now()}@example.com`
     });
     
-    // Navigate to homepage and open the community waitlist modal
-    await page.goto('/');
-    
-    // First, check if CommunitySection is present. If not, we need to add it to the homepage
-    const communityButton = page.locator('button:has-text("Join Community Waitlist")');
-    if (await communityButton.isVisible()) {
-      // Click the button to open the modal
-      await communityButton.click();
-      
-      // Wait for the modal to open and the form to be visible
-      await expect(page.locator('text=Join Community Waitlist').last()).toBeVisible({ timeout: 10000 });
-    } else {
-      throw new Error('Community Waitlist button not found on homepage. The CommunitySection may need to be added to the page.');
-    }
+    // NOTE: Community section was intentionally removed from homepage
+    // These tests are skipped until community form is accessible elsewhere
   });
 
   test.afterEach(async () => {
