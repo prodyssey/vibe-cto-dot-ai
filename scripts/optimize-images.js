@@ -5,7 +5,7 @@ import { join, extname, basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import imagemin from 'imagemin';
 import imageminWebp from 'imagemin-webp';
-import imageminAvif from 'imagemin-avif';
+// Removed imageminAvif - using WebP only for better reliability
 import imageminMozjpeg from 'imagemin-mozjpeg';
 import imageminPngquant from 'imagemin-pngquant';
 
@@ -109,25 +109,7 @@ async function optimizeImages() {
       
       let hasSuccess = false;
       
-      // Skip AVIF in CI environments if it's problematic
-      if (isLocal) {
-        try {
-          await imagemin([filePath], {
-            destination: dirname(outputBase),
-            plugins: [
-              imageminAvif({
-                quality: 50,
-                effort: isCI ? 4 : 6 // Lower effort in CI for speed
-              })
-            ]
-          });
-          hasSuccess = true;
-        } catch (avifError) {
-          console.warn(`⚠️  AVIF generation failed for ${relativePath}: ${avifError.message}`);
-        }
-      }
-      
-      // Generate WebP (more reliable in CI)
+      // Generate WebP (reliable and well-supported)
       try {
         await imagemin([filePath], {
           destination: dirname(outputBase),

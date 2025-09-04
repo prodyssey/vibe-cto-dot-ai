@@ -35,7 +35,7 @@ async function checkOptimizedVersions(originalPath) {
   const relativePath = originalPath.replace(publicDir + '/', '');
   const outputBase = join(optimizedDir, relativePath.replace(extname(relativePath), ''));
   
-  const formats = ['.avif', '.webp'];
+  const formats = ['.webp'];
   const ext = extname(originalPath).toLowerCase();
   if (['.jpg', '.jpeg', '.png'].includes(ext)) {
     formats.push(ext);
@@ -84,7 +84,7 @@ async function checkImages() {
     
     if (optimizedFormats.length === 0) {
       unoptimizedImages.push(relativePath);
-    } else if (optimizedFormats.length < 3) {
+    } else if (optimizedFormats.length < 2) {
       partiallyOptimizedImages.push({
         path: relativePath,
         formats: optimizedFormats
@@ -112,7 +112,7 @@ async function checkImages() {
   }
   
   console.log('\n💡 To optimize images, run: npm run optimize-images');
-  console.log('   This will generate WebP and AVIF versions for better performance.');
+  console.log('   This will generate WebP versions for better performance.');
 }
 
 // Run check

@@ -25,7 +25,6 @@ function getOptimizedPaths(src: string) {
   const pathWithoutExt = cleanSrc.replace(/\.[^/.]+$/, '')
   
   return {
-    avif: `/optimized/${pathWithoutExt}.avif`,
     webp: `/optimized/${pathWithoutExt}.webp`,
     fallback: `/optimized/${cleanSrc}`
   }
@@ -55,14 +54,7 @@ export function OptimizedImage({
     const paths = getOptimizedPaths(src)
     
     return (
-      <picture className={className}>
-        {/* AVIF - best compression */}
-        <source
-          srcSet={paths.avif}
-          type="image/avif"
-          sizes={sizes}
-        />
-        
+      <picture className={className}>        
         {/* WebP - good compression, wide support */}
         <source
           srcSet={paths.webp}
@@ -88,7 +80,7 @@ export function OptimizedImage({
           priority={priority}
           sizes={sizes}
           quality={quality}
-          loading={loading}
+          loading={priority ? 'eager' : loading}
           unoptimized={false}
           onError={() => setUseNextjsOptimization(false)}
         />
@@ -108,7 +100,7 @@ export function OptimizedImage({
       priority={priority}
       sizes={sizes}
       quality={quality}
-      loading={loading}
+      loading={priority ? 'eager' : loading}
       unoptimized={false}
     />
   )
