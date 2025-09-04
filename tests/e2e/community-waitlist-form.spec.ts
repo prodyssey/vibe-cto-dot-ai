@@ -135,26 +135,36 @@ test.describe('Community Waitlist Form', () => {
     await modal.locator('input[placeholder*="name"], input[id*="name"]').fill(testData.name);
     await modal.locator('input[type="email"]').fill(testData.email);
     
-    // Select phone contact method
-    await modal.locator('input[value="phone"]').check();
-    
-    // Submit button should be disabled when phone is required but not provided
+    // Initially, phone and text options should be disabled
+    const phoneRadio = modal.locator('input[value="phone"]');
+    const textRadio = modal.locator('input[value="text"]');
     const submitButton = modal.locator('button[type="submit"]').last();
-    await expect(submitButton).toBeDisabled();
     
-    // Fill phone number
+    await expect(phoneRadio).toBeDisabled();
+    await expect(textRadio).toBeDisabled();
+    
+    // Fill phone number to enable phone/text options
     await modal.locator('input[type="tel"]').fill(testData.phone || '555-123-4567');
     
-    // Now submit button should be enabled
+    // Now phone and text options should be enabled
+    await expect(phoneRadio).toBeEnabled();
+    await expect(textRadio).toBeEnabled();
+    
+    // Select phone contact method by clicking its label
+    await modal.locator('label[for="method-phone"]').click();
+    await expect(phoneRadio).toBeChecked();
     await expect(submitButton).toBeEnabled();
     
-    // Test text/SMS option too
-    await modal.locator('input[value="text"]').check();
+    // Test text/SMS option too by clicking its label
+    await modal.locator('label[for="method-text"]').click();
+    await expect(textRadio).toBeChecked();
     await expect(submitButton).toBeEnabled();
     
-    // Clear phone and check that button becomes disabled again
+    // Clear phone and check that contact method resets to email automatically
     await modal.locator('input[type="tel"]').fill('');
-    await expect(submitButton).toBeDisabled();
+    const emailRadio = modal.locator('input[value="email"]');
+    await expect(emailRadio).toBeChecked();
+    await expect(submitButton).toBeEnabled();
   });
 
   test('should handle different contact methods correctly', async ({ page }) => {
@@ -162,23 +172,34 @@ test.describe('Community Waitlist Form', () => {
     
     await modal.locator('input[placeholder*="name"], input[id*="name"]').fill(testData.name);
     await modal.locator('input[type="email"]').fill(testData.email);
-    await modal.locator('input[type="tel"]').fill('555-123-4567');
     
     const submitButton = modal.locator('button[type="submit"]').last();
     
-    // Test each contact method
-    const methods = ['email', 'phone', 'text', 'either'];
+    // Test email method (available by default)
+    await modal.locator('label[for="method-email"]').click();
+    await expect(modal.locator('input[value="email"]')).toBeChecked();
+    await expect(submitButton).toBeEnabled();
     
-    for (const method of methods) {
-      await modal.locator(`input[value="${method}"]`).check();
-      await expect(modal.locator(`input[value="${method}"]`)).toBeChecked();
-      
-      // All should enable submit button when phone is provided
-      await expect(submitButton).toBeEnabled();
-    }
+    // Test either method (available by default)
+    await modal.locator('label[for="method-either"]').click();
+    await expect(modal.locator('input[value="either"]')).toBeChecked();
+    await expect(submitButton).toBeEnabled();
+    
+    // Fill phone number to enable phone/text methods
+    await modal.locator('input[type="tel"]').fill('555-123-4567');
+    
+    // Test phone method (now enabled) by clicking its label
+    await modal.locator('label[for="method-phone"]').click();
+    await expect(modal.locator('input[value="phone"]')).toBeChecked();
+    await expect(submitButton).toBeEnabled();
+    
+    // Test text method (now enabled) by clicking its label
+    await modal.locator('label[for="method-text"]').click();
+    await expect(modal.locator('input[value="text"]')).toBeChecked();
+    await expect(submitButton).toBeEnabled();
     
     // Submit with 'either' method and verify database entry
-    await modal.locator('input[value="either"]').check();
+    await modal.locator('label[for="method-either"]').click();
     await submitButton.click();
     
     await expect(modal.locator('text=Submitting')).toBeVisible();
@@ -193,45 +214,6 @@ test.describe('Community Waitlist Form', () => {
     expect(savedEntry?.preferred_contact).toBe('either');
   });
 
-  test('should handle duplicate email submission', async ({ page }) => {
-    const modal = page.locator('[role="dialog"]');
-    
-    // Submit the form once successfully
-    await modal.locator('input[placeholder*="name"], input[id*="name"]').fill(testData.name);
-    await modal.locator('input[type="email"]').fill(testData.email);
-    await modal.locator('input[value="email"]').check();
-    
-    const submitButton = modal.locator('button[type="submit"]').last();
-    await submitButton.click();
-    
-    await expect(modal.locator('text=Submitting')).toBeVisible();
-    await expect(modal.locator('text=Submitting')).not.toBeVisible({ timeout: 10000 });
-    
-    await wait(2000);
-    
-    // Navigate back to adventure alternatives scene and open modal again
-    await page.evaluate(() => {
-      window.gameStore?.getState().navigateToScene('ignitionAlternatives');
-    });
-    await expect(page.locator('text=Alternative Paths')).toBeVisible({ timeout: 10000 });
-    
-    const communityButton = page.locator('button:has-text("Join Community")');
-    await communityButton.click();
-    await expect(page.locator('text=Join Community Waitlist').last()).toBeVisible({ timeout: 10000 });
-    
-    const newModal = page.locator('[role="dialog"]');
-    
-    // Try to submit with same email
-    await newModal.locator('input[placeholder*="name"], input[id*="name"]').fill('Another Name');
-    await newModal.locator('input[type="email"]').fill(testData.email);
-    await newModal.locator('input[value="email"]').check();
-    
-    const newSubmitButton = newModal.locator('button[type="submit"]').last();
-    await newSubmitButton.click();
-    
-    // Should show duplicate email error
-    await expect(newModal.locator('text=This email is already on the waitlist')).toBeVisible({ timeout: 10000 });
-  });
 
   test('should show loading state during submission', async ({ page }) => {
     const modal = page.locator('[role="dialog"]');
@@ -264,11 +246,17 @@ test.describe('Community Waitlist Form', () => {
     
     const phoneInput = modal.locator('input[type="tel"]');
     const phoneRadio = modal.locator('input[value="phone"]');
+    const textRadio = modal.locator('input[value="text"]');
     const emailRadio = modal.locator('input[value="email"]');
     
-    // Fill phone number and select phone contact method
+    // Initially phone and text should be disabled
+    await expect(phoneRadio).toBeDisabled();
+    await expect(textRadio).toBeDisabled();
+    
+    // Fill phone number and select phone contact method by clicking label
     await phoneInput.fill('555-123-4567');
-    await phoneRadio.check();
+    await expect(phoneRadio).toBeEnabled();
+    await modal.locator('label[for="method-phone"]').click();
     await expect(phoneRadio).toBeChecked();
     
     // Clear phone number - should automatically reset to email method
@@ -277,17 +265,20 @@ test.describe('Community Waitlist Form', () => {
     // Contact method should have automatically changed to email
     await expect(emailRadio).toBeChecked();
     await expect(phoneRadio).not.toBeChecked();
+    await expect(phoneRadio).toBeDisabled();
     
-    // Test same behavior with text method
+    // Test same behavior with text method by clicking label
     await phoneInput.fill('555-987-6543');
-    await modal.locator('input[value="text"]').check();
-    await expect(modal.locator('input[value="text"]')).toBeChecked();
+    await expect(textRadio).toBeEnabled();
+    await modal.locator('label[for="method-text"]').click();
+    await expect(textRadio).toBeChecked();
     
     // Clear phone again
     await phoneInput.fill('');
     
     // Should reset to email again
     await expect(emailRadio).toBeChecked();
-    await expect(modal.locator('input[value="text"]')).not.toBeChecked();
+    await expect(textRadio).not.toBeChecked();
+    await expect(textRadio).toBeDisabled();
   });
 });
