@@ -117,23 +117,162 @@ test.describe('Community Waitlist Form', () => {
     await expect(emailInput).toBeFocused();
   });
 
-  test.skip('should validate phone number when phone/text contact method selected', async ({ page }) => {
-    // Skip this complex test - focus on basic functionality first
+  test('should validate phone number when phone/text contact method selected', async ({ page }) => {
+    const modal = page.locator('[role="dialog"]');
+    
+    // Fill required fields first
+    await modal.locator('input[placeholder*="name"], input[id*="name"]').fill(testData.name);
+    await modal.locator('input[type="email"]').fill(testData.email);
+    
+    // Select phone contact method
+    await modal.locator('input[value="phone"]').check();
+    
+    // Submit button should be disabled when phone is required but not provided
+    const submitButton = modal.locator('button[type="submit"]').last();
+    await expect(submitButton).toBeDisabled();
+    
+    // Fill phone number
+    await modal.locator('input[type="tel"]').fill(testData.phone || '555-123-4567');
+    
+    // Now submit button should be enabled
+    await expect(submitButton).toBeEnabled();
+    
+    // Test text/SMS option too
+    await modal.locator('input[value="text"]').check();
+    await expect(submitButton).toBeEnabled();
+    
+    // Clear phone and check that button becomes disabled again
+    await modal.locator('input[type="tel"]').fill('');
+    await expect(submitButton).toBeDisabled();
   });
 
-  test.skip('should handle different contact methods correctly', async ({ page }) => {
-    // Skip this complex test - focus on basic functionality first
+  test('should handle different contact methods correctly', async ({ page }) => {
+    const modal = page.locator('[role="dialog"]');
+    
+    await modal.locator('input[placeholder*="name"], input[id*="name"]').fill(testData.name);
+    await modal.locator('input[type="email"]').fill(testData.email);
+    await modal.locator('input[type="tel"]').fill('555-123-4567');
+    
+    const submitButton = modal.locator('button[type="submit"]').last();
+    
+    // Test each contact method
+    const methods = ['email', 'phone', 'text', 'either'];
+    
+    for (const method of methods) {
+      await modal.locator(`input[value="${method}"]`).check();
+      await expect(modal.locator(`input[value="${method}"]`)).toBeChecked();
+      
+      // All should enable submit button when phone is provided
+      await expect(submitButton).toBeEnabled();
+    }
+    
+    // Submit with 'either' method and verify database entry
+    await modal.locator('input[value="either"]').check();
+    await submitButton.click();
+    
+    await expect(modal.locator('text=Submitting')).toBeVisible();
+    await expect(modal.locator('text=Submitting')).not.toBeVisible({ timeout: 10000 });
+    
+    await wait(2000);
+    
+    const savedEntry = await testDb.verifyDataExists<any>('community_waitlist', { 
+      email: testData.email.toLowerCase() 
+    });
+    expect(savedEntry).toBeTruthy();
+    expect(savedEntry?.preferred_contact).toBe('either');
   });
 
-  test.skip('should handle duplicate email submission', async ({ page }) => {
-    // Skip this complex test - focus on basic functionality first
+  test('should handle duplicate email submission', async ({ page }) => {
+    const modal = page.locator('[role="dialog"]');
+    
+    // Submit the form once successfully
+    await modal.locator('input[placeholder*="name"], input[id*="name"]').fill(testData.name);
+    await modal.locator('input[type="email"]').fill(testData.email);
+    await modal.locator('input[value="email"]').check();
+    
+    const submitButton = modal.locator('button[type="submit"]').last();
+    await submitButton.click();
+    
+    await expect(modal.locator('text=Submitting')).toBeVisible();
+    await expect(modal.locator('text=Submitting')).not.toBeVisible({ timeout: 10000 });
+    
+    await wait(2000);
+    
+    // Navigate back to homepage and open modal again
+    await page.goto('/');
+    const communityButton = page.locator('button:has-text("Join Community Waitlist")');
+    await communityButton.click();
+    await expect(page.locator('text=Join Community Waitlist').last()).toBeVisible({ timeout: 10000 });
+    
+    const newModal = page.locator('[role="dialog"]');
+    
+    // Try to submit with same email
+    await newModal.locator('input[placeholder*="name"], input[id*="name"]').fill('Another Name');
+    await newModal.locator('input[type="email"]').fill(testData.email);
+    await newModal.locator('input[value="email"]').check();
+    
+    const newSubmitButton = newModal.locator('button[type="submit"]').last();
+    await newSubmitButton.click();
+    
+    // Should show duplicate email error
+    await expect(newModal.locator('text=This email is already on the waitlist')).toBeVisible({ timeout: 10000 });
   });
 
-  test.skip('should show loading state during submission', async ({ page }) => {
-    // Skip this complex test - focus on basic functionality first
+  test('should show loading state during submission', async ({ page }) => {
+    const modal = page.locator('[role="dialog"]');
+    
+    await modal.locator('input[placeholder*="name"], input[id*="name"]').fill(testData.name);
+    await modal.locator('input[type="email"]').fill(testData.email);
+    await modal.locator('input[value="email"]').check();
+    
+    const submitButton = modal.locator('button[type="submit"]').last();
+    
+    // Click submit and immediately check for loading state
+    await submitButton.click();
+    
+    // Should show submitting text and spinner
+    await expect(modal.locator('text=Submitting')).toBeVisible();
+    await expect(modal.locator('.animate-spin')).toBeVisible();
+    
+    // Submit button should be disabled during submission
+    await expect(submitButton).toBeDisabled();
+    
+    // Wait for submission to complete
+    await expect(modal.locator('text=Submitting')).not.toBeVisible({ timeout: 10000 });
   });
 
-  test.skip('should reset contact method when phone is cleared', async ({ page }) => {
-    // Skip this complex test - focus on basic functionality first
+  test('should reset contact method when phone is cleared', async ({ page }) => {
+    const modal = page.locator('[role="dialog"]');
+    
+    await modal.locator('input[placeholder*="name"], input[id*="name"]').fill(testData.name);
+    await modal.locator('input[type="email"]').fill(testData.email);
+    
+    const phoneInput = modal.locator('input[type="tel"]');
+    const phoneRadio = modal.locator('input[value="phone"]');
+    const emailRadio = modal.locator('input[value="email"]');
+    
+    // Fill phone number and select phone contact method
+    await phoneInput.fill('555-123-4567');
+    await phoneRadio.check();
+    await expect(phoneRadio).toBeChecked();
+    
+    // Clear phone number - should automatically reset to email method
+    await phoneInput.fill('');
+    
+    // Contact method should have automatically changed to email
+    await expect(emailRadio).toBeChecked();
+    await expect(phoneRadio).not.toBeChecked();
+    
+    // Test same behavior with text method
+    await phoneInput.fill('555-987-6543');
+    await modal.locator('input[value="text"]').check();
+    await expect(modal.locator('input[value="text"]')).toBeChecked();
+    
+    // Clear phone again
+    await phoneInput.fill('');
+    
+    // Should reset to email again
+    await expect(emailRadio).toBeChecked();
+    await expect(modal.locator('input[value="text"]')).not.toBeChecked();
   });
 });
