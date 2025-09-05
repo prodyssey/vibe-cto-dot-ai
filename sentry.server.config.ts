@@ -12,4 +12,19 @@ Sentry.init({
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
+
+  // Filter out browser extension errors
+  beforeSend(event) {
+    // Filter out browser extension related errors
+    if (event.exception) {
+      const error = event.exception.values?.[0];
+      if (error?.value?.includes('runtime.sendMessage') ||
+          error?.value?.includes('Tab not found') ||
+          error?.value?.includes('chrome-extension://') ||
+          error?.value?.includes('moz-extension://')) {
+        return null; // Don't send this event
+      }
+    }
+    return event;
+  },
 });
