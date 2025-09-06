@@ -7,10 +7,30 @@ export type Json =
   | Json[]
 
 export interface Database {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
@@ -214,66 +234,6 @@ export interface Database {
           visited_scenes?: Json | null
         }
         Relationships: []
-      }
-      community_waitlist: {
-        Row: {
-          contact_method: string
-          created_at: string | null
-          email: string
-          id: string
-          name: string
-          notes: string | null
-          phone: string | null
-          preferred_contact: string
-          session_id: string | null
-          source: string | null
-          status: string
-          updated_at: string | null
-        }
-        Insert: {
-          contact_method: string
-          created_at?: string | null
-          email: string
-          id?: string
-          name: string
-          notes?: string | null
-          phone?: string | null
-          preferred_contact: string
-          session_id?: string | null
-          source?: string | null
-          status?: string
-          updated_at?: string | null
-        }
-        Update: {
-          contact_method?: string
-          created_at?: string | null
-          email?: string
-          id?: string
-          name?: string
-          notes?: string | null
-          phone?: string | null
-          preferred_contact?: string
-          session_id?: string | null
-          source?: string | null
-          status?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "community_waitlist_session_id_fkey"
-            columns: ["session_id"]
-            isOneToOne: false
-            referencedRelation: "adventure_sessions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "community_waitlist_session_id_fkey"
-            columns: ["session_id"]
-            isOneToOne: false
-            referencedRelation: "adventure_sessions_public"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       contacts: {
         Row: {
@@ -751,6 +711,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       adventure_path: [
@@ -763,3 +726,4 @@ export const Constants = {
     },
   },
 } as const
+
