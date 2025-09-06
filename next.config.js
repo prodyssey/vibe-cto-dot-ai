@@ -5,13 +5,14 @@ const nextConfig = {
   
   images: {
     remotePatterns: [
-      {
+      // Supabase images - hostname will be extracted from NEXT_PUBLIC_SUPABASE_URL at runtime
+      ...(process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith('https://') ? [{
         protocol: 'https',
-        hostname: 'zfuokpddfofaneazfrhf.supabase.co',
+        hostname: new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname,
         port: '',
         pathname: '/**',
         search: '',
-      }
+      }] : []),
     ],
     // Enable optimization for better Lighthouse scores
     unoptimized: false,

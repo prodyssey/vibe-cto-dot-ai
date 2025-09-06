@@ -1,1 +1,3 @@
-project_id = "zfuokpddfofaneazfrhf"
+# Replace with your actual Supabase project ID for production
+# For local development, this is handled automatically by 'supabase start'
+project_id = "your-supabase-project-id"
