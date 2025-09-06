@@ -128,28 +128,76 @@ export async function POST(request: NextRequest) {
 
     // If we have tags to add and the subscription was successful
     if (tags && tags.length > 0 && convertKitData.subscription) {
-      // Add tags in parallel for better performance
-      const tagPromises = tags.map((tag) =>
-        fetch(`https://api.convertkit.com/v3/tags`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            api_secret: CONVERTKIT_API_SECRET,
-            tag: {
-              name: tag,
-              email,
-            },
-          }),
-        }).catch((error) => {
-          console.warn(`Failed to add tag "${tag}" to ${email}:`, error);
-          // Don't fail the whole request if tagging fails
-          return null;
-        })
-      );
+      // Add tags using the correct ConvertKit API endpoint
+      // Use the subscriber-specific tagging endpoint for better reliability
+      const subscriberId = convertKitData.subscription.id;
+      
+      if (subscriberId) {
+        const tagPromises = tags.map(async (tag) => {
+          try {
+            // First, get or create the tag to get its ID
+            const tagResponse = await fetch(`https://api.convertkit.com/v3/tags?api_secret=${CONVERTKIT_API_SECRET}`);
+            const tagsData = await tagResponse.json();
+            
+            let tagId = null;
+            if (tagsData.tags) {
+              const existingTag = tagsData.tags.find((t: any) => t.name === tag);
+              tagId = existingTag?.id;
+            }
+            
+            // If tag doesn't exist, create it
+            if (!tagId) {
+              const createTagResponse = await fetch(`https://api.convertkit.com/v3/tags`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  api_secret: CONVERTKIT_API_SECRET,
+                  tag: { name: tag }
+                }),
+              });
+              
+              if (createTagResponse.ok) {
+                const newTagData = await createTagResponse.json();
+                tagId = newTagData.tag?.id;
+              }
+            }
+            
+            // Now tag the subscriber using the tag ID
+            if (tagId) {
+              const tagSubscriberResponse = await fetch(
+                `https://api.convertkit.com/v3/tags/${tagId}/subscribe`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    api_secret: CONVERTKIT_API_SECRET,
+                    email,
+                  }),
+                }
+              );
+              
+              if (!tagSubscriberResponse.ok) {
+                console.warn(`Failed to tag subscriber with "${tag}":`, await tagSubscriberResponse.text());
+              } else {
+                console.log(`Successfully tagged subscriber with "${tag}"`);
+              }
+            } else {
+              console.warn(`Could not create or find tag "${tag}"`);
+            }
+          } catch (error) {
+            console.warn(`Failed to add tag "${tag}" to ${email}:`, error);
+            // Don't fail the whole request if tagging fails
+          }
+        });
 
-      await Promise.allSettled(tagPromises);
+        await Promise.allSettled(tagPromises);
+      } else {
+        console.warn('No subscriber ID returned from ConvertKit, cannot apply tags');
+      }
     }
 
     // Send Slack notification via internal API
