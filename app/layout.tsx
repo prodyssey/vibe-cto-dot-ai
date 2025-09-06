@@ -3,6 +3,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vibecto.ai"),
@@ -56,6 +57,7 @@ export default function RootLayout({
       <body>
         <GoogleAnalytics />
         <Analytics />
+        <SpeedInsights />
         <Providers>
           <div id="root">{children}</div>
         </Providers>
