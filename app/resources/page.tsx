@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     url: "https://vibecto.ai/resources",
     images: [
       {
-        url: '/vibe-cto-og.png',
+        url: '/images/posts/vibe-coding-augmented-engineering.png',
         width: 1200,
         height: 630,
         alt: 'Resources - Engineering Insights | VibeCTO.ai',
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Resources - Engineering Insights | VibeCTO.ai",
     description: "Discover insights, guides, and resources for AI-augmented engineering and product development.",
-    images: ['/vibe-cto-og.png'],
+    images: ['/images/posts/vibe-coding-augmented-engineering.png'],
   },
   alternates: {
     canonical: "https://vibecto.ai/resources"
