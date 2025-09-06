@@ -11,6 +11,7 @@ import { trackFormSubmission } from "@/lib/analytics";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
 import { subscribeToConvertKit, getContextualTags, getCustomFields } from "@/lib/convertkit";
 import { sendSlackNotification } from "@/lib/slack";
+import { OptInCheckbox } from "@/components/ui/opt-in-checkbox";
 
 import { AnimatedButton } from "./AnimatedButton";
 
@@ -35,6 +36,7 @@ export const LaunchControlWaitlistForm = ({
     email: "",
     phone: "",
     contactMethod: "email",
+    optInToMarketing: true,
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -87,6 +89,7 @@ export const LaunchControlWaitlistForm = ({
           company_name: null,
           current_scale: null,
           is_waitlist: true,
+          opt_in_to_marketing: formData.optInToMarketing,
         });
 
       if (dbError) {
@@ -194,6 +197,15 @@ export const LaunchControlWaitlistForm = ({
             required
             className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-500"
           />
+          <div className="mt-3">
+            <OptInCheckbox
+              id="launch-control-waitlist-opt-in"
+              checked={formData.optInToMarketing}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, optInToMarketing: checked })
+              }
+            />
+          </div>
         </div>
 
         <div>

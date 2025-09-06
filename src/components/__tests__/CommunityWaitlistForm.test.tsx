@@ -66,6 +66,7 @@ describe('CommunityWaitlistForm', () => {
       contact_method: 'phone',
       source: 'test',
       status: 'pending',
+      opt_in_to_marketing: true,
       notes: null,
     })
   })
@@ -109,6 +110,7 @@ describe('CommunityWaitlistForm', () => {
       contact_method: 'email',
       source: 'test',
       status: 'pending',
+      opt_in_to_marketing: true,
       notes: null,
     })
   })
@@ -153,6 +155,7 @@ describe('CommunityWaitlistForm', () => {
       contact_method: 'either',
       source: 'test',
       status: 'pending',
+      opt_in_to_marketing: true,
       notes: 'Phone: 555-987-6543', // Phone goes in notes when method is "either"
     })
   })
