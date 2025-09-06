@@ -27,6 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { sendSlackNotification } from "@/lib/slack";
+import { OptInCheckbox } from "@/components/ui/opt-in-checkbox";
 
 interface ContactFormProps {
   className?: string;
@@ -41,6 +42,7 @@ interface FormData {
   preferredContact: "email" | "phone" | "text" | "either";
   message: string;
   sessionId: string;
+  optInToMarketing: boolean;
 }
 
 const INQUIRY_TYPES = [
@@ -65,6 +67,7 @@ export const ContactForm = ({ className }: ContactFormProps) => {
     preferredContact: "email",
     message: "",
     sessionId: "",
+    optInToMarketing: true,
   });
 
   // Generate session ID only on client side to prevent hydration mismatch
@@ -147,6 +150,7 @@ export const ContactForm = ({ className }: ContactFormProps) => {
           source: 'contact_form',
           status: 'pending',
           session_id: formData.sessionId,
+          opt_in_to_marketing: formData.optInToMarketing,
         })
         .select()
         .single();
@@ -172,6 +176,7 @@ export const ContactForm = ({ className }: ContactFormProps) => {
             inquiry_label: INQUIRY_TYPES.find(t => t.value === formData.inquiryType)?.label || formData.inquiryType,
             message: formData.message,
             form_type: 'contact_form',
+            opt_in_to_marketing: formData.optInToMarketing,
           },
         });
       } catch (error) {
@@ -280,6 +285,15 @@ export const ContactForm = ({ className }: ContactFormProps) => {
                 setFormData({ ...formData, email: e.target.value })
               }
             />
+            <div className="mt-3">
+              <OptInCheckbox
+                id="contact-opt-in"
+                checked={formData.optInToMarketing}
+                onCheckedChange={(checked) =>
+                  setFormData({ ...formData, optInToMarketing: checked })
+                }
+              />
+            </div>
           </div>
         </div>
 

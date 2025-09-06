@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { trackFormSubmission } from '@/lib/analytics';
 import { sessionEmailFormSchema, validateForm } from '@/lib/validation';
 import { logger } from '@/lib/logger';
+import { OptInCheckbox } from '@/components/ui/opt-in-checkbox';
 
 import { AnimatedButton } from './AnimatedButton';
 
@@ -22,6 +23,7 @@ interface SessionEmailFormProps {
 export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuccess, onBack }: SessionEmailFormProps) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState(isGeneratedName ? '' : playerName);
+  const [optInToMarketing, setOptInToMarketing] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,7 +70,7 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
       // Session found, proceeding with update
 
       // Update the session with the email (and name if it was generated)
-      const updateData: any = { email };
+      const updateData: any = { email, opt_in_to_marketing: optInToMarketing };
       if (isGeneratedName && name) {
         // Update the player name if they provided their real name
         updateData.player_name = name;
@@ -163,6 +165,13 @@ export const SessionEmailForm = ({ sessionId, playerName, isGeneratedName, onSuc
             disabled={isSubmitting}
             className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-500"
           />
+          <div className="mt-3">
+            <OptInCheckbox
+              id="session-email-opt-in"
+              checked={optInToMarketing}
+              onCheckedChange={setOptInToMarketing}
+            />
+          </div>
         </div>
       </div>
 
