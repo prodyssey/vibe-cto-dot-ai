@@ -4,6 +4,7 @@ import { Calendar, FileText, Code } from "lucide-react";
 import Link from "next/link";
 
 import { EmailOptIn } from "@/components/EmailOptIn";
+import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { Badge } from "@/components/ui/badge";
@@ -46,9 +47,9 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
 
   return (
     <>
-      <Navigation />
-      <div className="pt-20">
-        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex flex-col">
+        <Navigation />
+        <div className="pt-20 flex-grow">
           <div className="px-6">
             <div className="max-w-6xl mx-auto">
               {/* Header */}
@@ -232,6 +233,7 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </>
   );

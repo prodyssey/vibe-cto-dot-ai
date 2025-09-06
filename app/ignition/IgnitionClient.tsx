@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 
 import { EmailOptIn } from "@/components/EmailOptIn";
+import { Footer } from "@/components/Footer";
 import { IgnitionQualificationForm } from "@/components/IgnitionQualificationForm";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -64,10 +65,10 @@ export function IgnitionClient() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
         <Navigation />
 
-        <div className="pt-20">
+        <div className="pt-20 flex-grow">
         {/* Hero Section */}
         <section className="py-20 px-6">
           <div className="max-w-4xl mx-auto text-center">
@@ -228,6 +229,8 @@ export function IgnitionClient() {
           </div>
         </section>
         </div>
+
+        <Footer />
 
         {/* Qualification Form Dialog */}
       <Dialog open={showQualificationForm} onOpenChange={setShowQualificationForm}>

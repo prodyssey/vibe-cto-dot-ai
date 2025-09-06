@@ -19,6 +19,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
+import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -143,10 +144,10 @@ export function TransformationClient({ posts = [] }: TransformationClientProps) 
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
         <Navigation />
 
-        <div className="pt-20">
+        <div className="pt-20 flex-grow">
           {/* Hero Section */}
           <section className="py-20 px-6">
             <div className="max-w-7xl mx-auto">
@@ -734,6 +735,7 @@ export function TransformationClient({ posts = [] }: TransformationClientProps) 
             </div>
           </section>
         </div>
+        <Footer />
       </div>
     </>
   );
