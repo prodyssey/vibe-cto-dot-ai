@@ -4,7 +4,7 @@ import { Calendar, FileText, Code } from "lucide-react";
 import Link from "next/link";
 
 import { EmailOptIn } from "@/components/EmailOptIn";
-import { Navigation } from "@/components/Navigation";
+import { StandardLayout } from "@/components/StandardLayout";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -45,10 +45,8 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
   const regularPosts = posts.filter((post) => !post.featured);
 
   return (
-    <>
-      <Navigation />
+    <StandardLayout className="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
       <div className="pt-20">
-        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
           <div className="px-6">
             <div className="max-w-6xl mx-auto">
               {/* Header */}
@@ -231,8 +229,7 @@ export function ResourcesClient({ posts }: ResourcesClientProps) {
               )}
             </div>
           </div>
-        </div>
       </div>
-    </>
+    </StandardLayout>
   );
 }
