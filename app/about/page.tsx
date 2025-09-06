@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Navigation } from "@/components/Navigation";
+import { StandardLayout } from "@/components/StandardLayout";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,10 +19,8 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-        <Navigation />
-        <div className="pt-32 pb-20 px-6">
+    <StandardLayout>
+      <div className="pt-32 pb-20 px-6">
           <div className="max-w-4xl mx-auto">
             {/* Header Section */}
             <div className="text-center mb-16">
@@ -241,7 +239,6 @@ export default function AboutPage() {
             </Card>
           </div>
         </div>
-      </div>
-    </>
+    </StandardLayout>
   );
 }
