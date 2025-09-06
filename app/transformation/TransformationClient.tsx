@@ -19,7 +19,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-import { Navigation } from "@/components/Navigation";
+import { StandardLayout } from "@/components/StandardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -143,9 +143,7 @@ export function TransformationClient({ posts = [] }: TransformationClientProps) 
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-        <Navigation />
-
+      <StandardLayout>
         <div className="pt-20">
           {/* Hero Section */}
           <section className="py-20 px-6">
@@ -734,7 +732,7 @@ export function TransformationClient({ posts = [] }: TransformationClientProps) 
             </div>
           </section>
         </div>
-      </div>
+      </StandardLayout>
     </>
   );
 }

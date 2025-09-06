@@ -9,10 +9,12 @@ global.React = React
 // Extend Vitest's expect with Testing Library matchers
 expect.extend(matchers)
 
-// Mock Next.js environment variables
+// Mock Next.js environment variables for testing
 process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID = '8281105'
+// Use mock values for CI/CD testing (not local Supabase)
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co'
 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key'
+process.env.NODE_ENV = 'test'
 
 // Mock Next.js navigation
 vi.mock('next/navigation', () => ({

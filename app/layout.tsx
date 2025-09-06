@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import AnalyticsErrorBoundary from "@/components/AnalyticsErrorBoundary";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vibecto.ai"),
@@ -53,7 +56,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body>
-        <GoogleAnalytics />
+        <AnalyticsErrorBoundary>
+          <GoogleAnalytics />
+          {process.env.NODE_ENV === 'production' && (
+            <>
+              <Analytics />
+              <SpeedInsights />
+            </>
+          )}
+        </AnalyticsErrorBoundary>
         <Providers>
           <div id="root">{children}</div>
         </Providers>
