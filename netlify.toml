@@ -31,14 +31,13 @@
     
     # Content Security Policy
     # This is a strict policy that allows only necessary resources
-    # NOTE: Replace 'your-supabase-project' with your actual Supabase project hostname
     Content-Security-Policy = """
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://app.kit.com https://f.convertkit.com;
       style-src 'self' 'unsafe-inline';
       img-src 'self' data: https: blob:;
       font-src 'self' data:;
-      connect-src 'self' https://your-supabase-project.supabase.co https://app.kit.com https://api.convertkit.com wss://your-supabase-project.supabase.co;
+      connect-src 'self' https://zfuokpddfofaneazfrhf.supabase.co https://app.kit.com https://api.convertkit.com wss://zfuokpddfofaneazfrhf.supabase.co;
       frame-src https://savvycal.com;
       frame-ancestors 'none';
       base-uri 'self';
