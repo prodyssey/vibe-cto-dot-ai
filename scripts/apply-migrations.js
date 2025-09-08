@@ -40,8 +40,22 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
  * Ensures the schema_migrations table exists
  */
 async function ensureSchemaMigrationsTable() {
-  const { error } = await supabase.rpc('exec', {
-    sql: `
+  // First, try to query the table to see if it exists
+  const { error: checkError } = await supabase
+    .from('schema_migrations')
+    .select('version')
+    .limit(1);
+
+  if (!checkError) {
+    // Table exists and is accessible
+    return;
+  }
+
+  if (checkError.message && checkError.message.includes('does not exist')) {
+    // Table doesn't exist, try to create it
+    console.log('📋 schema_migrations table not found, attempting to create...');
+    
+    const createTableSQL = `
       CREATE TABLE IF NOT EXISTS public.schema_migrations (
         version VARCHAR(255) PRIMARY KEY,
         applied_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -49,24 +63,29 @@ async function ensureSchemaMigrationsTable() {
       
       -- Grant necessary permissions
       GRANT SELECT, INSERT ON public.schema_migrations TO anon, authenticated;
-    `
-  });
+    `;
 
-  if (error) {
-    // If rpc doesn't work, try direct SQL execution
-    const { error: directError } = await supabase.from('schema_migrations').select('version').limit(1);
-    if (directError && directError.message.includes('does not exist')) {
-      console.log('⚠️  schema_migrations table does not exist. Please create it manually:');
-      console.log(`
-        CREATE TABLE IF NOT EXISTS public.schema_migrations (
-          version VARCHAR(255) PRIMARY KEY,
-          applied_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        );
-        GRANT SELECT, INSERT ON public.schema_migrations TO anon, authenticated;
-      `);
+    const { error: createError } = await supabase.rpc('exec', {
+      sql: createTableSQL
+    });
+
+    if (createError) {
+      console.error('❌ Could not create schema_migrations table automatically.');
+      console.error('💡 Please create it manually in your Supabase dashboard:');
+      console.error('   https://app.supabase.com/project/[your-project]/sql/new');
+      console.error('');
+      console.error('   SQL to execute:');
+      console.error(createTableSQL);
       process.exit(1);
     }
+
+    console.log('✅ Successfully created schema_migrations table');
+    return;
   }
+
+  // Some other error occurred
+  console.error('❌ Error checking schema_migrations table:', checkError.message);
+  throw checkError;
 }
 
 /**
@@ -113,14 +132,31 @@ async function applyMigration(migration) {
   
   console.log(`📦 Applying migration: ${migration.filename}`);
   
-  // Execute the migration SQL
-  const { error: migrationError } = await supabase.rpc('exec', {
-    sql: sql
-  });
+  try {
+    // For now, we'll use a simpler approach and assume the migrations
+    // are primarily DDL operations that can be handled by the client
+    // In a production environment, you might want to use a direct database connection
+    
+    // Try to execute using rpc first, with fallback handling
+    const { error: migrationError } = await supabase.rpc('exec', {
+      sql: sql
+    });
 
-  if (migrationError) {
-    console.error(`❌ Error applying migration ${migration.filename}:`, migrationError.message);
-    throw migrationError;
+    if (migrationError) {
+      // If RPC exec doesn't work, log a detailed error and guidance
+      console.error(`❌ Error applying migration ${migration.filename}:`, migrationError.message);
+      console.error('💡 This might be because the "exec" RPC function is not available.');
+      console.error('   Consider applying this migration manually in your Supabase dashboard:');
+      console.error('   https://app.supabase.com/project/[your-project]/sql/new');
+      console.error('');
+      console.error('   Migration SQL:');
+      console.error('   ' + sql.split('\n').map(line => '   ' + line).join('\n'));
+      throw migrationError;
+    }
+    
+  } catch (error) {
+    console.error(`❌ Failed to apply migration ${migration.filename}:`, error.message);
+    throw error;
   }
 
   // Record the migration as applied
@@ -137,14 +173,82 @@ async function applyMigration(migration) {
 }
 
 /**
+ * Attempts to acquire a migration lock to prevent concurrent migrations
+ */
+async function acquireMigrationLock() {
+  const lockId = `migration_lock_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  const lockTimeout = 300000; // 5 minutes
+  const lockExpiry = new Date(Date.now() + lockTimeout).toISOString();
+  
+  try {
+    // Try to insert a lock record - this will fail if a lock already exists
+    const { error } = await supabase
+      .from('schema_migrations')
+      .insert({ 
+        version: '_MIGRATION_LOCK_', 
+        applied_at: lockExpiry
+      });
+
+    if (error) {
+      // Check if there's an existing lock
+      const { data: existingLock } = await supabase
+        .from('schema_migrations')
+        .select('applied_at')
+        .eq('version', '_MIGRATION_LOCK_')
+        .single();
+
+      if (existingLock) {
+        const lockExpiry = new Date(existingLock.applied_at);
+        if (lockExpiry > new Date()) {
+          console.log('⏳ Another migration process is running. Waiting...');
+          // Wait for the lock to expire or be released
+          await new Promise(resolve => setTimeout(resolve, 5000));
+          return await acquireMigrationLock(); // Retry
+        } else {
+          // Lock has expired, remove it and try again
+          await releaseMigrationLock();
+          return await acquireMigrationLock();
+        }
+      }
+    }
+
+    console.log('🔒 Acquired migration lock');
+    return lockId;
+  } catch (error) {
+    console.log('⚠️  Could not acquire migration lock, proceeding without lock');
+    return null;
+  }
+}
+
+/**
+ * Releases the migration lock
+ */
+async function releaseMigrationLock() {
+  try {
+    await supabase
+      .from('schema_migrations')
+      .delete()
+      .eq('version', '_MIGRATION_LOCK_');
+    console.log('🔓 Released migration lock');
+  } catch (error) {
+    console.log('⚠️  Could not release migration lock:', error.message);
+  }
+}
+
+/**
  * Main migration application logic
  */
 async function applyMigrations() {
+  let lockId = null;
+  
   try {
     console.log('🚀 Starting migration process...');
     
     // Ensure schema_migrations table exists
     await ensureSchemaMigrationsTable();
+    
+    // Try to acquire migration lock
+    lockId = await acquireMigrationLock();
     
     // Get applied migrations from database
     const appliedMigrations = await getAppliedMigrations();
@@ -176,6 +280,11 @@ async function applyMigrations() {
   } catch (error) {
     console.error('💥 Migration process failed:', error.message);
     process.exit(1);
+  } finally {
+    // Always release the lock, even if migrations failed
+    if (lockId) {
+      await releaseMigrationLock();
+    }
   }
 }
 

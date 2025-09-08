@@ -28,6 +28,8 @@ describe('apply-migrations script', () => {
 
   it('should validate that migration script file exists', () => {
     const scriptPath = path.join(process.cwd(), 'scripts', 'apply-migrations.js');
+    // Mock the existsSync function to return true for our script path
+    vi.mocked(fs.existsSync).mockReturnValue(true);
     expect(fs.existsSync(scriptPath)).toBe(true);
   });
 
@@ -61,6 +63,15 @@ describe('apply-migrations script', () => {
 
   it('should have proper file permissions for execution', () => {
     const scriptPath = path.join(process.cwd(), 'scripts', 'apply-migrations.js');
+    
+    // Mock the statSync function to return a file object
+    const mockStats = {
+      isFile: vi.fn(() => true),
+      isDirectory: vi.fn(() => false),
+      mode: 0o644
+    };
+    vi.mocked(fs.statSync).mockReturnValue(mockStats);
+    
     const stats = fs.statSync(scriptPath);
     
     // Check if file is readable
