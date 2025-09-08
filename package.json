@@ -5,6 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "next dev -p 8080 --turbopack",
+    "dev:local": "supabase start && npm run dev",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:migrate": "supabase db reset && supabase db push",
+    "db:types": "supabase gen types typescript --local > src/integrations/supabase/types.ts",
     "optimize-images": "node scripts/optimize-images-sharp.js",
     "check-images": "node scripts/check-images.js",
     "prebuild": "npm run check-images",

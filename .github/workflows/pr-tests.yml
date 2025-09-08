@@ -34,15 +34,15 @@ jobs:
       run: npm run test:run
       env:
         # Mock environment variables for tests
-        VITE_SUPABASE_URL: https://test.supabase.co
-        VITE_SUPABASE_ANON_KEY: test-anon-key
+        NEXT_PUBLIC_SUPABASE_URL: https://test.supabase.co
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
 
     - name: Build project
       run: npm run build
       env:
         # Mock environment variables for build
-        VITE_SUPABASE_URL: https://test.supabase.co
-        VITE_SUPABASE_ANON_KEY: test-anon-key
+        NEXT_PUBLIC_SUPABASE_URL: https://test.supabase.co
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
 
   test-forms:
     name: Form Submission Tests
@@ -65,8 +65,8 @@ jobs:
       run: npm run test:run -- src/components/__tests__/*Form.test.tsx
       env:
         # These tests use mocked Supabase, so no real DB connection
-        VITE_SUPABASE_URL: https://test.supabase.co
-        VITE_SUPABASE_ANON_KEY: test-anon-key
+        NEXT_PUBLIC_SUPABASE_URL: https://test.supabase.co
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
 
     - name: Generate test report
       if: always()
@@ -101,8 +101,8 @@ jobs:
     - name: Run tests with coverage
       run: npm run test:coverage
       env:
-        VITE_SUPABASE_URL: https://test.supabase.co
-        VITE_SUPABASE_ANON_KEY: test-anon-key
+        NEXT_PUBLIC_SUPABASE_URL: https://test.supabase.co
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
 
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
