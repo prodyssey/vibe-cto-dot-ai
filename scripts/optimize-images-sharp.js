@@ -3,11 +3,7 @@
 import { readdir, mkdir, stat, access } from 'fs/promises';
 import { join, extname, basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import imagemin from 'imagemin';
-import imageminWebp from 'imagemin-webp';
-// Removed imageminAvif - using WebP only for better reliability
-import imageminMozjpeg from 'imagemin-mozjpeg';
-import imageminPngquant from 'imagemin-pngquant';
+import sharp from 'sharp';
 
 // Environment detection
 const isCI = process.env.CI === 'true' || process.env.NETLIFY === 'true';
@@ -51,9 +47,9 @@ async function getImageFiles(dir, files = []) {
   return files;
 }
 
-// Optimize images and generate multiple formats
+// Optimize images using Sharp
 async function optimizeImages() {
-  console.log('🖼️  Starting image optimization...');
+  console.log('🖼️  Starting image optimization with Sharp...');
   console.log(`Environment: ${isCI ? 'CI/CD' : 'Local'}`);
   console.log(`Node version: ${process.version}`);
   console.log(`Platform: ${process.platform}`);
@@ -109,50 +105,28 @@ async function optimizeImages() {
       
       let hasSuccess = false;
       
-      // Generate WebP (reliable and well-supported)
+      // Generate WebP using Sharp
       try {
-        await imagemin([filePath], {
-          destination: dirname(outputBase),
-          plugins: [
-            imageminWebp({
-              quality: 80, // Slightly higher quality to preserve details
-              method: isCI ? 4 : 6, // Faster method in CI
-              crop: false, // Explicitly disable cropping
-              resize: false // Explicitly disable resizing
-            })
-          ]
-        });
+        await sharp(filePath)
+          .webp({ quality: 80, effort: isCI ? 2 : 6 })
+          .toFile(`${outputBase}.webp`);
         hasSuccess = true;
       } catch (webpError) {
         console.warn(`⚠️  WebP generation failed for ${relativePath}: ${webpError.message}`);
       }
       
-      // Optimize original format as fallback
+      // Optimize original format as fallback using Sharp
       try {
         const ext = extname(filePath).toLowerCase();
         if (ext === '.png') {
-          await imagemin([filePath], {
-            destination: dirname(outputBase),
-            plugins: [
-              imageminPngquant({
-                quality: [0.8, 0.95], // Higher quality to prevent cropping/distortion
-                speed: isCI ? 1 : 3, // Faster in CI
-                strip: false, // Don't strip metadata that might affect dimensions
-                dithering: false // Disable dithering to prevent visual artifacts
-              })
-            ]
-          });
+          await sharp(filePath)
+            .png({ quality: 80, compressionLevel: 8 })
+            .toFile(`${outputBase}.png`);
           hasSuccess = true;
         } else if (['.jpg', '.jpeg'].includes(ext)) {
-          await imagemin([filePath], {
-            destination: dirname(outputBase),
-            plugins: [
-              imageminMozjpeg({
-                quality: 80,
-                progressive: true
-              })
-            ]
-          });
+          await sharp(filePath)
+            .jpeg({ quality: 80, progressive: true })
+            .toFile(`${outputBase}.jpg`);
           hasSuccess = true;
         }
       } catch (originalError) {
