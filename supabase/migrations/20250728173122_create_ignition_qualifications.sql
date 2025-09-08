@@ -1,7 +1,5 @@
--- Drop existing table and policies if they exist
-drop policy if exists "Anyone can create qualification" on public.ignition_qualifications;
-drop policy if exists "Authenticated users can view qualifications" on public.ignition_qualifications;
-drop table if exists public.ignition_qualifications;
+-- Drop existing table if it exists
+drop table if exists public.ignition_qualifications CASCADE;
 
 -- Create ignition_qualifications table
 create table public.ignition_qualifications (
