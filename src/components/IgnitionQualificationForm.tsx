@@ -28,6 +28,7 @@ import { cn } from "@/lib/utils";
 import { waitlistFormSchema, validateForm } from "@/lib/validation";
 import { subscribeToConvertKit, getContextualTags, getCustomFields } from "@/lib/convertkit";
 import { sendSlackNotification } from "@/lib/slack";
+import { OptInCheckbox } from "@/components/ui/opt-in-checkbox";
 
 type FormStep = "contact" | "budget" | "success";
 
@@ -44,6 +45,7 @@ interface FormData {
   phone?: string;
   recordId?: string;
   sessionId?: string;
+  optInToMarketing: boolean;
 }
 
 const BUDGET_RANGES = [
@@ -98,6 +100,7 @@ export const IgnitionQualificationForm = ({
     email: "",
     preferredContact: "email",
     sessionId: "", // Will be generated on client side to prevent hydration mismatch
+    optInToMarketing: true,
   });
 
   // Generate session ID only on client side to prevent hydration mismatch
@@ -188,7 +191,8 @@ export const IgnitionQualificationForm = ({
           additionalData: {
             budget: `$${formData.budget.toLocaleString()}`,
             form_type: 'qualification_form',
-            step: 'budget_completed'
+            step: 'budget_completed',
+            opt_in_to_marketing: formData.optInToMarketing,
           },
         });
       } catch (error) {
@@ -271,6 +275,7 @@ export const IgnitionQualificationForm = ({
           email: formData.email,
           preferred_contact: formData.preferredContact,
           phone: formData.phone,
+          opt_in_to_marketing: formData.optInToMarketing,
           completed: false, // Track completion status
           session_id: formData.sessionId, // Include session ID for RLS
         })
@@ -481,6 +486,15 @@ export const IgnitionQualificationForm = ({
                     setFormData({ ...formData, email: e.target.value })
                   }
                 />
+                <div className="mt-3">
+                  <OptInCheckbox
+                    id="ignition-opt-in"
+                    checked={formData.optInToMarketing}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, optInToMarketing: checked })
+                    }
+                  />
+                </div>
               </div>
 
               <div>

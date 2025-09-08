@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { subscribeToConvertKit, getContextualTags, getCustomFields } from "@/lib/convertkit";
 import { sendSlackNotification } from "@/lib/slack";
+import { OptInCheckbox } from "@/components/ui/opt-in-checkbox";
 
 interface CommunityWaitlistFormProps {
   sessionId?: string;
@@ -40,6 +41,7 @@ export const CommunityWaitlistForm = ({
     email: initialData?.email || "",
     phone: initialData?.phone || "",
     contactMethod: initialData?.contactMethod || "email",
+    optInToMarketing: true,
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -92,6 +94,7 @@ export const CommunityWaitlistForm = ({
           contact_method: formData.contactMethod,
           source: source,
           status: 'pending',
+          opt_in_to_marketing: formData.optInToMarketing,
           notes: formData.phone && 
                  formData.contactMethod !== "phone" && 
                  formData.contactMethod !== "text"
@@ -195,6 +198,15 @@ export const CommunityWaitlistForm = ({
             required
             className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-500"
           />
+          <div className="mt-3">
+            <OptInCheckbox
+              id="community-opt-in"
+              checked={formData.optInToMarketing}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, optInToMarketing: checked })
+              }
+            />
+          </div>
         </div>
 
         <div>
