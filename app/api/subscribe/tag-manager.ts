@@ -8,12 +8,10 @@ interface Tag {
   name: string;
 }
 
-interface TagCache {
-  [tagName: string]: {
-    id: number;
-    timestamp: number;
-  };
-}
+type TagCache = Record<string, {
+  id: number;
+  timestamp: number;
+}>;
 
 // In-memory cache with 5 minute TTL
 const tagCache: TagCache = {};
