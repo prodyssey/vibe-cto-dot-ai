@@ -154,7 +154,8 @@ export async function applyTagToSubscriber(
     );
 
     if (!response.ok) {
-      console.warn(`Failed to apply tag "${tagName}" to ${email}:`, response.status, await response.text());
+      const responseText = await response.text();
+      console.warn(`Failed to apply tag "${tagName}" to ${email}:`, response.status, responseText);
       return false;
     }
 
