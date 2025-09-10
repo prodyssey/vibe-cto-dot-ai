@@ -7,6 +7,7 @@ import { Hero } from "@/components/sections/Hero";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Paths } from "@/components/sections/Paths";
 import { ProblemPromise } from "@/components/sections/ProblemPromise";
+import { ProductLifecycleSprint } from "@/components/sections/ProductLifecycleSprint";
 import { Proof } from "@/components/sections/Proof";
 import { Resources } from "@/components/sections/Resources";
 import { getAllPosts } from "@/lib/posts";
@@ -51,6 +52,7 @@ export default async function HomePage() {
         <Navigation />
         <div className="pt-20 flex-grow">
           <Hero />
+          <ProductLifecycleSprint />
           <ProblemPromise />
           <Proof />
           <HowItWorks />
