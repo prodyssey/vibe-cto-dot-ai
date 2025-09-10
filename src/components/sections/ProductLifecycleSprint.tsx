@@ -194,7 +194,7 @@ export const ProductLifecycleSprint = () => {
                 <div className="text-center mb-3">
                   <h4 className="text-sm font-bold text-white mb-1"> &lt; $5M ARR</h4>
                   <div className="text-lg font-bold text-blue-400 mb-1">
-                    $7,500
+                    $10,000
                   </div>
                 </div>
               </div>
