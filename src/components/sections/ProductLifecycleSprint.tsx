@@ -132,18 +132,17 @@ export const ProductLifecycleSprint = () => {
                   </p>
                 </div>
               </div>
-              {/* <div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0" />
                 <div>
                   <h4 className="font-semibold text-white mb-1 text-sm">
-                    Team Training & Enablement
+                    AI Product Opportunities Review
                   </h4>
                   <p className="text-xs text-gray-400">
-                    Hands-on training to get your team productive with AI tools
-                    immediately
+                    Identify where integrating AI into your product might represent a meaningful opportunity vs. a bolted on afterthought
                   </p>
                 </div>
-              </div> */}
+              </div>
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0" />
                 <div>
@@ -183,40 +182,30 @@ export const ProductLifecycleSprint = () => {
 
           {/* Section 3: Pricing Tiers */}
           <div className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.05] rounded-2xl p-6 sm:p-8 shadow-2xl lg:flex-1">
-            <h3 className="text-xl sm:text-2xl font-bold text-white text-left mb-6">
+            <h3 className="text-xl sm:text-2xl font-bold text-white text-left mb-2">
               Investment Tiers
             </h3>
+            <p className="text-sm text-gray-400 text-left mb-6">
+              Based on company size and therefore complexity and impact potential
+            </p>
             <div className="space-y-3">
               {/* Starter Tier - < 5M ARR */}
               <div className="bg-white/[0.02] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] transition-colors duration-300">
                 <div className="text-center mb-3">
-                  <h4 className="text-sm font-bold text-white mb-1">Starter</h4>
+                  <h4 className="text-sm font-bold text-white mb-1"> &lt; $5M ARR</h4>
                   <div className="text-lg font-bold text-blue-400 mb-1">
-                    $15K
+                    $7,500
                   </div>
-                  <p className="text-xs text-gray-500">&lt; $5M ARR</p>
-                </div>
-                <div className="text-xs text-gray-300 text-center">
-                  2-week engagement with basic AI setup and training
                 </div>
               </div>
 
               {/* Growth Tier - 5-25M ARR */}
-              <div className="bg-gradient-to-b from-purple-500/10 to-indigo-500/5 border-2 border-purple-400/50 rounded-lg p-4 relative">
-                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-lg">
-                    POPULAR
-                  </span>
-                </div>
-                <div className="text-center mb-3 pt-1">
-                  <h4 className="text-sm font-bold text-white mb-1">Growth</h4>
+              <div className="bg-white/[0.02] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] transition-colors duration-300">
+                <div className="text-center mb-3">
+                  <h4 className="text-sm font-bold text-white mb-1">$5M - $20M ARR</h4>
                   <div className="text-lg font-bold text-purple-400 mb-1">
-                    $35K
+                    $15,000
                   </div>
-                  <p className="text-xs text-gray-500">$5M - $25M ARR</p>
-                </div>
-                <div className="text-xs text-gray-300 text-center">
-                  4-week comprehensive engagement with multi-team strategy
                 </div>
               </div>
 
@@ -224,17 +213,20 @@ export const ProductLifecycleSprint = () => {
               <div className="bg-white/[0.02] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] transition-colors duration-300">
                 <div className="text-center mb-3">
                   <h4 className="text-sm font-bold text-white mb-1">
-                    Enterprise
+                    $20M+ ARR
                   </h4>
                   <div className="text-lg font-bold text-pink-400 mb-1">
-                    $65K
+                    $25,000
                   </div>
-                  <p className="text-xs text-gray-500">$25M+ ARR</p>
-                </div>
-                <div className="text-xs text-gray-300 text-center">
-                  6-week enterprise-scale transformation with ongoing support
                 </div>
               </div>
+            </div>
+            
+            {/* Note about continued engagement */}
+            <div className="mt-6 p-4 bg-white/[0.02] border border-white/[0.08] rounded-lg">
+              <p className="text-xs text-gray-400 text-left">
+                Continued engagement and ongoing support available based on capacity and fit.
+              </p>
             </div>
           </div>
         </div>
@@ -242,8 +234,8 @@ export const ProductLifecycleSprint = () => {
         {/* CTA Section - Below all three sections */}
         <div className="text-center mt-12">
           <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-            Ready to accelerate your product development with AI? Book a
-            strategic alignment call to discuss your team's transformation.
+            Ready to supercharge your product development with AI? Book a
+            strategic alignment call.
           </p>
           <a
             href="https://savvycal.com/craigsturgis/vibecto-dot-ai-chat"
@@ -256,7 +248,7 @@ export const ProductLifecycleSprint = () => {
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
             >
               <Calendar className="mr-2 w-5 h-5" />
-              Start Your Sprint
+              Reserve Your Sprint
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </a>
