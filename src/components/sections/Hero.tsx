@@ -213,12 +213,12 @@ export const Hero = () => {
                       AI early adopter since 2022
                     </span>
                   </div>
-                  {/* <div className="flex items-center justify-center space-x-2">
+                  <div className="flex items-center justify-center space-x-2">
                     <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse delay-500"></div>
                     <span className="text-gray-200">
-                      AI transformation expert
+                      Product development workflow expert
                     </span>
-                  </div> */}
+                  </div>
                 </div>
               </div>
             </div>
