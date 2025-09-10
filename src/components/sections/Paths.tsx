@@ -26,32 +26,33 @@ export const Paths = () => {
   }, []);
   
   const services = getOrderedServices();
-  const paths = services.map(service => ({
-    icon: service.icon,
-    title: service.label,
-    subtitle: service.subtitle,
-    description: service.longDescription,
-    features: service.features,
-    cta: service.cta,
-    link: service.link,
-    isExternal: service.isExternal,
-    color: service.color,
-  }));
+  const paths = services
+    .filter(service => service.id === 'ignition' || service.id === 'launch-control')
+    .map(service => ({
+      icon: service.icon,
+      title: service.label,
+      subtitle: service.subtitle,
+      description: service.longDescription,
+      features: service.features,
+      cta: service.cta,
+      link: service.link,
+      isExternal: service.isExternal,
+      color: service.color,
+    }));
 
   return (
     <section id="journey" className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Choose Your Journey
+            Looking for pure vibe coding help?
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Whether you&apos;re leading a team, just starting out, or ready to
-            launch, there&apos;s a path designed for your success.
+            Not everybody is ready for a full product team yet. Here's how Craig can help.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {paths.map((path, index) => (
             <Card
               key={index}

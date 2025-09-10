@@ -67,7 +67,7 @@ export const SERVICES: Service[] = [
       launch_control: 0,
       transformation: 3,
     },
-    order: 1,
+    order: 3,
     problemPromise: {
       heading: "Established company / product?",
       description:
@@ -93,7 +93,7 @@ export const SERVICES: Service[] = [
     description: "Jump start your vibe coded prototype",
     shortDescription:
       "🔥 I have an idea I believe in - but need help getting started",
-    subtitle: "For builders with vibe code ready ideas who could use a boost",
+    subtitle: "For builders with vibe code ready ideas who are having trouble getting to something testable",
     longDescription:
       "Compress months of wandering into weeks of clarity. Get a working MVP + validation framework from an expert 0 to 1 builder in just 2-4 weeks.",
     features: [
@@ -114,7 +114,7 @@ export const SERVICES: Service[] = [
       launch_control: 0,
       transformation: 0,
     },
-    order: 3,
+    order: 1,
     problemPromise: {
       heading: "Trouble getting off the ground?",
       description:
@@ -140,7 +140,7 @@ export const SERVICES: Service[] = [
     description: "Vibe code to production product",
     shortDescription:
       "🚀 I've got a real vibe coded prototype with traction - ready to gear up for scale",
-    subtitle: "For vibe coding builders ready to scale with confidence",
+    subtitle: "For vibe coding builders who need support to scale with confidence",
     longDescription:
       "Your vibe coded product has achieved liftoff. Get the technical infrastructure and strategic guidance to scale into a market-capturing product.",
     features: [
@@ -149,7 +149,7 @@ export const SERVICES: Service[] = [
       "Team augmentation",
       "Fractional CTO/CPO support",
     ],
-    cta: "Explore Mission Parameters",
+    cta: "Get me ready to scale",
     link: "/launch-control",
     color: "from-blue-600 to-cyan-600",
     glowColor: "shadow-blue-500/50",
