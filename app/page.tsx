@@ -53,9 +53,10 @@ export default async function HomePage() {
         <div className="pt-20 flex-grow">
           <Hero />
           <ProductLifecycleSprint />
-          <ProblemPromise />
           <Proof />
-          <HowItWorks />
+          {/* <ProblemPromise /> */}
+          {/* <HowItWorks /> */}
+          <Paths />
           <Resources posts={featuredPosts} />
           <div className="py-16 px-6">
             <EmailOptIn
@@ -64,7 +65,6 @@ export default async function HomePage() {
               className="max-w-2xl mx-auto"
             />
           </div>
-          <Paths />
           <FinalCTA />
         </div>
         <Footer />
