@@ -19,7 +19,7 @@ export const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 py-8 sm:px-6 sm:py-12">
+    <section className="relative min-h-[50vh] lg:min-h-[60vh] flex items-center justify-center px-4 py-8 sm:px-6 sm:py-12">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 backdrop-blur-3xl"></div>
 
