@@ -40,26 +40,27 @@ export interface Service {
 
 export const SERVICES: Service[] = [
   {
-    id: "transformation",
-    path: "/transformation",
-    label: "Transformation",
+    id: "ai-product-lifecycle-sprint",
+    path: "/ai-product-lifecycle-sprint",
+    label: "AI Product Lifecycle Sprint",
     icon: Sparkles,
-    description: "Accelerate your roadmap with AI tool adoption",
+    description: "4-week focused process to start or accelerate your AI journey",
     shortDescription:
-      "✨ We're well on our way - but want help to go further, faster",
-    subtitle: "For Series A, B+, and Growth Equity companies",
+      "✨ A structured 4-week engagement to transform your product development",
+    subtitle: "For companies ready to build effectively with AI",
     longDescription:
-      "Transform your team's development velocity with enterprise-grade AI agent integration.",
+      "A focused 4-week process to start or focus your AI product lifecycle journey, see quick results with a pilot project, and align on opportunities and measurement of success.",
     features: [
-      "Team transformation",
-      "AI agent deployment",
-      "Sophisticated measurement",
-      "Enterprise support",
+      "4 weeks of live and async work with Craig",
+      "Custom AI Agent Configuration Blueprint",
+      "Pilot Project Coaching + Execution",
+      "Performance Monitoring Setup",
+      "Access to best practices database",
     ],
-    cta: "Schedule Team Call",
-    link: "/transformation",
-    color: "from-purple-600 to-blue-600",
-    glowColor: "shadow-purple-500/50",
+    cta: "Reserve Your Sprint",
+    link: "/ai-product-lifecycle-sprint",
+    color: "from-blue-600 to-purple-600",
+    glowColor: "shadow-blue-500/50",
     adventureSceneId: "transformation-path",
     adventureNextScene: "transformationDetail",
     pathWeight: {
@@ -67,22 +68,22 @@ export const SERVICES: Service[] = [
       launch_control: 0,
       transformation: 3,
     },
-    order: 3,
+    order: 1,
     problemPromise: {
-      heading: "Established company / product?",
+      heading: "Ready to build effectively with AI?",
       description:
-        "Racing the competition to adopt AI more effectively? Get expert help to adopt the latest in AI tools and processes throughout your whole lifecycle.",
+        "Get focused guidance to adopt the right AI workflows and see quick results through a structured 4-week engagement.",
       features: [
-        "Hands-on AI agent integration",
-        "Sophisticated measurement",
-        "Experienced support",
+        "Custom AI agent configuration",
+        "Pilot project execution",
+        "Performance monitoring setup",
       ],
-      borderColor: "border-purple-500/30 hover:border-purple-400/50",
-      shadowColor: "hover:shadow-purple-500/20",
-      iconBgColor: "bg-purple-500/20",
-      iconColor: "text-purple-400",
-      dotColor: "bg-purple-400",
-      buttonColor: "bg-purple-600 hover:bg-purple-700",
+      borderColor: "border-blue-500/30 hover:border-blue-400/50",
+      shadowColor: "hover:shadow-blue-500/20",
+      iconBgColor: "bg-blue-500/20",
+      iconColor: "text-blue-400",
+      dotColor: "bg-blue-400",
+      buttonColor: "bg-blue-600 hover:bg-blue-700",
     },
   },
   {
@@ -114,7 +115,7 @@ export const SERVICES: Service[] = [
       launch_control: 0,
       transformation: 0,
     },
-    order: 1,
+    order: 2,
     problemPromise: {
       heading: "Trouble getting off the ground?",
       description:
@@ -160,7 +161,7 @@ export const SERVICES: Service[] = [
       launch_control: 3,
       transformation: 0,
     },
-    order: 2,
+    order: 3,
     problemPromise: {
       heading: "Vibe code hitting its limits?",
       description:
