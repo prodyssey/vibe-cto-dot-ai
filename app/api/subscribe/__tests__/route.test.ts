@@ -1,10 +1,18 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { NextRequest } from 'next/server';
 import { POST, OPTIONS } from '../route';
+import * as tagManager from '../tag-manager';
 
 // Mock fetch globally
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
+
+// Mock tag manager
+vi.mock('../tag-manager', () => ({
+  applyTagsToSubscriber: vi.fn(),
+}));
+
+const mockApplyTagsToSubscriber = vi.mocked(tagManager.applyTagsToSubscriber);
 
 // Mock environment variables
 const originalEnv = process.env;
@@ -12,6 +20,7 @@ const originalEnv = process.env;
 describe('/api/subscribe', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockApplyTagsToSubscriber.mockClear();
     process.env = {
       ...originalEnv,
       CONVERTKIT_API_SECRET: 'test-secret',
@@ -65,7 +74,7 @@ describe('/api/subscribe', () => {
       expect(mockFetch).toHaveBeenCalledTimes(2);
     });
 
-    it('should successfully subscribe with tags and parallelize tag addition', async () => {
+    it('should successfully subscribe with tags using optimized tag manager', async () => {
       // Mock successful ConvertKit subscription response
       mockFetch.mockResolvedValueOnce({
         ok: true,
@@ -79,10 +88,16 @@ describe('/api/subscribe', () => {
         }),
       });
 
-      // Mock successful tag addition responses
-      mockFetch.mockResolvedValue({
+      // Mock successful Slack notification response
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ success: true }),
+      });
+
+      // Mock tag manager success
+      mockApplyTagsToSubscriber.mockResolvedValueOnce({
+        success: 3,
+        failed: 0
       });
 
       const request = new NextRequest('http://localhost:3000/api/subscribe', {
@@ -101,20 +116,17 @@ describe('/api/subscribe', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      // Should have 1 call for subscription + 3 calls for tags + 1 call for Slack notification
-      expect(mockFetch).toHaveBeenCalledTimes(5);
-
-      // Verify tag addition calls are made with correct data
-      // First call is ConvertKit subscription, last call is Slack notification, middle 3 are tags
-      const tagCalls = mockFetch.mock.calls.slice(1, 4);
-      expect(tagCalls).toHaveLength(3);
-      tagCalls.forEach((call, index) => {
-        expect(call[0]).toBe('https://api.convertkit.com/v3/tags');
-        expect(call[1].method).toBe('POST');
-        const body = JSON.parse(call[1].body);
-        expect(body.tag.name).toBe(`tag${index + 1}`);
-        expect(body.tag.email).toBe('test@example.com');
-      });
+      
+      // Should have 1 call for ConvertKit subscription + 1 call for Slack notification
+      // Tag management is handled by the tag manager (mocked)
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+      
+      // Verify tag manager was called with correct parameters
+      expect(mockApplyTagsToSubscriber).toHaveBeenCalledWith(
+        'test-secret',
+        ['tag1', 'tag2', 'tag3'],
+        'test@example.com'
+      );
     });
 
     it('should handle tag addition failures gracefully', async () => {
@@ -131,8 +143,17 @@ describe('/api/subscribe', () => {
         }),
       });
 
-      // Mock tag addition failures
-      mockFetch.mockRejectedValue(new Error('Tag addition failed'));
+      // Mock successful Slack notification response
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
+
+      // Mock tag manager partial failure
+      mockApplyTagsToSubscriber.mockResolvedValueOnce({
+        success: 1,
+        failed: 1
+      });
 
       const request = new NextRequest('http://localhost:3000/api/subscribe', {
         method: 'POST',
@@ -147,10 +168,16 @@ describe('/api/subscribe', () => {
       const response = await POST(request);
       const data = await response.json();
 
-      // Should still succeed even if tag addition fails
+      // Should still succeed even if tag addition partially fails
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
       expect(data.message).toBe('Successfully subscribed to email list');
+      
+      expect(mockApplyTagsToSubscriber).toHaveBeenCalledWith(
+        'test-secret',
+        ['tag1', 'tag2'],
+        'test@example.com'
+      );
     });
 
     it('should validate email format', async () => {
