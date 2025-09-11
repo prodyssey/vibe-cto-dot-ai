@@ -73,7 +73,7 @@ export const saveGameProgress = async (
         ...(progress.finalPath && { final_path: progress.finalPath }),
         ...(progress.completedAt && { completed_at: progress.completedAt }),
       }),
-      new Promise((_, reject) => 
+      new Promise<never>((_, reject) => 
         setTimeout(() => reject(new Error('Database timeout')), 5000)
       )
     ]);
@@ -153,7 +153,7 @@ export const saveSceneVisit = async (
         visit_count: visitCount,
         last_visited_at: new Date().toISOString(),
       }),
-      new Promise((_, reject) => 
+      new Promise<never>((_, reject) => 
         setTimeout(() => reject(new Error('Database timeout')), 5000)
       )
     ]);
