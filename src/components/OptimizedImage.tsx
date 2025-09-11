@@ -54,39 +54,37 @@ export function OptimizedImage({
     const paths = getOptimizedPaths(src)
     
     return (
-      <div className={className}>
-        <picture className="w-full h-full">        
-          {/* WebP - good compression, wide support */}
-          <source
-            srcSet={paths.webp}
-            type="image/webp"
-            sizes={sizes}
-          />
-          
-          {/* Optimized original format - fallback */}
-          <source
-            srcSet={paths.fallback}
-            type={src.endsWith('.png') ? 'image/png' : 'image/jpeg'}
-            sizes={sizes}
-          />
-          
-          {/* Final fallback to Next.js Image with original src */}
-          <Image
-            src={src}
-            alt={alt}
-            width={width}
-            height={height}
-            fill={fill}
-            className={fill ? 'object-cover w-full h-full' : 'w-full h-full object-cover'}
-            priority={priority}
-            sizes={sizes}
-            quality={quality}
-            loading={priority ? 'eager' : loading}
-            unoptimized={false}
-            onError={() => setHasError(true)}
-          />
-        </picture>
-      </div>
+      <picture className={className}>        
+        {/* WebP - good compression, wide support */}
+        <source
+          srcSet={paths.webp}
+          type="image/webp"
+          sizes={sizes}
+        />
+        
+        {/* Optimized original format - fallback */}
+        <source
+          srcSet={paths.fallback}
+          type={src.endsWith('.png') ? 'image/png' : 'image/jpeg'}
+          sizes={sizes}
+        />
+        
+        {/* Final fallback to Next.js Image with original src */}
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          fill={fill}
+          className={fill ? className : [className, 'w-full h-full object-cover'].filter(Boolean).join(' ')}
+          priority={priority}
+          sizes={sizes}
+          quality={quality}
+          loading={priority ? 'eager' : loading}
+          unoptimized={false}
+          onError={() => setHasError(true)}
+        />
+      </picture>
     )
   }
   
