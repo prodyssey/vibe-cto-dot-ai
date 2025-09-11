@@ -56,38 +56,64 @@ export const PlayerSetupScreen = () => {
       // Get the existing session ID from the game store
       const { sessionId: existingSessionId } = useGameStore.getState();
       
+      // If no session ID exists, generate one for offline mode
       if (!existingSessionId) {
-        throw new Error('No session ID found. Please restart the game.');
+        console.log('No session ID found, generating one for offline mode');
+        const newSessionId = crypto.randomUUID();
+        setSessionId(newSessionId);
       }
 
-      // Set session context for RLS policies
-      await supabase.rpc('set_config', {
-        setting_name: 'app.current_session_id',
-        setting_value: existingSessionId,
-        is_local: false
-      });
+      try {
+        // Try to update Supabase if available, with timeout
+        if (existingSessionId) {
+          const dbOperationWithTimeout = Promise.race([
+            // Database operation
+            (async () => {
+              // Set session context for RLS policies
+              await supabase.rpc('set_config', {
+                setting_name: 'app.current_session_id',
+                setting_value: existingSessionId,
+                is_local: false
+              });
 
-      // Update the existing session record with player information
-      const { data, error } = await supabase
-        .from('adventure_sessions')
-        .update({
-          player_name: playerName,
-          is_generated_name: isGeneratedName,
-          current_scene_id: 'destinationSelection',
-        })
-        .eq('id', existingSessionId)
-        .select()
-        .single();
+              // Update the existing session record with player information
+              const { data, error } = await supabase
+                .from('adventure_sessions')
+                .update({
+                  player_name: playerName,
+                  is_generated_name: isGeneratedName,
+                  current_scene_id: 'destinationSelection',
+                })
+                .eq('id', existingSessionId)
+                .select()
+                .single();
 
-      if (error) {
-        throw error;
+              if (error) {
+                throw error;
+              }
+              return data;
+            })(),
+            // Timeout after 5 seconds
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Database timeout')), 5000)
+            )
+          ]);
+
+          await dbOperationWithTimeout;
+        }
+      } catch (dbError) {
+        console.warn('Database update failed, continuing in offline mode:', dbError);
+        // Continue without database - game will work offline
       }
       
-      // No need to setSessionId as it's already set
+      // Always proceed to next scene regardless of database status
+      setIsLoading(false);
       pushScene('destinationSelection');
     } catch (error) {
       console.error('Error starting game:', error);
       setIsLoading(false);
+      // Show error but allow retry
+      setError('Unable to initialize game. Please try again.');
     }
   };
 
