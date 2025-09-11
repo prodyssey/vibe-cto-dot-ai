@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Gamepad2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
@@ -41,7 +41,7 @@ export const Paths = () => {
     }));
 
   return (
-    <section id="journey" className="py-20 px-6">
+    <section id="journey" className="py-20 px-6 bg-slate-900">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -56,7 +56,7 @@ export const Paths = () => {
           {paths.map((path, index) => (
             <Card
               key={index}
-              className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 relative overflow-hidden group"
+              className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 relative overflow-hidden group flex flex-col h-full"
             >
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${path.color} opacity-5 group-hover:opacity-10 transition-opacity`}
@@ -76,12 +76,12 @@ export const Paths = () => {
                 </p>
               </CardHeader>
 
-              <CardContent className="relative space-y-4">
+              <CardContent className="relative space-y-4 flex-grow flex flex-col">
                 <p className="text-gray-300 leading-relaxed">
                   {path.description}
                 </p>
 
-                <ul className="space-y-2">
+                <ul className="space-y-2 flex-grow">
                   {path.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start space-x-2">
                       <span
@@ -94,49 +94,60 @@ export const Paths = () => {
                   ))}
                 </ul>
 
-                {path.isExternal ? (
-                  <a
-                    ref={
-                      path.title === "Ignition" ? ignitionLinkRef : undefined
-                    }
-                    href={path.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block pt-4"
-                  >
-                    <Button
-                      className={`w-full bg-gradient-to-r ${path.color} hover:opacity-90 text-white font-semibold`}
+                <div className="mt-auto pt-4">
+                  {path.isExternal ? (
+                    <a
+                      ref={
+                        path.title === "Ignition" ? ignitionLinkRef : undefined
+                      }
+                      href={path.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
                     >
-                      {path.cta}
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                  </a>
-                ) : (
-                  <Link href={path.link} className="block pt-4">
-                    <Button
-                      className={`w-full bg-gradient-to-r ${path.color} hover:opacity-90 text-white font-semibold`}
-                    >
-                      {path.cta}
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                  </Link>
-                )}
+                      <Button
+                        className={`w-full bg-gradient-to-r ${path.color} hover:opacity-90 text-white font-semibold`}
+                      >
+                        {path.cta}
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                    </a>
+                  ) : (
+                    <Link href={path.link} className="block">
+                      <Button
+                        className={`w-full bg-gradient-to-r ${path.color} hover:opacity-90 text-white font-semibold`}
+                      >
+                        {path.cta}
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                    </Link>
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* <div className="text-center mt-12">
-          <p className="text-gray-400">
-            Not sure which path is right for you?
-            <Button
-              variant="link"
-              className="text-blue-400 hover:text-blue-300 px-1"
-            >
-              Take a quick quiz
-            </Button>
-          </p>
-        </div> */}
+        {/* Adventure Game CTA */}
+        <div className="text-center mt-12">
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Not sure which path is right for you?
+            </h3>
+            <p className="text-gray-300 mb-6">
+              Take an interactive journey through the VibeCTO Station to discover the perfect path for your situation.
+            </p>
+            <Link href="/adventure">
+              <Button
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 font-semibold rounded-xl shadow-lg hover:shadow-indigo-500/25 transition-all duration-300 hover:scale-105"
+              >
+                <Gamepad2 className="mr-2 w-5 h-5" />
+                Enter the VibeCTO Station
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );
