@@ -69,25 +69,60 @@ export const Hero = () => {
             </a>
           </div>
 
-          {/* Avatar - positioned after primary CTA on mobile */}
-          <div className="relative order-3">
-            {/* Gradient border container */}
-            <div className="relative p-1 bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 rounded-xl hover:scale-105 transition-all duration-300 mx-auto w-fit">
-              {/* Glass morphism inner container */}
-              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-2">
-                <OptimizedImage
-                  src="/images/craig-avatar-pixelated.png"
-                  alt="VibeCTO Avatar"
-                  width={200}
-                  height={200}
-                  priority
-                  className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-lg"
-                  sizes="(max-width: 640px) 128px, (max-width: 768px) 160px, (max-width: 1024px) 192px, 224px"
-                />
+          {/* Avatar with trust content - positioned after primary CTA on mobile */}
+          <div className="order-3 flex flex-col items-center space-y-4">
+            {/* Avatar */}
+            <div className="relative">
+              {/* Gradient border container */}
+              <div className="relative p-1 bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 rounded-xl hover:scale-105 transition-all duration-300 mx-auto w-fit">
+                {/* Glass morphism inner container */}
+                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-2">
+                  <OptimizedImage
+                    src="/images/craig-avatar-pixelated.png"
+                    alt="VibeCTO Avatar"
+                    width={200}
+                    height={200}
+                    priority
+                    className="w-32 h-32 rounded-lg"
+                    sizes="128px"
+                  />
+                </div>
+              </div>
+              {/* Glow effect behind avatar */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-xl -z-10 scale-125"></div>
+            </div>
+
+            {/* Trust-building content for mobile */}
+            <div className="text-center space-y-3 max-w-xs">
+              {/* Attribution */}
+              <p className="text-sm text-gray-300/80 font-medium italic">
+                - Craig Sturgis, Founder
+              </p>
+
+              {/* Trust indicators in glass morphism container */}
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4">
+                <div className="grid grid-cols-1 gap-3 text-sm">
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-gray-200">
+                      20+ years building products
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-300"></div>
+                    <span className="text-gray-200">
+                      AI early adopter since 2022
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse delay-500"></div>
+                    <span className="text-gray-200">
+                      Product development workflow expert
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-            {/* Glow effect behind avatar */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-xl -z-10 scale-125"></div>
           </div>
 
           {/* Secondary CTA Button - positioned after avatar on mobile */}
