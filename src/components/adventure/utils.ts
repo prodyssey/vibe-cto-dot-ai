@@ -61,17 +61,24 @@ export const saveGameProgress = async (
     
     const gameState = useGameStore.getState();
     
-    // Use minimal data that should work with any schema version
-    const { error } = await supabase.from("adventure_sessions").upsert({
-      id: progress.sessionId,
-      player_name: progress.playerName,
-      // Only include fields that are likely to exist in the database
-      ...(progress.currentSceneId && { current_scene_id: progress.currentSceneId }),
-      ...(progress.visitedScenes && { visited_scenes: progress.visitedScenes }),
-      ...(progress.choices && { choices: progress.choices }),
-      ...(progress.finalPath && { final_path: progress.finalPath }),
-      ...(progress.completedAt && { completed_at: progress.completedAt }),
-    });
+    // Use minimal data that should work with any schema version, with timeout
+    const dbOperation = Promise.race([
+      supabase.from("adventure_sessions").upsert({
+        id: progress.sessionId,
+        player_name: progress.playerName,
+        // Only include fields that are likely to exist in the database
+        ...(progress.currentSceneId && { current_scene_id: progress.currentSceneId }),
+        ...(progress.visitedScenes && { visited_scenes: progress.visitedScenes }),
+        ...(progress.choices && { choices: progress.choices }),
+        ...(progress.finalPath && { final_path: progress.finalPath }),
+        ...(progress.completedAt && { completed_at: progress.completedAt }),
+      }),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Database timeout')), 5000)
+      )
+    ]);
+
+    const { error } = await dbOperation;
 
     if (error) {
       throw error;
@@ -137,14 +144,21 @@ export const saveSceneVisit = async (
       console.log("Session exists, proceeding with scene visit");
     }
 
-    // Now save the scene visit
+    // Now save the scene visit with timeout
     console.log("Attempting to save scene visit:", { sessionId, sceneId, visitCount });
-    const { data, error } = await supabase.from("adventure_scene_visits").upsert({
-      session_id: sessionId,
-      scene_id: sceneId,
-      visit_count: visitCount,
-      last_visited_at: new Date().toISOString(),
-    });
+    const dbOperation = Promise.race([
+      supabase.from("adventure_scene_visits").upsert({
+        session_id: sessionId,
+        scene_id: sceneId,
+        visit_count: visitCount,
+        last_visited_at: new Date().toISOString(),
+      }),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Database timeout')), 5000)
+      )
+    ]);
+    
+    const { data, error } = await dbOperation;
 
     console.log("Scene visit save result:", { data, error });
     
