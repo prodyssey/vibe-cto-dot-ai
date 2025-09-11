@@ -44,7 +44,7 @@ export const GOALS: Goal[] = [
     path: "/transformation",
     label: "AI Transformation",
     icon: Sparkles,
-    description: "Accelerate your roadmap with AI tool adoption",
+    description: "Become an AI-native company",
     shortDescription:
       "✨ We're well on our way - but want help to go further, faster",
     subtitle: "For Series A, B+, and Growth Equity companies",
