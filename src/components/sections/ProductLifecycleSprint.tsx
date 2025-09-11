@@ -190,7 +190,7 @@ export const ProductLifecycleSprint = () => {
               Investment
             </h3>
             <p className="text-sm text-gray-400 text-left mb-6">
-              Pricing based on company size and complexity and impact potential
+              Pricing based on company size and the resulting complexity and impact potential
             </p>
             <div className="text-center">
               {/* Single Pricing Option */}
