@@ -94,6 +94,10 @@ export const ProductLifecycleSprint = () => {
                 </li>
                 <li className="flex items-start">
                   <span className="text-blue-400 mr-2">•</span>
+                  Evaluate AI enabled product opportunities
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-400 mr-2">•</span>
                   See quick results with a pilot project
                 </li>
                 <li className="flex items-start">
@@ -180,43 +184,21 @@ export const ProductLifecycleSprint = () => {
             </div>
           </div>
 
-          {/* Section 3: Pricing Tiers */}
+          {/* Section 3: Pricing */}
           <div className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.05] rounded-2xl p-6 sm:p-8 shadow-2xl lg:flex-1">
             <h3 className="text-xl sm:text-2xl font-bold text-white text-left mb-2">
-              Investment Tiers
+              Investment
             </h3>
             <p className="text-sm text-gray-400 text-left mb-6">
-              Based on company size and therefore complexity and impact potential
+              Pricing based on company size and complexity and impact potential
             </p>
-            <div className="space-y-3">
-              {/* Starter Tier - < 5M ARR */}
-              <div className="bg-white/[0.02] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] transition-colors duration-300">
+            <div className="text-center">
+              {/* Single Pricing Option */}
+              <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 hover:bg-white/[0.04] transition-colors duration-300">
                 <div className="text-center mb-3">
-                  <h4 className="text-sm font-bold text-white mb-1"> &lt; $5M ARR</h4>
-                  <div className="text-lg font-bold text-blue-400 mb-1">
-                    $10,000
-                  </div>
-                </div>
-              </div>
-
-              {/* Growth Tier - 5-25M ARR */}
-              <div className="bg-white/[0.02] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] transition-colors duration-300">
-                <div className="text-center mb-3">
-                  <h4 className="text-sm font-bold text-white mb-1">$5M - $20M ARR</h4>
-                  <div className="text-lg font-bold text-purple-400 mb-1">
-                    $15,000
-                  </div>
-                </div>
-              </div>
-
-              {/* Enterprise Tier - 25M+ ARR */}
-              <div className="bg-white/[0.02] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] transition-colors duration-300">
-                <div className="text-center mb-3">
-                  <h4 className="text-sm font-bold text-white mb-1">
-                    $20M+ ARR
-                  </h4>
-                  <div className="text-lg font-bold text-pink-400 mb-1">
-                    $25,000
+                  <p>Starting at</p>
+                  <div className="text-2xl font-bold text-blue-400 mb-2">
+                    $12,500
                   </div>
                 </div>
               </div>
