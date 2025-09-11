@@ -16,7 +16,7 @@ export const Proof = () => {
         "Craig helped us build a culture around AI-assisted engineering. We've dramatically increased the pace of delivery even with 1/3 the capacity we had in 2024.",
       author: "Jason Burchard",
       role: "CEO, Rootnote",
-      path: "Transformation",
+      path: "AI Product Lifecycle",
       link: "https://rootnote.co",
     },
   ];
