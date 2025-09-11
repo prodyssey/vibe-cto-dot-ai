@@ -2,6 +2,7 @@
 
 import { ArrowRight, Calendar, Gamepad2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
 import { OptimizedImage } from "@/components/OptimizedImage";
@@ -9,14 +10,14 @@ import { OptimizedImage } from "@/components/OptimizedImage";
 export const Hero = () => {
   const router = useRouter();
 
-  const scrollToJourney = () => {
+  const scrollToJourney = useCallback(() => {
     if (typeof document !== "undefined") {
       const journeySection = document.getElementById("journey");
       if (journeySection) {
         journeySection.scrollIntoView({ behavior: "smooth" });
       }
     }
-  };
+  }, []);
 
   return (
     <section className="relative min-h-[50vh] lg:min-h-[60vh] flex items-center justify-center px-4 py-8 sm:px-6 sm:py-12">

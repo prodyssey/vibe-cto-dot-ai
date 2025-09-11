@@ -43,48 +43,50 @@ export function OptimizedImage({
   useOptimizedFallbacks = true,
   loading = 'lazy'
 }: OptimizedImageProps) {
-  const [useNextjsOptimization, setUseNextjsOptimization] = useState(true)
+  const [hasError, setHasError] = useState(false)
   
   // Check if this is a local image that should use optimized fallbacks
   const isLocalImage = src.startsWith('/images/')
-  const shouldUseOptimizedFallbacks = useOptimizedFallbacks && isLocalImage
+  const shouldUseOptimizedFallbacks = useOptimizedFallbacks && isLocalImage && !hasError
   
-  // If we should use optimized fallbacks and we haven't fallen back to Next.js yet
-  if (shouldUseOptimizedFallbacks && useNextjsOptimization) {
+  // If we should use optimized fallbacks and haven't had an error
+  if (shouldUseOptimizedFallbacks) {
     const paths = getOptimizedPaths(src)
     
     return (
-      <picture className={className}>        
-        {/* WebP - good compression, wide support */}
-        <source
-          srcSet={paths.webp}
-          type="image/webp"
-          sizes={sizes}
-        />
-        
-        {/* Optimized original format - fallback */}
-        <source
-          srcSet={paths.fallback}
-          type={src.endsWith('.png') ? 'image/png' : 'image/jpeg'}
-          sizes={sizes}
-        />
-        
-        {/* Final fallback to Next.js Image with original src */}
-        <Image
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          fill={fill}
-          className={fill ? className : [className, 'w-full h-full object-cover'].filter(Boolean).join(' ')}
-          priority={priority}
-          sizes={sizes}
-          quality={quality}
-          loading={priority ? 'eager' : loading}
-          unoptimized={false}
-          onError={() => setUseNextjsOptimization(false)}
-        />
-      </picture>
+      <div className={className}>
+        <picture className="w-full h-full">        
+          {/* WebP - good compression, wide support */}
+          <source
+            srcSet={paths.webp}
+            type="image/webp"
+            sizes={sizes}
+          />
+          
+          {/* Optimized original format - fallback */}
+          <source
+            srcSet={paths.fallback}
+            type={src.endsWith('.png') ? 'image/png' : 'image/jpeg'}
+            sizes={sizes}
+          />
+          
+          {/* Final fallback to Next.js Image with original src */}
+          <Image
+            src={src}
+            alt={alt}
+            width={width}
+            height={height}
+            fill={fill}
+            className={fill ? 'object-cover w-full h-full' : 'w-full h-full object-cover'}
+            priority={priority}
+            sizes={sizes}
+            quality={quality}
+            loading={priority ? 'eager' : loading}
+            unoptimized={false}
+            onError={() => setHasError(true)}
+          />
+        </picture>
+      </div>
     )
   }
   
