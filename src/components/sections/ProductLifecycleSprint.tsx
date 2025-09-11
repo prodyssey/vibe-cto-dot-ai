@@ -102,7 +102,7 @@ export const ProductLifecycleSprint = () => {
                 </li>
                 <li className="flex items-start">
                   <span className="text-blue-400 mr-2">•</span>
-                  Align on opportunities and measurement of success
+                  Align on opportunities and ongoing measurement of success
                 </li>
               </ul>
             </div>
