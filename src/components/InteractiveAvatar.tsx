@@ -47,11 +47,7 @@ export const InteractiveAvatar = ({
             width={width}
             height={height}
             priority
-            className={`${className} ${
-              showPixelated 
-                ? 'object-cover object-center' 
-                : 'object-cover object-center'
-            }`}
+            className={`${className} object-cover object-center aspect-square`}
             sizes={sizes}
           />
           

@@ -73,12 +73,14 @@ export const Hero = () => {
           {/* Avatar with trust content - positioned after primary CTA on mobile */}
           <div className="order-3 flex flex-col items-center space-y-4">
             {/* Avatar */}
-            <InteractiveAvatar
-              className="w-32 h-32 rounded-lg"
-              width={200}
-              height={200}
-              sizes="128px"
-            />
+            <div className="flex justify-center w-full">
+              <InteractiveAvatar
+                className="w-48 h-48 rounded-lg"
+                width={240}
+                height={240}
+                sizes="192px"
+              />
+            </div>
 
             {/* Trust-building content for mobile */}
             <div className="text-center space-y-3 max-w-xs">
