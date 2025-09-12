@@ -41,13 +41,17 @@ export const InteractiveAvatar = ({
             src={
               showPixelated 
                 ? "/images/craig-avatar-pixelated.png"
-                : "/images/headshot-2025-nano-banana-transparent.png"
+                : "/images/headshot-2025-transparent-avatar.png"
             }
             alt="VibeCTO Avatar"
             width={width}
             height={height}
             priority
-            className={className}
+            className={`${className} ${
+              showPixelated 
+                ? 'object-cover object-center' 
+                : 'object-cover object-center'
+            }`}
             sizes={sizes}
           />
           
