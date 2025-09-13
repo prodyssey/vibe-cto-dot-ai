@@ -18,13 +18,33 @@ export const InteractiveAvatar = ({
 }: InteractiveAvatarProps) => {
   const [showPixelated, setShowPixelated] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
+  const [showWhiteFlash, setShowWhiteFlash] = useState(false);
+  const [showPowerglove, setShowPowerglove] = useState(false);
 
   const handleQuestionBlockClick = () => {
+    if (showPixelated) {return;} // Prevent multiple clicks
+    
     setIsFlashing(true);
+    
+    // Show powerglove sprite immediately - starts rising
+    setShowPowerglove(true);
+    
+    // Start white flash after powerglove has risen (give it time to complete)
+    setTimeout(() => {
+      setShowWhiteFlash(true);
+    }, 1000);
+    
+    // End the white flash and hide powerglove
+    setTimeout(() => {
+      setShowWhiteFlash(false);
+      setShowPowerglove(false);
+    }, 1300);
+    
+    // Then reveal pixelated avatar
     setTimeout(() => {
       setShowPixelated(true);
       setIsFlashing(false);
-    }, 200);
+    }, 1400);
   };
 
   return (
@@ -33,7 +53,7 @@ export const InteractiveAvatar = ({
       <div className="relative p-1 bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 rounded-xl hover:scale-105 transition-all duration-300">
         {/* Glass morphism inner container */}
         <div 
-          className={`relative bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-2 transition-all duration-200 ${
+          className={`relative bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-2 transition-all duration-200 overflow-hidden ${
             isFlashing ? 'bg-white/20 border-white/30' : ''
           }`}
         >
@@ -51,6 +71,35 @@ export const InteractiveAvatar = ({
             sizes={sizes}
           />
           
+          {/* White flash overlay */}
+          {showWhiteFlash && (
+            <div 
+              className="absolute inset-0 bg-white rounded-lg animate-pulse"
+              style={{
+                animation: 'dramatic-flash 300ms ease-out'
+              }}
+            />
+          )}
+          
+          {/* Powerglove sprite - rises from behind question block */}
+          {showPowerglove && (
+            <div 
+              className="absolute bottom-1 right-1 w-1/3 pointer-events-none overflow-visible"
+              style={{
+                animation: 'powerglove-rise 1200ms ease-out',
+                zIndex: 1
+              }}
+            >
+              <OptimizedImage
+                src="/images/powerglove-sprite.png"
+                alt="Powerglove activation"
+                width={120}
+                height={120}
+                className="w-full h-auto drop-shadow-2xl"
+              />
+            </div>
+          )}
+
           {/* Question block overlay - always visible, bottom right, overlapping the image */}
           <div 
             className="absolute bottom-1 right-1 w-1/4 cursor-pointer hover:scale-110 transition-transform duration-200 overflow-hidden rounded"
@@ -63,7 +112,8 @@ export const InteractiveAvatar = ({
               }
             }}
             style={{
-              animation: showPixelated ? 'none' : 'subtle-bounce 2s ease-in-out infinite'
+              animation: showPixelated ? 'none' : 'subtle-bounce 2s ease-in-out infinite',
+              zIndex: 2
             }}
           >
             <OptimizedImage
@@ -103,6 +153,49 @@ export const InteractiveAvatar = ({
                 50% {
                   transform: translateX(100%);
                   opacity: 1;
+                }
+              }
+              @keyframes dramatic-flash {
+                0% {
+                  opacity: 0;
+                }
+                50% {
+                  opacity: 0.9;
+                }
+                100% {
+                  opacity: 0;
+                }
+              }
+              @keyframes powerglove-rise {
+                0% {
+                  transform: translateY(100%);
+                  opacity: 0;
+                  scale: 0.8;
+                }
+                25% {
+                  transform: translateY(50%);
+                  opacity: 0.3;
+                  scale: 0.85;
+                }
+                50% {
+                  transform: translateY(0%);
+                  opacity: 0.8;
+                  scale: 0.95;
+                }
+                75% {
+                  transform: translateY(-30%);
+                  opacity: 1;
+                  scale: 1.05;
+                }
+                90% {
+                  transform: translateY(-50%);
+                  opacity: 1;
+                  scale: 1.02;
+                }
+                100% {
+                  transform: translateY(-60%);
+                  opacity: 1;
+                  scale: 1;
                 }
               }
             `}</style>
