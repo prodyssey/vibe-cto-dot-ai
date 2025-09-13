@@ -1,6 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getOrCreateTagId, applyTagToSubscriber, applyTagsToSubscriber } from '../tag-manager';
 
+// Mock Supabase client
+const mockSupabaseClient = {
+  from: vi.fn(),
+  rpc: vi.fn(),
+};
+
+vi.mock('@/integrations/supabase/client', () => ({
+  supabase: mockSupabaseClient,
+}));
+
 // Mock fetch globally
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
@@ -8,9 +18,36 @@ global.fetch = mockFetch;
 describe('tag-manager', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    
+    // Default Supabase mock implementations
+    mockSupabaseClient.rpc.mockResolvedValue({ error: null });
+    mockSupabaseClient.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      gt: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null, error: null }),
+    });
   });
 
   describe('getOrCreateTagId', () => {
+    it('should return cached tag ID when available', async () => {
+      // Mock cache hit
+      mockSupabaseClient.from.mockReturnValue({
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        gt: vi.fn().mockReturnThis(),
+        single: vi.fn().mockResolvedValue({ data: { tag_id: 5 }, error: null }),
+      });
+
+      const tagId = await getOrCreateTagId('test-secret', 'cached-tag');
+
+      expect(tagId).toBe(5);
+      // Should not call ConvertKit API when cached
+      expect(mockFetch).not.toHaveBeenCalled();
+      // Should call cache cleanup
+      expect(mockSupabaseClient.rpc).toHaveBeenCalledWith('cleanup_expired_tag_cache');
+    });
+
     it('should return existing tag ID when tag exists', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
@@ -28,6 +65,15 @@ describe('tag-manager', () => {
       expect(mockFetch).toHaveBeenCalledWith(
         'https://api.convertkit.com/v3/tags?api_secret=test-secret'
       );
+      // Should cache all fetched tags
+      expect(mockSupabaseClient.rpc).toHaveBeenCalledWith('upsert_tag_cache', {
+        p_tag_name: 'existing-tag',
+        p_tag_id: 1
+      });
+      expect(mockSupabaseClient.rpc).toHaveBeenCalledWith('upsert_tag_cache', {
+        p_tag_name: 'another-tag',
+        p_tag_id: 2
+      });
     });
 
     it('should create new tag when tag does not exist', async () => {
@@ -64,24 +110,13 @@ describe('tag-manager', () => {
           })
         }
       );
-    });
-
-    it('should use cached tag ID on subsequent calls', async () => {
-      // First call - fetch tags
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          tags: [{ id: 1, name: 'cached-tag' }],
-        }),
+      // Should cache the newly created tag
+      expect(mockSupabaseClient.rpc).toHaveBeenCalledWith('upsert_tag_cache', {
+        p_tag_name: 'new-tag',
+        p_tag_id: 3
       });
-
-      const tagId1 = await getOrCreateTagId('test-secret', 'cached-tag');
-      const tagId2 = await getOrCreateTagId('test-secret', 'cached-tag');
-
-      expect(tagId1).toBe(1);
-      expect(tagId2).toBe(1);
-      expect(mockFetch).toHaveBeenCalledTimes(1); // Only called once due to caching
     });
+
 
     it('should handle API errors gracefully', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Network error'));

@@ -1,51 +1,80 @@
 /**
  * ConvertKit Tag Management Utility
- * Handles tag creation and ID resolution with caching to optimize performance
+ * Handles tag creation and ID resolution with Supabase caching to optimize performance
  */
+
+import { supabase } from '@/integrations/supabase/client';
 
 interface Tag {
   id: number;
   name: string;
 }
 
-type TagCache = Record<string, {
-  id: number;
-  timestamp: number;
-}>;
-
-// In-memory cache with 5 minute TTL
-const tagCache: TagCache = {};
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+interface CachedTag {
+  id: string;
+  tag_name: string;
+  tag_id: number;
+  created_at: string;
+  updated_at: string;
+  expires_at: string;
+}
 
 /**
- * Clears expired cache entries
+ * Clears expired cache entries from Supabase
  */
-function clearExpiredCache(): void {
-  const now = Date.now();
-  Object.keys(tagCache).forEach(tagName => {
-    if (now - tagCache[tagName].timestamp > CACHE_TTL) {
-      delete tagCache[tagName];
+async function clearExpiredCache(): Promise<void> {
+  try {
+    const { error } = await supabase.rpc('cleanup_expired_tag_cache');
+    if (error) {
+      console.warn('Failed to clean up expired tag cache:', error);
     }
-  });
+  } catch (error) {
+    console.warn('Error cleaning up expired cache:', error);
+  }
 }
 
 /**
- * Gets tag ID from cache if available and not expired
+ * Gets tag ID from Supabase cache if available and not expired
  */
-function getCachedTagId(tagName: string): number | null {
-  clearExpiredCache();
-  const cached = tagCache[tagName];
-  return cached ? cached.id : null;
+async function getCachedTagId(tagName: string): Promise<number | null> {
+  try {
+    // Clean up expired entries first
+    await clearExpiredCache();
+    
+    const { data, error } = await supabase
+      .from('convertkit_tag_cache')
+      .select('tag_id')
+      .eq('tag_name', tagName)
+      .gt('expires_at', new Date().toISOString())
+      .single();
+
+    if (error || !data) {
+      return null;
+    }
+
+    return data.tag_id;
+  } catch (error) {
+    console.warn(`Error getting cached tag ID for "${tagName}":`, error);
+    return null;
+  }
 }
 
 /**
- * Caches a tag ID with current timestamp
+ * Caches a tag ID in Supabase with TTL
  */
-function cacheTagId(tagName: string, tagId: number): void {
-  tagCache[tagName] = {
-    id: tagId,
-    timestamp: Date.now()
-  };
+async function cacheTagId(tagName: string, tagId: number): Promise<void> {
+  try {
+    const { error } = await supabase.rpc('upsert_tag_cache', {
+      p_tag_name: tagName,
+      p_tag_id: tagId
+    });
+
+    if (error) {
+      console.warn(`Failed to cache tag "${tagName}":`, error);
+    }
+  } catch (error) {
+    console.warn(`Error caching tag "${tagName}":`, error);
+  }
 }
 
 /**
@@ -87,7 +116,7 @@ async function createTag(apiSecret: string, tagName: string): Promise<number | n
   
   if (tagId) {
     // Cache the newly created tag
-    cacheTagId(tagName, tagId);
+    await cacheTagId(tagName, tagId);
   }
   
   return tagId;
@@ -95,11 +124,11 @@ async function createTag(apiSecret: string, tagName: string): Promise<number | n
 
 /**
  * Gets or creates a tag and returns its ID
- * Uses caching to minimize API calls
+ * Uses Supabase caching to minimize API calls
  */
 export async function getOrCreateTagId(apiSecret: string, tagName: string): Promise<number | null> {
   // Check cache first
-  const cachedId = getCachedTagId(tagName);
+  const cachedId = await getCachedTagId(tagName);
   if (cachedId) {
     return cachedId;
   }
@@ -109,9 +138,9 @@ export async function getOrCreateTagId(apiSecret: string, tagName: string): Prom
     const tags = await fetchAllTags(apiSecret);
     
     // Cache all fetched tags to optimize future lookups
-    tags.forEach(tag => {
-      cacheTagId(tag.name, tag.id);
-    });
+    await Promise.allSettled(
+      tags.map(tag => cacheTagId(tag.name, tag.id))
+    );
 
     // Check if our target tag exists
     const existingTag = tags.find(tag => tag.name === tagName);
