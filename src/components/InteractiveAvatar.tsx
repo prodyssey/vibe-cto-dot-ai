@@ -59,7 +59,7 @@ export const InteractiveAvatar = ({
   };
   
   // Helper function for triple flash sequence
-  const triggerTripleFlash = (startDelay: number = 0, callback?: () => void) => {
+  const triggerTripleFlash = (startDelay = 0, callback?: () => void) => {
     createTimeout(() => setShowWhiteFlash(true), startDelay);
     createTimeout(() => setShowWhiteFlash(false), startDelay + ANIMATION_TIMINGS.FLASH_DURATION);
     createTimeout(() => setShowWhiteFlash(true), startDelay + ANIMATION_TIMINGS.FLASH_INTERVAL * 2);
@@ -67,12 +67,16 @@ export const InteractiveAvatar = ({
     createTimeout(() => setShowWhiteFlash(true), startDelay + ANIMATION_TIMINGS.FLASH_INTERVAL * 4);
     createTimeout(() => {
       setShowWhiteFlash(false);
-      if (callback) callback();
+      if (callback) {
+        callback();
+      }
     }, startDelay + ANIMATION_TIMINGS.FLASH_INTERVAL * 4 + ANIMATION_TIMINGS.FLASH_DURATION);
   };
 
   const handleQuestionBlockClick = () => {
-    if (showPixelated) return; // Prevent multiple clicks
+    if (showPixelated) {
+      return; // Prevent multiple clicks
+    }
     
     setIsFlashing(true);
     
@@ -100,7 +104,9 @@ export const InteractiveAvatar = ({
   };
 
   const handleRefreshClick = () => {
-    if (isResetting) return; // Prevent multiple clicks
+    if (isResetting) {
+      return; // Prevent multiple clicks
+    }
     
     setIsResetting(true);
     setShowRefreshIcon(false);
