@@ -43,7 +43,7 @@ export default function AboutPage() {
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-2xl blur-xl scale-105 group-hover:scale-110 transition-transform duration-500"></div>
                     <div className="relative bg-gray-900/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-6">
                       <OptimizedImage
-                        src="/craig-sturgis.jpg"
+                        src="/images/headshot-2025-nano-banana-neutral.png"
                         alt="Craig Sturgis - Headshot"
                         width={288}
                         height={288}
