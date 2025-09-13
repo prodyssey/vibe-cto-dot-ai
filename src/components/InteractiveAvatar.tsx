@@ -1,8 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { RefreshCw } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
+
+// Animation timing constants
+const ANIMATION_TIMINGS = {
+  POWERGLOVE_RISE: 1200,
+  FLASH_SEQUENCE_START: 1000,
+  FLASH_DURATION: 100,
+  FLASH_INTERVAL: 100,
+  TRANSFORMATION_DELAY: 1600,
+  REFRESH_ICON_DELAY: 2600,
+  RESET_FLASH_START: 100,
+  RESET_COMPLETE: 700,
+} as const;
 
 interface InteractiveAvatarProps {
   className?: string;
@@ -24,9 +36,43 @@ export const InteractiveAvatar = ({
   const [isBlockHit, setIsBlockHit] = useState(false);
   const [showRefreshIcon, setShowRefreshIcon] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  
+  // Ref to track timeout IDs for cleanup
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+  
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(clearTimeout);
+    };
+  }, []);
+  
+  // Helper function to create a timeout and track it for cleanup
+  const createTimeout = (callback: () => void, delay: number) => {
+    const timeoutId = setTimeout(() => {
+      callback();
+      // Remove completed timeout from tracking
+      timeoutsRef.current = timeoutsRef.current.filter(id => id !== timeoutId);
+    }, delay);
+    timeoutsRef.current.push(timeoutId);
+    return timeoutId;
+  };
+  
+  // Helper function for triple flash sequence
+  const triggerTripleFlash = (startDelay: number = 0, callback?: () => void) => {
+    createTimeout(() => setShowWhiteFlash(true), startDelay);
+    createTimeout(() => setShowWhiteFlash(false), startDelay + ANIMATION_TIMINGS.FLASH_DURATION);
+    createTimeout(() => setShowWhiteFlash(true), startDelay + ANIMATION_TIMINGS.FLASH_INTERVAL * 2);
+    createTimeout(() => setShowWhiteFlash(false), startDelay + ANIMATION_TIMINGS.FLASH_INTERVAL * 2 + ANIMATION_TIMINGS.FLASH_DURATION);
+    createTimeout(() => setShowWhiteFlash(true), startDelay + ANIMATION_TIMINGS.FLASH_INTERVAL * 4);
+    createTimeout(() => {
+      setShowWhiteFlash(false);
+      if (callback) callback();
+    }, startDelay + ANIMATION_TIMINGS.FLASH_INTERVAL * 4 + ANIMATION_TIMINGS.FLASH_DURATION);
+  };
 
   const handleQuestionBlockClick = () => {
-    if (showPixelated) {return;} // Prevent multiple clicks
+    if (showPixelated) return; // Prevent multiple clicks
     
     setIsFlashing(true);
     
@@ -37,72 +83,39 @@ export const InteractiveAvatar = ({
     setShowPowerglove(true);
     
     // Start triple flash sequence after powerglove has risen
-    setTimeout(() => {
-      setShowWhiteFlash(true);
-    }, 1000);
-    setTimeout(() => {
-      setShowWhiteFlash(false);
-    }, 1100);
-    setTimeout(() => {
-      setShowWhiteFlash(true);
-    }, 1200);
-    setTimeout(() => {
-      setShowWhiteFlash(false);
-    }, 1300);
-    setTimeout(() => {
-      setShowWhiteFlash(true);
-    }, 1400);
-    setTimeout(() => {
-      setShowWhiteFlash(false);
+    triggerTripleFlash(ANIMATION_TIMINGS.FLASH_SEQUENCE_START, () => {
       setShowPowerglove(false);
-    }, 1500);
+    });
     
     // Then reveal pixelated avatar
-    setTimeout(() => {
+    createTimeout(() => {
       setShowPixelated(true);
       setIsFlashing(false);
-    }, 1600);
+    }, ANIMATION_TIMINGS.TRANSFORMATION_DELAY);
     
     // Show refresh icon after everything is complete
-    setTimeout(() => {
+    createTimeout(() => {
       setShowRefreshIcon(true);
-    }, 2600);
+    }, ANIMATION_TIMINGS.REFRESH_ICON_DELAY);
   };
 
   const handleRefreshClick = () => {
-    if (isResetting) {return;} // Prevent multiple clicks
+    if (isResetting) return; // Prevent multiple clicks
     
     setIsResetting(true);
     setShowRefreshIcon(false);
     
     // Triple flash animation
-    setTimeout(() => {
-      setShowWhiteFlash(true);
-    }, 100);
-    setTimeout(() => {
-      setShowWhiteFlash(false);
-    }, 200);
-    setTimeout(() => {
-      setShowWhiteFlash(true);
-    }, 300);
-    setTimeout(() => {
-      setShowWhiteFlash(false);
-    }, 400);
-    setTimeout(() => {
-      setShowWhiteFlash(true);
-    }, 500);
-    setTimeout(() => {
-      setShowWhiteFlash(false);
-    }, 600);
+    triggerTripleFlash(ANIMATION_TIMINGS.RESET_FLASH_START);
     
     // Reset everything after triple flash
-    setTimeout(() => {
+    createTimeout(() => {
       setShowPixelated(false);
       setIsBlockHit(false);
       setIsFlashing(false);
       setShowPowerglove(false);
       setIsResetting(false);
-    }, 700);
+    }, ANIMATION_TIMINGS.RESET_COMPLETE);
   };
 
   return (
@@ -144,7 +157,7 @@ export const InteractiveAvatar = ({
             <div 
               className="absolute bottom-1 right-2 w-1/6 pointer-events-none overflow-visible"
               style={{
-                animation: 'powerglove-rise 1200ms ease-out',
+                animation: `powerglove-rise ${ANIMATION_TIMINGS.POWERGLOVE_RISE}ms ease-out`,
                 zIndex: 1,
                 transformOrigin: 'center bottom'
               }}
@@ -271,6 +284,21 @@ export const InteractiveAvatar = ({
                   transform: translateY(-120%);
                   opacity: 1;
                   scale: 1;
+                }
+              }
+              
+              /* Respect user's motion preferences */
+              @media (prefers-reduced-motion: reduce) {
+                * {
+                  animation-duration: 0.01ms !important;
+                  animation-iteration-count: 1 !important;
+                  transition-duration: 0.01ms !important;
+                  scroll-behavior: auto !important;
+                }
+                
+                /* Keep essential visual feedback but make it instant */
+                .animate-pulse {
+                  animation: none;
                 }
               }
             `}</style>
