@@ -36,27 +36,37 @@ export const InteractiveAvatar = ({
     // Show powerglove sprite immediately - starts rising
     setShowPowerglove(true);
     
-    // Start white flash after powerglove has risen (give it time to complete)
+    // Start triple flash sequence after powerglove has risen
     setTimeout(() => {
       setShowWhiteFlash(true);
     }, 1000);
-    
-    // End the white flash and hide powerglove
+    setTimeout(() => {
+      setShowWhiteFlash(false);
+    }, 1100);
+    setTimeout(() => {
+      setShowWhiteFlash(true);
+    }, 1200);
+    setTimeout(() => {
+      setShowWhiteFlash(false);
+    }, 1300);
+    setTimeout(() => {
+      setShowWhiteFlash(true);
+    }, 1400);
     setTimeout(() => {
       setShowWhiteFlash(false);
       setShowPowerglove(false);
-    }, 1300);
+    }, 1500);
     
     // Then reveal pixelated avatar
     setTimeout(() => {
       setShowPixelated(true);
       setIsFlashing(false);
-    }, 1400);
+    }, 1600);
     
     // Show refresh icon after everything is complete
     setTimeout(() => {
       setShowRefreshIcon(true);
-    }, 1600);
+    }, 2600);
   };
 
   const handleRefreshClick = () => {
@@ -65,20 +75,34 @@ export const InteractiveAvatar = ({
     setIsResetting(true);
     setShowRefreshIcon(false);
     
-    // Flash animation
+    // Triple flash animation
     setTimeout(() => {
       setShowWhiteFlash(true);
     }, 100);
-    
-    // End flash and reset everything
     setTimeout(() => {
       setShowWhiteFlash(false);
+    }, 200);
+    setTimeout(() => {
+      setShowWhiteFlash(true);
+    }, 300);
+    setTimeout(() => {
+      setShowWhiteFlash(false);
+    }, 400);
+    setTimeout(() => {
+      setShowWhiteFlash(true);
+    }, 500);
+    setTimeout(() => {
+      setShowWhiteFlash(false);
+    }, 600);
+    
+    // Reset everything after triple flash
+    setTimeout(() => {
       setShowPixelated(false);
       setIsBlockHit(false);
       setIsFlashing(false);
       setShowPowerglove(false);
       setIsResetting(false);
-    }, 400);
+    }, 700);
   };
 
   return (
