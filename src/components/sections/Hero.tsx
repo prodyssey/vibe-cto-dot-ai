@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
-import { OptimizedImage } from "@/components/OptimizedImage";
+import { InteractiveAvatar } from "@/components/InteractiveAvatar";
 
 export const Hero = () => {
   const router = useRouter();
@@ -73,24 +73,13 @@ export const Hero = () => {
           {/* Avatar with trust content - positioned after primary CTA on mobile */}
           <div className="order-3 flex flex-col items-center space-y-4">
             {/* Avatar */}
-            <div className="relative">
-              {/* Gradient border container */}
-              <div className="relative p-1 bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 rounded-xl hover:scale-105 transition-all duration-300 mx-auto w-fit">
-                {/* Glass morphism inner container */}
-                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-2">
-                  <OptimizedImage
-                    src="/images/craig-avatar-pixelated.png"
-                    alt="VibeCTO Avatar"
-                    width={200}
-                    height={200}
-                    priority
-                    className="w-32 h-32 rounded-lg"
-                    sizes="128px"
-                  />
-                </div>
-              </div>
-              {/* Glow effect behind avatar */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-xl -z-10 scale-125"></div>
+            <div className="flex justify-center w-full">
+              <InteractiveAvatar
+                className="w-48 h-48 rounded-lg"
+                width={240}
+                height={240}
+                sizes="192px"
+              />
             </div>
 
             {/* Trust-building content for mobile */}
@@ -194,25 +183,12 @@ export const Hero = () => {
           {/* Right column - Avatar and Trust Stats */}
           <div className="flex flex-col justify-center items-center pr-4 sm:pr-6 md:pr-8 space-y-6 sm:space-y-0">
             {/* Avatar */}
-            <div className="relative">
-              {/* Gradient border container */}
-              <div className="relative p-1 bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 rounded-xl hover:scale-105 transition-all duration-300 w-fit mx-auto">
-                {/* Glass morphism inner container */}
-                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-3">
-                  <OptimizedImage
-                    src="/images/craig-avatar-pixelated.png"
-                    alt="VibeCTO Avatar"
-                    width={384}
-                    height={384}
-                    priority
-                    className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 2xl:w-96 2xl:h-96 rounded-lg"
-                    sizes="(max-width: 1536px) 320px, 384px"
-                  />
-                </div>
-              </div>
-              {/* Glow effect behind avatar */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-2xl -z-10 scale-125"></div>
-            </div>
+            <InteractiveAvatar
+              className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 2xl:w-96 2xl:h-96 rounded-lg"
+              width={384}
+              height={384}
+              sizes="(max-width: 1536px) 320px, 384px"
+            />
 
             {/* Trust-building stats */}
             <div className="text-center space-y-3 sm:space-y-2 max-w-xs sm:max-w-sm">
