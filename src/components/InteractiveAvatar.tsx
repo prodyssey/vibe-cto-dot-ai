@@ -84,10 +84,11 @@ export const InteractiveAvatar = ({
           {/* Powerglove sprite - rises from behind question block */}
           {showPowerglove && (
             <div 
-              className="absolute bottom-1 right-1 w-1/3 pointer-events-none overflow-visible"
+              className="absolute bottom-1 right-2 w-1/6 pointer-events-none overflow-visible"
               style={{
                 animation: 'powerglove-rise 1200ms ease-out',
-                zIndex: 1
+                zIndex: 1,
+                transformOrigin: 'center bottom'
               }}
             >
               <OptimizedImage
@@ -168,32 +169,32 @@ export const InteractiveAvatar = ({
               }
               @keyframes powerglove-rise {
                 0% {
-                  transform: translateY(100%);
+                  transform: translateY(50%);
                   opacity: 0;
+                  scale: 0.7;
+                }
+                20% {
+                  transform: translateY(20%);
+                  opacity: 0.4;
                   scale: 0.8;
                 }
-                25% {
-                  transform: translateY(50%);
-                  opacity: 0.3;
-                  scale: 0.85;
+                40% {
+                  transform: translateY(-20%);
+                  opacity: 0.7;
+                  scale: 0.9;
                 }
-                50% {
-                  transform: translateY(0%);
-                  opacity: 0.8;
+                60% {
+                  transform: translateY(-60%);
+                  opacity: 0.9;
                   scale: 0.95;
                 }
-                75% {
-                  transform: translateY(-30%);
+                80% {
+                  transform: translateY(-100%);
                   opacity: 1;
                   scale: 1.05;
                 }
-                90% {
-                  transform: translateY(-50%);
-                  opacity: 1;
-                  scale: 1.02;
-                }
                 100% {
-                  transform: translateY(-60%);
+                  transform: translateY(-120%);
                   opacity: 1;
                   scale: 1;
                 }
