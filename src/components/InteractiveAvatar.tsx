@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { RefreshCw } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 
 interface InteractiveAvatarProps {
@@ -21,6 +22,8 @@ export const InteractiveAvatar = ({
   const [showWhiteFlash, setShowWhiteFlash] = useState(false);
   const [showPowerglove, setShowPowerglove] = useState(false);
   const [isBlockHit, setIsBlockHit] = useState(false);
+  const [showRefreshIcon, setShowRefreshIcon] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   const handleQuestionBlockClick = () => {
     if (showPixelated) {return;} // Prevent multiple clicks
@@ -49,6 +52,33 @@ export const InteractiveAvatar = ({
       setShowPixelated(true);
       setIsFlashing(false);
     }, 1400);
+    
+    // Show refresh icon after everything is complete
+    setTimeout(() => {
+      setShowRefreshIcon(true);
+    }, 1600);
+  };
+
+  const handleRefreshClick = () => {
+    if (isResetting) {return;} // Prevent multiple clicks
+    
+    setIsResetting(true);
+    setShowRefreshIcon(false);
+    
+    // Flash animation
+    setTimeout(() => {
+      setShowWhiteFlash(true);
+    }, 100);
+    
+    // End flash and reset everything
+    setTimeout(() => {
+      setShowWhiteFlash(false);
+      setShowPixelated(false);
+      setIsBlockHit(false);
+      setIsFlashing(false);
+      setShowPowerglove(false);
+      setIsResetting(false);
+    }, 400);
   };
 
   return (
@@ -108,16 +138,16 @@ export const InteractiveAvatar = ({
           {/* Question block overlay - always visible, bottom right, overlapping the image */}
           <div 
             className="absolute bottom-1 right-1 w-1/4 cursor-pointer hover:scale-110 transition-transform duration-200 overflow-hidden rounded"
-            onClick={handleQuestionBlockClick}
+            onClick={showRefreshIcon ? handleRefreshClick : handleQuestionBlockClick}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                handleQuestionBlockClick();
+                showRefreshIcon ? handleRefreshClick() : handleQuestionBlockClick();
               }
             }}
             style={{
-              animation: showPixelated ? 'none' : 'subtle-bounce 2s ease-in-out infinite',
+              animation: showPixelated && !showRefreshIcon ? 'none' : 'subtle-bounce 2s ease-in-out infinite',
               zIndex: 2
             }}
           >
@@ -132,8 +162,20 @@ export const InteractiveAvatar = ({
               height={100}
               className="w-full h-auto drop-shadow-lg"
             />
-            {/* Glint effect - only when not pixelated */}
-            {!showPixelated && (
+            {/* Refresh icon - centered in the block when shown */}
+            {showRefreshIcon && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <RefreshCw 
+                  className="w-1/2 h-1/2 text-white drop-shadow-lg animate-pulse"
+                  style={{
+                    filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.8))'
+                  }}
+                />
+              </div>
+            )}
+            
+            {/* Glint effect - only when not pixelated and no refresh icon */}
+            {!showPixelated && !showRefreshIcon && (
               <div 
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full"
                 style={{
