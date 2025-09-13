@@ -20,11 +20,15 @@ export const InteractiveAvatar = ({
   const [isFlashing, setIsFlashing] = useState(false);
   const [showWhiteFlash, setShowWhiteFlash] = useState(false);
   const [showPowerglove, setShowPowerglove] = useState(false);
+  const [isBlockHit, setIsBlockHit] = useState(false);
 
   const handleQuestionBlockClick = () => {
     if (showPixelated) {return;} // Prevent multiple clicks
     
     setIsFlashing(true);
+    
+    // Hit the block immediately
+    setIsBlockHit(true);
     
     // Show powerglove sprite immediately - starts rising
     setShowPowerglove(true);
@@ -118,7 +122,11 @@ export const InteractiveAvatar = ({
             }}
           >
             <OptimizedImage
-              src="/images/vibe-cto-question-block-v3.png"
+              src={
+                isBlockHit 
+                  ? "/images/vibe-cto-question-block-hit.png"
+                  : "/images/vibe-cto-question-block-v3.png"
+              }
               alt="Question block - click to reveal pixelated avatar"
               width={100}
               height={100}
