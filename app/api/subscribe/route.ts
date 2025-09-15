@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { applyTagsToSubscriber } from "./tag-manager";
 
 // Request schema
 const subscribeSchema = z.object({
@@ -128,28 +129,25 @@ export async function POST(request: NextRequest) {
 
     // If we have tags to add and the subscription was successful
     if (tags && tags.length > 0 && convertKitData.subscription) {
-      // Add tags in parallel for better performance
-      const tagPromises = tags.map((tag) =>
-        fetch(`https://api.convertkit.com/v3/tags`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            api_secret: CONVERTKIT_API_SECRET,
-            tag: {
-              name: tag,
-              email,
-            },
-          }),
-        }).catch((error) => {
-          console.warn(`Failed to add tag "${tag}" to ${email}:`, error);
-          // Don't fail the whole request if tagging fails
-          return null;
-        })
-      );
-
-      await Promise.allSettled(tagPromises);
+      const subscriberId = convertKitData.subscription.id;
+      
+      if (subscriberId) {
+        try {
+          const tagResults = await applyTagsToSubscriber(CONVERTKIT_API_SECRET, tags, email);
+          
+          if (tagResults.success > 0) {
+            console.log(`Successfully applied ${tagResults.success} tag(s) to ${email}`);
+          }
+          
+          if (tagResults.failed > 0) {
+            console.warn(`Failed to apply ${tagResults.failed} tag(s) to ${email}`);
+          }
+        } catch (error) {
+          console.error(`Error applying tags to ${email}:`, error);
+        }
+      } else {
+        console.warn('No subscriber ID returned from ConvertKit, cannot apply tags');
+      }
     }
 
     // Send Slack notification via internal API
