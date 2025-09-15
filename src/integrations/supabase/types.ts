@@ -676,6 +676,10 @@ export interface Database {
         }
         Returns: void
       }
+      clear_all_tag_cache: {
+        Args: Record<PropertyKey, never>
+        Returns: void
+      }
     }
     Enums: {
       adventure_path:
