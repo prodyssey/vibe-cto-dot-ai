@@ -8,6 +8,7 @@ import {
   User,
   ChevronDown,
   Briefcase,
+  Target,
 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
@@ -25,12 +26,14 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { getOrderedServices } from "@/config/services";
+import { getOrderedGoals } from "@/config/goals";
 
 export const Navigation = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   const serviceItems = getOrderedServices();
+  const goalItems = getOrderedGoals();
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },
@@ -82,6 +85,45 @@ export const Navigation = () => {
                                 className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors ${
                                   isActive
                                     ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                                    : "hover:bg-white/10 hover:text-white text-white/90"
+                                }`}
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <Icon className="w-4 h-4" />
+                                  <div className="text-sm font-medium leading-none">
+                                    {item.label}
+                                  </div>
+                                </div>
+                                <p className="line-clamp-2 text-sm leading-snug text-white/60">
+                                  {item.description}
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent text-white hover:bg-white/10 data-[state=open]:bg-white/10">
+                    <Target className="w-4 h-4 mr-2" />
+                    Goals
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 bg-black/95 backdrop-blur-lg border border-white/10">
+                      {goalItems.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = pathname === item.path;
+
+                        return (
+                          <li key={item.path}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                href={item.path}
+                                className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors ${
+                                  isActive
+                                    ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                                     : "hover:bg-white/10 hover:text-white text-white/90"
                                 }`}
                               >
@@ -209,6 +251,40 @@ export const Navigation = () => {
                             className={`w-full justify-start space-x-3 text-left ${
                               isActive
                                 ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                                : "text-white hover:bg-white/10"
+                            }`}
+                          >
+                            <Icon className="w-5 h-5" />
+                            <span className="text-base">{item.label}</span>
+                          </Button>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Goals Section */}
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2 px-3 py-2 text-white/60 text-sm font-medium">
+                    <Target className="w-4 h-4" />
+                    <span>Goals</span>
+                  </div>
+                  <div className="ml-4 space-y-1">
+                    {goalItems.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = pathname === item.path;
+
+                      return (
+                        <Link
+                          key={item.path}
+                          href={item.path}
+                          onClick={handleNavClick}
+                        >
+                          <Button
+                            variant={isActive ? "default" : "ghost"}
+                            className={`w-full justify-start space-x-3 text-left ${
+                              isActive
+                                ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                                 : "text-white hover:bg-white/10"
                             }`}
                           >

@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { getOrderedServices } from "@/config/services";
+import { getOrderedGoals } from "@/config/goals";
 
 import {
   IgnitionPortal,
@@ -43,7 +44,14 @@ interface Portal {
 }
 
 const services = getOrderedServices();
-const PORTALS: Portal[] = services.map(service => ({
+const goals = getOrderedGoals();
+// Only include items that have implemented adventure game scenes
+const allItems = [...services, ...goals].filter(item => 
+  item.id === 'ignition' || 
+  item.id === 'launch-control' || 
+  item.id === 'transformation'
+);
+const PORTALS: Portal[] = allItems.map(service => ({
   id: service.adventureSceneId,
   title: service.label,
   icon: service.id === 'ignition' ? <Flame className="w-12 h-12" /> : <service.icon className="w-12 h-12" />,

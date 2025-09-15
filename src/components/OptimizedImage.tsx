@@ -43,14 +43,14 @@ export function OptimizedImage({
   useOptimizedFallbacks = true,
   loading = 'lazy'
 }: OptimizedImageProps) {
-  const [useNextjsOptimization, setUseNextjsOptimization] = useState(true)
+  const [hasError, setHasError] = useState(false)
   
   // Check if this is a local image that should use optimized fallbacks
   const isLocalImage = src.startsWith('/images/')
-  const shouldUseOptimizedFallbacks = useOptimizedFallbacks && isLocalImage
+  const shouldUseOptimizedFallbacks = useOptimizedFallbacks && isLocalImage && !hasError
   
-  // If we should use optimized fallbacks and we haven't fallen back to Next.js yet
-  if (shouldUseOptimizedFallbacks && useNextjsOptimization) {
+  // If we should use optimized fallbacks and haven't had an error
+  if (shouldUseOptimizedFallbacks) {
     const paths = getOptimizedPaths(src)
     
     return (
@@ -82,7 +82,7 @@ export function OptimizedImage({
           quality={quality}
           loading={priority ? 'eager' : loading}
           unoptimized={false}
-          onError={() => setUseNextjsOptimization(false)}
+          onError={() => setHasError(true)}
         />
       </picture>
     )

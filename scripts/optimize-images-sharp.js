@@ -47,6 +47,48 @@ async function getImageFiles(dir, files = []) {
   return files;
 }
 
+// Safely get file stats, returning null if file doesn't exist
+async function getFileStat(filePath) {
+  try {
+    return await stat(filePath);
+  } catch (error) {
+    return null; // File doesn't exist or can't be accessed
+  }
+}
+
+// Check if image needs optimization
+async function needsOptimization(sourceFile, outputBase) {
+  try {
+    const sourceStat = await stat(sourceFile);
+    
+    // Get stats for optimized files (null if they don't exist)
+    const webpStat = await getFileStat(`${outputBase}.webp`);
+    const ext = extname(sourceFile).toLowerCase();
+    const originalFormatFile = ext === '.png' ? `${outputBase}.png` : 
+      ['.jpg', '.jpeg'].includes(ext) ? `${outputBase}.jpg` : null;
+    const originalStat = originalFormatFile ? await getFileStat(originalFormatFile) : null;
+    
+    // If neither optimized file exists, we need optimization
+    if (!webpStat && !originalStat) {
+      return true;
+    }
+    
+    // Check modification times - if source is newer than optimized files, re-optimize
+    if (webpStat && sourceStat.mtime > webpStat.mtime) {
+      return true;
+    }
+    
+    if (originalStat && sourceStat.mtime > originalStat.mtime) {
+      return true;
+    }
+    
+    return false; // Already optimized and up to date
+  } catch (error) {
+    // If we can't check, assume we need optimization
+    return true;
+  }
+}
+
 // Optimize images using Sharp
 async function optimizeImages() {
   console.log('🖼️  Starting image optimization with Sharp...');
@@ -87,10 +129,11 @@ async function optimizeImages() {
     return;
   }
   
-  console.log(`Found ${imageFiles.length} images to optimize...`);
+  console.log(`Found ${imageFiles.length} images to process...`);
   
   let successCount = 0;
   let errorCount = 0;
+  let skippedCount = 0;
   
   for (const filePath of imageFiles) {
     const relativePath = filePath.replace(publicDir + '/', '');
@@ -98,10 +141,18 @@ async function optimizeImages() {
     const outputDir = dirname(outputBase);
     
     try {
+      // Check if optimization is needed
+      const needsOpt = await needsOptimization(filePath, outputBase);
+      if (!needsOpt) {
+        console.log(`⏭️  Skipping already optimized: ${relativePath}`);
+        skippedCount++;
+        continue;
+      }
+      
       // Ensure output directory exists
       await mkdir(outputDir, { recursive: true });
       
-      console.log(`Optimizing: ${relativePath}`);
+      console.log(`🔄 Optimizing: ${relativePath}`);
       
       let hasSuccess = false;
       
@@ -146,10 +197,10 @@ async function optimizeImages() {
     }
   }
   
-  console.log(`🎉 Image optimization complete! ✅ ${successCount} success, ⚠️ ${errorCount} errors`);
+  console.log(`🎉 Image optimization complete! ✅ ${successCount} optimized, ⏭️ ${skippedCount} skipped, ⚠️ ${errorCount} errors`);
   
   // Don't fail the build if some optimizations fail
-  if (successCount === 0 && imageFiles.length > 0) {
+  if (successCount === 0 && skippedCount === 0 && imageFiles.length > 0) {
     console.log('⚠️  No images were optimized, but continuing build...');
   }
 }

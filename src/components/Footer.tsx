@@ -7,14 +7,14 @@ export const Footer = () => {
   return (
     <footer className="bg-slate-900/90 backdrop-blur-sm border-t border-white/10 mt-auto">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Logo and Description */}
           <div className="md:col-span-2">
             <Link href="/" className="inline-block mb-4">
               <Logo />
             </Link>
             <p className="text-gray-400 max-w-md">
-              Elite AI augmented engineering and vibe coding guidance. Transform your ideas into real, secure, scalable products.
+              Human help to build effectively with AI. VibeCTO.ai is a consultancy that helps digital product companies adopt the right AI workflows to accelerate their roadmap.
             </p>
           </div>
           
@@ -22,6 +22,14 @@ export const Footer = () => {
           <div>
             <h3 className="text-white font-semibold mb-4">Services</h3>
             <ul className="space-y-2">
+              <li>
+                <Link 
+                  href="/ai-product-lifecycle-sprint" 
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                >
+                  AI Product Lifecycle Sprint
+                </Link>
+              </li>
               <li>
                 <Link 
                   href="/ignition" 
@@ -38,12 +46,19 @@ export const Footer = () => {
                   Launch Control
                 </Link>
               </li>
+            </ul>
+          </div>
+          
+          {/* Goals */}
+          <div>
+            <h3 className="text-white font-semibold mb-4">Goals</h3>
+            <ul className="space-y-2">
               <li>
                 <Link 
                   href="/transformation" 
                   className="text-gray-400 hover:text-blue-400 transition-colors"
                 >
-                  Transformation
+                  AI Transformation
                 </Link>
               </li>
             </ul>
@@ -104,7 +119,7 @@ export const Footer = () => {
               © {new Date().getFullYear()} VibeCTO.ai. All rights reserved.
             </p>
             <p className="text-gray-500 text-sm mt-2 md:mt-0">
-              Human help to build better with AI
+              Human help to build effectively with AI
             </p>
           </div>
         </div>
