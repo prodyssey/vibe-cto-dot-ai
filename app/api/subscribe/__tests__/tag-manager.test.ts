@@ -1,24 +1,25 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getOrCreateTagId, applyTagToSubscriber, applyTagsToSubscriber } from '../tag-manager';
-
-// Mock Supabase client
-const mockSupabaseClient = {
-  from: vi.fn(),
-  rpc: vi.fn(),
-};
+import { supabase } from '@/integrations/supabase/client';
 
 vi.mock('@/integrations/supabase/client', () => ({
-  supabase: mockSupabaseClient,
+  supabase: {
+    from: vi.fn(),
+    rpc: vi.fn(),
+  },
 }));
 
 // Mock fetch globally
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
+// Get the mocked supabase client
+const mockSupabaseClient = vi.mocked(supabase);
+
 describe('tag-manager', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Default Supabase mock implementations
     mockSupabaseClient.rpc.mockResolvedValue({ error: null });
     mockSupabaseClient.from.mockReturnValue({
