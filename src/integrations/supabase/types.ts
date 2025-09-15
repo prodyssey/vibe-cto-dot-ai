@@ -541,6 +541,33 @@ export interface Database {
           },
         ]
       }
+      convertkit_tag_cache: {
+        Row: {
+          id: string
+          tag_name: string
+          tag_id: number
+          created_at: string
+          updated_at: string
+          expires_at: string
+        }
+        Insert: {
+          id?: string
+          tag_name: string
+          tag_id: number
+          created_at?: string
+          updated_at?: string
+          expires_at?: string
+        }
+        Update: {
+          id?: string
+          tag_name?: string
+          tag_id?: number
+          created_at?: string
+          updated_at?: string
+          expires_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       adventure_choices_unified: {
@@ -637,6 +664,17 @@ export interface Database {
           setting_value: string
         }
         Returns: string
+      }
+      cleanup_expired_tag_cache: {
+        Args: Record<PropertyKey, never>
+        Returns: void
+      }
+      upsert_tag_cache: {
+        Args: {
+          p_tag_name: string
+          p_tag_id: number
+        }
+        Returns: void
       }
     }
     Enums: {

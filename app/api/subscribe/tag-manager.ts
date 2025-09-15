@@ -21,6 +21,7 @@ interface CachedTag {
 
 /**
  * Clears expired cache entries from Supabase
+ * Falls back gracefully if the function doesn't exist
  */
 async function clearExpiredCache(): Promise<void> {
   try {
@@ -29,18 +30,19 @@ async function clearExpiredCache(): Promise<void> {
       console.warn('Failed to clean up expired tag cache:', error);
     }
   } catch (error) {
-    console.warn('Error cleaning up expired cache:', error);
+    console.warn('Cache cleanup function not available:', error);
   }
 }
 
 /**
  * Gets tag ID from Supabase cache if available and not expired
+ * Falls back gracefully if the table doesn't exist
  */
 async function getCachedTagId(tagName: string): Promise<number | null> {
   try {
     // Clean up expired entries first
     await clearExpiredCache();
-    
+
     const { data, error } = await supabase
       .from('convertkit_tag_cache')
       .select('tag_id')
@@ -54,13 +56,14 @@ async function getCachedTagId(tagName: string): Promise<number | null> {
 
     return data.tag_id;
   } catch (error) {
-    console.warn(`Error getting cached tag ID for "${tagName}":`, error);
+    console.warn(`Cache table not available for tag "${tagName}":`, error);
     return null;
   }
 }
 
 /**
  * Caches a tag ID in Supabase with TTL
+ * Falls back gracefully if the function doesn't exist
  */
 async function cacheTagId(tagName: string, tagId: number): Promise<void> {
   try {
@@ -73,7 +76,7 @@ async function cacheTagId(tagName: string, tagId: number): Promise<void> {
       console.warn(`Failed to cache tag "${tagName}":`, error);
     }
   } catch (error) {
-    console.warn(`Error caching tag "${tagName}":`, error);
+    console.warn(`Cache function not available for tag "${tagName}":`, error);
   }
 }
 
@@ -113,12 +116,12 @@ async function createTag(apiSecret: string, tagName: string): Promise<number | n
 
   const data = await response.json();
   const tagId = data.tag?.id;
-  
+
   if (tagId) {
     // Cache the newly created tag
     await cacheTagId(tagName, tagId);
   }
-  
+
   return tagId;
 }
 
@@ -136,7 +139,7 @@ export async function getOrCreateTagId(apiSecret: string, tagName: string): Prom
   try {
     // Fetch all tags to check if it exists
     const tags = await fetchAllTags(apiSecret);
-    
+
     // Cache all fetched tags to optimize future lookups
     await Promise.allSettled(
       tags.map(tag => cacheTagId(tag.name, tag.id))
