@@ -4,11 +4,11 @@ import {
   ArrowLeft,
   Calendar,
   Clock,
-  Share2,
   Linkedin,
   Copy,
 } from "lucide-react";
 import { useState, Suspense } from "react";
+import type { ComponentType } from "react";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import rehypeHighlight from "rehype-highlight";
@@ -33,6 +33,11 @@ import "highlight.js/styles/github-dark.css";
 interface ResourcePostClientProps {
   post: Post;
 }
+
+const reactComponentLoaders: Record<string, () => Promise<{ default: ComponentType }>> = {
+  "interactive-demo": () => import("../../../src/content/posts/interactive-demo"),
+  "idea-to-revenue-machine": () => import("../../../src/content/posts/idea-to-revenue-machine"),
+};
 
 export function ResourcePostClient({ post }: ResourcePostClientProps) {
   const [copied, setCopied] = useState(false);
@@ -62,10 +67,15 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
   };
 
   // For React components, dynamically import them
-  const ReactComponent = post.metadata.type === 'react' && post.metadata.slug === 'interactive-demo' ? 
-    dynamic(() => import('../../../src/content/posts/interactive-demo'), {
-      loading: () => <div className="text-white">Loading interactive content...</div>
-    }) : null;
+  const loader = post.metadata.type === 'react'
+    ? reactComponentLoaders[post.metadata.slug]
+    : undefined;
+
+  const ReactComponent = loader
+    ? dynamic(loader, {
+        loading: () => <div className="text-white">Loading interactive content...</div>,
+      })
+    : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">

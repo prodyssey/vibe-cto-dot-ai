@@ -37,6 +37,33 @@ function getPostsDirectory(): string {
   return path.join(process.cwd(), 'src', 'content', 'posts');
 }
 
+const REACT_POSTS: Record<string, PostMetadata> = {
+  'interactive-demo': {
+    title: 'Interactive Demo',
+    description: 'An interactive demonstration of concepts',
+    date: '2025-01-01',
+    readTime: '5 min read',
+    featured: false,
+    type: 'react',
+    tags: ['interactive', 'demo'],
+    author: 'Craig Sturgis',
+    slug: 'interactive-demo',
+    hidden: false,
+  },
+  'idea-to-revenue-machine': {
+    title: 'Idea to Revenue Machine',
+    description: 'Interactive factory simulation that turns ideas into features and highlights delivery bottlenecks.',
+    date: '2025-01-25',
+    readTime: '8 min interactive',
+    featured: false,
+    type: 'react',
+    tags: ['interactive', 'product', 'throughput'],
+    author: 'Craig Sturgis',
+    slug: 'idea-to-revenue-machine',
+    hidden: false,
+  },
+};
+
 export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]> {
   const posts: PostMetadata[] = [];
   
@@ -73,29 +100,16 @@ export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]
     for (const fileName of fileNames) {
       if (fileName.endsWith('.tsx')) {
         try {
-          // For React components, we'll manually define their metadata here
-          // since we can't dynamically import in server context
           const slug = slugify(fileName);
-          
-          if (slug === 'interactive-demo') {
-            const post: PostMetadata = {
-              title: "Interactive Demo",
-              description: "An interactive demonstration of concepts",
-              date: "2025-01-01",
-              readTime: "5 min read",
-              featured: false,
-              type: 'react',
-              tags: ['interactive', 'demo'],
-              author: "Craig Sturgis",
-              slug: 'interactive-demo',
-              hidden: false
-            };
-            
-            // Skip hidden posts unless explicitly requested
-            if (!includeHidden && post.hidden) {continue;}
-            
-            posts.push(post);
+          const post = REACT_POSTS[slug];
+
+          if (!post) {
+            continue;
           }
+
+          if (!includeHidden && post.hidden) {continue;}
+
+          posts.push(post);
         } catch (error) {
           console.error(`Error processing React file ${fileName}:`, error);
         }
@@ -147,29 +161,16 @@ export async function getPostBySlug(slug: string, allowHidden = true): Promise<P
     // Try React component
     const reactPath = path.join(postsDirectory, `${slug}.tsx`);
     if (fs.existsSync(reactPath)) {
-      // Handle React components - return metadata only
-      if (slug === 'interactive-demo') {
-        const metadata: PostMetadata = {
-          title: "Interactive Demo",
-          description: "An interactive demonstration of concepts",
-          date: "2025-01-01",
-          readTime: "5 min read",
-          featured: false,
-          type: 'react',
-          tags: ['interactive', 'demo'],
-          author: "Craig Sturgis",
-          slug: 'interactive-demo',
-          hidden: false
-        };
-        
-        // Check if post is hidden and if we should allow it
+      const metadata = REACT_POSTS[slug];
+
+      if (metadata) {
         if (!allowHidden && metadata.hidden) {
           return null;
         }
-        
+
         return {
           metadata,
-          content: '' // React components don't have markdown content
+          content: '',
         };
       }
     }
