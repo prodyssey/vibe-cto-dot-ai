@@ -96,23 +96,18 @@ export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]
       }
     }
 
-    // Process React files - just metadata for now
-    for (const fileName of fileNames) {
-      if (fileName.endsWith('.tsx')) {
-        try {
-          const slug = slugify(fileName);
-          const post = REACT_POSTS[slug];
-
-          if (!post) {
-            continue;
-          }
-
-          if (!includeHidden && post.hidden) {continue;}
-
-          posts.push(post);
-        } catch (error) {
-          console.error(`Error processing React file ${fileName}:`, error);
+    for (const [slug, post] of Object.entries(REACT_POSTS)) {
+      try {
+        const filePath = path.join(postsDirectory, `${slug}.tsx`);
+        if (!fs.existsSync(filePath)) {
+          continue;
         }
+
+        if (!includeHidden && post.hidden) {continue;}
+
+        posts.push(post);
+      } catch (error) {
+        console.error(`Error processing React file ${slug}:`, error);
       }
     }
   } catch (error) {
@@ -159,20 +154,21 @@ export async function getPostBySlug(slug: string, allowHidden = true): Promise<P
     }
 
     // Try React component
-    const reactPath = path.join(postsDirectory, `${slug}.tsx`);
-    if (fs.existsSync(reactPath)) {
-      const metadata = REACT_POSTS[slug];
-
-      if (metadata) {
-        if (!allowHidden && metadata.hidden) {
-          return null;
-        }
-
-        return {
-          metadata,
-          content: '',
-        };
+    const metadata = REACT_POSTS[slug];
+    if (metadata) {
+      const reactPath = path.join(postsDirectory, `${slug}.tsx`);
+      if (!fs.existsSync(reactPath)) {
+        return null;
       }
+
+      if (!allowHidden && metadata.hidden) {
+        return null;
+      }
+
+      return {
+        metadata,
+        content: '',
+      };
     }
   } catch (error) {
     console.error(`Error in getPostBySlug for ${slug}:`, error);
