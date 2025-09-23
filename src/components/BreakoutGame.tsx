@@ -24,6 +24,9 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
   const [linkedinUsername, setLinkedinUsername] = useState("");
   const [isSubmittingScore, setIsSubmittingScore] = useState(false);
   const [scoreSubmitted, setScoreSubmitted] = useState(false);
+  const [lifeBonus, setLifeBonus] = useState(0);
+  const [showingLifeBonus, setShowingLifeBonus] = useState(false);
+  const [animatedBonusLives, setAnimatedBonusLives] = useState(0);
 
   // Game objects refs to persist across renders
   const gameRef = useRef({
@@ -241,9 +244,34 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
       // Check win condition
       if (game.bricks.length === 0) {
         setGameState("won");
-        if (onGameComplete) {
-          onGameComplete(score);
-        }
+
+        // Calculate life bonus
+        const bonus = lives * 500;
+        setLifeBonus(bonus);
+        setShowingLifeBonus(true);
+        setAnimatedBonusLives(0);
+
+        // Animate the bonus addition
+        let currentLives = 0;
+        const animateBonus = setInterval(() => {
+          currentLives++;
+          setAnimatedBonusLives(currentLives);
+
+          if (currentLives >= lives) {
+            clearInterval(animateBonus);
+            // Add bonus to score after animation
+            setTimeout(() => {
+              setScore(prevScore => {
+                const finalScore = prevScore + bonus;
+                if (onGameComplete) {
+                  onGameComplete(finalScore);
+                }
+                return finalScore;
+              });
+              setShowingLifeBonus(false);
+            }, 1000);
+          }
+        }, 500); // Show each life bonus every 500ms
       }
     }
 
@@ -308,7 +336,7 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
     ctx.shadowColor = "#60a5fa";
     ctx.stroke();
     ctx.shadowBlur = 0;
-  }, [gameState, score, difficulty, onScoreUpdate, onGameComplete]);
+  }, [gameState, score, difficulty, lives, onScoreUpdate, onGameComplete]);
 
   // Animation loop
   const animate = useCallback(() => {
@@ -629,6 +657,12 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
               <div className="flex flex-col items-center gap-2">
                 <button
                   onClick={() => {
+                    setLifeBonus(0);
+                    setShowingLifeBonus(false);
+                    setAnimatedBonusLives(0);
+                    setScoreSubmitted(false);
+                    setPlayerInitials("");
+                    setLinkedinUsername("");
                     setGameState("ready");
                   }}
                   className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold hover:scale-105 transition-transform"
@@ -661,7 +695,43 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
               <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-green-400 bg-clip-text text-transparent text-center">
                 YOU WIN! 🏆
               </h3>
-              <p className="text-lg mb-2 text-center">Final Score: {score}</p>
+
+              {/* Life Bonus Animation */}
+              {showingLifeBonus && (
+                <div className="mb-4 text-center animate-pulse">
+                  <p className="text-yellow-400 text-xl font-bold mb-2">LIFE BONUS!</p>
+                  <div className="flex justify-center items-center gap-2 mb-2">
+                    {Array.from({ length: lives }).map((_, i) => (
+                      <div
+                        key={i}
+                        className={`transition-all duration-500 ${
+                          i < animatedBonusLives ? "scale-150 animate-bounce" : "scale-100 opacity-30"
+                        }`}
+                      >
+                        <Heart
+                          className={`w-8 h-8 ${
+                            i < animatedBonusLives ? "text-red-500 fill-red-500" : "text-gray-500"
+                          }`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  {animatedBonusLives > 0 && (
+                    <p className="text-2xl font-mono text-green-400">
+                      +{animatedBonusLives * 500}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <p className="text-lg mb-2 text-center">
+                Final Score: {score}
+                {lifeBonus > 0 && !showingLifeBonus && (
+                  <span className="text-green-400 text-sm ml-2">
+                    (includes {lifeBonus} life bonus!)
+                  </span>
+                )}
+              </p>
               <p className="text-sm mb-2 text-gray-400 text-center">
                 {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode (1.5x)"}
               </p>
@@ -711,6 +781,12 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
               <div className="flex flex-col items-center gap-2">
                 <button
                   onClick={() => {
+                    setLifeBonus(0);
+                    setShowingLifeBonus(false);
+                    setAnimatedBonusLives(0);
+                    setScoreSubmitted(false);
+                    setPlayerInitials("");
+                    setLinkedinUsername("");
                     setGameState("ready");
                   }}
                   className="px-6 py-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg font-semibold hover:scale-105 transition-transform"
