@@ -299,7 +299,7 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
   // Start game
   const startGame = useCallback(() => {
     // Set ball speed based on difficulty
-    const ballSpeed = difficulty === "easy" ? 2 : 3; // Easy: 2 (current), Hard: 3 (original)
+    const ballSpeed = difficulty === "easy" ? 2 : 4; // Easy: 2 (current), Hard: 3 (original)
 
     gameRef.current.bricks = initializeBricks();
     gameRef.current.ball = { x: 200, y: 250, vx: ballSpeed, vy: -ballSpeed, radius: 6 };
