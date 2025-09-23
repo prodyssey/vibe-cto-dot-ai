@@ -16,6 +16,8 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
   const [gameState, setGameState] = useState<"difficulty" | "ready" | "playing" | "paused" | "gameover" | "won">("difficulty");
   const [highScore, setHighScore] = useState(0);
   const [difficulty, setDifficulty] = useState<"easy" | "hard">("easy");
+  const [chainMultiplier, setChainMultiplier] = useState(1);
+  const [currentChain, setCurrentChain] = useState(0);
 
   // Game objects refs to persist across renders
   const gameRef = useRef({
@@ -161,6 +163,10 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
         const hitPos = (game.ball.x - game.paddle.x) / game.paddle.width;
         game.ball.vx = 4 * (hitPos - 0.5);
 
+        // Reset chain when ball hits paddle
+        setChainMultiplier(1);
+        setCurrentChain(0);
+
         createParticles(game.ball.x, game.ball.y, "#60a5fa");
       }
 
@@ -182,6 +188,9 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
         game.ball.y = canvas.height / 2;
         game.ball.vx = ballSpeed;
         game.ball.vy = -ballSpeed;
+        // Reset chain when ball is lost
+        setChainMultiplier(1);
+        setCurrentChain(0);
       }
 
       // Ball collision with bricks
@@ -196,12 +205,23 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
 
           createParticles(brick.x + brick.width / 2, brick.y + brick.height / 2, brick.color);
 
-          setScore(prev => {
-            const newScore = prev + brick.points;
-            if (onScoreUpdate) {
-              onScoreUpdate(newScore);
-            }
-            return newScore;
+          // Update chain and calculate bonus score
+          setCurrentChain(prev => {
+            const newChain = prev + 1;
+            setChainMultiplier(Math.max(1, newChain));
+            
+            setScore(prevScore => {
+              const basePoints = brick.points;
+              const bonusPoints = basePoints * Math.max(1, newChain);
+              const newScore = prevScore + bonusPoints;
+              
+              if (onScoreUpdate) {
+                onScoreUpdate(newScore);
+              }
+              return newScore;
+            });
+            
+            return newChain;
           });
 
           return false; // Remove brick
@@ -308,6 +328,8 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
     gameRef.current.particles = [];
     setScore(0);
     setLives(3);
+    setChainMultiplier(1);
+    setCurrentChain(0);
     setGameState("playing");
   }, [initializeBricks, difficulty]);
 
@@ -389,6 +411,13 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
               <Zap className="w-4 h-4 text-blue-400" />
               <span className="text-blue-400 font-mono">{score}</span>
             </div>
+            {currentChain > 1 && (
+              <div className="flex items-center gap-1">
+                <span className="text-purple-400 font-mono text-xs">
+                  {currentChain}x CHAIN
+                </span>
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-1">
             {Array.from({ length: 3 }, (_, i) => (
@@ -543,7 +572,7 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
       {/* Instructions */}
       <div className="mt-3 text-center">
         <p className="text-xs text-gray-500">
-          Break the blockers • Build momentum • Ship faster
+          Break the blockers • Chain breaks for bonus • Ship faster
         </p>
       </div>
     </div>
