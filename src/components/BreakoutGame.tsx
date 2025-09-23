@@ -27,6 +27,7 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
   const [lifeBonus, setLifeBonus] = useState(0);
   const [showingLifeBonus, setShowingLifeBonus] = useState(false);
   const [animatedBonusLives, setAnimatedBonusLives] = useState(0);
+  const [ballLaunched, setBallLaunched] = useState(false);
 
   // Game objects refs to persist across renders
   const gameRef = useRef({
@@ -149,8 +150,14 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
       game.paddle.x = Math.max(0, Math.min(canvas.width - game.paddle.width, game.paddle.x));
 
       // Update ball position
-      game.ball.x += game.ball.vx;
-      game.ball.y += game.ball.vy;
+      if (ballLaunched) {
+        game.ball.x += game.ball.vx;
+        game.ball.y += game.ball.vy;
+      } else {
+        // Ball sticks to paddle center when not launched
+        game.ball.x = game.paddle.x + game.paddle.width / 2;
+        game.ball.y = game.paddle.y - game.ball.radius - 2;
+      }
 
       // Ball collision with walls
       if (game.ball.x + game.ball.radius > canvas.width || game.ball.x - game.ball.radius < 0) {
@@ -180,7 +187,7 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
       }
 
       // Ball falls off screen
-      if (game.ball.y - game.ball.radius > canvas.height) {
+      if (game.ball.y - game.ball.radius > canvas.height && ballLaunched) {
         setLives(prev => {
           const newLives = prev - 1;
           if (newLives <= 0) {
@@ -191,10 +198,9 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
           }
           return newLives;
         });
-        // Reset ball with correct speed based on difficulty
+        // Reset ball to paddle
+        setBallLaunched(false);
         const ballSpeed = difficulty === "easy" ? 2 : 4;
-        game.ball.x = canvas.width / 2;
-        game.ball.y = canvas.height / 2;
         game.ball.vx = ballSpeed;
         game.ball.vy = -ballSpeed;
         // Reset chain when ball is lost
@@ -336,7 +342,7 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
     ctx.shadowColor = "#60a5fa";
     ctx.stroke();
     ctx.shadowBlur = 0;
-  }, [gameState, score, difficulty, lives, onScoreUpdate, onGameComplete]);
+  }, [gameState, score, difficulty, lives, ballLaunched, onScoreUpdate, onGameComplete]);
 
   // Animation loop
   const animate = useCallback(() => {
@@ -417,6 +423,7 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
     setScoreSubmitted(false);
     setPlayerInitials("");
     setLinkedinUsername("");
+    setBallLaunched(false);  // Ball starts on paddle
     setGameState("playing");
   }, [initializeBricks, difficulty]);
 
@@ -524,6 +531,17 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
           width={400}
           height={400}
           className="w-full touch-none"
+          onClick={() => {
+            if (gameState === "playing" && !ballLaunched) {
+              setBallLaunched(true);
+            }
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            if (gameState === "playing" && !ballLaunched) {
+              setBallLaunched(true);
+            }
+          }}
           onTouchMove={(e) => {
             e.preventDefault();
             handleTouchMove(e.touches[0].clientX);
@@ -532,6 +550,16 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
           onMouseMove={(e) => handleTouchMove(e.clientX)}
           onMouseLeave={handleTouchEnd}
         />
+
+        {/* Launch hint overlay */}
+        {gameState === "playing" && !ballLaunched && (
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            <div className="bg-black/50 px-4 py-2 rounded-lg animate-pulse">
+              <p className="text-white font-bold text-sm">TAP TO LAUNCH</p>
+              <p className="text-gray-300 text-xs">Move paddle to aim</p>
+            </div>
+          </div>
+        )}
 
         {/* Game overlay messages */}
         {gameState === "difficulty" && (
