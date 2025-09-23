@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Trophy, Heart, Zap, Linkedin, Share2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { Trophy, Heart, Zap, Linkedin } from "lucide-react";
 
 interface GameProps {
   onScoreUpdate?: (score: number) => void;
@@ -330,14 +329,9 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
   // Load leaderboard
   const loadLeaderboard = useCallback(async () => {
     try {
-      const { data, error } = await supabase
-        .from('breakout_leaderboard')
-        .select('*')
-        .eq('difficulty', difficulty)
-        .order('score', { ascending: false })
-        .limit(10);
-
-      if (!error && data) {
+      const response = await fetch(`/api/breakout-leaderboard?difficulty=${difficulty}`);
+      if (response.ok) {
+        const data = await response.json();
         setLeaderboardData(data);
       }
     } catch (err) {
@@ -354,24 +348,20 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
 
     setIsSubmittingScore(true);
     try {
-      // Extract LinkedIn username from various input formats
-      let username = linkedinUsername.trim();
-      if (username.includes('linkedin.com/in/')) {
-        username = username.split('linkedin.com/in/')[1].split('/')[0].split('?')[0];
-      } else if (username.startsWith('@')) {
-        username = username.substring(1);
-      }
-
-      const { error } = await supabase
-        .from('breakout_leaderboard')
-        .insert({
+      const response = await fetch('/api/breakout-leaderboard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           initials: playerInitials.toUpperCase(),
           score: score,
           difficulty: difficulty,
-          linkedin_username: username || null
-        });
+          linkedin_username: linkedinUsername || null,
+        }),
+      });
 
-      if (!error) {
+      if (response.ok) {
         setScoreSubmitted(true);
         await loadLeaderboard();
         setShowLeaderboard(true);
@@ -600,23 +590,29 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
                 <div className="mb-4 p-4 bg-gray-800/50 rounded-lg">
                   <p className="text-sm mb-3 text-center">Submit to Leaderboard</p>
                   <div className="space-y-3">
-                    <input
-                      type="text"
-                      maxLength={3}
-                      placeholder="AAA"
-                      value={playerInitials}
-                      onChange={(e) => setPlayerInitials(e.target.value.toUpperCase())}
-                      className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-center text-white uppercase"
-                    />
-                    <div className="flex items-center gap-2">
-                      <Linkedin className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                    <div>
                       <input
                         type="text"
-                        placeholder="@username or profile URL (optional)"
-                        value={linkedinUsername}
-                        onChange={(e) => setLinkedinUsername(e.target.value)}
-                        className="flex-1 px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-white text-sm"
+                        maxLength={3}
+                        placeholder="AAA"
+                        value={playerInitials}
+                        onChange={(e) => setPlayerInitials(e.target.value.toUpperCase())}
+                        className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-center text-white uppercase font-mono text-lg"
                       />
+                      <p className="text-xs text-gray-500 mt-1 text-center">Enter your initials</p>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Linkedin className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                        <input
+                          type="text"
+                          placeholder="LinkedIn username (optional)"
+                          value={linkedinUsername}
+                          onChange={(e) => setLinkedinUsername(e.target.value)}
+                          className="flex-1 px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-white text-sm"
+                        />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">Optional: @username or profile URL</p>
                     </div>
                     <button
                       onClick={submitScore}
@@ -676,23 +672,29 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
                 <div className="mb-4 p-4 bg-gray-800/50 rounded-lg">
                   <p className="text-sm mb-3 text-center">Submit to Leaderboard</p>
                   <div className="space-y-3">
-                    <input
-                      type="text"
-                      maxLength={3}
-                      placeholder="AAA"
-                      value={playerInitials}
-                      onChange={(e) => setPlayerInitials(e.target.value.toUpperCase())}
-                      className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-center text-white uppercase"
-                    />
-                    <div className="flex items-center gap-2">
-                      <Linkedin className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                    <div>
                       <input
                         type="text"
-                        placeholder="@username or profile URL (optional)"
-                        value={linkedinUsername}
-                        onChange={(e) => setLinkedinUsername(e.target.value)}
-                        className="flex-1 px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-white text-sm"
+                        maxLength={3}
+                        placeholder="AAA"
+                        value={playerInitials}
+                        onChange={(e) => setPlayerInitials(e.target.value.toUpperCase())}
+                        className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-center text-white uppercase font-mono text-lg"
                       />
+                      <p className="text-xs text-gray-500 mt-1 text-center">Enter your initials</p>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Linkedin className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                        <input
+                          type="text"
+                          placeholder="LinkedIn username (optional)"
+                          value={linkedinUsername}
+                          onChange={(e) => setLinkedinUsername(e.target.value)}
+                          className="flex-1 px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-white text-sm"
+                        />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">Optional: @username or profile URL</p>
                     </div>
                     <button
                       onClick={submitScore}
