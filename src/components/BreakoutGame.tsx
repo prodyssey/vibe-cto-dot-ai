@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Trophy, Heart, Zap } from "lucide-react";
+import { Trophy, Heart, Zap, Linkedin, Share2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface GameProps {
   onScoreUpdate?: (score: number) => void;
@@ -18,6 +19,12 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
   const [difficulty, setDifficulty] = useState<"easy" | "hard">("easy");
   const [chainMultiplier, setChainMultiplier] = useState(1);
   const [currentChain, setCurrentChain] = useState(0);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [leaderboardData, setLeaderboardData] = useState<any[]>([]);
+  const [playerInitials, setPlayerInitials] = useState("");
+  const [linkedinUsername, setLinkedinUsername] = useState("");
+  const [isSubmittingScore, setIsSubmittingScore] = useState(false);
+  const [scoreSubmitted, setScoreSubmitted] = useState(false);
 
   // Game objects refs to persist across renders
   const gameRef = useRef({
@@ -209,18 +216,21 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
           setCurrentChain(prev => {
             const newChain = prev + 1;
             setChainMultiplier(Math.max(1, newChain));
-            
+
             setScore(prevScore => {
               const basePoints = brick.points;
-              const bonusPoints = basePoints * Math.max(1, newChain);
-              const newScore = prevScore + bonusPoints;
-              
+              const chainBonus = basePoints * Math.max(1, newChain);
+              // Apply 1.5x multiplier for intense difficulty
+              const difficultyMultiplier = difficulty === "hard" ? 1.5 : 1;
+              const finalPoints = Math.floor(chainBonus * difficultyMultiplier);
+              const newScore = prevScore + finalPoints;
+
               if (onScoreUpdate) {
                 onScoreUpdate(newScore);
               }
               return newScore;
             });
-            
+
             return newChain;
           });
 
@@ -299,7 +309,7 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
     ctx.shadowColor = "#60a5fa";
     ctx.stroke();
     ctx.shadowBlur = 0;
-  }, [gameState, score, onScoreUpdate, onGameComplete]);
+  }, [gameState, score, difficulty, onScoreUpdate, onGameComplete]);
 
   // Animation loop
   const animate = useCallback(() => {
@@ -317,6 +327,62 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
     requestRef.current = requestAnimationFrame(animate);
   }, [gameLoop]);
 
+  // Load leaderboard
+  const loadLeaderboard = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('breakout_leaderboard')
+        .select('*')
+        .eq('difficulty', difficulty)
+        .order('score', { ascending: false })
+        .limit(10);
+
+      if (!error && data) {
+        setLeaderboardData(data);
+      }
+    } catch (err) {
+      console.error('Error loading leaderboard:', err);
+    }
+  }, [difficulty]);
+
+  // Submit score to leaderboard
+  const submitScore = useCallback(async () => {
+    if (!playerInitials || playerInitials.length !== 3) {
+      alert('Please enter exactly 3 initials');
+      return;
+    }
+
+    setIsSubmittingScore(true);
+    try {
+      // Extract LinkedIn username from various input formats
+      let username = linkedinUsername.trim();
+      if (username.includes('linkedin.com/in/')) {
+        username = username.split('linkedin.com/in/')[1].split('/')[0].split('?')[0];
+      } else if (username.startsWith('@')) {
+        username = username.substring(1);
+      }
+
+      const { error } = await supabase
+        .from('breakout_leaderboard')
+        .insert({
+          initials: playerInitials.toUpperCase(),
+          score: score,
+          difficulty: difficulty,
+          linkedin_username: username || null
+        });
+
+      if (!error) {
+        setScoreSubmitted(true);
+        await loadLeaderboard();
+        setShowLeaderboard(true);
+      }
+    } catch (err) {
+      console.error('Error submitting score:', err);
+    } finally {
+      setIsSubmittingScore(false);
+    }
+  }, [playerInitials, linkedinUsername, score, difficulty, loadLeaderboard]);
+
   // Start game
   const startGame = useCallback(() => {
     // Set ball speed based on difficulty
@@ -330,6 +396,9 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
     setLives(3);
     setChainMultiplier(1);
     setCurrentChain(0);
+    setScoreSubmitted(false);
+    setPlayerInitials("");
+    setLinkedinUsername("");
     setGameState("playing");
   }, [initializeBricks, difficulty]);
 
@@ -490,7 +559,7 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
               BLOCKER BREAKER
             </h3>
             <p className="text-sm mb-2">
-              {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode"}
+              {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode (1.5x score)"}
             </p>
             <p className="text-xs text-gray-400 mb-4">Use arrow keys or touch to move</p>
             <button
@@ -515,56 +584,213 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
         )}
 
         {gameState === "gameover" && (
-          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white">
-            <h3 className="text-2xl font-bold mb-4 text-red-500">GAME OVER</h3>
-            <p className="text-lg mb-2">Score: {score}</p>
-            <p className="text-sm mb-4 text-gray-400">
-              {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode"}
-            </p>
-            {score > 1500 && (
-              <p className="text-sm text-yellow-400 mb-4">Impressive skills! 🎮</p>
-            )}
-            <button
-              onClick={() => {
-                setGameState("ready");
-              }}
-              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold hover:scale-105 transition-transform"
-            >
-              TRY AGAIN
-            </button>
-            <button
-              onClick={() => setGameState("difficulty")}
-              className="mt-2 text-xs text-gray-400 hover:text-white transition-colors"
-            >
-              Change Difficulty
-            </button>
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white overflow-y-auto">
+            <div className="max-w-md w-full p-4">
+              <h3 className="text-2xl font-bold mb-4 text-red-500 text-center">GAME OVER</h3>
+              <p className="text-lg mb-2 text-center">Score: {score}</p>
+              <p className="text-sm mb-4 text-gray-400 text-center">
+                {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode (1.5x)"}
+              </p>
+              {score > 1500 && (
+                <p className="text-sm text-yellow-400 mb-4 text-center">Impressive skills! 🎮</p>
+              )}
+
+              {/* Score submission form */}
+              {!scoreSubmitted && score > 0 && (
+                <div className="mb-4 p-4 bg-gray-800/50 rounded-lg">
+                  <p className="text-sm mb-3 text-center">Submit to Leaderboard</p>
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      maxLength={3}
+                      placeholder="AAA"
+                      value={playerInitials}
+                      onChange={(e) => setPlayerInitials(e.target.value.toUpperCase())}
+                      className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-center text-white uppercase"
+                    />
+                    <div className="flex items-center gap-2">
+                      <Linkedin className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                      <input
+                        type="text"
+                        placeholder="@username or profile URL (optional)"
+                        value={linkedinUsername}
+                        onChange={(e) => setLinkedinUsername(e.target.value)}
+                        className="flex-1 px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-white text-sm"
+                      />
+                    </div>
+                    <button
+                      onClick={submitScore}
+                      disabled={isSubmittingScore || !playerInitials || playerInitials.length !== 3}
+                      className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 rounded font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                      {isSubmittingScore ? "Submitting..." : "Submit Score"}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Buttons */}
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => {
+                    setGameState("ready");
+                  }}
+                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold hover:scale-105 transition-transform"
+                >
+                  TRY AGAIN
+                </button>
+                <button
+                  onClick={() => {
+                    loadLeaderboard();
+                    setShowLeaderboard(true);
+                  }}
+                  className="px-6 py-2 bg-gray-700/50 border border-gray-600 rounded-lg font-semibold hover:bg-gray-600/50 transition-colors"
+                >
+                  View Leaderboard
+                </button>
+                <button
+                  onClick={() => setGameState("difficulty")}
+                  className="text-xs text-gray-400 hover:text-white transition-colors"
+                >
+                  Change Difficulty
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
         {gameState === "won" && (
-          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white">
-            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-green-400 bg-clip-text text-transparent">
-              YOU WIN! 🏆
-            </h3>
-            <p className="text-lg mb-2">Final Score: {score}</p>
-            <p className="text-sm mb-2 text-gray-400">
-              {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode"}
-            </p>
-            <p className="text-sm text-gray-400 mb-4">You've got the touch!</p>
-            <button
-              onClick={() => {
-                setGameState("ready");
-              }}
-              className="px-6 py-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg font-semibold hover:scale-105 transition-transform"
-            >
-              PLAY AGAIN
-            </button>
-            <button
-              onClick={() => setGameState("difficulty")}
-              className="mt-2 text-xs text-gray-400 hover:text-white transition-colors"
-            >
-              Change Difficulty
-            </button>
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white overflow-y-auto">
+            <div className="max-w-md w-full p-4">
+              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-green-400 bg-clip-text text-transparent text-center">
+                YOU WIN! 🏆
+              </h3>
+              <p className="text-lg mb-2 text-center">Final Score: {score}</p>
+              <p className="text-sm mb-2 text-gray-400 text-center">
+                {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode (1.5x)"}
+              </p>
+              <p className="text-sm text-gray-400 mb-4 text-center">You've got the touch!</p>
+
+              {/* Score submission form */}
+              {!scoreSubmitted && score > 0 && (
+                <div className="mb-4 p-4 bg-gray-800/50 rounded-lg">
+                  <p className="text-sm mb-3 text-center">Submit to Leaderboard</p>
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      maxLength={3}
+                      placeholder="AAA"
+                      value={playerInitials}
+                      onChange={(e) => setPlayerInitials(e.target.value.toUpperCase())}
+                      className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-center text-white uppercase"
+                    />
+                    <div className="flex items-center gap-2">
+                      <Linkedin className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                      <input
+                        type="text"
+                        placeholder="@username or profile URL (optional)"
+                        value={linkedinUsername}
+                        onChange={(e) => setLinkedinUsername(e.target.value)}
+                        className="flex-1 px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-white text-sm"
+                      />
+                    </div>
+                    <button
+                      onClick={submitScore}
+                      disabled={isSubmittingScore || !playerInitials || playerInitials.length !== 3}
+                      className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 rounded font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                      {isSubmittingScore ? "Submitting..." : "Submit Score"}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Buttons */}
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => {
+                    setGameState("ready");
+                  }}
+                  className="px-6 py-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg font-semibold hover:scale-105 transition-transform"
+                >
+                  PLAY AGAIN
+                </button>
+                <button
+                  onClick={() => {
+                    loadLeaderboard();
+                    setShowLeaderboard(true);
+                  }}
+                  className="px-6 py-2 bg-gray-700/50 border border-gray-600 rounded-lg font-semibold hover:bg-gray-600/50 transition-colors"
+                >
+                  View Leaderboard
+                </button>
+                <button
+                  onClick={() => setGameState("difficulty")}
+                  className="text-xs text-gray-400 hover:text-white transition-colors"
+                >
+                  Change Difficulty
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Leaderboard Modal */}
+        {showLeaderboard && (
+          <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center text-white p-4">
+            <div className="max-w-md w-full bg-gray-800/80 rounded-lg p-6">
+              <h3 className="text-xl font-bold mb-4 text-center bg-gradient-to-r from-yellow-400 to-green-400 bg-clip-text text-transparent">
+                LEADERBOARD
+              </h3>
+              <p className="text-sm mb-4 text-center text-gray-400">
+                {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode"}
+              </p>
+
+              {/* Leaderboard entries */}
+              <div className="space-y-2 mb-6 max-h-64 overflow-y-auto">
+                {leaderboardData.length > 0 ? (
+                  leaderboardData.map((entry, index) => (
+                    <div
+                      key={entry.id}
+                      className={`flex items-center justify-between p-2 rounded ${
+                        index === 0 ? 'bg-yellow-600/20 border border-yellow-600/40' :
+                        index === 1 ? 'bg-gray-600/20 border border-gray-600/40' :
+                        index === 2 ? 'bg-orange-700/20 border border-orange-700/40' :
+                        'bg-gray-700/30'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-sm">
+                          {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
+                        </span>
+                        <span className="font-bold">{entry.initials}</span>
+                        {entry.linkedin_username && (
+                          <a
+                            href={`https://linkedin.com/in/${entry.linkedin_username}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300"
+                          >
+                            <Linkedin className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
+                      <span className="font-mono text-yellow-400">{entry.score.toLocaleString()}</span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500">No scores yet. Be the first!</p>
+                )}
+              </div>
+
+              {/* Close button */}
+              <button
+                onClick={() => setShowLeaderboard(false)}
+                className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                CLOSE
+              </button>
+            </div>
           </div>
         )}
       </div>
