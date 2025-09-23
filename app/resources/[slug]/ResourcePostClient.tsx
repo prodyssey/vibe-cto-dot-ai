@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   Calendar,
   Clock,
-  Share2,
   Linkedin,
   Copy,
 } from "lucide-react";
@@ -17,10 +16,9 @@ import { BlogHeaderImage, BlogHeaderMedia, BlogImage } from "@/components/BlogIm
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import { toast } from "sonner";
-import dynamic from "next/dynamic";
-
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
+import { reactPostComponents, isReactPost } from "@/content/posts/registry";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -61,11 +59,10 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
     }
   };
 
-  // For React components, dynamically import them
-  const ReactComponent = post.metadata.type === 'react' && post.metadata.slug === 'interactive-demo' ? 
-    dynamic(() => import('../../../src/content/posts/interactive-demo'), {
-      loading: () => <div className="text-white">Loading interactive content...</div>
-    }) : null;
+  // For React components, use the registry
+  const ReactComponent = post.metadata.type === 'react' && isReactPost(post.metadata.slug)
+    ? reactPostComponents[post.metadata.slug]
+    : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">

@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 8080 --turbopack",
+    "dev": "next dev --turbopack",
     "dev:local": "supabase start && npm run dev",
     "db:start": "supabase start",
     "db:stop": "supabase stop",

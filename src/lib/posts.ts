@@ -1,6 +1,7 @@
 import matter from 'gray-matter';
 import fs from 'fs';
 import path from 'path';
+import { reactPostMetadata } from '@/content/posts/registry';
 
 export interface PostMetadata {
   title: string;
@@ -26,7 +27,7 @@ export interface Post {
 function slugify(filename: string): string {
   return filename
     .replace(/^.*\//, '') // Remove path
-    .replace(/\.(md|tsx)$/, '') // Remove extension
+    .replace(/(\.metadata)?\.(md|tsx|ts)$/, '') // Remove recognized extensions
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
     .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
@@ -36,6 +37,7 @@ function slugify(filename: string): string {
 function getPostsDirectory(): string {
   return path.join(process.cwd(), 'src', 'content', 'posts');
 }
+
 
 export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]> {
   const posts: PostMetadata[] = [];
@@ -69,36 +71,19 @@ export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]
       }
     }
 
-    // Process React files - just metadata for now
-    for (const fileName of fileNames) {
-      if (fileName.endsWith('.tsx')) {
-        try {
-          // For React components, we'll manually define their metadata here
-          // since we can't dynamically import in server context
-          const slug = slugify(fileName);
-          
-          if (slug === 'interactive-demo') {
-            const post: PostMetadata = {
-              title: "Interactive Demo",
-              description: "An interactive demonstration of concepts",
-              date: "2025-01-01",
-              readTime: "5 min read",
-              featured: false,
-              type: 'react',
-              tags: ['interactive', 'demo'],
-              author: "Craig Sturgis",
-              slug: 'interactive-demo',
-              hidden: false
-            };
-            
-            // Skip hidden posts unless explicitly requested
-            if (!includeHidden && post.hidden) {continue;}
-            
-            posts.push(post);
-          }
-        } catch (error) {
-          console.error(`Error processing React file ${fileName}:`, error);
+    // Add React posts from registry
+    for (const [slug, metadata] of Object.entries(reactPostMetadata)) {
+      try {
+        const filePath = path.join(postsDirectory, `${slug}.tsx`);
+        if (!fs.existsSync(filePath)) {
+          continue;
         }
+
+        if (!includeHidden && metadata.hidden) {continue;}
+
+        posts.push(metadata);
+      } catch (error) {
+        console.error(`Error processing React file ${slug}:`, error);
       }
     }
   } catch (error) {
@@ -144,34 +129,22 @@ export async function getPostBySlug(slug: string, allowHidden = true): Promise<P
       }
     }
 
-    // Try React component
-    const reactPath = path.join(postsDirectory, `${slug}.tsx`);
-    if (fs.existsSync(reactPath)) {
-      // Handle React components - return metadata only
-      if (slug === 'interactive-demo') {
-        const metadata: PostMetadata = {
-          title: "Interactive Demo",
-          description: "An interactive demonstration of concepts",
-          date: "2025-01-01",
-          readTime: "5 min read",
-          featured: false,
-          type: 'react',
-          tags: ['interactive', 'demo'],
-          author: "Craig Sturgis",
-          slug: 'interactive-demo',
-          hidden: false
-        };
-        
-        // Check if post is hidden and if we should allow it
-        if (!allowHidden && metadata.hidden) {
-          return null;
-        }
-        
-        return {
-          metadata,
-          content: '' // React components don't have markdown content
-        };
+    // Try React component from registry
+    const metadata = reactPostMetadata[slug];
+    if (metadata) {
+      const reactPath = path.join(postsDirectory, `${slug}.tsx`);
+      if (!fs.existsSync(reactPath)) {
+        return null;
       }
+
+      if (!allowHidden && metadata.hidden) {
+        return null;
+      }
+
+      return {
+        metadata,
+        content: '',
+      };
     }
   } catch (error) {
     console.error(`Error in getPostBySlug for ${slug}:`, error);

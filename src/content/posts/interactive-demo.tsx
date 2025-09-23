@@ -127,18 +127,4 @@ function InteractiveDemo() {
   );
 }
 
-// Add metadata as a static property
-InteractiveDemo.metadata = {
-  title: "Interactive React Demo Post",
-  description:
-    "Example of a dynamic React page with animations and interactive elements",
-  date: "2024-12-20",
-  readTime: "10 min read",
-  featured: false,
-  type: "react" as const,
-  tags: ["react", "interactive", "demo"],
-  author: "Vibe CTO",
-  hidden: true,
-};
-
 export default InteractiveDemo;
