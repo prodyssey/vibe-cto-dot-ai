@@ -13,8 +13,9 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
   const requestRef = useRef<number>(0);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
-  const [gameState, setGameState] = useState<"ready" | "playing" | "paused" | "gameover" | "won">("ready");
+  const [gameState, setGameState] = useState<"difficulty" | "ready" | "playing" | "paused" | "gameover" | "won">("difficulty");
   const [highScore, setHighScore] = useState(0);
+  const [difficulty, setDifficulty] = useState<"easy" | "hard">("easy");
 
   // Game objects refs to persist across renders
   const gameRef = useRef({
@@ -297,14 +298,17 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
 
   // Start game
   const startGame = useCallback(() => {
+    // Set ball speed based on difficulty
+    const ballSpeed = difficulty === "easy" ? 2 : 3; // Easy: 2 (current), Hard: 3 (original)
+
     gameRef.current.bricks = initializeBricks();
-    gameRef.current.ball = { x: 200, y: 250, vx: 2, vy: -2, radius: 6 };
+    gameRef.current.ball = { x: 200, y: 250, vx: ballSpeed, vy: -ballSpeed, radius: 6 };
     gameRef.current.paddle = { x: 150, y: 380, width: 90, height: 12, speed: 8 };
     gameRef.current.particles = [];
     setScore(0);
     setLives(3);
     setGameState("playing");
-  }, [initializeBricks]);
+  }, [initializeBricks, difficulty]);
 
   // Keyboard controls
   useEffect(() => {
@@ -410,18 +414,63 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
         />
 
         {/* Game overlay messages */}
+        {gameState === "difficulty" && (
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white">
+            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              BLOCKER BREAKER
+            </h3>
+            <p className="text-sm mb-6">Choose your vibe level:</p>
+
+            <div className="flex gap-6">
+              {/* Easy mode - Chill */}
+              <button
+                onClick={() => {
+                  setDifficulty("easy");
+                  setGameState("ready");
+                }}
+                className="flex flex-col items-center gap-2 px-8 py-6 bg-gray-800/80 border-2 border-green-500/50 rounded-lg hover:bg-gray-700/80 hover:border-green-400 hover:scale-105 transition-all"
+              >
+                <span className="text-4xl">🥱</span>
+                <span className="text-lg font-semibold text-green-400">CHILL</span>
+                <span className="text-xs text-gray-400">Slow ball</span>
+              </button>
+
+              {/* Hard mode - Intense */}
+              <button
+                onClick={() => {
+                  setDifficulty("hard");
+                  setGameState("ready");
+                }}
+                className="flex flex-col items-center gap-2 px-8 py-6 bg-gray-800/80 border-2 border-red-500/50 rounded-lg hover:bg-gray-700/80 hover:border-red-400 hover:scale-105 transition-all"
+              >
+                <span className="text-4xl">🤪</span>
+                <span className="text-lg font-semibold text-red-400">INTENSE</span>
+                <span className="text-xs text-gray-400">Fast ball</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         {gameState === "ready" && (
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white">
             <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               BLOCKER BREAKER
             </h3>
-            <p className="text-sm mb-2">Vibe through blockers!</p>
+            <p className="text-sm mb-2">
+              {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode"}
+            </p>
             <p className="text-xs text-gray-400 mb-4">Use arrow keys or touch to move</p>
             <button
               onClick={startGame}
               className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold hover:scale-105 transition-transform"
             >
               START GAME
+            </button>
+            <button
+              onClick={() => setGameState("difficulty")}
+              className="mt-2 text-xs text-gray-400 hover:text-white transition-colors"
+            >
+              Change Difficulty
             </button>
           </div>
         )}
@@ -435,15 +484,26 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
         {gameState === "gameover" && (
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white">
             <h3 className="text-2xl font-bold mb-4 text-red-500">GAME OVER</h3>
-            <p className="text-lg mb-4">Score: {score}</p>
+            <p className="text-lg mb-2">Score: {score}</p>
+            <p className="text-sm mb-4 text-gray-400">
+              {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode"}
+            </p>
             {score > 1500 && (
               <p className="text-sm text-yellow-400 mb-4">Impressive skills! 🎮</p>
             )}
             <button
-              onClick={startGame}
+              onClick={() => {
+                setGameState("ready");
+              }}
               className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold hover:scale-105 transition-transform"
             >
               TRY AGAIN
+            </button>
+            <button
+              onClick={() => setGameState("difficulty")}
+              className="mt-2 text-xs text-gray-400 hover:text-white transition-colors"
+            >
+              Change Difficulty
             </button>
           </div>
         )}
@@ -454,12 +514,23 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
               YOU WIN! 🏆
             </h3>
             <p className="text-lg mb-2">Final Score: {score}</p>
+            <p className="text-sm mb-2 text-gray-400">
+              {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode"}
+            </p>
             <p className="text-sm text-gray-400 mb-4">You've got the touch!</p>
             <button
-              onClick={startGame}
+              onClick={() => {
+                setGameState("ready");
+              }}
               className="px-6 py-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg font-semibold hover:scale-105 transition-transform"
             >
               PLAY AGAIN
+            </button>
+            <button
+              onClick={() => setGameState("difficulty")}
+              className="mt-2 text-xs text-gray-400 hover:text-white transition-colors"
+            >
+              Change Difficulty
             </button>
           </div>
         )}
