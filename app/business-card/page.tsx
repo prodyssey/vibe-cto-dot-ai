@@ -64,7 +64,7 @@ TITLE:Founder & AI-Augmented CTO
 ORG:VibeCTO.ai
 URL:https://vibecto.ai
 EMAIL:craig@vibecto.ai
-TEL:+1-610-7916
+TEL:+1-317-610-7916
 NOTE:Get human help to build effectively with AI
 END:VCARD`;
 
@@ -240,7 +240,7 @@ END:VCARD`;
               <div className="flex items-center justify-center space-x-3">
                 <Gamepad2 className="w-5 h-5 text-green-300" />
                 <span className="text-white font-semibold">
-                  Break Some Blocks 🎮
+                  Break Some Blocks
                 </span>
                 {activeButton === 'game' && (
                   <Sparkles className="w-4 h-4 text-yellow-300 animate-spin" />
