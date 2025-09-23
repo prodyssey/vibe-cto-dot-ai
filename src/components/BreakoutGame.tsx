@@ -176,11 +176,12 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
           }
           return newLives;
         });
-        // Reset ball
+        // Reset ball with correct speed based on difficulty
+        const ballSpeed = difficulty === "easy" ? 2 : 4;
         game.ball.x = canvas.width / 2;
         game.ball.y = canvas.height / 2;
-        game.ball.vx = 2;
-        game.ball.vy = -2;
+        game.ball.vx = ballSpeed;
+        game.ball.vy = -ballSpeed;
       }
 
       // Ball collision with bricks
@@ -407,7 +408,10 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
           width={400}
           height={400}
           className="w-full touch-none"
-          onTouchMove={(e) => handleTouchMove(e.touches[0].clientX)}
+          onTouchMove={(e) => {
+            e.preventDefault();
+            handleTouchMove(e.touches[0].clientX);
+          }}
           onTouchEnd={handleTouchEnd}
           onMouseMove={(e) => handleTouchMove(e.clientX)}
           onMouseLeave={handleTouchEnd}
