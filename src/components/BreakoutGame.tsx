@@ -413,8 +413,15 @@ export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
     const ballSpeed = difficulty === "easy" ? 2 : 4; // Easy: 2 (current), Hard: 3 (original)
 
     gameRef.current.bricks = initializeBricks();
-    gameRef.current.ball = { x: 200, y: 250, vx: ballSpeed, vy: -ballSpeed, radius: 6 };
     gameRef.current.paddle = { x: 150, y: 380, width: 90, height: 12, speed: 8 };
+    // Initialize ball on paddle
+    gameRef.current.ball = {
+      x: gameRef.current.paddle.x + gameRef.current.paddle.width / 2,
+      y: gameRef.current.paddle.y - 8, // radius (6) + small gap (2)
+      vx: ballSpeed,
+      vy: -ballSpeed,
+      radius: 6
+    };
     gameRef.current.particles = [];
     setScore(0);
     setLives(3);
