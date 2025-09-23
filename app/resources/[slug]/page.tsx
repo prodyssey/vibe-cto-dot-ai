@@ -3,6 +3,10 @@ import { notFound } from 'next/navigation'
 import { getPostBySlug, getAllPosts } from '@/lib/posts'
 import { ResourcePostClient } from './ResourcePostClient'
 
+export const dynamic = 'force-static';
+export const revalidate = false;
+export const dynamicParams = false;
+
 interface ResourcePostPageProps {
   params: Promise<{
     slug: string

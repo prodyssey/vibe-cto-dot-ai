@@ -618,17 +618,4 @@ function IdeaToRevenueMachine() {
   );
 }
 
-IdeaToRevenueMachine.metadata = {
-  title: "Idea to Revenue Machine",
-  description: "Interactive factory simulation that turns ideas into features and highlights delivery bottlenecks.",
-  date: "2025-01-25",
-  readTime: "8 min interactive",
-  featured: false,
-  type: "react" as const,
-  tags: ["interactive", "product", "throughput"],
-  author: "Craig Sturgis",
-  slug: "idea-to-revenue-machine",
-  hidden: false,
-} as const;
-
 export default IdeaToRevenueMachine;

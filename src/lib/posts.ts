@@ -1,6 +1,7 @@
 import matter from 'gray-matter';
 import fs from 'fs';
 import path from 'path';
+import { reactPostMetadata } from '@/content/posts/registry';
 
 export interface PostMetadata {
   title: string;
@@ -26,7 +27,7 @@ export interface Post {
 function slugify(filename: string): string {
   return filename
     .replace(/^.*\//, '') // Remove path
-    .replace(/\.(md|tsx)$/, '') // Remove extension
+    .replace(/(\.metadata)?\.(md|tsx|ts)$/, '') // Remove recognized extensions
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
     .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
@@ -37,32 +38,6 @@ function getPostsDirectory(): string {
   return path.join(process.cwd(), 'src', 'content', 'posts');
 }
 
-const REACT_POSTS: Record<string, PostMetadata> = {
-  'interactive-demo': {
-    title: 'Interactive Demo',
-    description: 'An interactive demonstration of concepts',
-    date: '2025-01-01',
-    readTime: '5 min read',
-    featured: false,
-    type: 'react',
-    tags: ['interactive', 'demo'],
-    author: 'Craig Sturgis',
-    slug: 'interactive-demo',
-    hidden: false,
-  },
-  'idea-to-revenue-machine': {
-    title: 'Idea to Revenue Machine',
-    description: 'Interactive factory simulation that turns ideas into features and highlights delivery bottlenecks.',
-    date: '2025-01-25',
-    readTime: '8 min interactive',
-    featured: false,
-    type: 'react',
-    tags: ['interactive', 'product', 'throughput'],
-    author: 'Craig Sturgis',
-    slug: 'idea-to-revenue-machine',
-    hidden: false,
-  },
-};
 
 export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]> {
   const posts: PostMetadata[] = [];
@@ -96,16 +71,17 @@ export async function getAllPosts(includeHidden = false): Promise<PostMetadata[]
       }
     }
 
-    for (const [slug, post] of Object.entries(REACT_POSTS)) {
+    // Add React posts from registry
+    for (const [slug, metadata] of Object.entries(reactPostMetadata)) {
       try {
         const filePath = path.join(postsDirectory, `${slug}.tsx`);
         if (!fs.existsSync(filePath)) {
           continue;
         }
 
-        if (!includeHidden && post.hidden) {continue;}
+        if (!includeHidden && metadata.hidden) {continue;}
 
-        posts.push(post);
+        posts.push(metadata);
       } catch (error) {
         console.error(`Error processing React file ${slug}:`, error);
       }
@@ -153,8 +129,8 @@ export async function getPostBySlug(slug: string, allowHidden = true): Promise<P
       }
     }
 
-    // Try React component
-    const metadata = REACT_POSTS[slug];
+    // Try React component from registry
+    const metadata = reactPostMetadata[slug];
     if (metadata) {
       const reactPath = path.join(postsDirectory, `${slug}.tsx`);
       if (!fs.existsSync(reactPath)) {

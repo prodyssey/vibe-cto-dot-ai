@@ -8,7 +8,6 @@ import {
   Copy,
 } from "lucide-react";
 import { useState, Suspense } from "react";
-import type { ComponentType } from "react";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import rehypeHighlight from "rehype-highlight";
@@ -17,10 +16,9 @@ import { BlogHeaderImage, BlogHeaderMedia, BlogImage } from "@/components/BlogIm
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import { toast } from "sonner";
-import dynamic from "next/dynamic";
-
 import { EmailOptIn } from "@/components/EmailOptIn";
 import { Navigation } from "@/components/Navigation";
+import { reactPostComponents, isReactPost } from "@/content/posts/registry";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -33,11 +31,6 @@ import "highlight.js/styles/github-dark.css";
 interface ResourcePostClientProps {
   post: Post;
 }
-
-const reactComponentLoaders: Record<string, () => Promise<{ default: ComponentType }>> = {
-  "interactive-demo": () => import("../../../src/content/posts/interactive-demo"),
-  "idea-to-revenue-machine": () => import("../../../src/content/posts/idea-to-revenue-machine"),
-};
 
 export function ResourcePostClient({ post }: ResourcePostClientProps) {
   const [copied, setCopied] = useState(false);
@@ -66,15 +59,9 @@ export function ResourcePostClient({ post }: ResourcePostClientProps) {
     }
   };
 
-  // For React components, dynamically import them
-  const loader = post.metadata.type === 'react'
-    ? reactComponentLoaders[post.metadata.slug]
-    : undefined;
-
-  const ReactComponent = loader
-    ? dynamic(loader, {
-        loading: () => <div className="text-white">Loading interactive content...</div>,
-      })
+  // For React components, use the registry
+  const ReactComponent = post.metadata.type === 'react' && isReactPost(post.metadata.slug)
+    ? reactPostComponents[post.metadata.slug]
     : null;
 
   return (
