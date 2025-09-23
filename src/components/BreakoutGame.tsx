@@ -1,0 +1,919 @@
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Trophy, Heart, Zap, Linkedin } from "lucide-react";
+
+interface GameProps {
+  onScoreUpdate?: (score: number) => void;
+  onGameComplete?: (score: number) => void;
+}
+
+export const BreakoutGame = ({ onScoreUpdate, onGameComplete }: GameProps) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const requestRef = useRef<number>(0);
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [gameState, setGameState] = useState<"difficulty" | "ready" | "playing" | "paused" | "gameover" | "won">("difficulty");
+  const [highScore, setHighScore] = useState(0);
+  const [difficulty, setDifficulty] = useState<"easy" | "hard">("easy");
+  const [chainMultiplier, setChainMultiplier] = useState(1);
+  const [currentChain, setCurrentChain] = useState(0);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [leaderboardData, setLeaderboardData] = useState<any[]>([]);
+  const [playerInitials, setPlayerInitials] = useState("");
+  const [linkedinUsername, setLinkedinUsername] = useState("");
+  const [isSubmittingScore, setIsSubmittingScore] = useState(false);
+  const [scoreSubmitted, setScoreSubmitted] = useState(false);
+  const [lifeBonus, setLifeBonus] = useState(0);
+  const [showingLifeBonus, setShowingLifeBonus] = useState(false);
+  const [animatedBonusLives, setAnimatedBonusLives] = useState(0);
+  const [ballLaunched, setBallLaunched] = useState(false);
+
+  // Game objects refs to persist across renders
+  const gameRef = useRef({
+    paddle: { x: 150, y: 380, width: 75, height: 12, speed: 8 },
+    ball: { x: 200, y: 250, vx: 2, vy: -2, radius: 6 },
+    bricks: [] as {x: number, y: number, width: number, height: number, color: string, hits: number, points: number, text?: string}[],
+    particles: [] as {x: number, y: number, vx: number, vy: number, color: string, life: number}[],
+    powerUps: [] as {x: number, y: number, type: string, falling: boolean}[],
+    touchX: null as number | null,
+    keys: { left: false, right: false },
+  });
+
+  // Initialize bricks with professional themes
+  const initializeBricks = useCallback(() => {
+    const bricks = [];
+    const rows = 5;
+    const cols = 8;
+    const brickWidth = 45;
+    const brickHeight = 20;
+    const padding = 2;
+    const offsetX = 10;
+    const offsetY = 50;
+
+    // Professional skill categories as bricks
+    const brickThemes = [
+      { color: "#60a5fa", points: 100, text: "ROI" },        // Blue
+      { color: "#a78bfa", points: 80, text: "CODE" },      // Purple
+      { color: "#f472b6", points: 60, text: "SHIP" },      // Pink
+      { color: "#34d399", points: 40, text: "SCALE" },     // Green
+      { color: "#fbbf24", points: 20, text: "VIBE" },      // Yellow
+    ];
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const theme = brickThemes[r];
+        bricks.push({
+          x: c * (brickWidth + padding) + offsetX,
+          y: r * (brickHeight + padding) + offsetY,
+          width: brickWidth,
+          height: brickHeight,
+          color: theme.color,
+          hits: 1,
+          points: theme.points,
+          text: c === 0 ? theme.text : undefined,
+        });
+      }
+    }
+
+    return bricks;
+  }, []);
+
+  // Handle touch/mouse controls
+  const handleTouchMove = useCallback((clientX: number) => {
+    if (!canvasRef.current) {
+      return;
+    }
+    const rect = canvasRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const scaleX = canvasRef.current.width / rect.width;
+    gameRef.current.touchX = x * scaleX;
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    gameRef.current.touchX = null;
+  }, []);
+
+  // Particle effects
+  const createParticles = (x: number, y: number, color: string) => {
+    for (let i = 0; i < 8; i++) {
+      gameRef.current.particles.push({
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 4,
+        vy: (Math.random() - 0.5) * 4,
+        color,
+        life: 20,
+      });
+    }
+  };
+
+  // Game loop
+  const gameLoop = useCallback((ctx: CanvasRenderingContext2D) => {
+    const game = gameRef.current;
+    const canvas = ctx.canvas;
+
+    // Clear canvas
+    ctx.fillStyle = "rgba(15, 23, 42, 0.95)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw grid background
+    ctx.strokeStyle = "rgba(100, 116, 139, 0.1)";
+    ctx.lineWidth = 1;
+    for (let i = 0; i < canvas.width; i += 20) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i, canvas.height);
+      ctx.stroke();
+    }
+    for (let i = 0; i < canvas.height; i += 20) {
+      ctx.beginPath();
+      ctx.moveTo(0, i);
+      ctx.lineTo(canvas.width, i);
+      ctx.stroke();
+    }
+
+    if (gameState === "playing") {
+      // Update paddle position
+      if (game.touchX !== null) {
+        game.paddle.x = game.touchX - game.paddle.width / 2;
+      } else {
+        if (game.keys.left && game.paddle.x > 0) {
+          game.paddle.x -= game.paddle.speed;
+        }
+        if (game.keys.right && game.paddle.x < canvas.width - game.paddle.width) {
+          game.paddle.x += game.paddle.speed;
+        }
+      }
+
+      // Keep paddle in bounds
+      game.paddle.x = Math.max(0, Math.min(canvas.width - game.paddle.width, game.paddle.x));
+
+      // Update ball position
+      if (ballLaunched) {
+        game.ball.x += game.ball.vx;
+        game.ball.y += game.ball.vy;
+      } else {
+        // Ball sticks to paddle center when not launched
+        game.ball.x = game.paddle.x + game.paddle.width / 2;
+        game.ball.y = game.paddle.y - game.ball.radius - 2;
+      }
+
+      // Ball collision with walls
+      if (game.ball.x + game.ball.radius > canvas.width || game.ball.x - game.ball.radius < 0) {
+        game.ball.vx = -game.ball.vx;
+      }
+      if (game.ball.y - game.ball.radius < 0) {
+        game.ball.vy = -game.ball.vy;
+      }
+
+      // Ball collision with paddle
+      if (
+        game.ball.y + game.ball.radius > game.paddle.y &&
+        game.ball.y - game.ball.radius < game.paddle.y + game.paddle.height &&
+        game.ball.x > game.paddle.x &&
+        game.ball.x < game.paddle.x + game.paddle.width
+      ) {
+        game.ball.vy = -Math.abs(game.ball.vy);
+        // Add english based on where ball hits paddle
+        const hitPos = (game.ball.x - game.paddle.x) / game.paddle.width;
+        game.ball.vx = 4 * (hitPos - 0.5);
+
+        // Reset chain when ball hits paddle
+        setChainMultiplier(1);
+        setCurrentChain(0);
+
+        createParticles(game.ball.x, game.ball.y, "#60a5fa");
+      }
+
+      // Ball falls off screen
+      if (game.ball.y - game.ball.radius > canvas.height && ballLaunched) {
+        setLives(prev => {
+          const newLives = prev - 1;
+          if (newLives <= 0) {
+            setGameState("gameover");
+            if (onGameComplete) {
+              onGameComplete(score);
+            }
+          }
+          return newLives;
+        });
+        // Reset ball to paddle
+        setBallLaunched(false);
+        const ballSpeed = difficulty === "easy" ? 2 : 4;
+        game.ball.vx = ballSpeed;
+        game.ball.vy = -ballSpeed;
+        // Reset chain when ball is lost
+        setChainMultiplier(1);
+        setCurrentChain(0);
+      }
+
+      // Ball collision with bricks
+      game.bricks = game.bricks.filter(brick => {
+        if (
+          game.ball.x + game.ball.radius > brick.x &&
+          game.ball.x - game.ball.radius < brick.x + brick.width &&
+          game.ball.y + game.ball.radius > brick.y &&
+          game.ball.y - game.ball.radius < brick.y + brick.height
+        ) {
+          game.ball.vy = -game.ball.vy;
+
+          createParticles(brick.x + brick.width / 2, brick.y + brick.height / 2, brick.color);
+
+          // Update chain and calculate bonus score
+          setCurrentChain(prev => {
+            const newChain = prev + 1;
+            setChainMultiplier(Math.max(1, newChain));
+
+            setScore(prevScore => {
+              const basePoints = brick.points;
+              const chainBonus = basePoints * Math.max(1, newChain);
+              // Apply 1.5x multiplier for intense difficulty
+              const difficultyMultiplier = difficulty === "hard" ? 1.5 : 1;
+              const finalPoints = Math.floor(chainBonus * difficultyMultiplier);
+              const newScore = prevScore + finalPoints;
+
+              if (onScoreUpdate) {
+                onScoreUpdate(newScore);
+              }
+              return newScore;
+            });
+
+            return newChain;
+          });
+
+          return false; // Remove brick
+        }
+        return true; // Keep brick
+      });
+
+      // Check win condition
+      if (game.bricks.length === 0) {
+        setGameState("won");
+
+        // Calculate life bonus
+        const bonus = lives * 500;
+        setLifeBonus(bonus);
+        setShowingLifeBonus(true);
+        setAnimatedBonusLives(0);
+
+        // Animate the bonus addition
+        let currentLives = 0;
+        const animateBonus = setInterval(() => {
+          currentLives++;
+          setAnimatedBonusLives(currentLives);
+
+          if (currentLives >= lives) {
+            clearInterval(animateBonus);
+            // Add bonus to score after animation
+            setTimeout(() => {
+              setScore(prevScore => {
+                const finalScore = prevScore + bonus;
+                if (onGameComplete) {
+                  onGameComplete(finalScore);
+                }
+                return finalScore;
+              });
+              setShowingLifeBonus(false);
+            }, 1000);
+          }
+        }, 500); // Show each life bonus every 500ms
+      }
+    }
+
+    // Update particles
+    game.particles = game.particles.filter(particle => {
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      particle.vy += 0.2; // Gravity
+      particle.life--;
+      return particle.life > 0;
+    });
+
+    // Draw particles
+    game.particles.forEach(particle => {
+      ctx.globalAlpha = particle.life / 20;
+      ctx.fillStyle = particle.color;
+      ctx.fillRect(particle.x - 2, particle.y - 2, 4, 4);
+    });
+    ctx.globalAlpha = 1;
+
+    // Draw bricks
+    game.bricks.forEach(brick => {
+      // Gradient fill
+      const gradient = ctx.createLinearGradient(brick.x, brick.y, brick.x, brick.y + brick.height);
+      gradient.addColorStop(0, brick.color);
+      gradient.addColorStop(1, brick.color + "99");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+
+      // Border
+      ctx.strokeStyle = brick.color;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(brick.x, brick.y, brick.width, brick.height);
+
+      // Text label
+      if (brick.text) {
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 8px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(brick.text, brick.x + brick.width / 2, brick.y + brick.height / 2 + 3);
+      }
+    });
+
+    // Draw paddle with gradient
+    const paddleGradient = ctx.createLinearGradient(game.paddle.x, game.paddle.y, game.paddle.x, game.paddle.y + game.paddle.height);
+    paddleGradient.addColorStop(0, "#60a5fa");
+    paddleGradient.addColorStop(1, "#a78bfa");
+    ctx.fillStyle = paddleGradient;
+    ctx.fillRect(game.paddle.x, game.paddle.y, game.paddle.width, game.paddle.height);
+
+    // Draw ball with glow effect
+    ctx.beginPath();
+    ctx.arc(game.ball.x, game.ball.y, game.ball.radius, 0, Math.PI * 2);
+    ctx.fillStyle = "#fff";
+    ctx.fill();
+    ctx.strokeStyle = "#60a5fa";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Glow effect
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "#60a5fa";
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }, [gameState, score, difficulty, lives, ballLaunched, onScoreUpdate, onGameComplete]);
+
+  // Animation loop
+  const animate = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      return;
+    }
+
+    gameLoop(ctx);
+    requestRef.current = requestAnimationFrame(animate);
+  }, [gameLoop]);
+
+  // Load leaderboard
+  const loadLeaderboard = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/breakout-leaderboard?difficulty=${difficulty}`);
+      if (response.ok) {
+        const data = await response.json();
+        setLeaderboardData(data);
+      }
+    } catch (err) {
+      console.error('Error loading leaderboard:', err);
+    }
+  }, [difficulty]);
+
+  // Submit score to leaderboard
+  const submitScore = useCallback(async () => {
+    if (!playerInitials || playerInitials.length !== 3) {
+      alert('Please enter exactly 3 initials');
+      return;
+    }
+
+    setIsSubmittingScore(true);
+    try {
+      const response = await fetch('/api/breakout-leaderboard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          initials: playerInitials.toUpperCase(),
+          score: score,
+          difficulty: difficulty,
+          linkedin_username: linkedinUsername || null,
+        }),
+      });
+
+      if (response.ok) {
+        setScoreSubmitted(true);
+        await loadLeaderboard();
+        setShowLeaderboard(true);
+      }
+    } catch (err) {
+      console.error('Error submitting score:', err);
+    } finally {
+      setIsSubmittingScore(false);
+    }
+  }, [playerInitials, linkedinUsername, score, difficulty, loadLeaderboard]);
+
+  // Start game
+  const startGame = useCallback(() => {
+    // Set ball speed based on difficulty
+    const ballSpeed = difficulty === "easy" ? 2 : 4; // Easy: 2 (current), Hard: 3 (original)
+
+    gameRef.current.bricks = initializeBricks();
+    gameRef.current.paddle = { x: 150, y: 380, width: 90, height: 12, speed: 8 };
+    // Initialize ball on paddle
+    gameRef.current.ball = {
+      x: gameRef.current.paddle.x + gameRef.current.paddle.width / 2,
+      y: gameRef.current.paddle.y - 8, // radius (6) + small gap (2)
+      vx: ballSpeed,
+      vy: -ballSpeed,
+      radius: 6
+    };
+    gameRef.current.particles = [];
+    setScore(0);
+    setLives(3);
+    setChainMultiplier(1);
+    setCurrentChain(0);
+    setScoreSubmitted(false);
+    setPlayerInitials("");
+    setLinkedinUsername("");
+    setBallLaunched(false);  // Ball starts on paddle
+    setGameState("playing");
+  }, [initializeBricks, difficulty]);
+
+  // Keyboard controls
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        gameRef.current.keys.left = true;
+      }
+      if (e.key === "ArrowRight") {
+        gameRef.current.keys.right = true;
+      }
+      if (e.key === " " && gameState === "ready") {
+        startGame();
+      }
+      if (e.key === "p" && gameState === "playing") {
+        setGameState("paused");
+      }
+      if (e.key === "p" && gameState === "paused") {
+        setGameState("playing");
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        gameRef.current.keys.left = false;
+      }
+      if (e.key === "ArrowRight") {
+        gameRef.current.keys.right = false;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [gameState, initializeBricks, startGame]);
+
+  // Start animation loop
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
+  }, [animate]);
+
+  // Load high score
+  useEffect(() => {
+    const saved = localStorage.getItem("breakout-highscore");
+    if (saved) {
+      setHighScore(parseInt(saved));
+    }
+  }, []);
+
+  // Save high score
+  useEffect(() => {
+    if (score > highScore) {
+      setHighScore(score);
+      localStorage.setItem("breakout-highscore", score.toString());
+    }
+  }, [score, highScore]);
+
+  return (
+    <div className="relative w-full max-w-md mx-auto">
+      {/* Game header */}
+      <div className="bg-gray-900/80 rounded-t-lg p-3 border border-gray-700">
+        <div className="flex justify-between items-center text-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1">
+              <Trophy className="w-4 h-4 text-yellow-400" />
+              <span className="text-yellow-400 font-mono">{highScore}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Zap className="w-4 h-4 text-blue-400" />
+              <span className="text-blue-400 font-mono">{score}</span>
+            </div>
+            {currentChain > 1 && (
+              <div className="flex items-center gap-1">
+                <span className="text-purple-400 font-mono text-xs">
+                  {currentChain}x CHAIN
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-1">
+            {Array.from({ length: 3 }, (_, i) => (
+              <Heart
+                key={i}
+                className={`w-4 h-4 ${i < lives ? "text-red-500 fill-red-500" : "text-gray-600"}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Game canvas */}
+      <div className="relative bg-gray-950 rounded-b-lg border-x border-b border-gray-700 overflow-hidden">
+        <canvas
+          ref={canvasRef}
+          width={400}
+          height={400}
+          className="w-full touch-none"
+          onClick={() => {
+            if (gameState === "playing" && !ballLaunched) {
+              setBallLaunched(true);
+            }
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            if (gameState === "playing" && !ballLaunched) {
+              setBallLaunched(true);
+            }
+          }}
+          onTouchMove={(e) => {
+            e.preventDefault();
+            handleTouchMove(e.touches[0].clientX);
+          }}
+          onTouchEnd={handleTouchEnd}
+          onMouseMove={(e) => handleTouchMove(e.clientX)}
+          onMouseLeave={handleTouchEnd}
+        />
+
+        {/* Launch hint overlay */}
+        {gameState === "playing" && !ballLaunched && (
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            <div className="bg-black/50 px-4 py-2 rounded-lg animate-pulse">
+              <p className="text-white font-bold text-sm">TAP TO LAUNCH</p>
+              <p className="text-gray-300 text-xs">Move paddle to aim</p>
+            </div>
+          </div>
+        )}
+
+        {/* Game overlay messages */}
+        {gameState === "difficulty" && (
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white">
+            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              BLOCKER BREAKER
+            </h3>
+            <p className="text-sm mb-6">Choose your vibe level:</p>
+
+            <div className="flex gap-6">
+              {/* Easy mode - Chill */}
+              <button
+                onClick={() => {
+                  setDifficulty("easy");
+                  setGameState("ready");
+                }}
+                className="flex flex-col items-center gap-2 px-8 py-6 bg-gray-800/80 border-2 border-green-500/50 rounded-lg hover:bg-gray-700/80 hover:border-green-400 hover:scale-105 transition-all"
+              >
+                <span className="text-4xl">🥱</span>
+                <span className="text-lg font-semibold text-green-400">CHILL</span>
+                <span className="text-xs text-gray-400">Slow ball</span>
+              </button>
+
+              {/* Hard mode - Intense */}
+              <button
+                onClick={() => {
+                  setDifficulty("hard");
+                  setGameState("ready");
+                }}
+                className="flex flex-col items-center gap-2 px-8 py-6 bg-gray-800/80 border-2 border-red-500/50 rounded-lg hover:bg-gray-700/80 hover:border-red-400 hover:scale-105 transition-all"
+              >
+                <span className="text-4xl">🤪</span>
+                <span className="text-lg font-semibold text-red-400">INTENSE</span>
+                <span className="text-xs text-gray-400">Fast ball</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {gameState === "ready" && (
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white">
+            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              BLOCKER BREAKER
+            </h3>
+            <p className="text-sm mb-2">
+              {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode (1.5x score)"}
+            </p>
+            <p className="text-xs text-gray-400 mb-4">Use arrow keys or touch to move</p>
+            <button
+              onClick={startGame}
+              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold hover:scale-105 transition-transform"
+            >
+              START GAME
+            </button>
+            <button
+              onClick={() => setGameState("difficulty")}
+              className="mt-2 text-xs text-gray-400 hover:text-white transition-colors"
+            >
+              Change Difficulty
+            </button>
+          </div>
+        )}
+
+        {gameState === "paused" && (
+          <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+            <p className="text-white text-xl font-bold">PAUSED</p>
+          </div>
+        )}
+
+        {gameState === "gameover" && (
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white overflow-y-auto">
+            <div className="max-w-md w-full p-4">
+              <h3 className="text-2xl font-bold mb-4 text-red-500 text-center">GAME OVER</h3>
+              <p className="text-lg mb-2 text-center">Score: {score}</p>
+              <p className="text-sm mb-4 text-gray-400 text-center">
+                {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode (1.5x)"}
+              </p>
+              {score > 1500 && (
+                <p className="text-sm text-yellow-400 mb-4 text-center">Impressive skills! 🎮</p>
+              )}
+
+              {/* Score submission form */}
+              {!scoreSubmitted && score > 0 && (
+                <div className="mb-4 p-4 bg-gray-800/50 rounded-lg">
+                  <p className="text-sm mb-3 text-center">Submit to Leaderboard</p>
+                  <div className="space-y-3">
+                    <div>
+                      <input
+                        type="text"
+                        maxLength={3}
+                        placeholder="AAA"
+                        value={playerInitials}
+                        onChange={(e) => setPlayerInitials(e.target.value.toUpperCase())}
+                        className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-center text-white uppercase font-mono text-lg"
+                      />
+                      <p className="text-xs text-gray-500 mt-1 text-center">Enter your initials</p>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Linkedin className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                        <input
+                          type="text"
+                          placeholder="LinkedIn username (optional)"
+                          value={linkedinUsername}
+                          onChange={(e) => setLinkedinUsername(e.target.value)}
+                          className="flex-1 px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-white text-sm"
+                        />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">Optional: @username or profile URL</p>
+                    </div>
+                    <button
+                      onClick={submitScore}
+                      disabled={isSubmittingScore || !playerInitials || playerInitials.length !== 3}
+                      className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 rounded font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                      {isSubmittingScore ? "Submitting..." : "Submit Score"}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Buttons */}
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => {
+                    setLifeBonus(0);
+                    setShowingLifeBonus(false);
+                    setAnimatedBonusLives(0);
+                    setScoreSubmitted(false);
+                    setPlayerInitials("");
+                    setLinkedinUsername("");
+                    setGameState("ready");
+                  }}
+                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold hover:scale-105 transition-transform"
+                >
+                  TRY AGAIN
+                </button>
+                <button
+                  onClick={() => {
+                    loadLeaderboard();
+                    setShowLeaderboard(true);
+                  }}
+                  className="px-6 py-2 bg-gray-700/50 border border-gray-600 rounded-lg font-semibold hover:bg-gray-600/50 transition-colors"
+                >
+                  View Leaderboard
+                </button>
+                <button
+                  onClick={() => setGameState("difficulty")}
+                  className="text-xs text-gray-400 hover:text-white transition-colors"
+                >
+                  Change Difficulty
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {gameState === "won" && (
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-white overflow-y-auto">
+            <div className="max-w-md w-full p-4">
+              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-green-400 bg-clip-text text-transparent text-center">
+                YOU WIN! 🏆
+              </h3>
+
+              {/* Life Bonus Animation */}
+              {showingLifeBonus && (
+                <div className="mb-4 text-center animate-pulse">
+                  <p className="text-yellow-400 text-xl font-bold mb-2">LIFE BONUS!</p>
+                  <div className="flex justify-center items-center gap-2 mb-2">
+                    {Array.from({ length: lives }).map((_, i) => (
+                      <div
+                        key={i}
+                        className={`transition-all duration-500 ${
+                          i < animatedBonusLives ? "scale-150 animate-bounce" : "scale-100 opacity-30"
+                        }`}
+                      >
+                        <Heart
+                          className={`w-8 h-8 ${
+                            i < animatedBonusLives ? "text-red-500 fill-red-500" : "text-gray-500"
+                          }`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  {animatedBonusLives > 0 && (
+                    <p className="text-2xl font-mono text-green-400">
+                      +{animatedBonusLives * 500}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <p className="text-lg mb-2 text-center">
+                Final Score: {score}
+                {lifeBonus > 0 && !showingLifeBonus && (
+                  <span className="text-green-400 text-sm ml-2">
+                    (includes {lifeBonus} life bonus!)
+                  </span>
+                )}
+              </p>
+              <p className="text-sm mb-2 text-gray-400 text-center">
+                {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode (1.5x)"}
+              </p>
+              <p className="text-sm text-gray-400 mb-4 text-center">You've got the touch!</p>
+
+              {/* Score submission form */}
+              {!scoreSubmitted && score > 0 && (
+                <div className="mb-4 p-4 bg-gray-800/50 rounded-lg">
+                  <p className="text-sm mb-3 text-center">Submit to Leaderboard</p>
+                  <div className="space-y-3">
+                    <div>
+                      <input
+                        type="text"
+                        maxLength={3}
+                        placeholder="AAA"
+                        value={playerInitials}
+                        onChange={(e) => setPlayerInitials(e.target.value.toUpperCase())}
+                        className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-center text-white uppercase font-mono text-lg"
+                      />
+                      <p className="text-xs text-gray-500 mt-1 text-center">Enter your initials</p>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Linkedin className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                        <input
+                          type="text"
+                          placeholder="LinkedIn username (optional)"
+                          value={linkedinUsername}
+                          onChange={(e) => setLinkedinUsername(e.target.value)}
+                          className="flex-1 px-3 py-2 bg-gray-700/50 border border-gray-600 rounded text-white text-sm"
+                        />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">Optional: @username or profile URL</p>
+                    </div>
+                    <button
+                      onClick={submitScore}
+                      disabled={isSubmittingScore || !playerInitials || playerInitials.length !== 3}
+                      className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 rounded font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                      {isSubmittingScore ? "Submitting..." : "Submit Score"}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Buttons */}
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => {
+                    setLifeBonus(0);
+                    setShowingLifeBonus(false);
+                    setAnimatedBonusLives(0);
+                    setScoreSubmitted(false);
+                    setPlayerInitials("");
+                    setLinkedinUsername("");
+                    setGameState("ready");
+                  }}
+                  className="px-6 py-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg font-semibold hover:scale-105 transition-transform"
+                >
+                  PLAY AGAIN
+                </button>
+                <button
+                  onClick={() => {
+                    loadLeaderboard();
+                    setShowLeaderboard(true);
+                  }}
+                  className="px-6 py-2 bg-gray-700/50 border border-gray-600 rounded-lg font-semibold hover:bg-gray-600/50 transition-colors"
+                >
+                  View Leaderboard
+                </button>
+                <button
+                  onClick={() => setGameState("difficulty")}
+                  className="text-xs text-gray-400 hover:text-white transition-colors"
+                >
+                  Change Difficulty
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Leaderboard Modal */}
+        {showLeaderboard && (
+          <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center text-white p-4">
+            <div className="max-w-md w-full bg-gray-800/80 rounded-lg p-6">
+              <h3 className="text-xl font-bold mb-4 text-center bg-gradient-to-r from-yellow-400 to-green-400 bg-clip-text text-transparent">
+                LEADERBOARD
+              </h3>
+              <p className="text-sm mb-4 text-center text-gray-400">
+                {difficulty === "easy" ? "🥱 Chill Mode" : "🤪 Intense Mode"}
+              </p>
+
+              {/* Leaderboard entries */}
+              <div className="space-y-2 mb-6 max-h-64 overflow-y-auto">
+                {leaderboardData.length > 0 ? (
+                  leaderboardData.map((entry, index) => (
+                    <div
+                      key={entry.id}
+                      className={`flex items-center justify-between p-2 rounded ${
+                        index === 0 ? 'bg-yellow-600/20 border border-yellow-600/40' :
+                        index === 1 ? 'bg-gray-600/20 border border-gray-600/40' :
+                        index === 2 ? 'bg-orange-700/20 border border-orange-700/40' :
+                        'bg-gray-700/30'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-sm">
+                          {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
+                        </span>
+                        <span className="font-bold">{entry.initials}</span>
+                        {entry.linkedin_username && (
+                          <a
+                            href={`https://linkedin.com/in/${entry.linkedin_username}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300"
+                          >
+                            <Linkedin className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
+                      <span className="font-mono text-yellow-400">{entry.score.toLocaleString()}</span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500">No scores yet. Be the first!</p>
+                )}
+              </div>
+
+              {/* Close button */}
+              <button
+                onClick={() => setShowLeaderboard(false)}
+                className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                CLOSE
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Instructions */}
+      <div className="mt-3 text-center">
+        <p className="text-xs text-gray-500">
+          Break the blockers • Chain breaks for bonus • Ship faster
+        </p>
+      </div>
+    </div>
+  );
+};
