@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/integrations/supabase/client";
 
-const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK_URL;
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -74,29 +72,51 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to save score" }, { status: 500 });
     }
 
-    // Send Slack notification
-    if (SLACK_WEBHOOK) {
-      try {
-        const linkedinProfile = cleanUsername
-          ? ` | LinkedIn: https://linkedin.com/in/${cleanUsername}`
-          : "";
-
-        const message = {
-          text: `🎮 New Breakout Score!\nPlayer: ${initials.toUpperCase()}\nScore: ${score.toLocaleString()} (${
-            difficulty === "hard" ? "🤪 Intense" : "🥱 Chill"
-          })${linkedinProfile}`,
-        };
-
-        await fetch(SLACK_WEBHOOK, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(message),
-        });
-      } catch (slackError) {
-        console.error("Error sending Slack notification:", slackError);
-        // Don't fail the request if Slack fails
-      }
+    // Send Slack notification using centralized system (fire and forget)
+    // Use the same URL construction logic as the working email subscription route
+    let siteUrl = "http://localhost:3000"; // Default fallback
+    
+    if (process.env.NODE_ENV === "production") {
+      siteUrl = "https://vibecto.ai";
+    } else if (process.env.NODE_ENV === "development") {
+      siteUrl = "http://localhost:8080";
+    } else if (process.env.DEPLOY_PRIME_URL) {
+      // Netlify deploy preview
+      siteUrl = process.env.DEPLOY_PRIME_URL;
+    } else if (process.env.DEPLOY_URL) {
+      // Netlify branch deploy
+      siteUrl = process.env.DEPLOY_URL;
+    } else if (process.env.NEXT_PUBLIC_SITE_URL) {
+      // Fallback to public site URL if set
+      siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
     }
+    
+    const slackPayload = {
+      formType: 'breakout_score',
+      additionalData: {
+        initials: initials.toUpperCase(),
+        score: score,
+        difficulty: difficulty,
+        linkedin_username: cleanUsername,
+      },
+    };
+    
+    console.log("Sending Slack notification to:", `${siteUrl}/api/slack-notify`);
+    console.log("Payload:", JSON.stringify(slackPayload, null, 2));
+    
+    fetch(`${siteUrl}/api/slack-notify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(slackPayload),
+    }).then(response => {
+      console.log("Slack notification response status:", response.status);
+      return response.json();
+    }).then(result => {
+      console.log("Slack notification result:", result);
+    }).catch(slackError => {
+      console.error("Error sending Slack notification:", slackError);
+      // Fire and forget - don't block the main response
+    });
 
     return NextResponse.json(data);
   } catch (error) {

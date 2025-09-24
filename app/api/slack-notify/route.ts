@@ -7,8 +7,8 @@ const slack = new WebClient(process.env.SLACK_BOT_TOKEN);
 
 // Request schema
 const slackNotifySchema = z.object({
-  formType: z.enum(['ignition_waitlist', 'launch_control_waitlist', 'community_waitlist', 'email_subscription', 'contact_form']),
-  email: z.string().email(),
+  formType: z.enum(['ignition_waitlist', 'launch_control_waitlist', 'community_waitlist', 'email_subscription', 'contact_form', 'breakout_score']),
+  email: z.string().email().optional(),
   name: z.string().optional(),
   phone: z.string().optional(),
   contactMethod: z.string().optional(),
@@ -21,10 +21,12 @@ const slackNotifySchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    console.log("Slack notify received request:", JSON.stringify(body, null, 2));
 
     // Validate request
     const validation = slackNotifySchema.safeParse(body);
     if (!validation.success) {
+      console.error("Slack notify validation failed:", validation.error.errors);
       return NextResponse.json(
         {
           error: "Invalid request data",
@@ -35,6 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = validation.data;
+    console.log("Slack notify validated data:", JSON.stringify(data, null, 2));
 
     if (!process.env.SLACK_BOT_TOKEN) {
       console.warn('SLACK_BOT_TOKEN not configured, skipping Slack notification');
@@ -46,13 +49,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Slack channel not configured' });
     }
 
+    console.log('Environment check passed - both SLACK_BOT_TOKEN and SLACK_CHANNEL_ID are set');
+    
     const message = formatFormSubmissionMessage(data);
+    console.log('Formatted Slack message:', JSON.stringify(message, null, 2));
+    
+    console.log('Sending to Slack channel:', process.env.SLACK_CHANNEL_ID);
     
     const result = await slack.chat.postMessage({
       channel: process.env.SLACK_CHANNEL_ID,
       blocks: message.blocks,
       text: message.fallbackText,
     });
+    
+    console.log('Slack API response:', JSON.stringify(result, null, 2));
 
     return NextResponse.json({ success: true, result });
   } catch (error) {
@@ -100,26 +110,50 @@ function formatFormSubmissionMessage(data: any) {
       color = '#6366f1'; // indigo
       emoji = '💬';
       break;
+    case 'breakout_score':
+      formTitle = 'Breakout Score';
+      color = '#f59e0b'; // amber
+      emoji = '🎮';
+      break;
   }
 
-  const fallbackText = `${emoji} New ${formTitle} submission from ${name || email}`;
+  const fallbackText = formType === 'breakout_score' 
+    ? `${emoji} New ${formTitle}: ${additionalData?.initials} scored ${additionalData?.score}` 
+    : `${emoji} New ${formTitle} submission from ${name || email}`;
 
   const blocks = [
     {
       type: 'header',
       text: {
         type: 'plain_text',
-        text: `${emoji} New ${formTitle} Submission`,
+        text: `${emoji} New ${formTitle}${formType === 'breakout_score' ? '' : ' Submission'}`,
         emoji: true
       }
     },
     {
       type: 'section',
-      fields: [
+      fields: formType === 'breakout_score' ? [
         {
           type: 'mrkdwn',
-          text: `*Email:*\n${email}`
+          text: `*Player:*\n${additionalData?.initials}`
         },
+        {
+          type: 'mrkdwn',
+          text: `*Score:*\n${additionalData?.score?.toLocaleString()}`
+        },
+        {
+          type: 'mrkdwn',
+          text: `*Difficulty:*\n${additionalData?.difficulty === 'hard' ? '🤪 Intense' : '🥱 Chill'}`
+        },
+        ...(additionalData?.linkedin_username ? [{
+          type: 'mrkdwn',
+          text: `*LinkedIn:*\nhttps://linkedin.com/in/${additionalData.linkedin_username}`
+        }] : [])
+      ] : [
+        ...(email ? [{
+          type: 'mrkdwn',
+          text: `*Email:*\n${email}`
+        }] : []),
         ...(name ? [{
           type: 'mrkdwn',
           text: `*Name:*\n${name}`
@@ -157,8 +191,8 @@ function formatFormSubmissionMessage(data: any) {
     }
   ];
 
-  // Add additional data if present
-  if (additionalData && Object.keys(additionalData).length > 0) {
+  // Add additional data if present (but not for breakout_score as it's already handled above)
+  if (additionalData && Object.keys(additionalData).length > 0 && formType !== 'breakout_score') {
     const additionalFields = Object.entries(additionalData).map(([key, value]) => ({
       type: 'mrkdwn',
       text: `*${key}:*\n${value}`
