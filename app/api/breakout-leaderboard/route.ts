@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/integrations/supabase/client";
 
-const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK_URL;
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -74,28 +72,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to save score" }, { status: 500 });
     }
 
-    // Send Slack notification
-    if (SLACK_WEBHOOK) {
-      try {
-        const linkedinProfile = cleanUsername
-          ? ` | LinkedIn: https://linkedin.com/in/${cleanUsername}`
-          : "";
-
-        const message = {
-          text: `🎮 New Breakout Score!\nPlayer: ${initials.toUpperCase()}\nScore: ${score.toLocaleString()} (${
-            difficulty === "hard" ? "🤪 Intense" : "🥱 Chill"
-          })${linkedinProfile}`,
-        };
-
-        await fetch(SLACK_WEBHOOK, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(message),
-        });
-      } catch (slackError) {
-        console.error("Error sending Slack notification:", slackError);
-        // Don't fail the request if Slack fails
-      }
+    // Send Slack notification using centralized system
+    try {
+      await fetch('/api/slack-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          formType: 'breakout_score',
+          additionalData: {
+            initials: initials.toUpperCase(),
+            score: score,
+            difficulty: difficulty,
+            linkedin_username: cleanUsername,
+          },
+        }),
+      });
+    } catch (slackError) {
+      console.error("Error sending Slack notification:", slackError);
+      // Don't fail the request if Slack fails
     }
 
     return NextResponse.json(data);

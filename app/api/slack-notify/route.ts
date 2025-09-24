@@ -7,8 +7,8 @@ const slack = new WebClient(process.env.SLACK_BOT_TOKEN);
 
 // Request schema
 const slackNotifySchema = z.object({
-  formType: z.enum(['ignition_waitlist', 'launch_control_waitlist', 'community_waitlist', 'email_subscription', 'contact_form']),
-  email: z.string().email(),
+  formType: z.enum(['ignition_waitlist', 'launch_control_waitlist', 'community_waitlist', 'email_subscription', 'contact_form', 'breakout_score']),
+  email: z.string().email().optional(),
   name: z.string().optional(),
   phone: z.string().optional(),
   contactMethod: z.string().optional(),
@@ -100,26 +100,50 @@ function formatFormSubmissionMessage(data: any) {
       color = '#6366f1'; // indigo
       emoji = '💬';
       break;
+    case 'breakout_score':
+      formTitle = 'Breakout Score';
+      color = '#f59e0b'; // amber
+      emoji = '🎮';
+      break;
   }
 
-  const fallbackText = `${emoji} New ${formTitle} submission from ${name || email}`;
+  const fallbackText = formType === 'breakout_score' 
+    ? `${emoji} New ${formTitle}: ${additionalData?.initials} scored ${additionalData?.score}` 
+    : `${emoji} New ${formTitle} submission from ${name || email}`;
 
   const blocks = [
     {
       type: 'header',
       text: {
         type: 'plain_text',
-        text: `${emoji} New ${formTitle} Submission`,
+        text: `${emoji} New ${formTitle}${formType === 'breakout_score' ? '' : ' Submission'}`,
         emoji: true
       }
     },
     {
       type: 'section',
-      fields: [
+      fields: formType === 'breakout_score' ? [
         {
           type: 'mrkdwn',
-          text: `*Email:*\n${email}`
+          text: `*Player:*\n${additionalData?.initials}`
         },
+        {
+          type: 'mrkdwn',
+          text: `*Score:*\n${additionalData?.score?.toLocaleString()}`
+        },
+        {
+          type: 'mrkdwn',
+          text: `*Difficulty:*\n${additionalData?.difficulty === 'hard' ? '🤪 Intense' : '🥱 Chill'}`
+        },
+        ...(additionalData?.linkedin_username ? [{
+          type: 'mrkdwn',
+          text: `*LinkedIn:*\nhttps://linkedin.com/in/${additionalData.linkedin_username}`
+        }] : [])
+      ] : [
+        ...(email ? [{
+          type: 'mrkdwn',
+          text: `*Email:*\n${email}`
+        }] : []),
         ...(name ? [{
           type: 'mrkdwn',
           text: `*Name:*\n${name}`
