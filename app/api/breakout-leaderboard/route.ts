@@ -72,25 +72,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to save score" }, { status: 500 });
     }
 
-    // Send Slack notification using centralized system
-    try {
-      await fetch('/api/slack-notify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          formType: 'breakout_score',
-          additionalData: {
-            initials: initials.toUpperCase(),
-            score: score,
-            difficulty: difficulty,
-            linkedin_username: cleanUsername,
-          },
-        }),
-      });
-    } catch (slackError) {
+    // Send Slack notification using centralized system (fire and forget)
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    
+    fetch(`${baseUrl}/api/slack-notify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        formType: 'breakout_score',
+        additionalData: {
+          initials: initials.toUpperCase(),
+          score: score,
+          difficulty: difficulty,
+          linkedin_username: cleanUsername,
+        },
+      }),
+    }).catch(slackError => {
       console.error("Error sending Slack notification:", slackError);
-      // Don't fail the request if Slack fails
-    }
+      // Fire and forget - don't block the main response
+    });
 
     return NextResponse.json(data);
   } catch (error) {
