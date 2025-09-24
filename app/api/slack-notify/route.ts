@@ -181,8 +181,8 @@ function formatFormSubmissionMessage(data: any) {
     }
   ];
 
-  // Add additional data if present
-  if (additionalData && Object.keys(additionalData).length > 0) {
+  // Add additional data if present (but not for breakout_score as it's already handled above)
+  if (additionalData && Object.keys(additionalData).length > 0 && formType !== 'breakout_score') {
     const additionalFields = Object.entries(additionalData).map(([key, value]) => ({
       type: 'mrkdwn',
       text: `*${key}:*\n${value}`
