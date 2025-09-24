@@ -21,10 +21,12 @@ const slackNotifySchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    console.log("Slack notify received request:", JSON.stringify(body, null, 2));
 
     // Validate request
     const validation = slackNotifySchema.safeParse(body);
     if (!validation.success) {
+      console.error("Slack notify validation failed:", validation.error.errors);
       return NextResponse.json(
         {
           error: "Invalid request data",
@@ -35,6 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = validation.data;
+    console.log("Slack notify validated data:", JSON.stringify(data, null, 2));
 
     if (!process.env.SLACK_BOT_TOKEN) {
       console.warn('SLACK_BOT_TOKEN not configured, skipping Slack notification');
@@ -46,13 +49,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Slack channel not configured' });
     }
 
+    console.log('Environment check passed - both SLACK_BOT_TOKEN and SLACK_CHANNEL_ID are set');
+    
     const message = formatFormSubmissionMessage(data);
+    console.log('Formatted Slack message:', JSON.stringify(message, null, 2));
+    
+    console.log('Sending to Slack channel:', process.env.SLACK_CHANNEL_ID);
     
     const result = await slack.chat.postMessage({
       channel: process.env.SLACK_CHANNEL_ID,
       blocks: message.blocks,
       text: message.fallbackText,
     });
+    
+    console.log('Slack API response:', JSON.stringify(result, null, 2));
 
     return NextResponse.json({ success: true, result });
   } catch (error) {

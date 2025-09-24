@@ -77,18 +77,28 @@ export async function POST(request: NextRequest) {
       ? `https://${process.env.VERCEL_URL}`
       : process.env.NEXTAUTH_URL || 'http://localhost:3000';
     
+    const slackPayload = {
+      formType: 'breakout_score',
+      additionalData: {
+        initials: initials.toUpperCase(),
+        score: score,
+        difficulty: difficulty,
+        linkedin_username: cleanUsername,
+      },
+    };
+    
+    console.log("Sending Slack notification to:", `${baseUrl}/api/slack-notify`);
+    console.log("Payload:", JSON.stringify(slackPayload, null, 2));
+    
     fetch(`${baseUrl}/api/slack-notify`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        formType: 'breakout_score',
-        additionalData: {
-          initials: initials.toUpperCase(),
-          score: score,
-          difficulty: difficulty,
-          linkedin_username: cleanUsername,
-        },
-      }),
+      body: JSON.stringify(slackPayload),
+    }).then(response => {
+      console.log("Slack notification response status:", response.status);
+      return response.json();
+    }).then(result => {
+      console.log("Slack notification result:", result);
     }).catch(slackError => {
       console.error("Error sending Slack notification:", slackError);
       // Fire and forget - don't block the main response
