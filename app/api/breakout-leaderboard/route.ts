@@ -73,9 +73,23 @@ export async function POST(request: NextRequest) {
     }
 
     // Send Slack notification using centralized system (fire and forget)
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}`
-      : process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    // Use the same URL construction logic as the working email subscription route
+    let siteUrl = "http://localhost:3000"; // Default fallback
+    
+    if (process.env.NODE_ENV === "production") {
+      siteUrl = "https://vibecto.ai";
+    } else if (process.env.NODE_ENV === "development") {
+      siteUrl = "http://localhost:8080";
+    } else if (process.env.DEPLOY_PRIME_URL) {
+      // Netlify deploy preview
+      siteUrl = process.env.DEPLOY_PRIME_URL;
+    } else if (process.env.DEPLOY_URL) {
+      // Netlify branch deploy
+      siteUrl = process.env.DEPLOY_URL;
+    } else if (process.env.NEXT_PUBLIC_SITE_URL) {
+      // Fallback to public site URL if set
+      siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    }
     
     const slackPayload = {
       formType: 'breakout_score',
@@ -87,10 +101,10 @@ export async function POST(request: NextRequest) {
       },
     };
     
-    console.log("Sending Slack notification to:", `${baseUrl}/api/slack-notify`);
+    console.log("Sending Slack notification to:", `${siteUrl}/api/slack-notify`);
     console.log("Payload:", JSON.stringify(slackPayload, null, 2));
     
-    fetch(`${baseUrl}/api/slack-notify`, {
+    fetch(`${siteUrl}/api/slack-notify`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(slackPayload),
